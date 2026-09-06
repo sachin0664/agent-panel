@@ -3,21 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Agent Panel</title>
+    <title>Sathi Pay - Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 30px 24px;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 18px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #1f2937;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>Agent Panel Login</h1>
+<div class="login-page">
 
-    <form>
-        <label>Username</label><br>
-        <input type="text" placeholder="Enter username"><br><br>
+    <div class="login-box">
 
-        <label>Password</label><br>
-        <input type="password" placeholder="Enter password"><br><br>
+        <div class="logo">Sathi Pay</div>
 
-        <button type="submit">Login</button>
-    </form>
+        <div class="subtitle">
+            Agent Login
+        </div>
+
+        <form>
+            <label>Mobile Number</label>
+            <input
+                type="tel"
+                placeholder="Enter mobile number"
+                required
+            >
+
+            <label>Password</label>
+            <input
+                type="password"
+                placeholder="Enter password"
+                required
+            >
+
+            <button type="submit">
+                Login
+            </button>
+        </form>
+
+        <div class="register">
+            New agent?
+            <a href="#">Register</a>
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>
