@@ -2,43 +2,486 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deposit</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sathi Pay - Deposit</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1f2937;
+            color: white;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .table-box {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #e5e7eb;
+        }
+
+        .pending {
+            color: #b45309;
+            font-weight: bold;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Deposit</h1>
-        <a href="admin.html">Dashboard</a>
-    </header>
+    <div class="header">
 
-    <main class="container">
+        <h2>Sathi Pay - Deposit</h2>
 
-        <div class="form-box">
+        <a href="agents.html">Agents</a>
 
-            <h2>Add Deposit</h2>
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- NEW DEPOSIT -->
+
+        <div class="card">
+
+            <h2>New Deposit</h2>
 
             <form onsubmit="submitDeposit(event)">
 
-                <label>Agent Name</label>
-                <input type="text" id="depositAgent" required>
 
-                <label>Amount</label>
-                <input type="number" id="depositAmount" required>
+                <label>Select Agent</label>
 
-                <button type="submit">Submit Deposit</button>
+                <select id="depositAgent" required>
+
+                    <option value="">
+                        Loading agents...
+                    </option>
+
+                </select>
+
+
+                <label>Amount (₹)</label>
+
+                <input
+                    type="number"
+                    id="depositAmount"
+                    placeholder="Enter amount"
+                    min="1"
+                    required
+                >
+
+
+                <button type="submit">
+
+                    Submit Deposit
+
+                </button>
+
+
+                <div id="message"></div>
+
 
             </form>
 
-            <p id="depositMessage"></p>
+        </div>
+
+
+
+        <!-- DEPOSIT HISTORY -->
+
+        <div class="card">
+
+            <h2>Deposit History</h2>
+
+
+            <div class="table-box">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Agent</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="depositTable">
+
+                        <tr>
+
+                            <td colspan="4">
+
+                                Loading deposits...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
-    </main>
+
+    </div>
+
+
+    <!-- SUPABASE LIBRARY -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- YOUR APP.JS -->
 
     <script src="js/app.js"></script>
+
+
+    <script>
+
+
+        // LOAD ACTIVE AGENTS
+
+        async function loadDepositAgents() {
+
+            const select =
+                document.getElementById("depositAgent");
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("agents")
+                    .select("*")
+                    .eq("status", "Active")
+                    .order("name");
+
+
+            if (error) {
+
+                console.error(error);
+
+                select.innerHTML =
+                    '<option value="">Error loading agents</option>';
+
+                return;
+
+            }
+
+
+            select.innerHTML =
+                '<option value="">Select Agent</option>';
+
+
+            data.forEach(function(agent) {
+
+                select.innerHTML += `
+
+                    <option value="${agent.id}">
+
+                        ${agent.name} - ${agent.mobile}
+
+                    </option>
+
+                `;
+
+            });
+
+        }
+
+
+
+        // SUBMIT DEPOSIT
+
+        async function submitDeposit(event) {
+
+            event.preventDefault();
+
+
+            const agentId =
+                document.getElementById("depositAgent").value;
+
+            const amount =
+                document.getElementById("depositAmount").value;
+
+            const message =
+                document.getElementById("message");
+
+
+            message.innerText = "";
+
+
+            if (!agentId) {
+
+                message.innerText =
+                    "Please select an agent.";
+
+                return;
+
+            }
+
+
+            if (!amount || Number(amount) <= 0) {
+
+                message.innerText =
+                    "Please enter a valid amount.";
+
+                return;
+
+            }
+
+
+            const { error } =
+                await supabaseClient
+                    .from("deposits")
+                    .insert([
+                        {
+                            agent_id: agentId,
+                            amount: Number(amount),
+                            status: "Pending"
+                        }
+                    ]);
+
+
+            if (error) {
+
+                console.error(error);
+
+                message.innerText =
+                    "Error: " + error.message;
+
+                return;
+
+            }
+
+
+            message.innerText =
+                "Deposit submitted successfully!";
+
+
+            document.getElementById("depositAmount").value = "";
+
+
+            await loadDeposits();
+
+        }
+
+
+
+        // LOAD DEPOSIT HISTORY
+
+        async function loadDeposits() {
+
+            const table =
+                document.getElementById("depositTable");
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("deposits")
+                    .select(`
+                        id,
+                        amount,
+                        status,
+                        agents (
+                            name
+                        )
+                    `)
+                    .order("id", {
+                        ascending: false
+                    });
+
+
+            if (error) {
+
+                console.error(error);
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="4">
+
+                            Error loading deposits
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+            if (!data || data.length === 0) {
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="4">
+
+                            No deposits found
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+            table.innerHTML = "";
+
+
+            data.forEach(function(deposit) {
+
+                const agentName =
+                    deposit.agents
+                        ? deposit.agents.name
+                        : "Unknown";
+
+
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>${deposit.id}</td>
+
+                        <td>${agentName}</td>
+
+                        <td>₹${deposit.amount}</td>
+
+                        <td class="pending">
+
+                            ${deposit.status}
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+        }
+
+
+
+        // LOAD PAGE DATA
+
+        loadDepositAgents();
+
+        loadDeposits();
+
+
+    </script>
+
+
 </body>
-</html>
+    </html>
