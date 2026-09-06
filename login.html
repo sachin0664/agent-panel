@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Sathi Pay - Login</title>
 
     <style>
@@ -74,6 +76,12 @@
             cursor: pointer;
         }
 
+        #loginMessage {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
         .register {
             text-align: center;
             margin-top: 20px;
@@ -89,44 +97,57 @@
 
 <body>
 
-<div class="login-page">
+    <div class="login-page">
 
-    <div class="login-box">
+        <div class="login-box">
 
-        <div class="logo">Sathi Pay</div>
+            <div class="logo">Sathi Pay</div>
 
-        <div class="subtitle">
-            Agent Login
-        </div>
+            <div class="subtitle">
+                Agent Login
+            </div>
 
-        <form>
-            <label>Mobile Number</label>
-            <input
-                type="tel"
-                placeholder="Enter mobile number"
-                required
-            >
+            <!-- IMPORTANT: onsubmit added -->
+            <form onsubmit="login(event)">
 
-            <label>Password</label>
-            <input
-                type="password"
-                placeholder="Enter password"
-                required
-            >
+                <label>Mobile Number</label>
 
-            <button type="submit">
-                Login
-            </button>
-        </form>
+                <input
+                    type="tel"
+                    id="username"
+                    placeholder="Enter mobile number"
+                    required
+                >
 
-        <div class="register">
-            New agent?
-        <a href="register.html">Register</a>
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    required
+                >
+
+                <button type="submit">
+                    Login
+                </button>
+
+                <!-- Login message -->
+                <p id="loginMessage"></p>
+
+            </form>
+
+            <div class="register">
+                New agent?
+                <a href="register.html">Register</a>
+            </div>
+
         </div>
 
     </div>
 
-</div>
+    <!-- IMPORTANT: JavaScript file -->
+    <script src="js/app.js"></script>
 
 </body>
 </html>
