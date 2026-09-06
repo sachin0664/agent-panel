@@ -1,61 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agents</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <title>Sathi Pay - Agents</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        /* Header */
+
+        .header {
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Main */
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .add-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        /* Form */
+
+        .agent-form {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            display: none;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Table */
+
+        .table-box {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            background: #e5e7eb;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .inactive {
+            color: red;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+
+            .top-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .add-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
 </head>
 
 <body>
 
-    <header>
+    <!-- Header -->
+
+    <div class="header">
         <h1>Agents</h1>
+
         <a href="admin.html">Dashboard</a>
-    </header>
+    </div>
 
-    <main class="container">
 
-        <h2>Agent List</h2>
+    <div class="container">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Agent Name</th>
-                    <th>Mobile</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
+        <div class="top-section">
 
-            <tbody>
+            <h2>Agent List</h2>
 
-                <tr>
-                    <td>001</td>
-                    <td>Agent One</td>
-                    <td>9876543210</td>
-                    <td>Active</td>
-                </tr>
+            <button class="add-btn" onclick="showAgentForm()">
+                + Add New Agent
+            </button>
 
-                <tr>
-                    <td>002</td>
-                    <td>Agent Two</td>
-                    <td>9876543211</td>
-                    <td>Active</td>
-                </tr>
+        </div>
 
-                <tr>
-                    <td>003</td>
-                    <td>Agent Three</td>
-                    <td>9876543212</td>
-                    <td>Inactive</td>
-                </tr>
 
-            </tbody>
-        </table>
+        <!-- Add Agent Form -->
 
-    </main>
+        <div class="agent-form" id="agentForm">
+
+            <h2>Add New Agent</h2>
+
+            <form onsubmit="addAgent(event)">
+
+                <label>Agent Name</label>
+
+                <input
+                    type="text"
+                    id="agentName"
+                    placeholder="Enter agent name"
+                    required
+                >
+
+
+                <label>Mobile Number</label>
+
+                <input
+                    type="tel"
+                    id="agentMobile"
+                    placeholder="Enter mobile number"
+                    required
+                >
+
+
+                <label>Status</label>
+
+                <select id="agentStatus">
+
+                    <option value="Active">Active</option>
+
+                    <option value="Inactive">Inactive</option>
+
+                </select>
+
+
+                <button type="submit" class="save-btn">
+                    Save Agent
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Agent Table -->
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Agent Name</th>
+                        <th>Mobile</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="agentTable">
+
+                    <tr>
+                        <td>001</td>
+                        <td>Agent One</td>
+                        <td>9876543210</td>
+                        <td class="active">Active</td>
+
+                        <td>
+                            <button class="delete-btn" onclick="deleteAgent(this)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>002</td>
+                        <td>Agent Two</td>
+                        <td>9876543211</td>
+                        <td class="active">Active</td>
+
+                        <td>
+                            <button class="delete-btn" onclick="deleteAgent(this)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>003</td>
+                        <td>Agent Three</td>
+                        <td>9876543212</td>
+                        <td class="inactive">Inactive</td>
+
+                        <td>
+                            <button class="delete-btn" onclick="deleteAgent(this)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- JavaScript -->
+
+    <script>
+
+        function showAgentForm() {
+
+            const form = document.getElementById("agentForm");
+
+            if (form.style.display === "block") {
+                form.style.display = "none";
+            } else {
+                form.style.display = "block";
+            }
+
+        }
+
+
+        function addAgent(event) {
+
+            event.preventDefault();
+
+            const name = document.getElementById("agentName").value;
+
+            const mobile = document.getElementById("agentMobile").value;
+
+            const status = document.getElementById("agentStatus").value;
+
+
+            const table = document.getElementById("agentTable");
+
+            const totalAgents = table.rows.length + 1;
+
+            const id = String(totalAgents).padStart(3, "0");
+
+
+            const statusClass =
+                status === "Active" ? "active" : "inactive";
+
+
+            const row = table.insertRow();
+
+
+            row.innerHTML = `
+
+                <td>${id}</td>
+
+                <td>${name}</td>
+
+                <td>${mobile}</td>
+
+                <td class="${statusClass}">
+                    ${status}
+                </td>
+
+                <td>
+                    <button class="delete-btn"
+                        onclick="deleteAgent(this)">
+                        Delete
+                    </button>
+                </td>
+
+            `;
+
+
+            /* Clear form */
+
+            document.getElementById("agentName").value = "";
+
+            document.getElementById("agentMobile").value = "";
+
+
+            /* Hide form */
+
+            document.getElementById("agentForm").style.display = "none";
+
+
+            alert("Agent added successfully!");
+
+        }
+
+
+        function deleteAgent(button) {
+
+            if (confirm("Are you sure you want to delete this agent?")) {
+
+                const row = button.parentNode.parentNode;
+
+                row.remove();
+
+            }
+
+        }
+
+    </script>
 
 </body>
-</html>
+
+    </html>
