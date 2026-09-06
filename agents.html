@@ -19,8 +19,6 @@
             color: #1f2937;
         }
 
-        /* Header */
-
         .header {
             background: #1f2937;
             color: white;
@@ -32,15 +30,12 @@
 
         .header h1 {
             margin: 0;
-            font-size: 26px;
         }
 
         .header a {
             color: white;
             text-decoration: none;
         }
-
-        /* Main */
 
         .container {
             max-width: 900px;
@@ -52,8 +47,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
             margin-bottom: 20px;
-            gap: 10px;
         }
 
         .add-btn {
@@ -66,43 +61,41 @@
             cursor: pointer;
         }
 
-        /* Form */
-
         .agent-form {
+            display: none;
             background: white;
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            display: none;
         }
 
-        input, select {
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select {
             width: 100%;
             padding: 12px;
-            margin-top: 6px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
         }
 
-        label {
-            font-weight: bold;
-        }
-
         .save-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
             background: #16a34a;
             color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
         }
-
-        /* Table */
 
         .table-box {
             background: white;
@@ -117,14 +110,15 @@
             min-width: 650px;
         }
 
-        th {
-            background: #e5e7eb;
-        }
-
-        th, td {
-            padding: 16px;
+        th,
+        td {
+            padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #e5e7eb;
         }
 
         .active {
@@ -147,7 +141,6 @@
         }
 
         @media (max-width: 600px) {
-
             .top-section {
                 flex-direction: column;
                 align-items: stretch;
@@ -156,19 +149,14 @@
             .add-btn {
                 width: 100%;
             }
-
         }
-
     </style>
 </head>
 
 <body>
 
-    <!-- Header -->
-
     <div class="header">
         <h1>Agents</h1>
-
         <a href="admin.html">Dashboard</a>
     </div>
 
@@ -176,17 +164,13 @@
     <div class="container">
 
         <div class="top-section">
-
             <h2>Agent List</h2>
 
             <button class="add-btn" onclick="showAgentForm()">
                 + Add New Agent
             </button>
-
         </div>
 
-
-        <!-- Add Agent Form -->
 
         <div class="agent-form" id="agentForm">
 
@@ -203,27 +187,22 @@
                     required
                 >
 
-
                 <label>Mobile Number</label>
 
                 <input
                     type="tel"
                     id="agentMobile"
                     placeholder="Enter mobile number"
+                    maxlength="10"
                     required
                 >
-
 
                 <label>Status</label>
 
                 <select id="agentStatus">
-
                     <option value="Active">Active</option>
-
                     <option value="Inactive">Inactive</option>
-
                 </select>
-
 
                 <button type="submit" class="save-btn">
                     Save Agent
@@ -234,14 +213,11 @@
         </div>
 
 
-        <!-- Agent Table -->
-
         <div class="table-box">
 
             <table>
 
                 <thead>
-
                     <tr>
                         <th>ID</th>
                         <th>Agent Name</th>
@@ -249,54 +225,9 @@
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
-
                 </thead>
 
-
-                <tbody id="agentTable">
-
-                    <tr>
-                        <td>001</td>
-                        <td>Agent One</td>
-                        <td>9876543210</td>
-                        <td class="active">Active</td>
-
-                        <td>
-                            <button class="delete-btn" onclick="deleteAgent(this)">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>002</td>
-                        <td>Agent Two</td>
-                        <td>9876543211</td>
-                        <td class="active">Active</td>
-
-                        <td>
-                            <button class="delete-btn" onclick="deleteAgent(this)">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>003</td>
-                        <td>Agent Three</td>
-                        <td>9876543212</td>
-                        <td class="inactive">Inactive</td>
-
-                        <td>
-                            <button class="delete-btn" onclick="deleteAgent(this)">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-
-                </tbody>
+                <tbody id="agentTable"></tbody>
 
             </table>
 
@@ -305,101 +236,201 @@
     </div>
 
 
-    <!-- JavaScript -->
+<script>
 
-    <script>
+    // Default Agents
+    const defaultAgents = [
+        {
+            id: "001",
+            name: "Agent One",
+            mobile: "9876543210",
+            status: "Active"
+        },
+        {
+            id: "002",
+            name: "Agent Two",
+            mobile: "9876543211",
+            status: "Active"
+        },
+        {
+            id: "003",
+            name: "Agent Three",
+            mobile: "9876543212",
+            status: "Inactive"
+        }
+    ];
 
-        function showAgentForm() {
 
-            const form = document.getElementById("agentForm");
+    // Get Agents from LocalStorage
+    function getAgents() {
 
-            if (form.style.display === "block") {
-                form.style.display = "none";
-            } else {
-                form.style.display = "block";
-            }
+        const savedAgents = localStorage.getItem("agents");
 
+        if (savedAgents) {
+            return JSON.parse(savedAgents);
         }
 
+        localStorage.setItem(
+            "agents",
+            JSON.stringify(defaultAgents)
+        );
 
-        function addAgent(event) {
-
-            event.preventDefault();
-
-            const name = document.getElementById("agentName").value;
-
-            const mobile = document.getElementById("agentMobile").value;
-
-            const status = document.getElementById("agentStatus").value;
+        return defaultAgents;
+    }
 
 
-            const table = document.getElementById("agentTable");
+    // Save Agents
+    function saveAgents(agents) {
 
-            const totalAgents = table.rows.length + 1;
+        localStorage.setItem(
+            "agents",
+            JSON.stringify(agents)
+        );
+    }
 
-            const id = String(totalAgents).padStart(3, "0");
 
+    // Show Agents
+    function displayAgents() {
+
+        const agents = getAgents();
+
+        const table = document.getElementById("agentTable");
+
+        table.innerHTML = "";
+
+        agents.forEach(function(agent) {
 
             const statusClass =
-                status === "Active" ? "active" : "inactive";
+                agent.status === "Active"
+                    ? "active"
+                    : "inactive";
 
+            table.innerHTML += `
+                <tr>
+                    <td>${agent.id}</td>
+                    <td>${agent.name}</td>
+                    <td>${agent.mobile}</td>
 
-            const row = table.insertRow();
+                    <td class="${statusClass}">
+                        ${agent.status}
+                    </td>
 
-
-            row.innerHTML = `
-
-                <td>${id}</td>
-
-                <td>${name}</td>
-
-                <td>${mobile}</td>
-
-                <td class="${statusClass}">
-                    ${status}
-                </td>
-
-                <td>
-                    <button class="delete-btn"
-                        onclick="deleteAgent(this)">
-                        Delete
-                    </button>
-                </td>
-
+                    <td>
+                        <button
+                            class="delete-btn"
+                            onclick="deleteAgent('${agent.id}')"
+                        >
+                            Delete
+                        </button>
+                    </td>
+                </tr>
             `;
 
+        });
 
-            /* Clear form */
-
-            document.getElementById("agentName").value = "";
-
-            document.getElementById("agentMobile").value = "";
+    }
 
 
-            /* Hide form */
+    // Show / Hide Form
+    function showAgentForm() {
 
-            document.getElementById("agentForm").style.display = "none";
+        const form = document.getElementById("agentForm");
+
+        if (form.style.display === "block") {
+            form.style.display = "none";
+        } else {
+            form.style.display = "block";
+        }
+    }
 
 
-            alert("Agent added successfully!");
+    // Add Agent
+    function addAgent(event) {
 
+        event.preventDefault();
+
+        const name =
+            document.getElementById("agentName").value.trim();
+
+        const mobile =
+            document.getElementById("agentMobile").value.trim();
+
+        const status =
+            document.getElementById("agentStatus").value;
+
+
+        if (mobile.length !== 10) {
+            alert("Please enter a valid 10 digit mobile number.");
+            return;
         }
 
 
-        function deleteAgent(button) {
+        const agents = getAgents();
 
-            if (confirm("Are you sure you want to delete this agent?")) {
 
-                const row = button.parentNode.parentNode;
+        // Generate ID
+        const newId = String(
+            agents.length + 1
+        ).padStart(3, "0");
 
-                row.remove();
 
-            }
+        const newAgent = {
+            id: newId,
+            name: name,
+            mobile: mobile,
+            status: status
+        };
 
+
+        agents.push(newAgent);
+
+        saveAgents(agents);
+
+        displayAgents();
+
+
+        // Reset Form
+        document.getElementById("agentName").value = "";
+        document.getElementById("agentMobile").value = "";
+        document.getElementById("agentStatus").value = "Active";
+
+
+        document.getElementById("agentForm").style.display = "none";
+
+        alert("Agent added successfully!");
+
+    }
+
+
+    // Delete Agent
+    function deleteAgent(id) {
+
+        const confirmDelete =
+            confirm("Are you sure you want to delete this agent?");
+
+        if (!confirmDelete) {
+            return;
         }
 
-    </script>
+
+        let agents = getAgents();
+
+        agents = agents.filter(function(agent) {
+            return agent.id !== id;
+        });
+
+
+        saveAgents(agents);
+
+        displayAgents();
+
+    }
+
+
+    // Load Agents when page opens
+    displayAgents();
+
+</script>
 
 </body>
-
-    </html>
+</html>
