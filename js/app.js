@@ -6,13 +6,16 @@ function login(event) {
     const message = document.getElementById("loginMessage");
 
     if (mobile === "9999999999" && password === "Admin@2026Secure") {
+
         message.innerText = "Login successful!";
 
         setTimeout(function () {
             window.location.href = "agents.html";
-        }, 500);
+        }, 1000);
 
     } else {
+
         message.innerText = "Invalid mobile number or password.";
+
     }
 }
