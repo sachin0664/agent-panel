@@ -1,18 +1,20 @@
 function login(event) {
     event.preventDefault();
 
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    const mobile = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
     const message = document.getElementById("loginMessage");
 
-    if (username === "admin" && password === "admin123") {
+    if (mobile === "9999999999" && password === "123456") {
         message.innerText = "Login successful!";
 
-        setTimeout(function() {
-            window.location.href = "admin.html";
+        setTimeout(function () {
+            window.location.href = "agents.html";
         }, 500);
     } else {
-        message.innerText = "Invalid username or password.";
+        message.innerText = "Invalid mobile number or password.";
+    }
+}
     }
 }
 
