@@ -11,12 +11,12 @@ function login(event) {
         setTimeout(function () {
             window.location.href = "agents.html";
         }, 500);
+
     } else {
         message.innerText = "Invalid mobile number or password.";
     }
 }
-    }
-}
+
 
 function submitDeposit(event) {
     event.preventDefault();
@@ -27,6 +27,7 @@ function submitDeposit(event) {
     document.getElementById("depositMessage").innerText =
         "Deposit submitted for " + agent + " : ₹" + amount;
 }
+
 
 function submitWithdrawal(event) {
     event.preventDefault();
