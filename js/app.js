@@ -5,7 +5,7 @@ function login(event) {
     const password = document.getElementById("password").value.trim();
     const message = document.getElementById("loginMessage");
 
-    if (mobile === "9999999999" && password === "123456") {
+    if (mobile === "9999999999" && password === "Admin@2026Secure") {
         message.innerText = "Login successful!";
 
         setTimeout(function () {
@@ -15,26 +15,4 @@ function login(event) {
     } else {
         message.innerText = "Invalid mobile number or password.";
     }
-}
-
-
-function submitDeposit(event) {
-    event.preventDefault();
-
-    const agent = document.getElementById("depositAgent").value;
-    const amount = document.getElementById("depositAmount").value;
-
-    document.getElementById("depositMessage").innerText =
-        "Deposit submitted for " + agent + " : ₹" + amount;
-}
-
-
-function submitWithdrawal(event) {
-    event.preventDefault();
-
-    const agent = document.getElementById("withdrawAgent").value;
-    const amount = document.getElementById("withdrawAmount").value;
-
-    document.getElementById("withdrawMessage").innerText =
-        "Withdrawal submitted for " + agent + " : ₹" + amount;
 }
