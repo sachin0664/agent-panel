@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Deposit</h1>
+        <a href="admin.html">Dashboard</a>
+    </header>
+
+    <main class="container">
+
+        <div class="form-box">
+
+            <h2>Add Deposit</h2>
+
+            <form onsubmit="submitDeposit(event)">
+
+                <label>Agent Name</label>
+                <input type="text" id="depositAgent" required>
+
+                <label>Amount</label>
+                <input type="number" id="depositAmount" required>
+
+                <button type="submit">Submit Deposit</button>
+
+            </form>
+
+            <p id="depositMessage"></p>
+
+        </div>
+
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
