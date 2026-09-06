@@ -78,6 +78,11 @@
       color: white;
       font-size: 18px;
       font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
     }
 
     .login-link {
@@ -91,41 +96,200 @@
       text-decoration: none;
       font-weight: bold;
     }
+
+    #otpSection {
+      display: none;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      background: #e5e7eb;
+      color: #111827;
+      margin-top: 10px;
+    }
   </style>
 </head>
 
 <body>
 
-  <div class="register-page">
-    <div class="register-box">
+<div class="register-page">
+  <div class="register-box">
 
-      <div class="logo">Sathi Pay</div>
+    <div class="logo">Sathi Pay</div>
+    <div class="subtitle">Agent Registration</div>
 
-      <div class="subtitle">Agent Registration</div>
+    <!-- Registration Form -->
+    <form id="registerForm">
 
-      <form>
-        <label>Full Name</label>
-        <input type="text" placeholder="Enter your full name" required>
+      <label>Full Name</label>
+      <input
+        type="text"
+        id="fullName"
+        placeholder="Enter your full name"
+        required
+      >
 
-        <label>Mobile Number</label>
-        <input type="tel" placeholder="Enter mobile number" required>
+      <label>Mobile Number</label>
+      <input
+        type="tel"
+        id="mobile"
+        placeholder="Enter 10 digit mobile number"
+        maxlength="10"
+        required
+      >
 
-        <label>Email</label>
-        <input type="email" placeholder="Enter email address" required>
+      <label>Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter email address"
+        required
+      >
 
-        <label>Password</label>
-        <input type="password" placeholder="Create password" required>
+      <label>Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Create password"
+        minlength="6"
+        required
+      >
 
-        <button type="submit">Register</button>
-      </form>
+      <button type="submit">Send OTP</button>
 
-      <div class="login-link">
-        Already registered?
-        <a href="login.html">Login</a>
-      </div>
+    </form>
+
+    <!-- OTP Section -->
+    <div id="otpSection">
+
+      <label>Enter OTP</label>
+
+      <input
+        type="text"
+        id="otp"
+        placeholder="Enter 6 digit OTP"
+        maxlength="6"
+        inputmode="numeric"
+      >
+
+      <button onclick="verifyOTP()">Verify OTP</button>
+
+      <button class="back-btn" onclick="goBack()">
+        Change Mobile Number
+      </button>
+
+      <div class="message" id="otpMessage"></div>
 
     </div>
+
+    <div class="login-link">
+      Already registered?
+      <a href="login.html">Login</a>
+    </div>
+
   </div>
+</div>
+
+
+<script>
+
+  let generatedOTP = "";
+
+  const registerForm = document.getElementById("registerForm");
+  const otpSection = document.getElementById("otpSection");
+
+  registerForm.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("fullName").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    // Check mobile number
+    if (!/^[0-9]{10}$/.test(mobile)) {
+      alert("Please enter a valid 10 digit mobile number.");
+      return;
+    }
+
+    // Generate 6 digit OTP
+    generatedOTP =
+      Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Save registration data temporarily
+    localStorage.setItem("sathi_name", name);
+    localStorage.setItem("sathi_mobile", mobile);
+    localStorage.setItem("sathi_email", email);
+
+    // Demo OTP
+    console.log("Demo OTP:", generatedOTP);
+
+    // Hide registration form
+    registerForm.style.display = "none";
+
+    // Show OTP section
+    otpSection.style.display = "block";
+
+    /*
+      DEMO MODE:
+      Real SMS OTP is not connected yet.
+      The generated OTP is shown in an alert for testing.
+    */
+
+    alert(
+      "Demo OTP: " + generatedOTP +
+      "\n\nReal SMS OTP service abhi connected nahi hai."
+    );
+
+  });
+
+
+  function verifyOTP() {
+
+    const enteredOTP =
+      document.getElementById("otp").value.trim();
+
+    const message =
+      document.getElementById("otpMessage");
+
+    if (enteredOTP === generatedOTP) {
+
+      message.style.color = "green";
+      message.innerText = "OTP verified successfully!";
+
+      // Registration complete
+      localStorage.setItem("sathi_registered", "true");
+
+      setTimeout(function() {
+        window.location.href = "login.html";
+      }, 1200);
+
+    } else {
+
+      message.style.color = "red";
+      message.innerText = "Invalid OTP. Please try again.";
+
+    }
+  }
+
+
+  function goBack() {
+
+    otpSection.style.display = "none";
+    registerForm.style.display = "block";
+
+    document.getElementById("otp").value = "";
+    document.getElementById("otpMessage").innerText = "";
+
+  }
+
+</script>
 
 </body>
-          </html>
+</html>
