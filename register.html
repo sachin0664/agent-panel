@@ -16,101 +16,83 @@
       background: #f4f6f8;
     }
 
-    .register-page {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .container {
+      max-width: 430px;
+      margin: 40px auto;
       padding: 20px;
     }
 
-    .register-box {
-      width: 100%;
-      max-width: 520px;
+    .card {
       background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
-    .logo {
+    h1 {
       text-align: center;
-      font-size: 42px;
-      font-weight: bold;
-      color: #1f2937;
+      color: #1d4ed8;
       margin-bottom: 8px;
     }
 
     .subtitle {
       text-align: center;
-      font-size: 22px;
       color: #666;
-      margin-bottom: 30px;
-    }
-
-    .referral-box {
-      display: none;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      text-align: center;
-      color: #1d4ed8;
-      font-weight: bold;
+      margin-bottom: 25px;
     }
 
     label {
       display: block;
-      font-size: 17px;
+      margin-top: 15px;
+      margin-bottom: 6px;
       font-weight: bold;
-      margin: 16px 0 8px;
+      color: #333;
     }
 
     input {
       width: 100%;
-      padding: 16px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 16px;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
     }
 
     input:focus {
-      outline: none;
       border-color: #2563eb;
     }
 
     button {
       width: 100%;
-      margin-top: 25px;
-      padding: 16px;
+      padding: 14px;
+      margin-top: 20px;
       border: none;
-      border-radius: 10px;
-      background: #1f2937;
+      border-radius: 8px;
+      background: #2563eb;
       color: white;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    button:disabled {
-      opacity: 0.6;
+    button:hover {
+      background: #1d4ed8;
     }
 
-    .login-link {
-      text-align: center;
-      margin-top: 22px;
-      font-size: 17px;
-    }
-
-    .login-link a {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    #otpSection {
+    .otp-box {
       display: none;
+      margin-top: 20px;
+    }
+
+    .ref-box {
+      display: none;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      color: #1e40af;
+      font-weight: bold;
     }
 
     .message {
@@ -119,286 +101,485 @@
       font-weight: bold;
     }
 
-    .back-btn {
-      background: #e5e7eb;
-      color: #111827;
-      margin-top: 10px;
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .login-link a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
-<div class="register-page">
-  <div class="register-box">
+  <div class="container">
+    <div class="card">
 
-    <div class="logo">Sathi Pay</div>
-    <div class="subtitle">Agent Registration</div>
+      <h1>Sathi Pay</h1>
+      <div class="subtitle">Create your account</div>
 
-    <div id="referralBox" class="referral-box">
-      Referral Code: <span id="referralCodeText"></span>
+      <div id="refBox" class="ref-box">
+        Referral Code:
+        <span id="refCodeText"></span>
+      </div>
+
+      <form id="registerForm">
+
+        <label>Full Name</label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter your full name"
+          required
+        >
+
+        <label>Mobile Number</label>
+        <input
+          type="tel"
+          id="mobile"
+          placeholder="Enter mobile number"
+          maxlength="10"
+          required
+        >
+
+        <label>Email</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter email"
+          required
+        >
+
+        <label>Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Create password"
+          required
+        >
+
+        <button type="submit">
+          Send OTP
+        </button>
+
+      </form>
+
+      <div id="otpBox" class="otp-box">
+
+        <label>Enter OTP</label>
+
+        <input
+          type="text"
+          id="otp"
+          placeholder="Enter 6 digit OTP"
+          maxlength="6"
+        >
+
+        <button type="button" id="verifyBtn">
+          Verify OTP & Register
+        </button>
+
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <div class="login-link">
+        Already have an account?
+        <a href="login.html">Login</a>
+      </div>
+
     </div>
-
-    <form id="registerForm">
-
-      <label>Full Name</label>
-      <input
-        type="text"
-        id="fullName"
-        placeholder="Enter your full name"
-        required
-      >
-
-      <label>Mobile Number</label>
-      <input
-        type="tel"
-        id="mobile"
-        placeholder="Enter 10 digit mobile number"
-        maxlength="10"
-        required
-      >
-
-      <label>Email</label>
-      <input
-        type="email"
-        id="email"
-        placeholder="Enter email address"
-        required
-      >
-
-      <label>Password</label>
-      <input
-        type="password"
-        id="password"
-        placeholder="Create password"
-        minlength="6"
-        required
-      >
-
-      <button type="submit" id="sendOtpBtn">
-        Send OTP
-      </button>
-
-    </form>
-
-    <div id="otpSection">
-
-      <label>Enter OTP</label>
-
-      <input
-        type="text"
-        id="otp"
-        placeholder="Enter 6 digit OTP"
-        maxlength="6"
-        inputmode="numeric"
-      >
-
-      <button onclick="verifyOTP()">
-        Verify OTP
-      </button>
-
-      <button class="back-btn" onclick="goBack()">
-        Change Mobile Number
-      </button>
-
-      <div class="message" id="otpMessage"></div>
-
-    </div>
-
-    <div class="login-link">
-      Already registered?
-      <a href="login.html">Login</a>
-    </div>
-
   </div>
-</div>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  const SUPABASE_URL =
-    "https://lozluohksmjxbxixkbmq.supabase.co";
+  <script>
 
-  const SUPABASE_KEY =
-    "YOUR_SUPABASE_PUBLISHABLE_KEY";
+    /* ================================
+       SUPABASE SETTINGS
+       ================================ */
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
+    const SUPABASE_URL =
+      "https://lozluohksmjxbxixkbmq.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    /* ================================
+       REFERRAL CODE
+       ================================ */
+
+    const urlParams = new URLSearchParams(
+      window.location.search
     );
 
-  let generatedOTP = "";
+    const referralCode =
+      urlParams.get("ref") || "";
 
-  const registerForm =
-    document.getElementById("registerForm");
+    if (referralCode) {
 
-  const otpSection =
-    document.getElementById("otpSection");
-
-  /*
-    Referral link example:
-
-    register.html?ref=SATHI123
-  */
-
-  const urlParams =
-    new URLSearchParams(window.location.search);
-
-  const referralCode =
-    urlParams.get("ref");
-
-  if (referralCode) {
-
-    document.getElementById("referralBox").style.display =
-      "block";
-
-    document.getElementById("referralCodeText").innerText =
-      referralCode;
-
-    localStorage.setItem(
-      "sathi_referral_code",
-      referralCode
-    );
-  }
-
-
-  registerForm.addEventListener(
-    "submit",
-    function(event) {
-
-      event.preventDefault();
-
-      const name =
-        document.getElementById("fullName")
-        .value.trim();
-
-      const mobile =
-        document.getElementById("mobile")
-        .value.trim();
-
-      const email =
-        document.getElementById("email")
-        .value.trim();
-
-      const password =
-        document.getElementById("password")
-        .value;
-
-      if (!/^[0-9]{10}$/.test(mobile)) {
-
-        alert(
-          "Please enter a valid 10 digit mobile number."
-        );
-
-        return;
-      }
-
-      generatedOTP =
-        Math.floor(
-          100000 +
-          Math.random() * 900000
-        ).toString();
-
-      localStorage.setItem(
-        "sathi_name",
-        name
-      );
-
-      localStorage.setItem(
-        "sathi_mobile",
-        mobile
-      );
-
-      localStorage.setItem(
-        "sathi_email",
-        email
-      );
-
-      localStorage.setItem(
-        "sathi_password",
-        password
-      );
-
-      console.log(
-        "Demo OTP:",
-        generatedOTP
-      );
-
-      registerForm.style.display =
-        "none";
-
-      otpSection.style.display =
+      document.getElementById("refBox").style.display =
         "block";
 
-      alert(
-        "Demo OTP: " +
-        generatedOTP +
-        "\n\nReal SMS OTP service abhi connected nahi hai."
+      document.getElementById("refCodeText").textContent =
+        referralCode;
+
+      localStorage.setItem(
+        "sathi_referral_code",
+        referralCode
       );
-
-    }
-  );
-
-
-  async function verifyOTP() {
-
-    const enteredOTP =
-      document.getElementById("otp")
-      .value.trim();
-
-    const message =
-      document.getElementById("otpMessage");
-
-    if (enteredOTP !== generatedOTP) {
-
-      message.style.color = "red";
-
-      message.innerText =
-        "Invalid OTP. Please try again.";
-
-      return;
     }
 
-    message.style.color = "green";
 
-    message.innerText =
-      "OTP verified successfully!";
+    /* ================================
+       VARIABLES
+       ================================ */
 
-
-    const name =
-      localStorage.getItem("sathi_name");
-
-    const mobile =
-      localStorage.getItem("sathi_mobile");
-
-    /*
-      Create unique referral code
-    */
-
-    const newReferralCode =
-      "SP" +
-      Math.random()
-        .toString(36)
-        .substring(2, 8)
-        .toUpperCase();
+    let generatedOTP = "";
 
 
-    /*
-      Find referring agent
-    */
+    /* ================================
+       REGISTER FORM
+       ================================ */
 
-    let referredBy = null;
+    document
+      .getElementById("registerForm")
+      .addEventListener("submit", function(event) {
 
-    const savedReferralCode =
-      localStorage.getItem(
-        "sathi_referral_code"
-      );
+        event.preventDefault();
 
-    if (savedReferralCode) {
+        const name =
+          document.getElementById("name").value.trim();
 
-      const { data: refAgent } =
-        await supabaseClient
-          .            
+        const mobile =
+          document.getElementById("mobile").value.trim();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        if (!/^[0-9]{10}$/.test(mobile)) {
+
+          showMessage(
+            "Please enter a valid 10 digit mobile number.",
+            "red"
+          );
+
+          return;
+        }
+
+        if (password.length < 6) {
+
+          showMessage(
+            "Password must be at least 6 characters.",
+            "red"
+          );
+
+          return;
+        }
+
+
+        /* Generate demo OTP */
+
+        generatedOTP =
+          Math.floor(
+            100000 + Math.random() * 900000
+          ).toString();
+
+
+        /* Save temporary data */
+
+        localStorage.setItem(
+          "sathi_temp_name",
+          name
+        );
+
+        localStorage.setItem(
+          "sathi_temp_mobile",
+          mobile
+        );
+
+        localStorage.setItem(
+          "sathi_temp_email",
+          email
+        );
+
+
+        /* NOTE:
+           Password is not saved in localStorage.
+           Real authentication should use Supabase Auth.
+        */
+
+
+        document.getElementById("otpBox").style.display =
+          "block";
+
+
+        showMessage(
+          "Demo OTP: " + generatedOTP,
+          "green"
+        );
+
+      });
+
+
+    /* ================================
+       VERIFY OTP
+       ================================ */
+
+    document
+      .getElementById("verifyBtn")
+      .addEventListener("click", async function() {
+
+        const enteredOTP =
+          document.getElementById("otp").value.trim();
+
+        if (enteredOTP !== generatedOTP) {
+
+          showMessage(
+            "Wrong OTP. Please enter the correct OTP.",
+            "red"
+          );
+
+          return;
+        }
+
+
+        const name =
+          localStorage.getItem("sathi_temp_name");
+
+        const mobile =
+          localStorage.getItem("sathi_temp_mobile");
+
+        const email =
+          localStorage.getItem("sathi_temp_email");
+
+
+        showMessage(
+          "Creating your account...",
+          "blue"
+        );
+
+
+        /* ================================
+           CHECK EXISTING MOBILE
+           ================================ */
+
+        const { data: existingAgent, error: checkError } =
+          await supabaseClient
+            .from("agents")
+            .select("id, mobile")
+            .eq("mobile", mobile)
+            .maybeSingle();
+
+
+        if (checkError) {
+
+          console.error(checkError);
+
+          showMessage(
+            "Database error: " + checkError.message,
+            "red"
+          );
+
+          return;
+        }
+
+
+        if (existingAgent) {
+
+          showMessage(
+            "This mobile number is already registered.",
+            "red"
+          );
+
+          return;
+        }
+
+
+        /* ================================
+           GENERATE REFERRAL CODE
+           ================================ */
+
+        const newReferralCode =
+          "SP" +
+          Math.random()
+            .toString(36)
+            .substring(2, 8)
+            .toUpperCase();
+
+
+        /* ================================
+           FIND REFERRER
+           ================================ */
+
+        let referredBy = null;
+
+        const savedReferralCode =
+          localStorage.getItem(
+            "sathi_referral_code"
+          );
+
+
+        if (savedReferralCode) {
+
+          const { data: referrer, error: refError } =
+            await supabaseClient
+              .from("agents")
+              .select("id, referral_code")
+              .eq(
+                "referral_code",
+                savedReferralCode
+              )
+              .maybeSingle();
+
+
+          if (!refError && referrer) {
+
+            referredBy =
+              savedReferralCode;
+
+          }
+        }
+
+
+        /* ================================
+           INSERT NEW AGENT
+           ================================ */
+
+        const { data: newAgent, error: insertError } =
+          await supabaseClient
+            .from("agents")
+            .insert([{
+
+              name: name,
+
+              mobile: mobile,
+
+              status: "Active",
+
+              referral_code:
+                newReferralCode,
+
+              referred_by:
+                referredBy
+
+            }])
+            .select()
+            .single();
+
+
+        if (insertError) {
+
+          console.error(insertError);
+
+          showMessage(
+            "Registration failed: " +
+            insertError.message,
+            "red"
+          );
+
+          return;
+        }
+
+
+        /* ================================
+           SAVE USER DATA
+           ================================ */
+
+        localStorage.setItem(
+          "sathi_registered",
+          "true"
+        );
+
+        localStorage.setItem(
+          "sathi_name",
+          name
+        );
+
+        localStorage.setItem(
+          "sathi_mobile",
+          mobile
+        );
+
+        localStorage.setItem(
+          "sathi_email",
+          email
+        );
+
+        localStorage.setItem(
+          "sathi_agent_id",
+          newAgent.id
+        );
+
+        localStorage.setItem(
+          "sathi_referral_code",
+          newReferralCode
+        );
+
+
+        /* Clear temporary data */
+
+        localStorage.removeItem(
+          "sathi_temp_name"
+        );
+
+        localStorage.removeItem(
+          "sathi_temp_mobile"
+        );
+
+        localStorage.removeItem(
+          "sathi_temp_email"
+        );
+
+
+        showMessage(
+          "Registration successful! Redirecting...",
+          "green"
+        );
+
+
+        setTimeout(function() {
+
+          window.location.href =
+            "login.html";
+
+        }, 1500);
+
+      });
+
+
+    /* ================================
+       MESSAGE FUNCTION
+       ================================ */
+
+    function showMessage(text, color) {
+
+      const message =
+        document.getElementById("message");
+
+      message.textContent = text;
+
+      message.style.color = color;
+
+    }
+
+  </script>
+
+</body>
+        </html>
