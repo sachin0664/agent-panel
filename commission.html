@@ -1,53 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commission</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sathi Pay - Commission</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
 </head>
+
 
 <body>
 
+
+    <!-- HEADER -->
+
     <header>
-        <h1>Commission</h1>
-        <a href="admin.html">Dashboard</a>
+
+        <h1>Sathi Pay - Commission</h1>
+
+        <a href="admin.html">
+            Dashboard
+        </a>
+
     </header>
+
+
+
+    <!-- MAIN -->
 
     <main class="container">
 
-        <h2>Commission Details</h2>
+
+        <h2>
+            Commission Details
+        </h2>
+
+
+        <p>
+            Commission Rate:
+            <strong>10%</strong>
+        </p>
+
+
+        <!-- COMMISSION TABLE -->
 
         <table>
 
             <thead>
+
                 <tr>
-                    <th>Agent</th>
-                    <th>Deposit</th>
-                    <th>Commission</th>
+
+                    <th>
+                        Agent
+                    </th>
+
+                    <th>
+                        Deposit
+                    </th>
+
+                    <th>
+                        Commission (10%)
+                    </th>
+
                 </tr>
+
             </thead>
 
-            <tbody>
+
+            <tbody id="commissionTable">
 
                 <tr>
-                    <td>Agent One</td>
-                    <td>₹50,000</td>
-                    <td>₹5,000</td>
-                </tr>
 
-                <tr>
-                    <td>Agent Two</td>
-                    <td>₹30,000</td>
-                    <td>₹3,000</td>
+                    <td colspan="3">
+                        Loading commission...
+                    </td>
+
                 </tr>
 
             </tbody>
 
+
+            <tfoot>
+
+                <tr>
+
+                    <th>
+                        Total
+                    </th>
+
+                    <th id="totalDeposit">
+                        ₹0
+                    </th>
+
+                    <th id="totalCommission">
+                        ₹0
+                    </th>
+
+                </tr>
+
+            </tfoot>
+
         </table>
+
+
+        <p
+            id="commissionMessage"
+            style="margin-top:15px;"
+        ></p>
+
 
     </main>
 
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- APP JS -->
+
+    <script src="js/app.js"></script>
+
+
+
+    <!-- COMMISSION SCRIPT -->
+
+    <script>
+
+        const COMMISSION_RATE = 0.10;
+
+
+        async function loadCommission() {
+
+            const table =
+                document.getElementById(
+                    "commissionTable"
+                );
+
+            const message =
+                document.getElementById(
+                    "commissionMessage"
+                );
+
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="3">
+                        Loading commission...
+                    </td>
+                </tr>
+            `;
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("deposits")
+                    .select(`
+                        amount,
+                        agent_id,
+                        agents (
+                            name
+                        )
+                    `);
+
+
+            if (error) {
+
+                console.error(error);
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="3">
+                            Error loading commission.
+                        </td>
+                    </tr>
+                `;
+
+                message.innerText =
+                    "Error: " + error.message;
+
+                return;
+            }
+
+
+            if (!data || data.length === 0) {
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="3">
+                            No deposits found.
+                        </td>
+                    </tr>
+                `;
+
+                document.getElementById(
+                    "totalDeposit"
+                ).innerText = "₹0";
+
+
+                document.getElementById(
+                    "totalCommission"
+                ).innerText = "₹0";
+
+                return;
+            }
+
+
+            // Agent-wise totals
+
+            const agentTotals = {};
+
+
+            data.forEach(function (deposit) {
+
+                const agentName =
+                    deposit.agents &&
+                    deposit.agents.name
+                        ? deposit.agents.name
+                        : "Unknown Agent";
+
+
+                const amount =
+                    Number(deposit.amount) || 0;
+
+
+                if (!agentTotals[agentName]) {
+
+                    agentTotals[agentName] = 0;
+
+                }
+
+
+                agentTotals[agentName] += amount;
+
+            });
+
+
+
+            table.innerHTML = "";
+
+
+            let totalDeposit = 0;
+
+
+            Object.keys(agentTotals).forEach(
+                function (agentName) {
+
+                    const depositAmount =
+                        agentTotals[agentName];
+
+
+                    const commission =
+                        depositAmount *
+                        COMMISSION_RATE;
+
+
+                    totalDeposit +=
+                        depositAmount;
+
+
+                    table.innerHTML += `
+
+                        <tr>
+
+                            <td>
+                                ${agentName}
+                            </td>
+
+                            <td>
+                                ₹${depositAmount.toFixed(2)}
+                            </td>
+
+                            <td>
+                                ₹${commission.toFixed(2)}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+
+            const totalCommission =
+                totalDeposit *
+                COMMISSION_RATE;
+
+
+            document.getElementById(
+                "totalDeposit"
+            ).innerText =
+                "₹" + totalDeposit.toFixed(2);
+
+
+            document.getElementById(
+                "totalCommission"
+            ).innerText =
+                "₹" + totalCommission.toFixed(2);
+
+
+            message.innerText =
+                "Commission calculated successfully.";
+
+        }
+
+
+        // Load commission when page opens
+
+        loadCommission();
+
+    </script>
+
+
 </body>
+
 </html>
