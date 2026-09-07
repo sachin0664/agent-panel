@@ -81,6 +81,7 @@
         }
 
         .menu a {
+            display: block;
             background: #202938;
             color: white;
             text-decoration: none;
@@ -88,6 +89,11 @@
             border-radius: 10px;
             text-align: center;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .menu a:active {
+            transform: scale(0.98);
         }
 
         @media (max-width: 600px) {
@@ -102,7 +108,7 @@
 
 <header>
     <h1>Sathi Pay</h1>
-    <a class="logout" href="login.html">Logout</a>
+    <a class="logout" href="./login.html">Logout</a>
 </header>
 
 <div class="container">
@@ -137,15 +143,34 @@
     </div>
 
     <div class="menu">
-        <a href="deposit.html">💰 Deposit Money</a>
-        <a href="withdrawal.html">💸 Withdraw Money</a>
-        <a href="commission.html">📊 Commission</a>
-        <a href="transactions.html">📜 Transaction History</a>
-        <a href="#">👤 My Profile</a>
-        <a href="#">🔗 Referral</a>
+
+        <a href="./deposit.html">
+            💰 Deposit Money
+        </a>
+
+        <a href="./withdrawal.html">
+            💸 Withdraw Money
+        </a>
+
+        <a href="./commission.html">
+            📊 Commission
+        </a>
+
+        <a href="./transactions.html">
+            📜 Transaction History
+        </a>
+
+        <a href="./agents.html">
+            👤 My Profile
+        </a>
+
+        <a href="./agents.html">
+            🔗 Referral
+        </a>
+
     </div>
 
 </div>
 
 </body>
-</html>
+            </html>
