@@ -2,35 +2,52 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sathi Pay - Admin</title>
 
-    <link
-        rel="stylesheet"
-        href="css/style.css"
-    >
+    <link rel="stylesheet" href="css/style.css">
 
+    <style>
+        /* ADMIN MENU FIX */
+
+        .admin-menu {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 15px !important;
+            margin-top: 20px !important;
+            width: 100% !important;
+        }
+
+        .admin-menu a {
+            display: block !important;
+            width: 100% !important;
+            padding: 18px 20px !important;
+            background: white !important;
+            border-radius: 12px !important;
+            text-decoration: none !important;
+            font-size: 18px !important;
+            font-weight: bold !important;
+            color: #1565c0 !important;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10) !important;
+            text-align: left !important;
+        }
+
+        .admin-menu a:active {
+            transform: scale(0.98);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-
-        <h1>
-            Sathi Pay - Admin
-        </h1>
+        <h1>Sathi Pay - Admin</h1>
 
         <a href="index.html">
             Logout
         </a>
-
     </header>
 
 
@@ -41,11 +58,11 @@
         </h2>
 
 
+        <!-- DASHBOARD CARDS -->
+
         <div class="dashboard-grid">
 
-
             <div class="card">
-
                 <h3>
                     👥 Total Agents
                 </h3>
@@ -53,12 +70,10 @@
                 <p id="totalAgents">
                     0
                 </p>
-
             </div>
 
 
             <div class="card">
-
                 <h3>
                     💰 Total Deposits
                 </h3>
@@ -66,12 +81,10 @@
                 <p id="totalDeposits">
                     ₹0
                 </p>
-
             </div>
 
 
             <div class="card">
-
                 <h3>
                     💸 Total Withdrawals
                 </h3>
@@ -79,12 +92,10 @@
                 <p id="totalWithdrawals">
                     ₹0
                 </p>
-
             </div>
 
 
             <div class="card">
-
                 <h3>
                     💵 Total Commission
                 </h3>
@@ -92,12 +103,10 @@
                 <p id="totalCommission">
                     ₹0
                 </p>
-
             </div>
 
 
             <div class="card">
-
                 <h3>
                     ⏳ Pending Deposits
                 </h3>
@@ -105,12 +114,10 @@
                 <p id="pendingDeposits">
                     0
                 </p>
-
             </div>
 
 
             <div class="card">
-
                 <h3>
                     ⏳ Pending Withdrawals
                 </h3>
@@ -118,11 +125,12 @@
                 <p id="pendingWithdrawals">
                     0
                 </p>
-
             </div>
 
         </div>
 
+
+        <!-- ADMIN MENU -->
 
         <h2>
             ⚙️ Admin Menu
@@ -135,17 +143,21 @@
                 👥 Agent Management
             </a>
 
+
             <a href="deposit.html">
                 💰 Deposit
             </a>
+
 
             <a href="withdrawal.html">
                 💸 Withdrawal
             </a>
 
+
             <a href="commission.html">
                 💵 Commission
             </a>
+
 
             <a href="transactions.html">
                 🧾 Transactions
@@ -153,6 +165,8 @@
 
         </div>
 
+
+        <!-- SYSTEM STATUS -->
 
         <div class="status">
 
@@ -180,4 +194,4 @@
 
 </body>
 
-</html>
+    </html>
