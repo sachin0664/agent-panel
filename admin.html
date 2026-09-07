@@ -524,11 +524,11 @@ id="rCommission"
 </h4>
 
 <p>
-Approved deposit par abhi <b>1%</b> commission calculate ho raha hai.
+Approved deposit par <b>8%</b> commission calculate ho raha hai.
 </p>
 
 <p>
-Example: ₹1,000 approved deposit = ₹10 commission.
+Example: ₹1,000 approved deposit = ₹80 commission.
 </p>
 
 </div>
@@ -1189,11 +1189,11 @@ approvedWithdrawal += amount;
 
 /* ================================
    COMMISSION
-   1% OF APPROVED DEPOSITS
+   8% OF APPROVED DEPOSITS
 ================================ */
 
 const commission =
-approvedDeposit * 0.01;
+approvedDeposit * 0.08;
 
 
 /* AGENT DETAILS */
@@ -1842,13 +1842,13 @@ document.getElementById(
 pendingDeposits;
 
 
-/*
-   CURRENT COMMISSION
-   1% OF APPROVED DEPOSITS
-*/
+/* ================================
+   TOTAL COMMISSION
+   8% OF APPROVED DEPOSITS
+================================ */
 
 const totalCommission =
-approvedDeposits * 0.01;
+approvedDeposits * 0.08;
 
 
 document.getElementById(
