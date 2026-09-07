@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Sathi Pay - Withdrawal</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
         }
+
 
         body {
             margin: 0;
@@ -18,18 +27,23 @@
             color: #1f2937;
         }
 
+
         .header {
             background: #1f2937;
             color: white;
             padding: 18px;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+
         .header h2 {
             margin: 0;
+            font-size: 21px;
         }
+
 
         .header a {
             color: white;
@@ -37,19 +51,24 @@
             font-weight: bold;
         }
 
+
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: auto;
             padding: 20px;
         }
+
 
         .card {
             background: white;
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.08);
         }
+
 
         label {
             display: block;
@@ -58,27 +77,42 @@
             margin-bottom: 6px;
         }
 
+
         select,
         input {
             width: 100%;
             padding: 12px;
+
             border: 1px solid #ddd;
             border-radius: 8px;
+
             font-size: 16px;
         }
+
 
         button {
             width: 100%;
             margin-top: 20px;
             padding: 13px;
+
             border: none;
             border-radius: 8px;
+
             background: #dc2626;
             color: white;
+
             font-size: 16px;
             font-weight: bold;
+
             cursor: pointer;
         }
+
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
 
         #message {
             text-align: center;
@@ -86,15 +120,18 @@
             font-weight: bold;
         }
 
+
         .table-box {
             overflow-x: auto;
         }
 
+
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 500px;
+            min-width: 650px;
         }
+
 
         th,
         td {
@@ -103,303 +140,920 @@
             text-align: left;
         }
 
+
         th {
             background: #e5e7eb;
         }
+
 
         .pending {
             color: #b45309;
             font-weight: bold;
         }
+
+
+        .success {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+
+        .failed {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+
+        .uid {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+
+        .amount {
+            font-weight: bold;
+        }
+
+
+        .agent-info {
+            margin-top: 10px;
+            padding: 12px;
+
+            background: #f1f5f9;
+
+            border-radius: 8px;
+
+            display: none;
+        }
+
+
+        .agent-info div {
+            margin: 5px 0;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 12px;
+            }
+
+
+            .card {
+                padding: 16px;
+            }
+
+
+            .header {
+                padding: 15px;
+            }
+
+
+            .header h2 {
+                font-size: 18px;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
+    <!-- HEADER -->
+
     <div class="header">
-        <h2>Sathi Pay - Withdrawal</h2>
-        <a href="agents.html">Agents</a>
+
+        <h2>
+            Sathi Pay - Withdrawal
+        </h2>
+
+
+        <a href="agents.html">
+            Agents
+        </a>
+
     </div>
+
+
 
     <div class="container">
 
+
         <!-- NEW WITHDRAWAL -->
+
         <div class="card">
 
-            <h2>New Withdrawal</h2>
+            <h2>
+                💸 New Withdrawal
+            </h2>
 
-            <form onsubmit="submitWithdrawal(event)">
 
-                <label>Select Agent</label>
+            <form
+                id="withdrawalForm"
+                onsubmit="submitWithdrawal(event)"
+            >
 
-                <select id="withdrawAgent" required>
-                    <option value="">Loading agents...</option>
+
+                <label>
+                    Select Agent
+                </label>
+
+
+                <select
+                    id="withdrawAgent"
+                    required
+                    onchange="showAgentInfo()"
+                >
+
+                    <option value="">
+                        Loading agents...
+                    </option>
+
                 </select>
 
-                <label>Amount (₹)</label>
+
+
+                <!-- SELECTED AGENT INFO -->
+
+                <div
+                    id="agentInfo"
+                    class="agent-info"
+                >
+
+                    <div>
+                        <b>UID:</b>
+                        <span id="selectedUID">-</span>
+                    </div>
+
+
+                    <div>
+                        <b>Name:</b>
+                        <span id="selectedName">-</span>
+                    </div>
+
+
+                    <div>
+                        <b>Mobile:</b>
+                        <span id="selectedMobile">-</span>
+                    </div>
+
+
+                    <div>
+                        <b>Status:</b>
+                        <span id="selectedStatus">-</span>
+                    </div>
+
+                </div>
+
+
+
+                <label>
+                    Amount (₹)
+                </label>
+
 
                 <input
                     type="number"
                     id="withdrawAmount"
                     placeholder="Enter amount"
                     min="1"
+                    step="0.01"
                     required
                 >
 
-                <button type="submit">
+
+
+                <button
+                    id="submitButton"
+                    type="submit"
+                >
                     Submit Withdrawal
                 </button>
 
+
                 <div id="message"></div>
+
 
             </form>
 
         </div>
 
 
+
         <!-- WITHDRAWAL HISTORY -->
+
         <div class="card">
 
-            <h2>Withdrawal History</h2>
+            <h2>
+                📜 Withdrawal History
+            </h2>
+
 
             <div class="table-box">
 
+
                 <table>
 
+
                     <thead>
+
                         <tr>
-                            <th>ID</th>
-                            <th>Agent</th>
-                            <th>Amount</th>
-                            <th>Status</th>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                UID
+                            </th>
+
+                            <th>
+                                Agent
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
                         </tr>
+
                     </thead>
 
+
+
                     <tbody id="withdrawalTable">
+
                         <tr>
-                            <td colspan="4">
+
+                            <td colspan="5">
                                 Loading withdrawals...
                             </td>
+
                         </tr>
+
                     </tbody>
 
+
                 </table>
+
 
             </div>
 
         </div>
 
+
     </div>
 
 
-    <!-- SUPABASE LIBRARY -->
+
+    <!-- SUPABASE -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+
     <!-- APP.JS -->
+
     <script src="js/app.js"></script>
+
 
 
     <script>
 
+
+        // =========================================
         // LOAD ACTIVE AGENTS
+        // =========================================
+
         async function loadWithdrawalAgents() {
 
             const select =
-                document.getElementById("withdrawAgent");
+                document.getElementById(
+                    "withdrawAgent"
+                );
 
-            const { data, error } =
-                await supabaseClient
+
+            select.innerHTML =
+                '<option value="">Loading agents...</option>';
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+
                     .from("agents")
-                    .select("*")
+
+                    .select(`
+                        id,
+                        uid,
+                        name,
+                        mobile,
+                        status
+                    `)
+
                     .eq("status", "Active")
+
                     .order("name");
 
 
-            if (error) {
+                console.log(
+                    "Agents:",
+                    data
+                );
+
+
+                console.log(
+                    "Agent error:",
+                    error
+                );
+
+
+                if (error) {
+
+                    console.error(error);
+
+
+                    select.innerHTML =
+                        '<option value="">Error loading agents</option>';
+
+
+                    return;
+                }
+
+
+                if (!data || data.length === 0) {
+
+                    select.innerHTML =
+                        '<option value="">No active agents found</option>';
+
+
+                    return;
+                }
+
+
+                window.withdrawalAgents =
+                    data;
+
+
+                select.innerHTML =
+                    '<option value="">Select Agent</option>';
+
+
+                data.forEach(function(agent) {
+
+
+                    const option =
+                        document.createElement("option");
+
+
+                    option.value =
+                        agent.id;
+
+
+                    option.textContent =
+                        (agent.uid || "No UID")
+                        + " - "
+                        + (agent.name || "Unknown")
+                        + " - "
+                        + (agent.mobile || "");
+
+
+                    select.appendChild(option);
+
+
+                });
+
+
+            }
+
+            catch (error) {
 
                 console.error(error);
 
+
                 select.innerHTML =
                     '<option value="">Error loading agents</option>';
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // SHOW SELECTED AGENT INFORMATION
+        // =========================================
+
+        function showAgentInfo() {
+
+
+            const agentId =
+                document.getElementById(
+                    "withdrawAgent"
+                ).value;
+
+
+            const info =
+                document.getElementById(
+                    "agentInfo"
+                );
+
+
+            if (!agentId) {
+
+                info.style.display =
+                    "none";
 
                 return;
             }
 
 
-            select.innerHTML =
-                '<option value="">Select Agent</option>';
+            const agent =
+                window.withdrawalAgents.find(
+                    function(item) {
+
+                        return String(item.id)
+                            === String(agentId);
+
+                    }
+                );
 
 
-            data.forEach(function(agent) {
+            if (!agent) {
 
-                select.innerHTML += `
-                    <option value="${agent.id}">
-                        ${agent.name} - ${agent.mobile}
-                    </option>
-                `;
+                info.style.display =
+                    "none";
 
-            });
+                return;
+            }
+
+
+            document.getElementById(
+                "selectedUID"
+            ).textContent =
+                agent.uid || "-";
+
+
+            document.getElementById(
+                "selectedName"
+            ).textContent =
+                agent.name || "-";
+
+
+            document.getElementById(
+                "selectedMobile"
+            ).textContent =
+                agent.mobile || "-";
+
+
+            document.getElementById(
+                "selectedStatus"
+            ).textContent =
+                agent.status || "-";
+
+
+            info.style.display =
+                "block";
 
         }
 
 
+
+        // =========================================
         // SUBMIT WITHDRAWAL
+        // =========================================
+
         async function submitWithdrawal(event) {
 
             event.preventDefault();
 
 
             const agentId =
-                document.getElementById("withdrawAgent").value;
+                document.getElementById(
+                    "withdrawAgent"
+                ).value;
+
+
+            const amountInput =
+                document.getElementById(
+                    "withdrawAmount"
+                );
+
 
             const amount =
-                document.getElementById("withdrawAmount").value;
+                Number(
+                    amountInput.value
+                );
+
 
             const message =
-                document.getElementById("message");
+                document.getElementById(
+                    "message"
+                );
 
 
-            message.innerText = "";
+            const button =
+                document.getElementById(
+                    "submitButton"
+                );
 
+
+            message.innerText =
+                "";
+
+
+            // Validate agent
 
             if (!agentId) {
 
                 message.innerText =
                     "Please select an agent.";
 
+                message.style.color =
+                    "red";
+
                 return;
             }
 
 
-            if (!amount || Number(amount) <= 0) {
+            // Validate amount
+
+            if (
+                !amount ||
+                amount <= 0
+            ) {
 
                 message.innerText =
                     "Please enter a valid amount.";
 
-                return;
-            }
-
-
-            const { error } =
-                await supabaseClient
-                    .from("withdrawals")
-                    .insert([
-                        {
-                            agent_id: agentId,
-                            amount: Number(amount),
-                            status: "Pending"
-                        }
-                    ]);
-
-
-            if (error) {
-
-                console.error(error);
-
-                message.innerText =
-                    "Error: " + error.message;
+                message.style.color =
+                    "red";
 
                 return;
             }
+
+
+            button.disabled =
+                true;
+
+
+            button.innerText =
+                "Submitting...";
 
 
             message.innerText =
-                "Withdrawal submitted successfully!";
+                "Submitting withdrawal...";
 
 
-            document.getElementById("withdrawAmount").value = "";
+            message.style.color =
+                "#2563eb";
 
 
-            await loadWithdrawals();
+            try {
+
+
+                const {
+                    error
+                } = await supabaseClient
+
+                    .from("withdrawals")
+
+                    .insert([
+
+                        {
+                            agent_id: agentId,
+                            amount: amount,
+                            status: "Pending"
+                        }
+
+                    ]);
+
+
+                if (error) {
+
+                    console.error(error);
+
+
+                    message.innerText =
+                        "Error: " + error.message;
+
+
+                    message.style.color =
+                        "red";
+
+
+                    return;
+                }
+
+
+                // SUCCESS
+
+                message.innerText =
+                    "✅ Withdrawal submitted successfully!";
+
+
+                message.style.color =
+                    "green";
+
+
+                amountInput.value =
+                    "";
+
+
+                document.getElementById(
+                    "withdrawAgent"
+                ).value =
+                    "";
+
+
+                document.getElementById(
+                    "agentInfo"
+                ).style.display =
+                    "none";
+
+
+                await loadWithdrawals();
+
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+
+                message.innerText =
+                    "Something went wrong.";
+
+
+                message.style.color =
+                    "red";
+
+            }
+
+            finally {
+
+                button.disabled =
+                    false;
+
+
+                button.innerText =
+                    "Submit Withdrawal";
+
+            }
 
         }
 
 
+
+        // =========================================
         // LOAD WITHDRAWAL HISTORY
+        // =========================================
+
         async function loadWithdrawals() {
 
+
             const table =
-                document.getElementById("withdrawalTable");
+                document.getElementById(
+                    "withdrawalTable"
+                );
 
 
-            const { data, error } =
-                await supabaseClient
+            table.innerHTML = `
+
+                <tr>
+
+                    <td colspan="5">
+                        Loading withdrawals...
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            try {
+
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+
                     .from("withdrawals")
+
                     .select(`
                         id,
                         amount,
                         status,
                         agents (
-                            name
+                            uid,
+                            name,
+                            mobile
                         )
                     `)
+
                     .order("id", {
                         ascending: false
                     });
 
 
-            if (error) {
+                if (error) {
+
+                    console.error(error);
+
+
+                    table.innerHTML = `
+
+                        <tr>
+
+                            <td colspan="5">
+                                Error loading withdrawals:
+                                ${error.message}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
+                    return;
+                }
+
+
+                if (
+                    !data ||
+                    data.length === 0
+                ) {
+
+                    table.innerHTML = `
+
+                        <tr>
+
+                            <td colspan="5">
+                                No withdrawals found
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
+                    return;
+                }
+
+
+                table.innerHTML =
+                    "";
+
+
+                data.forEach(
+                    function(withdrawal) {
+
+
+                        const agent =
+                            withdrawal.agents;
+
+
+                        const uid =
+                            agent &&
+                            agent.uid
+                                ? agent.uid
+                                : "-";
+
+
+                        const agentName =
+                            agent &&
+                            agent.name
+                                ? agent.name
+                                : "Unknown";
+
+
+                        const status =
+                            withdrawal.status
+                                ? withdrawal.status
+                                : "Pending";
+
+
+                        let statusClass =
+                            "pending";
+
+
+                        if (
+                            status.toLowerCase()
+                            === "approved"
+                        ) {
+
+                            statusClass =
+                                "success";
+
+                        }
+
+
+                        if (
+                            status.toLowerCase()
+                            === "failed"
+                        ) {
+
+                            statusClass =
+                                "failed";
+
+                        }
+
+
+                        const amount =
+                            Number(
+                                withdrawal.amount || 0
+                            ).toFixed(2);
+
+
+                        table.innerHTML += `
+
+                            <tr>
+
+                                <td>
+                                    ${withdrawal.id}
+                                </td>
+
+                                <td class="uid">
+                                    ${uid}
+                                </td>
+
+                                <td>
+                                    ${agentName}
+                                </td>
+
+                                <td class="amount">
+                                    ₹${amount}
+                                </td>
+
+                                <td class="${statusClass}">
+                                    ${status}
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                );
+
+            }
+
+            catch (error) {
 
                 console.error(error);
 
-                table.innerHTML = `
-                    <tr>
-                        <td colspan="4">
-                            Error loading withdrawals
-                        </td>
-                    </tr>
-                `;
-
-                return;
-            }
-
-
-            if (!data || data.length === 0) {
 
                 table.innerHTML = `
+
                     <tr>
-                        <td colspan="4">
-                            No withdrawals found
+
+                        <td colspan="5">
+                            Something went wrong while
+                            loading withdrawals.
                         </td>
+
                     </tr>
+
                 `;
 
-                return;
             }
-
-
-            table.innerHTML = "";
-
-
-            data.forEach(function(withdrawal) {
-
-                const agentName =
-                    withdrawal.agents
-                        ? withdrawal.agents.name
-                        : "Unknown";
-
-
-                table.innerHTML += `
-                    <tr>
-                        <td>${withdrawal.id}</td>
-                        <td>${agentName}</td>
-                        <td>₹${withdrawal.amount}</td>
-                        <td class="pending">
-                            ${withdrawal.status}
-                        </td>
-                    </tr>
-                `;
-
-            });
 
         }
 
 
-        // LOAD PAGE DATA
-        loadWithdrawalAgents();
-        loadWithdrawals();
+
+        // =========================================
+        // START
+        // =========================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                loadWithdrawalAgents();
+
+                loadWithdrawals();
+
+            }
+        );
+
 
     </script>
 
+
 </body>
-</html>
+
+    </html>
