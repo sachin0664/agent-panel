@@ -5,262 +5,179 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Sathi Pay - Admin Dashboard</title>
+    <title>Sathi Pay - Admin</title>
 
-    <link rel="stylesheet"
-          href="css/style.css">
-
-    <style>
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #1f2937;
-        }
-
-        header {
-            background: #1f2937;
-            color: white;
-            padding: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 22px;
-        }
-
-        header a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        }
-
-        .card h3 {
-            margin: 0 0 10px;
-            font-size: 16px;
-            color: #555;
-        }
-
-        .card p {
-            margin: 0;
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        .menu {
-            display: grid;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .menu a {
-            background: white;
-            padding: 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #222;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .status {
-            margin-top: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        @media (min-width: 700px) {
-
-            .dashboard-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-        }
-
-    </style>
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 
 </head>
 
-
 <body>
 
+    <header>
 
-<header>
+        <h1>
+            Sathi Pay - Admin
+        </h1>
 
-    <h1>Sathi Pay - Admin</h1>
-
-    <a href="index.html">
-        Logout
-    </a>
-
-</header>
-
-
-<main class="container">
-
-
-    <h2>📊 Admin Dashboard</h2>
-
-
-    <div class="dashboard-grid">
-
-
-        <!-- TOTAL AGENTS -->
-
-        <div class="card">
-
-            <h3>👥 Total Agents</h3>
-
-            <p id="totalAgents">
-                0
-            </p>
-
-        </div>
-
-
-        <!-- TOTAL DEPOSITS -->
-
-        <div class="card">
-
-            <h3>💰 Total Deposits</h3>
-
-            <p id="totalDeposits">
-                ₹0
-            </p>
-
-        </div>
-
-
-        <!-- TOTAL WITHDRAWALS -->
-
-        <div class="card">
-
-            <h3>💸 Total Withdrawals</h3>
-
-            <p id="totalWithdrawals">
-                ₹0
-            </p>
-
-        </div>
-
-
-        <!-- COMMISSION -->
-
-        <div class="card">
-
-            <h3>💵 Total Commission</h3>
-
-            <p id="totalCommission">
-                ₹0
-            </p>
-
-        </div>
-
-
-        <!-- PENDING DEPOSITS -->
-
-        <div class="card">
-
-            <h3>⏳ Pending Deposits</h3>
-
-            <p id="pendingDeposits">
-                0
-            </p>
-
-        </div>
-
-
-        <!-- PENDING WITHDRAWALS -->
-
-        <div class="card">
-
-            <h3>⏳ Pending Withdrawals</h3>
-
-            <p id="pendingWithdrawals">
-                0
-            </p>
-
-        </div>
-
-
-    </div>
-
-
-    <h2>⚙️ Admin Menu</h2>
-
-
-    <div class="menu">
-
-        <a href="agents.html">
-            👥 Agent Management
+        <a href="index.html">
+            Logout
         </a>
 
-        <a href="deposit.html">
-            💰 Deposit
-        </a>
-
-        <a href="withdrawal.html">
-            💸 Withdrawal
-        </a>
-
-        <a href="commission.html">
-            💵 Commission
-        </a>
-
-        <a href="transactions.html">
-            📋 Transactions
-        </a>
-
-    </div>
+    </header>
 
 
-    <div class="status">
+    <main class="container">
 
-        <b>System Status:</b>
-
-        🟢 Online
-
-    </div>
+        <h2>
+            📊 Admin Dashboard
+        </h2>
 
 
-</main>
+        <div class="dashboard-grid">
 
 
-<!-- SUPABASE LIBRARY -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <div class="card">
+
+                <h3>
+                    👥 Total Agents
+                </h3>
+
+                <p id="totalAgents">
+                    0
+                </p>
+
+            </div>
 
 
-<!-- YOUR APP.JS -->
-<script src="js/app.js"></script>
+            <div class="card">
 
+                <h3>
+                    💰 Total Deposits
+                </h3>
+
+                <p id="totalDeposits">
+                    ₹0
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    💸 Total Withdrawals
+                </h3>
+
+                <p id="totalWithdrawals">
+                    ₹0
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    💵 Total Commission
+                </h3>
+
+                <p id="totalCommission">
+                    ₹0
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    ⏳ Pending Deposits
+                </h3>
+
+                <p id="pendingDeposits">
+                    0
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    ⏳ Pending Withdrawals
+                </h3>
+
+                <p id="pendingWithdrawals">
+                    0
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+            ⚙️ Admin Menu
+        </h2>
+
+
+        <div class="admin-menu">
+
+            <a href="agents.html">
+                👥 Agent Management
+            </a>
+
+            <a href="deposit.html">
+                💰 Deposit
+            </a>
+
+            <a href="withdrawal.html">
+                💸 Withdrawal
+            </a>
+
+            <a href="commission.html">
+                💵 Commission
+            </a>
+
+            <a href="transactions.html">
+                🧾 Transactions
+            </a>
+
+        </div>
+
+
+        <div class="status">
+
+            <b>
+                System Status:
+            </b>
+
+            <p>
+                🟢 Online
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- APP JS -->
+
+    <script src="js/app.js?v=2"></script>
 
 </body>
 
-    </html>
+</html>
