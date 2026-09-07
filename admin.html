@@ -67,13 +67,6 @@ body{
     font-weight:bold;
     font-size:16px;
     cursor:pointer;
-    pointer-events:auto;
-    position:relative;
-    z-index:10;
-}
-
-.uid-input-row button:active{
-    transform:scale(.98);
 }
 
 #uidMessage{
@@ -198,10 +191,6 @@ body{
     background:#dc2626;
 }
 
-.action-btn:active{
-    transform:scale(.96);
-}
-
 .action-done{
     font-weight:bold;
 }
@@ -243,11 +232,6 @@ body{
     color:#15803d;
 }
 
-.loading{
-    opacity:.6;
-    pointer-events:none;
-}
-
 @media(max-width:600px){
 
     .uid-input-row{
@@ -283,7 +267,6 @@ body{
 
 
 <body>
-
 
 <header>
 
@@ -517,6 +500,8 @@ id="rCommission"
 </div>
 
 
+<!-- COMMISSION RULE -->
+
 <div class="commission-info">
 
 <h4>
@@ -524,11 +509,11 @@ id="rCommission"
 </h4>
 
 <p>
-Approved deposit par <b>8%</b> commission calculate ho raha hai.
+Approved deposit par <b>10%</b> commission calculate ho raha hai.
 </p>
 
 <p>
-Example: ₹1,000 approved deposit = ₹80 commission.
+Example: ₹1,000 approved deposit = ₹100 commission.
 </p>
 
 </div>
@@ -557,21 +542,10 @@ class="history-card"
 
 <tr>
 
-<th>
-ID
-</th>
-
-<th>
-Amount
-</th>
-
-<th>
-Status
-</th>
-
-<th>
-Action
-</th>
+<th>ID</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Action</th>
 
 </tr>
 
@@ -617,21 +591,10 @@ class="history-card"
 
 <tr>
 
-<th>
-ID
-</th>
-
-<th>
-Amount
-</th>
-
-<th>
-Status
-</th>
-
-<th>
-Action
-</th>
+<th>ID</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Action</th>
 
 </tr>
 
@@ -752,31 +715,25 @@ No withdrawals found
 
 <div class="admin-menu">
 
-
 <a href="agents.html">
 👥 Agent Management
 </a>
-
 
 <a href="deposit.html">
 💰 Deposit
 </a>
 
-
 <a href="withdrawal.html">
 💸 Withdrawal
 </a>
-
 
 <a href="commission.html">
 💵 Commission
 </a>
 
-
 <a href="transactions.html">
 🧾 Transactions
 </a>
-
 
 </div>
 
@@ -804,20 +761,24 @@ System Status:
 
 <script>
 
-
 const SUPABASE_URL =
 "https://lozluohksmjxbxixkbmq.supabase.co";
 
-
 const SUPABASE_KEY =
 "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
-
 
 const supabaseClient =
 window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
+
+
+/* ================================
+   COMMISSION RATE
+================================ */
+
+const COMMISSION_RATE = 0.10;
 
 
 /* ================================
@@ -873,48 +834,31 @@ return "pending";
 async function searchAgent(){
 
 const input =
-document.getElementById(
-"uidInput"
-);
+document.getElementById("uidInput");
 
 const uid =
 input.value
 .trim()
 .toUpperCase();
 
-
 const message =
-document.getElementById(
-"uidMessage"
-);
-
+document.getElementById("uidMessage");
 
 const result =
-document.getElementById(
-"agentResult"
-);
-
+document.getElementById("agentResult");
 
 const depositCard =
-document.getElementById(
-"depositHistoryCard"
-);
-
+document.getElementById("depositHistoryCard");
 
 const withdrawalCard =
-document.getElementById(
-"withdrawalHistoryCard"
-);
+document.getElementById("withdrawalHistoryCard");
 
 
-result.style.display =
-"none";
+result.style.display = "none";
 
-depositCard.style.display =
-"none";
+depositCard.style.display = "none";
 
-withdrawalCard.style.display =
-"none";
+withdrawalCard.style.display = "none";
 
 
 if(!uid){
@@ -922,8 +866,7 @@ if(!uid){
 message.textContent =
 "Please enter UID.";
 
-message.style.color =
-"red";
+message.style.color = "red";
 
 return;
 
@@ -958,10 +901,7 @@ mobile,
 status
 `)
 
-.eq(
-"uid",
-uid
-)
+.eq("uid",uid)
 
 .maybeSingle();
 
@@ -974,8 +914,7 @@ message.textContent =
 "Database error: " +
 agentError.message;
 
-message.style.color =
-"red";
+message.style.color = "red";
 
 return;
 
@@ -987,8 +926,7 @@ if(!agent){
 message.textContent =
 "❌ Agent not found.";
 
-message.style.color =
-"red";
+message.style.color = "red";
 
 return;
 
@@ -1011,10 +949,7 @@ amount,
 status
 `)
 
-.eq(
-"agent_id",
-agent.id
-)
+.eq("agent_id",agent.id)
 
 .order(
 "id",
@@ -1032,8 +967,7 @@ message.textContent =
 "Deposit error: " +
 depositError.message;
 
-message.style.color =
-"red";
+message.style.color = "red";
 
 return;
 
@@ -1056,10 +990,7 @@ amount,
 status
 `)
 
-.eq(
-"agent_id",
-agent.id
-)
+.eq("agent_id",agent.id)
 
 .order(
 "id",
@@ -1077,8 +1008,7 @@ message.textContent =
 "Withdrawal error: " +
 withdrawalError.message;
 
-message.style.color =
-"red";
+message.style.color = "red";
 
 return;
 
@@ -1100,22 +1030,16 @@ let approvedDeposit = 0;
 deposit => {
 
 const amount =
-Number(
-deposit.amount || 0
-);
+Number(deposit.amount || 0);
 
 totalDeposit += amount;
 
-
 const status =
-String(
-deposit.status || ""
-).toLowerCase();
+String(deposit.status || "")
+.toLowerCase();
 
 
-if(
-status === "pending"
-){
+if(status === "pending"){
 
 pendingDeposit += amount;
 
@@ -1151,22 +1075,16 @@ let approvedWithdrawal = 0;
 withdrawal => {
 
 const amount =
-Number(
-withdrawal.amount || 0
-);
+Number(withdrawal.amount || 0);
 
 totalWithdrawal += amount;
 
-
 const status =
-String(
-withdrawal.status || ""
-).toLowerCase();
+String(withdrawal.status || "")
+.toLowerCase();
 
 
-if(
-status === "pending"
-){
+if(status === "pending"){
 
 pendingWithdrawal += amount;
 
@@ -1188,107 +1106,80 @@ approvedWithdrawal += amount;
 
 
 /* ================================
-   COMMISSION
-   8% OF APPROVED DEPOSITS
+   COMMISSION - 10%
 ================================ */
 
 const commission =
-approvedDeposit * 0.08;
+approvedDeposit * COMMISSION_RATE;
 
 
-/* AGENT DETAILS */
+/* ================================
+   AGENT DETAILS
+================================ */
 
-document.getElementById(
-"rUid"
-).textContent =
+document.getElementById("rUid")
+.textContent =
 agent.uid || "-";
 
 
-document.getElementById(
-"rName"
-).textContent =
+document.getElementById("rName")
+.textContent =
 agent.name || "-";
 
 
-document.getElementById(
-"rMobile"
-).textContent =
+document.getElementById("rMobile")
+.textContent =
 agent.mobile || "-";
 
 
 const statusElement =
-document.getElementById(
-"rStatus"
-);
-
+document.getElementById("rStatus");
 
 statusElement.textContent =
 agent.status || "-";
 
-
 statusElement.className =
 "detail-value " +
-statusClass(
-agent.status
-);
+statusClass(agent.status);
 
 
-/* SUMMARY */
+/* ================================
+   SUMMARY
+================================ */
 
-document.getElementById(
-"rTotalDeposit"
-).textContent =
-money(
-totalDeposit
-);
-
-
-document.getElementById(
-"rTotalWithdrawal"
-).textContent =
-money(
-totalWithdrawal
-);
+document.getElementById("rTotalDeposit")
+.textContent =
+money(totalDeposit);
 
 
-document.getElementById(
-"rPendingDeposit"
-).textContent =
-money(
-pendingDeposit
-);
+document.getElementById("rTotalWithdrawal")
+.textContent =
+money(totalWithdrawal);
 
 
-document.getElementById(
-"rPendingWithdrawal"
-).textContent =
-money(
-pendingWithdrawal
-);
+document.getElementById("rPendingDeposit")
+.textContent =
+money(pendingDeposit);
 
 
-document.getElementById(
-"rApprovedDeposit"
-).textContent =
-money(
-approvedDeposit
-);
+document.getElementById("rPendingWithdrawal")
+.textContent =
+money(pendingWithdrawal);
 
 
-document.getElementById(
-"rApprovedWithdrawal"
-).textContent =
-money(
-approvedWithdrawal
-);
+document.getElementById("rApprovedDeposit")
+.textContent =
+money(approvedDeposit);
 
 
-document.getElementById(
-"rCommission"
-).textContent =
-money(
-commission
-);
+document.getElementById("rApprovedWithdrawal")
+.textContent =
+money(approvedWithdrawal);
+
+
+document.getElementById("rCommission")
+.textContent =
+money(commission);
 
 
 result.style.display =
@@ -1333,13 +1224,10 @@ String(
 deposit.status || ""
 ).toLowerCase();
 
-
 let action = "";
 
 
-if(
-status === "pending"
-){
+if(status === "pending"){
 
 action = `
 
@@ -1448,13 +1336,10 @@ String(
 withdrawal.status || ""
 ).toLowerCase();
 
-
 let action = "";
 
 
-if(
-status === "pending"
-){
+if(status === "pending"){
 
 action = `
 
@@ -1540,8 +1425,7 @@ message.textContent =
 "Error: " +
 error.message;
 
-message.style.color =
-"red";
+message.style.color = "red";
 
 }
 
@@ -1559,13 +1443,13 @@ newStatus
 
 const text =
 newStatus === "approved"
-? "Approve this deposit?"
-: "Reject this deposit?";
+?
+"Approve this deposit?"
+:
+"Reject this deposit?";
 
 
-if(
-!confirm(text)
-){
+if(!confirm(text)){
 
 return;
 
@@ -1585,10 +1469,7 @@ await supabaseClient
 status:newStatus
 })
 
-.eq(
-"id",
-depositId
-);
+.eq("id",depositId);
 
 
 if(error){
@@ -1644,13 +1525,13 @@ newStatus
 
 const text =
 newStatus === "approved"
-? "Approve this withdrawal?"
-: "Reject this withdrawal?";
+?
+"Approve this withdrawal?"
+:
+"Reject this withdrawal?";
 
 
-if(
-!confirm(text)
-){
+if(!confirm(text)){
 
 return;
 
@@ -1670,10 +1551,7 @@ await supabaseClient
 status:newStatus
 })
 
-.eq(
-"id",
-withdrawalId
-);
+.eq("id",withdrawalId);
 
 
 if(error){
@@ -1746,11 +1624,7 @@ head:true
 );
 
 
-if(agentError){
-
-console.error(agentError);
-
-}else{
+if(!agentError){
 
 document.getElementById(
 "totalAgents"
@@ -1770,9 +1644,10 @@ await supabaseClient
 
 .from("deposits")
 
-.select(
-"amount,status"
-);
+.select(`
+amount,
+status
+`);
 
 
 if(depositError){
@@ -1792,12 +1667,9 @@ let approvedDeposits = 0;
 deposit => {
 
 const amount =
-Number(
-deposit.amount || 0
-);
+Number(deposit.amount || 0);
 
 totalDeposits += amount;
-
 
 const status =
 String(
@@ -1805,9 +1677,7 @@ deposit.status || ""
 ).toLowerCase();
 
 
-if(
-status === "pending"
-){
+if(status === "pending"){
 
 pendingDeposits++;
 
@@ -1831,9 +1701,7 @@ approvedDeposits += amount;
 document.getElementById(
 "totalDeposits"
 ).textContent =
-money(
-totalDeposits
-);
+money(totalDeposits);
 
 
 document.getElementById(
@@ -1842,21 +1710,17 @@ document.getElementById(
 pendingDeposits;
 
 
-/* ================================
-   TOTAL COMMISSION
-   8% OF APPROVED DEPOSITS
-================================ */
+/* TOTAL COMMISSION = 10% */
 
 const totalCommission =
-approvedDeposits * 0.08;
+approvedDeposits *
+COMMISSION_RATE;
 
 
 document.getElementById(
 "totalCommission"
 ).textContent =
-money(
-totalCommission
-);
+money(totalCommission);
 
 }
 
@@ -1871,16 +1735,15 @@ await supabaseClient
 
 .from("withdrawals")
 
-.select(
-"amount,status"
-);
+.select(`
+amount,
+status
+`);
 
 
 if(withdrawalError){
 
-console.error(
-withdrawalError
-);
+console.error(withdrawalError);
 
 }else{
 
@@ -1893,12 +1756,9 @@ let pendingWithdrawals = 0;
 withdrawal => {
 
 const amount =
-Number(
-withdrawal.amount || 0
-);
+Number(withdrawal.amount || 0);
 
 totalWithdrawals += amount;
-
 
 const status =
 String(
@@ -1906,9 +1766,7 @@ withdrawal.status || ""
 ).toLowerCase();
 
 
-if(
-status === "pending"
-){
+if(status === "pending"){
 
 pendingWithdrawals++;
 
@@ -1921,9 +1779,7 @@ pendingWithdrawals++;
 document.getElementById(
 "totalWithdrawals"
 ).textContent =
-money(
-totalWithdrawals
-);
+money(totalWithdrawals);
 
 
 document.getElementById(
@@ -1950,37 +1806,23 @@ error
    SEARCH BUTTON
 ================================ */
 
-document
-.getElementById(
+document.getElementById(
 "searchButton"
-)
-.addEventListener(
+).addEventListener(
 "click",
-function(){
-
-searchAgent();
-
-}
+searchAgent
 );
 
 
-/* ================================
-   ENTER KEY
-================================ */
+/* ENTER KEY SEARCH */
 
-document
-.getElementById(
+document.getElementById(
 "uidInput"
-)
-.addEventListener(
+).addEventListener(
 "keydown",
 function(event){
 
-if(
-event.key === "Enter"
-){
-
-event.preventDefault();
+if(event.key === "Enter"){
 
 searchAgent();
 
@@ -1991,11 +1833,10 @@ searchAgent();
 
 
 /* ================================
-   START
+   LOAD TOTALS ON PAGE OPEN
 ================================ */
 
 loadAdminTotals();
-
 
 </script>
 
