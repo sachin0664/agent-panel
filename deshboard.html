@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sathi Pay - Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #202938;
+        }
+
+        header {
+            background: #202938;
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .logout {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .welcome {
+            margin-bottom: 20px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 5px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .card p {
+            margin: 0 0 8px;
+            color: #777;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .menu {
+            margin-top: 20px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .menu a {
+            background: #202938;
+            color: white;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Sathi Pay</h1>
+    <a class="logout" href="login.html">Logout</a>
+</header>
+
+<div class="container">
+
+    <div class="welcome">
+        <h2>Agent Dashboard</h2>
+        <p>Welcome to your Sathi Pay account.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <p>Wallet Balance</p>
+            <h2>₹0.00</h2>
+        </div>
+
+        <div class="card">
+            <p>Total Commission</p>
+            <h2>₹0.00</h2>
+        </div>
+
+        <div class="card">
+            <p>Total Transactions</p>
+            <h2>0</h2>
+        </div>
+
+        <div class="card">
+            <p>Today's Transactions</p>
+            <h2>0</h2>
+        </div>
+
+    </div>
+
+    <div class="menu">
+        <a href="#">💰 Deposit Money</a>
+        <a href="#">💸 Withdraw Money</a>
+        <a href="#">📊 Commission</a>
+        <a href="#">📜 Transaction History</a>
+        <a href="#">👤 My Profile</a>
+        <a href="#">🔗 Referral</a>
+    </div>
+
+</div>
+
+</body>
+</html>
