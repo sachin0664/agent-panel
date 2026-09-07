@@ -23,7 +23,7 @@ const COMMISSION_RATE = 0.10;
 
 
 // ===============================
-// LOGIN
+// LOGIN FUNCTION
 // ===============================
 
 function login(event) {
@@ -45,11 +45,13 @@ function login(event) {
         password === "Admin@2026Secure"
     ) {
 
-        message.innerText = "Login successful!";
+        message.innerText =
+            "Login successful!";
 
         setTimeout(function () {
 
-            window.location.href = "agents.html";
+            window.location.href =
+                "agents.html";
 
         }, 1000);
 
@@ -64,7 +66,7 @@ function login(event) {
 
 
 // ===============================
-// ADMIN DASHBOARD
+// LOAD ADMIN DASHBOARD
 // ===============================
 
 async function loadAdminDashboard() {
@@ -77,15 +79,14 @@ async function loadAdminDashboard() {
     }
 
 
-    // -------------------------------
-    // AGENTS
-    // -------------------------------
+    // ===============================
+    // TOTAL AGENTS
+    // ===============================
 
     const agentsResult =
         await supabaseClient
             .from("agents")
             .select("id");
-
 
     if (agentsResult.error) {
 
@@ -94,10 +95,7 @@ async function loadAdminDashboard() {
             agentsResult.error
         );
 
-        return;
-
     }
-
 
     const totalAgents =
         agentsResult.data
@@ -107,18 +105,18 @@ async function loadAdminDashboard() {
 
     document.getElementById(
         "totalAgents"
-    ).innerText = totalAgents;
+    ).innerText =
+        totalAgents;
 
 
-    // -------------------------------
+    // ===============================
     // DEPOSITS
-    // -------------------------------
+    // ===============================
 
     const depositsResult =
         await supabaseClient
             .from("deposits")
             .select("amount,status");
-
 
     if (depositsResult.error) {
 
@@ -129,12 +127,12 @@ async function loadAdminDashboard() {
 
     }
 
-
     const deposits =
         depositsResult.data || [];
 
 
     let totalDeposits = 0;
+
     let pendingDeposits = 0;
 
 
@@ -146,7 +144,10 @@ async function loadAdminDashboard() {
         totalDeposits += amount;
 
 
-        if (deposit.status === "Pending") {
+        if (
+            String(deposit.status).toLowerCase()
+            === "pending"
+        ) {
 
             pendingDeposits++;
 
@@ -167,15 +168,14 @@ async function loadAdminDashboard() {
         pendingDeposits;
 
 
-    // -------------------------------
+    // ===============================
     // WITHDRAWALS
-    // -------------------------------
+    // ===============================
 
     const withdrawalsResult =
         await supabaseClient
             .from("withdrawals")
             .select("amount,status");
-
 
     if (withdrawalsResult.error) {
 
@@ -186,12 +186,12 @@ async function loadAdminDashboard() {
 
     }
 
-
     const withdrawals =
         withdrawalsResult.data || [];
 
 
     let totalWithdrawals = 0;
+
     let pendingWithdrawals = 0;
 
 
@@ -203,7 +203,10 @@ async function loadAdminDashboard() {
         totalWithdrawals += amount;
 
 
-        if (withdrawal.status === "Pending") {
+        if (
+            String(withdrawal.status).toLowerCase()
+            === "pending"
+        ) {
 
             pendingWithdrawals++;
 
@@ -224,9 +227,9 @@ async function loadAdminDashboard() {
         pendingWithdrawals;
 
 
-    // -------------------------------
-    // COMMISSION 10%
-    // -------------------------------
+    // ===============================
+    // TOTAL COMMISSION
+    // ===============================
 
     const totalCommission =
         totalDeposits * COMMISSION_RATE;
@@ -285,6 +288,7 @@ async function loadAgents() {
         `;
 
         return;
+
     }
 
 
@@ -299,6 +303,7 @@ async function loadAgents() {
         `;
 
         return;
+
     }
 
 
@@ -317,17 +322,11 @@ async function loadAgents() {
 
             <tr>
 
-                <td>
-                    ${agent.id}
-                </td>
+                <td>${agent.id}</td>
 
-                <td>
-                    ${agent.name}
-                </td>
+                <td>${agent.name}</td>
 
-                <td>
-                    ${agent.mobile}
-                </td>
+                <td>${agent.mobile}</td>
 
                 <td class="${statusClass}">
                     ${agent.status}
@@ -347,3 +346,202 @@ async function loadAgents() {
             </tr>
 
         `;
+
+    });
+
+}
+
+
+// ===============================
+// SHOW ADD AGENT FORM
+// ===============================
+
+function showAgentForm() {
+
+    const form =
+        document.getElementById("agentForm");
+
+    if (!form) {
+        return;
+    }
+
+
+    if (form.style.display === "block") {
+
+        form.style.display = "none";
+
+    } else {
+
+        form.style.display = "block";
+
+    }
+
+}
+
+
+// ===============================
+// ADD AGENT
+// ===============================
+
+async function addAgent(event) {
+
+    event.preventDefault();
+
+
+    const name =
+        document.getElementById("agentName").value.trim();
+
+    const mobile =
+        document.getElementById("agentMobile").value.trim();
+
+    const status =
+        document.getElementById("agentStatus").value;
+
+    const message =
+        document.getElementById("agentMessage");
+
+
+    message.innerText = "";
+
+
+    if (!/^[0-9]{10}$/.test(mobile)) {
+
+        message.innerText =
+            "Please enter a valid 10 digit mobile number.";
+
+        return;
+
+    }
+
+
+    const { error } =
+        await supabaseClient
+            .from("agents")
+            .insert([
+                {
+                    name: name,
+                    mobile: mobile,
+                    status: status
+                }
+            ]);
+
+
+    if (error) {
+
+        console.error(error);
+
+
+        if (error.code === "23505") {
+
+            message.innerText =
+                "This mobile number already exists.";
+
+        } else {
+
+            message.innerText =
+                "Error: " + error.message;
+
+        }
+
+        return;
+
+    }
+
+
+    message.innerText =
+        "Agent added successfully!";
+
+
+    document.getElementById(
+        "agentName"
+    ).value = "";
+
+
+    document.getElementById(
+        "agentMobile"
+    ).value = "";
+
+
+    document.getElementById(
+        "agentStatus"
+    ).value = "Active";
+
+
+    await loadAgents();
+
+
+    setTimeout(function () {
+
+        document.getElementById(
+            "agentForm"
+        ).style.display = "none";
+
+        message.innerText = "";
+
+    }, 1000);
+
+}
+
+
+// ===============================
+// DELETE AGENT
+// ===============================
+
+async function deleteAgent(id) {
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete this agent?"
+        );
+
+
+    if (!confirmDelete) {
+        return;
+    }
+
+
+    const { error } =
+        await supabaseClient
+            .from("agents")
+            .delete()
+            .eq("id", id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Error deleting agent: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "Agent deleted successfully!"
+    );
+
+
+    await loadAgents();
+
+}
+
+
+// ===============================
+// PAGE LOAD
+// ===============================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadAdminDashboard();
+
+        loadAgents();
+
+    }
+);
