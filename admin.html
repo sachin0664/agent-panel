@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
+
         .admin-menu {
             display: flex !important;
             flex-direction: column !important;
@@ -28,15 +30,13 @@
             font-size: 18px !important;
             font-weight: bold !important;
             color: #1565c0 !important;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10) !important;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10) !important;
             text-align: left !important;
         }
 
         .admin-menu a:active {
             transform: scale(0.98);
         }
-
-        /* UID SEARCH */
 
         .uid-search {
             background: white;
@@ -61,6 +61,7 @@
             border: 1px solid #ccc;
             border-radius: 9px;
             font-size: 16px;
+            min-width: 0;
         }
 
         .uid-input-row button {
@@ -70,6 +71,11 @@
             background: #1565c0;
             color: white;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .uid-input-row button:active {
+            transform: scale(0.97);
         }
 
         .agent-result {
@@ -110,25 +116,64 @@
             font-weight: bold;
             text-align: center;
         }
+
+        .status {
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            margin-top: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width: 600px) {
+
+            .uid-input-row {
+                flex-direction: column;
+            }
+
+            .uid-input-row button {
+                width: 100%;
+            }
+
+            .detail-row {
+                flex-direction: column;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-    <h1>Sathi Pay - Admin</h1>
+
+    <h1>
+        Sathi Pay - Admin
+    </h1>
 
     <a href="index.html">
         Logout
     </a>
+
 </header>
+
 
 
 <main class="container">
 
+
     <h2>
         📊 Admin Dashboard
     </h2>
+
 
 
     <!-- UID SEARCH -->
@@ -139,6 +184,7 @@
             🔎 Search Agent by UID
         </h3>
 
+
         <div class="uid-input-row">
 
             <input
@@ -148,15 +194,21 @@
                 autocomplete="off"
             >
 
-            <button onclick="searchAgent()">
+
+            <button
+                type="button"
+                onclick="searchAgent()"
+            >
                 Search
             </button>
 
         </div>
 
+
         <div id="uidMessage"></div>
 
     </div>
+
 
 
     <!-- AGENT RESULT -->
@@ -170,99 +222,272 @@
             👤 Agent Details
         </h3>
 
-        <div class="detail-row">
-            <span class="detail-label">UID</span>
-            <span class="detail-value" id="rUid">-</span>
-        </div>
 
         <div class="detail-row">
-            <span class="detail-label">Name</span>
-            <span class="detail-value" id="rName">-</span>
+
+            <span class="detail-label">
+                UID
+            </span>
+
+            <span
+                class="detail-value"
+                id="rUid"
+            >
+                -
+            </span>
+
         </div>
 
-        <div class="detail-row">
-            <span class="detail-label">Mobile</span>
-            <span class="detail-value" id="rMobile">-</span>
-        </div>
 
         <div class="detail-row">
-            <span class="detail-label">Status</span>
-            <span class="detail-value" id="rStatus">-</span>
+
+            <span class="detail-label">
+                Name
+            </span>
+
+            <span
+                class="detail-value"
+                id="rName"
+            >
+                -
+            </span>
+
         </div>
 
-        <div class="detail-row">
-            <span class="detail-label">Wallet Balance</span>
-            <span class="detail-value" id="rWallet">₹0</span>
-        </div>
 
         <div class="detail-row">
-            <span class="detail-label">Commission</span>
-            <span class="detail-value" id="rCommission">₹0</span>
+
+            <span class="detail-label">
+                Mobile
+            </span>
+
+            <span
+                class="detail-value"
+                id="rMobile"
+            >
+                -
+            </span>
+
         </div>
 
-        <div class="detail-row">
-            <span class="detail-label">Referral Code</span>
-            <span class="detail-value" id="rReferral">-</span>
-        </div>
 
         <div class="detail-row">
-            <span class="detail-label">Referred By</span>
-            <span class="detail-value" id="rReferredBy">-</span>
+
+            <span class="detail-label">
+                Status
+            </span>
+
+            <span
+                class="detail-value"
+                id="rStatus"
+            >
+                -
+            </span>
+
         </div>
 
-        <div class="detail-row">
-            <span class="detail-label">Level A ID</span>
-            <span class="detail-value" id="rLevelA">-</span>
-        </div>
 
         <div class="detail-row">
-            <span class="detail-label">Level B ID</span>
-            <span class="detail-value" id="rLevelB">-</span>
+
+            <span class="detail-label">
+                Wallet Balance
+            </span>
+
+            <span
+                class="detail-value"
+                id="rWallet"
+            >
+                ₹0.00
+            </span>
+
         </div>
 
+
         <div class="detail-row">
-            <span class="detail-label">Level C ID</span>
-            <span class="detail-value" id="rLevelC">-</span>
+
+            <span class="detail-label">
+                Commission
+            </span>
+
+            <span
+                class="detail-value"
+                id="rCommission"
+            >
+                ₹0.00
+            </span>
+
         </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Referral Code
+            </span>
+
+            <span
+                class="detail-value"
+                id="rReferral"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Referred By
+            </span>
+
+            <span
+                class="detail-value"
+                id="rReferredBy"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Level A ID
+            </span>
+
+            <span
+                class="detail-value"
+                id="rLevelA"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Level B ID
+            </span>
+
+            <span
+                class="detail-value"
+                id="rLevelB"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Level C ID
+            </span>
+
+            <span
+                class="detail-value"
+                id="rLevelC"
+            >
+                -
+            </span>
+
+        </div>
+
 
     </div>
+
 
 
     <!-- DASHBOARD CARDS -->
 
     <div class="dashboard-grid">
 
-        <div class="card">
-            <h3>👥 Total Agents</h3>
-            <p id="totalAgents">0</p>
-        </div>
 
         <div class="card">
-            <h3>💰 Total Deposits</h3>
-            <p id="totalDeposits">₹0</p>
+
+            <h3>
+                👥 Total Agents
+            </h3>
+
+            <p id="totalAgents">
+                0
+            </p>
+
         </div>
 
-        <div class="card">
-            <h3>💸 Total Withdrawals</h3>
-            <p id="totalWithdrawals">₹0</p>
-        </div>
 
         <div class="card">
-            <h3>💵 Total Commission</h3>
-            <p id="totalCommission">₹0</p>
+
+            <h3>
+                💰 Total Deposits
+            </h3>
+
+            <p id="totalDeposits">
+                ₹0
+            </p>
+
         </div>
 
-        <div class="card">
-            <h3>⏳ Pending Deposits</h3>
-            <p id="pendingDeposits">0</p>
-        </div>
 
         <div class="card">
-            <h3>⏳ Pending Withdrawals</h3>
-            <p id="pendingWithdrawals">0</p>
+
+            <h3>
+                💸 Total Withdrawals
+            </h3>
+
+            <p id="totalWithdrawals">
+                ₹0
+            </p>
+
         </div>
+
+
+        <div class="card">
+
+            <h3>
+                💵 Total Commission
+            </h3>
+
+            <p id="totalCommission">
+                ₹0
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                ⏳ Pending Deposits
+            </h3>
+
+            <p id="pendingDeposits">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                ⏳ Pending Withdrawals
+            </h3>
+
+            <p id="pendingWithdrawals">
+                0
+            </p>
+
+        </div>
+
 
     </div>
+
 
 
     <!-- ADMIN MENU -->
@@ -271,29 +496,37 @@
         ⚙️ Admin Menu
     </h2>
 
+
     <div class="admin-menu">
+
 
         <a href="agents.html">
             👥 Agent Management
         </a>
 
+
         <a href="deposit.html">
             💰 Deposit
         </a>
+
 
         <a href="withdrawal.html">
             💸 Withdrawal
         </a>
 
+
         <a href="commission.html">
             💵 Commission
         </a>
+
 
         <a href="transactions.html">
             🧾 Transactions
         </a>
 
+
     </div>
+
 
 
     <!-- SYSTEM STATUS -->
@@ -310,20 +543,26 @@
 
     </div>
 
+
 </main>
+
 
 
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
+
 
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
 
+
 const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -332,36 +571,47 @@ const supabaseClient =
     );
 
 
-/* ===============================
+
+/* =================================
    SEARCH AGENT BY UID
-================================ */
+================================= */
 
 async function searchAgent() {
 
+
+    const input =
+        document.getElementById("uidInput");
+
+
     const uid =
-        document
-            .getElementById("uidInput")
-            .value
+        input.value
             .trim()
             .toUpperCase();
+
 
     const message =
         document.getElementById("uidMessage");
 
+
     const result =
         document.getElementById("agentResult");
 
+
     result.style.display = "none";
+
 
     if (!uid) {
 
         message.textContent =
             "Please enter UID.";
 
-        message.style.color = "red";
+        message.style.color =
+            "red";
 
         return;
+
     }
+
 
     message.textContent =
         "Searching...";
@@ -372,26 +622,28 @@ async function searchAgent() {
 
     try {
 
+
+        /*
+           IMPORTANT:
+           Only existing database columns
+           are requested here.
+        */
+
         const {
             data: agent,
             error
-        } = await supabaseClient
-            .from("agents")
-            .select(`
-                id,
-                uid,
-                name,
-                mobile,
-                status,
-                wallet_balance,
-                referral_code,
-                referred_by,
-                level_a_id,
-                level_b_id,
-                level_c_id
-            `)
-            .eq("uid", uid)
-            .maybeSingle();
+        } =
+            await supabaseClient
+                .from("agents")
+                .select(`
+                    id,
+                    uid,
+                    name,
+                    mobile,
+                    status
+                `)
+                .eq("uid", uid)
+                .maybeSingle();
 
 
         if (error) {
@@ -399,11 +651,14 @@ async function searchAgent() {
             console.error(error);
 
             message.textContent =
-                "Database error: " + error.message;
+                "Database error: " +
+                error.message;
 
-            message.style.color = "red";
+            message.style.color =
+                "red";
 
             return;
+
         }
 
 
@@ -412,87 +667,148 @@ async function searchAgent() {
             message.textContent =
                 "❌ Agent not found.";
 
-            message.style.color = "red";
+            message.style.color =
+                "red";
 
             return;
+
         }
 
 
-        /* SHOW DETAILS */
 
-        document.getElementById("rUid").textContent =
+        /* ==========================
+           SHOW AGENT DETAILS
+        ========================== */
+
+
+        document.getElementById(
+            "rUid"
+        ).textContent =
             agent.uid || "-";
 
-        document.getElementById("rName").textContent =
+
+        document.getElementById(
+            "rName"
+        ).textContent =
             agent.name || "-";
 
-        document.getElementById("rMobile").textContent =
+
+        document.getElementById(
+            "rMobile"
+        ).textContent =
             agent.mobile || "-";
 
-        document.getElementById("rStatus").textContent =
+
+        document.getElementById(
+            "rStatus"
+        ).textContent =
             agent.status || "-";
 
-        document.getElementById("rWallet").textContent =
-            "₹" + Number(agent.wallet_balance || 0).toFixed(2);
 
-        document.getElementById("rCommission").textContent =
-            "₹0";
+        /*
+           These fields will remain
+           ₹0 / - until their database
+           columns are created.
+        */
 
-        document.getElementById("rReferral").textContent =
-            agent.referral_code || "-";
+        document.getElementById(
+            "rWallet"
+        ).textContent =
+            "₹0.00";
 
-        document.getElementById("rReferredBy").textContent =
-            agent.referred_by || "-";
 
-        document.getElementById("rLevelA").textContent =
-            agent.level_a_id || "-";
+        document.getElementById(
+            "rCommission"
+        ).textContent =
+            "₹0.00";
 
-        document.getElementById("rLevelB").textContent =
-            agent.level_b_id || "-";
 
-        document.getElementById("rLevelC").textContent =
-            agent.level_c_id || "-";
+        document.getElementById(
+            "rReferral"
+        ).textContent =
+            "-";
+
+
+        document.getElementById(
+            "rReferredBy"
+        ).textContent =
+            "-";
+
+
+        document.getElementById(
+            "rLevelA"
+        ).textContent =
+            "-";
+
+
+        document.getElementById(
+            "rLevelB"
+        ).textContent =
+            "-";
+
+
+        document.getElementById(
+            "rLevelC"
+        ).textContent =
+            "-";
 
 
         result.style.display =
             "block";
 
+
         message.textContent =
             "✅ Agent found.";
+
 
         message.style.color =
             "green";
 
+
     }
+
 
     catch (error) {
 
+
         console.error(error);
+
 
         message.textContent =
             "Something went wrong.";
 
         message.style.color =
             "red";
+
     }
+
 }
 
 
-/* ENTER KEY SEARCH */
+
+/* =================================
+   ENTER KEY SEARCH
+================================= */
 
 document
     .getElementById("uidInput")
-    .addEventListener("keydown", function(event) {
+    .addEventListener(
+        "keydown",
+        function(event) {
 
-        if (event.key === "Enter") {
+            if (event.key === "Enter") {
 
-            searchAgent();
+                searchAgent();
+
+            }
 
         }
+    );
 
-    });
 
 </script>
 
+
 </body>
-    </html>
+
+                </html>
