@@ -2,23 +2,15 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sathi Pay - My Profile</title>
 
-
     <style>
-
         * {
             box-sizing: border-box;
         }
-
 
         body {
             margin: 0;
@@ -26,7 +18,6 @@
             background: #f4f6f8;
             color: #202938;
         }
-
 
         .header {
             background: #202938;
@@ -37,12 +28,10 @@
             align-items: center;
         }
 
-
         .header h2 {
             margin: 0;
             font-size: 22px;
         }
-
 
         .header a {
             color: white;
@@ -50,13 +39,11 @@
             font-weight: bold;
         }
 
-
         .container {
             max-width: 700px;
             margin: auto;
             padding: 20px;
         }
-
 
         .card {
             background: white;
@@ -65,7 +52,6 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-
 
         .profile-icon {
             width: 80px;
@@ -80,34 +66,28 @@
             margin: 0 auto 15px;
         }
 
-
         .profile-title {
             text-align: center;
             margin-bottom: 25px;
         }
 
-
         .profile-title h2 {
             margin: 5px 0;
         }
-
 
         .profile-title p {
             color: #777;
             margin: 0;
         }
 
-
         .info {
             border-bottom: 1px solid #eee;
             padding: 14px 0;
         }
 
-
         .info:last-child {
             border-bottom: none;
         }
-
 
         .label {
             color: #777;
@@ -115,19 +95,20 @@
             margin-bottom: 5px;
         }
 
-
         .value {
             font-weight: bold;
             font-size: 16px;
+            word-break: break-all;
         }
 
-
-        .uid-value {
-            color: #2563eb;
+        .uid {
+            color: #1565c0;
             font-size: 18px;
-            letter-spacing: 1px;
         }
 
+        .status {
+            color: green;
+        }
 
         .back-btn {
             display: block;
@@ -140,20 +121,14 @@
             font-weight: bold;
             margin-top: 20px;
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
     <div class="header">
 
-        <h2>
-            Sathi Pay - Profile
-        </h2>
+        <h2>Sathi Pay - Profile</h2>
 
         <a href="deshboard.html">
             Dashboard
@@ -164,9 +139,7 @@
 
     <div class="container">
 
-
         <div class="card">
-
 
             <div class="profile-icon">
                 👤
@@ -175,13 +148,9 @@
 
             <div class="profile-title">
 
-                <h2>
-                    My Profile
-                </h2>
+                <h2>My Profile</h2>
 
-                <p>
-                    Sathi Pay Agent Account
-                </p>
+                <p>Sathi Pay Agent Account</p>
 
             </div>
 
@@ -191,13 +160,10 @@
             <div class="info">
 
                 <div class="label">
-                    UID
+                    UID Number
                 </div>
 
-                <div
-                    class="value uid-value"
-                    id="profileUID"
-                >
+                <div class="value uid" id="profileUID">
                     Loading...
                 </div>
 
@@ -212,11 +178,8 @@
                     Name
                 </div>
 
-                <div
-                    class="value"
-                    id="profileName"
-                >
-                    Agent
+                <div class="value" id="profileName">
+                    Loading...
                 </div>
 
             </div>
@@ -230,11 +193,8 @@
                     Mobile Number
                 </div>
 
-                <div
-                    class="value"
-                    id="profileMobile"
-                >
-                    Not available
+                <div class="value" id="profileMobile">
+                    Loading...
                 </div>
 
             </div>
@@ -248,7 +208,7 @@
                     Account Status
                 </div>
 
-                <div class="value">
+                <div class="value status" id="profileStatus">
                     Active
                 </div>
 
@@ -270,13 +230,9 @@
             </div>
 
 
-            <a
-                class="back-btn"
-                href="deshboard.html"
-            >
+            <a class="back-btn" href="deshboard.html">
                 ← Back to Dashboard
             </a>
-
 
         </div>
 
@@ -285,61 +241,81 @@
 
     <script>
 
-
-        const name =
-            localStorage.getItem(
-                "agentName"
-            );
-
-
-        const mobile =
-            localStorage.getItem(
-                "agentMobile"
-            );
-
+        /*
+         * Profile information
+         * registration/login ke time localStorage
+         * se read hogi.
+         */
 
         const uid =
-            localStorage.getItem(
-                "sathi_uid"
-            );
+            localStorage.getItem("agentUID");
+
+        const name =
+            localStorage.getItem("agentName");
+
+        const mobile =
+            localStorage.getItem("agentMobile");
+
+        const status =
+            localStorage.getItem("agentStatus");
 
 
-        if (name) {
-
-            document
-                .getElementById("profileName")
-                .innerText = name;
-
-        }
-
-
-        if (mobile) {
-
-            document
-                .getElementById("profileMobile")
-                .innerText = mobile;
-
-        }
-
+        // UID
 
         if (uid) {
 
-            document
-                .getElementById("profileUID")
-                .innerText = uid;
+            document.getElementById("profileUID").innerText =
+                uid;
 
         } else {
 
-            document
-                .getElementById("profileUID")
-                .innerText =
+            document.getElementById("profileUID").innerText =
                 "UID not available";
+
+        }
+
+
+        // NAME
+
+        if (name) {
+
+            document.getElementById("profileName").innerText =
+                name;
+
+        } else {
+
+            document.getElementById("profileName").innerText =
+                "Not available";
+
+        }
+
+
+        // MOBILE
+
+        if (mobile) {
+
+            document.getElementById("profileMobile").innerText =
+                mobile;
+
+        } else {
+
+            document.getElementById("profileMobile").innerText =
+                "Not available";
+
+        }
+
+
+        // STATUS
+
+        if (status) {
+
+            document.getElementById("profileStatus").innerText =
+                status;
 
         }
 
     </script>
 
-
 </body>
 
-                    </html>
+</html>
