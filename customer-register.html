@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sathi Pay - Customer Registration</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+</head>
+
+<body>
+
+    <header>
+        <h1>Sathi Pay</h1>
+
+        <a href="customer-login.html">
+            Customer Login
+        </a>
+    </header>
+
+    <main class="container">
+
+        <h2>Customer Registration</h2>
+
+        <form id="customerRegisterForm">
+
+            <label>
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label>
+                Mobile Number
+            </label>
+
+            <input
+                type="tel"
+                id="customerMobile"
+                placeholder="10 digit mobile number"
+                maxlength="10"
+                required
+            >
+
+            <label>
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="customerEmail"
+                placeholder="Enter email address"
+                required
+            >
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="customerPassword"
+                placeholder="Create password"
+                minlength="6"
+                required
+            >
+
+            <button type="submit">
+                Create Customer Account
+            </button>
+
+        </form>
+
+        <p id="customerRegisterMessage"></p>
+
+        <p>
+            Already have an account?
+            <a href="customer-login.html">
+                Login here
+            </a>
+        </p>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/app.js?v=3"></script>
+
+    <script>
+
+        const registerForm =
+            document.getElementById(
+                "customerRegisterForm"
+            );
+
+        registerForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+                const name =
+                    document.getElementById(
+                        "customerName"
+                    ).value.trim();
+
+                const mobile =
+                    document.getElementById(
+                        "customerMobile"
+                    ).value.trim();
+
+                const email =
+                    document.getElementById(
+                        "customerEmail"
+                    ).value.trim();
+
+                const password =
+                    document.getElementById(
+                        "customerPassword"
+                    ).value;
+
+                const message =
+                    document.getElementById(
+                        "customerRegisterMessage"
+                    );
+
+                message.innerText = "";
+
+                if (!/^[0-9]{10}$/.test(mobile)) {
+
+                    message.innerText =
+                        "Please enter a valid 10 digit mobile number.";
+
+                    return;
+                }
+
+                if (password.length < 6) {
+
+                    message.innerText =
+                        "Password must be at least 6 characters.";
+
+                    return;
+                }
+
+                message.innerText =
+                    "Creating account...";
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.signUp({
+                        email: email,
+                        password: password
+                    });
+
+                if (error) {
+
+                    console.error(error);
+
+                    message.innerText =
+                        "Registration error: " +
+                        error.message;
+
+                    return;
+                }
+
+                if (!data.user) {
+
+                    message.innerText =
+                        "Account creation failed.";
+
+                    return;
+                }
+
+                const {
+                    error: profileError
+                } =
+                    await supabaseClient
+                        .from("customers")
+                        .insert([
+                            {
+                                id: data.user.id,
+                                name: name,
+                                mobile: mobile,
+                                status: "Active"
+                            }
+                        ]);
+
+                if (profileError) {
+
+                    console.error(profileError);
+
+                    message.innerText =
+                        "Account created, but profile setup failed: " +
+                        profileError.message;
+
+                    return;
+                }
+
+                message.innerText =
+                    "Customer registration successful!";
+
+                registerForm.reset();
+
+                setTimeout(function() {
+
+                    window.location.href =
+                        "customer-login.html";
+
+                }, 1500);
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
