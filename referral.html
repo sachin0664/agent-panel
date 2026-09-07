@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sathi Pay - Referral</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -80,6 +82,42 @@
             cursor: pointer;
         }
 
+        .levels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .level {
+            padding: 18px 10px;
+            border-radius: 12px;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .level h3 {
+            margin: 0 0 8px;
+        }
+
+        .percentage {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .level-a {
+            border-top: 5px solid #16a34a;
+        }
+
+        .level-b {
+            border-top: 5px solid #2563eb;
+        }
+
+        .level-c {
+            border-top: 5px solid #ea580c;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -109,32 +147,64 @@
             font-weight: bold;
         }
 
+        .note {
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff7ed;
+            border-radius: 8px;
+            color: #9a3412;
+            font-size: 14px;
+        }
+
         @media (max-width: 600px) {
+
             .referral-box {
                 flex-direction: column;
+            }
+
+            .levels {
+                grid-template-columns: 1fr;
             }
 
             .stats {
                 grid-template-columns: 1fr;
             }
+
         }
+
     </style>
+
 </head>
 
 <body>
 
     <div class="header">
-        <h2>Sathi Pay - Referral</h2>
-        <a href="dashboard.html">Dashboard</a>
+
+        <h2>
+            Sathi Pay - Referral
+        </h2>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
     </div>
+
 
     <div class="container">
 
+
+        <!-- REFERRAL LINK -->
+
         <div class="card">
 
-            <h2>🔗 My Referral</h2>
+            <h2>
+                🔗 My Referral
+            </h2>
 
-            <p>Share your referral link with others.</p>
+            <p>
+                Share your referral link with new agents.
+            </p>
 
             <div class="referral-box">
 
@@ -158,20 +228,120 @@
         </div>
 
 
+        <!-- COMMISSION LEVELS -->
+
         <div class="card">
 
-            <h2>📊 Referral Summary</h2>
+            <h2>
+                💰 Referral Commission
+            </h2>
+
+            <p>
+                Your referral commission levels
+            </p>
+
+
+            <div class="levels">
+
+
+                <div class="level level-a">
+
+                    <h3>
+                        Level A
+                    </h3>
+
+                    <div class="percentage">
+                        1%
+                    </div>
+
+                    <small>
+                        Direct Referral
+                    </small>
+
+                </div>
+
+
+                <div class="level level-b">
+
+                    <h3>
+                        Level B
+                    </h3>
+
+                    <div class="percentage">
+                        0.5%
+                    </div>
+
+                    <small>
+                        Second Level
+                    </small>
+
+                </div>
+
+
+                <div class="level level-c">
+
+                    <h3>
+                        Level C
+                    </h3>
+
+                    <div class="percentage">
+                        0.2%
+                    </div>
+
+                    <small>
+                        Third Level
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="note">
+
+                Commission rates shown above are the configured
+                referral rates. Actual earnings will be calculated
+                from eligible transactions after the backend is connected.
+
+            </div>
+
+        </div>
+
+
+        <!-- REFERRAL SUMMARY -->
+
+        <div class="card">
+
+            <h2>
+                📊 Referral Summary
+            </h2>
 
             <div class="stats">
 
                 <div class="stat">
-                    <p>Total Referrals</p>
-                    <h2 id="totalReferrals">0</h2>
+
+                    <p>
+                        Total Referrals
+                    </p>
+
+                    <h2 id="totalReferrals">
+                        0
+                    </h2>
+
                 </div>
 
+
                 <div class="stat">
-                    <p>Referral Commission</p>
-                    <h2 id="totalCommission">₹0.00</h2>
+
+                    <p>
+                        Referral Commission
+                    </p>
+
+                    <h2 id="totalCommission">
+                        ₹0.00
+                    </h2>
+
                 </div>
 
             </div>
@@ -179,9 +349,13 @@
         </div>
 
 
+        <!-- REFERRAL HISTORY -->
+
         <div class="card">
 
-            <h2>👥 Referral History</h2>
+            <h2>
+                👥 Referral History
+            </h2>
 
             <p id="history">
                 No referrals found.
@@ -189,8 +363,11 @@
 
         </div>
 
+
     </div>
 
+
+    <!-- SUPABASE -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -241,6 +418,7 @@
                         "Referral link copied successfully!";
 
                 });
+
         }
 
 
@@ -249,4 +427,4 @@
     </script>
 
 </body>
-                      </html>
+                </html>
