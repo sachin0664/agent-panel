@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        /* ADMIN MENU FIX */
-
         .admin-menu {
             display: flex !important;
             flex-direction: column !important;
@@ -37,161 +35,464 @@
         .admin-menu a:active {
             transform: scale(0.98);
         }
+
+        /* UID SEARCH */
+
+        .uid-search {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+            margin-bottom: 25px;
+        }
+
+        .uid-search h3 {
+            margin-top: 0;
+        }
+
+        .uid-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .uid-input-row input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            font-size: 16px;
+        }
+
+        .uid-input-row button {
+            padding: 14px 18px;
+            border: none;
+            border-radius: 9px;
+            background: #1565c0;
+            color: white;
+            font-weight: bold;
+        }
+
+        .agent-result {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+            margin-bottom: 25px;
+        }
+
+        .agent-result h3 {
+            color: #1565c0;
+            margin-top: 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .detail-value {
+            text-align: right;
+            color: #222;
+            word-break: break-word;
+        }
+
+        #uidMessage {
+            margin-top: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>Sathi Pay - Admin</h1>
+<header>
+    <h1>Sathi Pay - Admin</h1>
 
-        <a href="index.html">
-            Logout
+    <a href="index.html">
+        Logout
+    </a>
+</header>
+
+
+<main class="container">
+
+    <h2>
+        📊 Admin Dashboard
+    </h2>
+
+
+    <!-- UID SEARCH -->
+
+    <div class="uid-search">
+
+        <h3>
+            🔎 Search Agent by UID
+        </h3>
+
+        <div class="uid-input-row">
+
+            <input
+                type="text"
+                id="uidInput"
+                placeholder="Enter Agent UID"
+                autocomplete="off"
+            >
+
+            <button onclick="searchAgent()">
+                Search
+            </button>
+
+        </div>
+
+        <div id="uidMessage"></div>
+
+    </div>
+
+
+    <!-- AGENT RESULT -->
+
+    <div
+        id="agentResult"
+        class="agent-result"
+    >
+
+        <h3>
+            👤 Agent Details
+        </h3>
+
+        <div class="detail-row">
+            <span class="detail-label">UID</span>
+            <span class="detail-value" id="rUid">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Name</span>
+            <span class="detail-value" id="rName">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Mobile</span>
+            <span class="detail-value" id="rMobile">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value" id="rStatus">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Wallet Balance</span>
+            <span class="detail-value" id="rWallet">₹0</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Commission</span>
+            <span class="detail-value" id="rCommission">₹0</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Referral Code</span>
+            <span class="detail-value" id="rReferral">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Referred By</span>
+            <span class="detail-value" id="rReferredBy">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Level A ID</span>
+            <span class="detail-value" id="rLevelA">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Level B ID</span>
+            <span class="detail-value" id="rLevelB">-</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Level C ID</span>
+            <span class="detail-value" id="rLevelC">-</span>
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD CARDS -->
+
+    <div class="dashboard-grid">
+
+        <div class="card">
+            <h3>👥 Total Agents</h3>
+            <p id="totalAgents">0</p>
+        </div>
+
+        <div class="card">
+            <h3>💰 Total Deposits</h3>
+            <p id="totalDeposits">₹0</p>
+        </div>
+
+        <div class="card">
+            <h3>💸 Total Withdrawals</h3>
+            <p id="totalWithdrawals">₹0</p>
+        </div>
+
+        <div class="card">
+            <h3>💵 Total Commission</h3>
+            <p id="totalCommission">₹0</p>
+        </div>
+
+        <div class="card">
+            <h3>⏳ Pending Deposits</h3>
+            <p id="pendingDeposits">0</p>
+        </div>
+
+        <div class="card">
+            <h3>⏳ Pending Withdrawals</h3>
+            <p id="pendingWithdrawals">0</p>
+        </div>
+
+    </div>
+
+
+    <!-- ADMIN MENU -->
+
+    <h2>
+        ⚙️ Admin Menu
+    </h2>
+
+    <div class="admin-menu">
+
+        <a href="agents.html">
+            👥 Agent Management
         </a>
-    </header>
+
+        <a href="deposit.html">
+            💰 Deposit
+        </a>
+
+        <a href="withdrawal.html">
+            💸 Withdrawal
+        </a>
+
+        <a href="commission.html">
+            💵 Commission
+        </a>
+
+        <a href="transactions.html">
+            🧾 Transactions
+        </a>
+
+    </div>
 
 
-    <main class="container">
+    <!-- SYSTEM STATUS -->
 
-        <h2>
-            📊 Admin Dashboard
-        </h2>
+    <div class="status">
 
+        <b>
+            System Status:
+        </b>
 
-        <!-- DASHBOARD CARDS -->
+        <p>
+            🟢 Online
+        </p>
 
-        <div class="dashboard-grid">
+    </div>
 
-            <div class="card">
-                <h3>
-                    👥 Total Agents
-                </h3>
-
-                <p id="totalAgents">
-                    0
-                </p>
-            </div>
+</main>
 
 
-            <div class="card">
-                <h3>
-                    💰 Total Deposits
-                </h3>
+<!-- SUPABASE -->
 
-                <p id="totalDeposits">
-                    ₹0
-                </p>
-            </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
 
-            <div class="card">
-                <h3>
-                    💸 Total Withdrawals
-                </h3>
+const SUPABASE_URL =
+    "https://lozluohksmjxbxixkbmq.supabase.co";
 
-                <p id="totalWithdrawals">
-                    ₹0
-                </p>
-            </div>
+const SUPABASE_KEY =
+    "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
-            <div class="card">
-                <h3>
-                    💵 Total Commission
-                </h3>
+/* ===============================
+   SEARCH AGENT BY UID
+================================ */
 
-                <p id="totalCommission">
-                    ₹0
-                </p>
-            </div>
+async function searchAgent() {
 
+    const uid =
+        document
+            .getElementById("uidInput")
+            .value
+            .trim()
+            .toUpperCase();
 
-            <div class="card">
-                <h3>
-                    ⏳ Pending Deposits
-                </h3>
+    const message =
+        document.getElementById("uidMessage");
 
-                <p id="pendingDeposits">
-                    0
-                </p>
-            </div>
+    const result =
+        document.getElementById("agentResult");
 
+    result.style.display = "none";
 
-            <div class="card">
-                <h3>
-                    ⏳ Pending Withdrawals
-                </h3>
+    if (!uid) {
 
-                <p id="pendingWithdrawals">
-                    0
-                </p>
-            </div>
+        message.textContent =
+            "Please enter UID.";
 
-        </div>
+        message.style.color = "red";
 
+        return;
+    }
 
-        <!-- ADMIN MENU -->
+    message.textContent =
+        "Searching...";
 
-        <h2>
-            ⚙️ Admin Menu
-        </h2>
+    message.style.color =
+        "#1565c0";
 
 
-        <div class="admin-menu">
+    try {
 
-            <a href="agents.html">
-                👥 Agent Management
-            </a>
-
-
-            <a href="deposit.html">
-                💰 Deposit
-            </a>
-
-
-            <a href="withdrawal.html">
-                💸 Withdrawal
-            </a>
-
-
-            <a href="commission.html">
-                💵 Commission
-            </a>
-
-
-            <a href="transactions.html">
-                🧾 Transactions
-            </a>
-
-        </div>
+        const {
+            data: agent,
+            error
+        } = await supabaseClient
+            .from("agents")
+            .select(`
+                id,
+                uid,
+                name,
+                mobile,
+                status,
+                wallet_balance,
+                referral_code,
+                referred_by,
+                level_a_id,
+                level_b_id,
+                level_c_id
+            `)
+            .eq("uid", uid)
+            .maybeSingle();
 
 
-        <!-- SYSTEM STATUS -->
+        if (error) {
 
-        <div class="status">
+            console.error(error);
 
-            <b>
-                System Status:
-            </b>
+            message.textContent =
+                "Database error: " + error.message;
 
-            <p>
-                🟢 Online
-            </p>
+            message.style.color = "red";
 
-        </div>
-
-    </main>
+            return;
+        }
 
 
-    <!-- SUPABASE -->
+        if (!agent) {
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            message.textContent =
+                "❌ Agent not found.";
+
+            message.style.color = "red";
+
+            return;
+        }
 
 
-    <!-- APP JS -->
+        /* SHOW DETAILS */
 
-    <script src="js/app.js?v=3"></script>
+        document.getElementById("rUid").textContent =
+            agent.uid || "-";
+
+        document.getElementById("rName").textContent =
+            agent.name || "-";
+
+        document.getElementById("rMobile").textContent =
+            agent.mobile || "-";
+
+        document.getElementById("rStatus").textContent =
+            agent.status || "-";
+
+        document.getElementById("rWallet").textContent =
+            "₹" + Number(agent.wallet_balance || 0).toFixed(2);
+
+        document.getElementById("rCommission").textContent =
+            "₹0";
+
+        document.getElementById("rReferral").textContent =
+            agent.referral_code || "-";
+
+        document.getElementById("rReferredBy").textContent =
+            agent.referred_by || "-";
+
+        document.getElementById("rLevelA").textContent =
+            agent.level_a_id || "-";
+
+        document.getElementById("rLevelB").textContent =
+            agent.level_b_id || "-";
+
+        document.getElementById("rLevelC").textContent =
+            agent.level_c_id || "-";
+
+
+        result.style.display =
+            "block";
+
+        message.textContent =
+            "✅ Agent found.";
+
+        message.style.color =
+            "green";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "Something went wrong.";
+
+        message.style.color =
+            "red";
+    }
+}
+
+
+/* ENTER KEY SEARCH */
+
+document
+    .getElementById("uidInput")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+
+            searchAgent();
+
+        }
+
+    });
+
+</script>
 
 </body>
-
     </html>
