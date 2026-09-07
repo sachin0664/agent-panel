@@ -129,3 +129,26 @@ p {
 a {
     color: #2563eb;
   }
+/* Admin Menu */
+.admin-menu {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.admin-menu a {
+    display: block;
+    padding: 16px 18px;
+    background: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1565c0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.admin-menu a:hover {
+    transform: translateY(-1px);
+}
