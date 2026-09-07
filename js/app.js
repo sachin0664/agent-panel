@@ -40,9 +40,36 @@ function login(event) {
         document.getElementById("loginMessage");
 
 
+    // ===============================
+    // ADMIN LOGIN
+    // ===============================
+
     if (
         mobile === "9999999999" &&
         password === "Admin@2026Secure"
+    ) {
+
+        message.innerText =
+            "Admin login successful!";
+
+        setTimeout(function () {
+
+            window.location.href =
+                "admin.html";
+
+        }, 1000);
+
+        return;
+    }
+
+
+    // ===============================
+    // DEMO AGENT LOGIN
+    // ===============================
+
+    if (
+        mobile === "8888888888" &&
+        password === "Agent@2026"
     ) {
 
         message.innerText =
@@ -51,16 +78,20 @@ function login(event) {
         setTimeout(function () {
 
             window.location.href =
-                "agents.html";
+                "dashboard.html";
 
         }, 1000);
 
-    } else {
-
-        message.innerText =
-            "Invalid mobile number or password.";
-
+        return;
     }
+
+
+    // ===============================
+    // INVALID LOGIN
+    // ===============================
+
+    message.innerText =
+        "Invalid mobile number or password.";
 
 }
 
