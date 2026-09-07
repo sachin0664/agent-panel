@@ -1,67 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transactions</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sathi Pay - Transactions</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
 </head>
+
 
 <body>
 
+
     <header>
-        <h1>Transactions</h1>
-        <a href="admin.html">Dashboard</a>
+
+        <h1>Sathi Pay - Transactions</h1>
+
+        <a href="admin.html">
+            Dashboard
+        </a>
+
     </header>
+
+
 
     <main class="container">
 
-        <h2>Transaction History</h2>
+        <h2>
+            Transaction History
+        </h2>
+
 
         <table>
 
             <thead>
+
                 <tr>
+
                     <th>ID</th>
+
                     <th>Agent</th>
+
                     <th>Type</th>
+
                     <th>Amount</th>
+
                     <th>Status</th>
+
                 </tr>
+
             </thead>
 
-            <tbody>
+
+            <tbody id="transactionTable">
 
                 <tr>
-                    <td>TX001</td>
-                    <td>Agent One</td>
-                    <td>Deposit</td>
-                    <td>₹10,000</td>
-                    <td>Completed</td>
-                </tr>
 
-                <tr>
-                    <td>TX002</td>
-                    <td>Agent Two</td>
-                    <td>Withdrawal</td>
-                    <td>₹5,000</td>
-                    <td>Pending</td>
-                </tr>
+                    <td colspan="5">
+                        Loading transactions...
+                    </td>
 
-                <tr>
-                    <td>TX003</td>
-                    <td>Agent Three</td>
-                    <td>Deposit</td>
-                    <td>₹15,000</td>
-                    <td>Completed</td>
                 </tr>
 
             </tbody>
 
         </table>
 
+
+        <p
+            id="transactionMessage"
+            style="margin-top:15px;"
+        ></p>
+
+
     </main>
 
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- APP JS -->
+
+    <script src="js/app.js"></script>
+
+
+
+    <script>
+
+        async function loadTransactions() {
+
+            const table =
+                document.getElementById(
+                    "transactionTable"
+                );
+
+            const message =
+                document.getElementById(
+                    "transactionMessage"
+                );
+
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        Loading transactions...
+                    </td>
+                </tr>
+            `;
+
+
+
+            // LOAD DEPOSITS
+
+            const depositResult =
+                await supabaseClient
+                    .from("deposits")
+                    .select(`
+                        id,
+                        amount,
+                        status,
+                        agent_id,
+                        agents (
+                            name
+                        )
+                    `)
+                    .order("id", {
+                        ascending: false
+                    });
+
+
+
+            if (depositResult.error) {
+
+                console.error(
+                    depositResult.error
+                );
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            Error loading deposits.
+                        </td>
+                    </tr>
+                `;
+
+                message.innerText =
+                    "Error: " +
+                    depositResult.error.message;
+
+                return;
+            }
+
+
+
+            // LOAD WITHDRAWALS
+
+            const withdrawalResult =
+                await supabaseClient
+                    .from("withdrawals")
+                    .select(`
+                        id,
+                        amount,
+                        status,
+                        agent_id,
+                        agents (
+                            name
+                        )
+                    `)
+                    .order("id", {
+                        ascending: false
+                    });
+
+
+
+            if (withdrawalResult.error) {
+
+                console.error(
+                    withdrawalResult.error
+                );
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            Error loading withdrawals.
+                        </td>
+                    </tr>
+                `;
+
+                message.innerText =
+                    "Error: " +
+                    withdrawalResult.error.message;
+
+                return;
+            }
+
+
+
+            const deposits =
+                depositResult.data || [];
+
+            const withdrawals =
+                withdrawalResult.data || [];
+
+
+
+            // COMBINE BOTH
+
+            const transactions = [];
+
+
+            deposits.forEach(
+                function (deposit) {
+
+                    transactions.push({
+
+                        id: deposit.id,
+
+                        agent:
+                            deposit.agents &&
+                            deposit.agents.name
+                                ? deposit.agents.name
+                                : "Unknown Agent",
+
+                        type: "Deposit",
+
+                        amount:
+                            Number(deposit.amount) || 0,
+
+                        status:
+                            deposit.status
+
+                    });
+
+                }
+            );
+
+
+            withdrawals.forEach(
+                function (withdrawal) {
+
+                    transactions.push({
+
+                        id: withdrawal.id,
+
+                        agent:
+                            withdrawal.agents &&
+                            withdrawal.agents.name
+                                ? withdrawal.agents.name
+                                : "Unknown Agent",
+
+                        type: "Withdrawal",
+
+                        amount:
+                            Number(withdrawal.amount) || 0,
+
+                        status:
+                            withdrawal.status
+
+                    });
+
+                }
+            );
+
+
+
+            if (transactions.length === 0) {
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            No transactions found.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+
+            // SORT BY ID
+
+            transactions.sort(
+                function (a, b) {
+
+                    return b.id - a.id;
+
+                }
+            );
+
+
+
+            table.innerHTML = "";
+
+
+
+            transactions.forEach(
+                function (transaction) {
+
+                    table.innerHTML += `
+
+                        <tr>
+
+                            <td>
+                                ${transaction.id}
+                            </td>
+
+                            <td>
+                                ${transaction.agent}
+                            </td>
+
+                            <td>
+                                ${transaction.type}
+                            </td>
+
+                            <td>
+                                ₹${transaction.amount.toFixed(2)}
+                            </td>
+
+                            <td>
+                                ${transaction.status}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+
+            message.innerText =
+                "Transactions loaded successfully.";
+
+        }
+
+
+
+        // LOAD WHEN PAGE OPENS
+
+        loadTransactions();
+
+    </script>
+
+
 </body>
+
 </html>
