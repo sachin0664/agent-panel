@@ -31,7 +31,7 @@
 
     h1 {
       text-align: center;
-      color: #1d4ed8;
+      color: #2563eb;
       margin-bottom: 8px;
     }
 
@@ -141,8 +141,9 @@
         <input
           type="tel"
           id="mobile"
-          placeholder="Enter mobile number"
+          placeholder="Enter 10 digit mobile number"
           maxlength="10"
+          inputmode="numeric"
           required
         >
 
@@ -159,6 +160,7 @@
           type="password"
           id="password"
           placeholder="Create password"
+          minlength="6"
           required
         >
 
@@ -177,6 +179,7 @@
           id="otp"
           placeholder="Enter 6 digit OTP"
           maxlength="6"
+          inputmode="numeric"
         >
 
         <button type="button" id="verifyBtn">
@@ -196,14 +199,14 @@
   </div>
 
 
-  <!-- Supabase -->
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
 
-    /* ================================
-       SUPABASE SETTINGS
-       ================================ */
+    /* =========================================
+       SUPABASE CONFIGURATION
+       ========================================= */
 
     const SUPABASE_URL =
       "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -218,13 +221,12 @@
       );
 
 
-    /* ================================
+    /* =========================================
        REFERRAL CODE
-       ================================ */
+       ========================================= */
 
-    const urlParams = new URLSearchParams(
-      window.location.search
-    );
+    const urlParams =
+      new URLSearchParams(window.location.search);
 
     const referralCode =
       urlParams.get("ref") || "";
@@ -244,16 +246,16 @@
     }
 
 
-    /* ================================
-       VARIABLES
-       ================================ */
+    /* =========================================
+       OTP VARIABLE
+       ========================================= */
 
     let generatedOTP = "";
 
 
-    /* ================================
-       REGISTER FORM
-       ================================ */
+    /* =========================================
+       SEND OTP
+       ========================================= */
 
     document
       .getElementById("registerForm")
@@ -273,6 +275,7 @@
         const password =
           document.getElementById("password").value;
 
+
         if (!/^[0-9]{10}$/.test(mobile)) {
 
           showMessage(
@@ -282,6 +285,7 @@
 
           return;
         }
+
 
         if (password.length < 6) {
 
@@ -294,7 +298,7 @@
         }
 
 
-        /* Generate demo OTP */
+        /* Generate Demo OTP */
 
         generatedOTP =
           Math.floor(
@@ -302,7 +306,7 @@
           ).toString();
 
 
-        /* Save temporary data */
+        /* Save temporary registration data */
 
         localStorage.setItem(
           "sathi_temp_name",
@@ -319,12 +323,13 @@
           email
         );
 
+        localStorage.setItem(
+          "sathi_temp_password",
+          password
+        );
 
-        /* NOTE:
-           Password is not saved in localStorage.
-           Real authentication should use Supabase Auth.
-        */
 
+        /* Show OTP box */
 
         document.getElementById("otpBox").style.display =
           "block";
@@ -338,9 +343,9 @@
       });
 
 
-    /* ================================
-       VERIFY OTP
-       ================================ */
+    /* =========================================
+       VERIFY OTP & CREATE ACCOUNT
+       ========================================= */
 
     document
       .getElementById("verifyBtn")
@@ -348,6 +353,18 @@
 
         const enteredOTP =
           document.getElementById("otp").value.trim();
+
+
+        if (!enteredOTP) {
+
+          showMessage(
+            "Please enter OTP.",
+            "red"
+          );
+
+          return;
+        }
+
 
         if (enteredOTP !== generatedOTP) {
 
@@ -369,6 +386,9 @@
         const email =
           localStorage.getItem("sathi_temp_email");
 
+        const password =
+          localStorage.getItem("sathi_temp_password");
+
 
         showMessage(
           "Creating your account...",
@@ -376,16 +396,18 @@
         );
 
 
-        /* ================================
+        /* =========================================
            CHECK EXISTING MOBILE
-           ================================ */
+           ========================================= */
 
-        const { data: existingAgent, error: checkError } =
-          await supabaseClient
-            .from("agents")
-            .select("id, mobile")
-            .eq("mobile", mobile)
-            .maybeSingle();
+        const {
+          data: existingAgent,
+          error: checkError
+        } = await supabaseClient
+          .from("agents")
+          .select("id, mobile")
+          .eq("mobile", mobile)
+          .maybeSingle();
 
 
         if (checkError) {
@@ -393,7 +415,8 @@
           console.error(checkError);
 
           showMessage(
-            "Database error: " + checkError.message,
+            "Database error: " +
+            checkError.message,
             "red"
           );
 
@@ -412,9 +435,9 @@
         }
 
 
-        /* ================================
-           GENERATE REFERRAL CODE
-           ================================ */
+        /* =========================================
+           GENERATE UNIQUE REFERRAL CODE
+           ========================================= */
 
         const newReferralCode =
           "SP" +
@@ -424,9 +447,9 @@
             .toUpperCase();
 
 
-        /* ================================
+        /* =========================================
            FIND REFERRER
-           ================================ */
+           ========================================= */
 
         let referredBy = null;
 
@@ -438,15 +461,17 @@
 
         if (savedReferralCode) {
 
-          const { data: referrer, error: refError } =
-            await supabaseClient
-              .from("agents")
-              .select("id, referral_code")
-              .eq(
-                "referral_code",
-                savedReferralCode
-              )
-              .maybeSingle();
+          const {
+            data: referrer,
+            error: refError
+          } = await supabaseClient
+            .from("agents")
+            .select("id, referral_code")
+            .eq(
+              "referral_code",
+              savedReferralCode
+            )
+            .maybeSingle();
 
 
           if (!refError && referrer) {
@@ -458,30 +483,35 @@
         }
 
 
-        /* ================================
-           INSERT NEW AGENT
-           ================================ */
+        /* =========================================
+           CREATE AGENT
+           ========================================= */
 
-        const { data: newAgent, error: insertError } =
-          await supabaseClient
-            .from("agents")
-            .insert([{
+        const {
+          data: newAgent,
+          error: insertError
+        } = await supabaseClient
+          .from("agents")
+          .insert([{
 
-              name: name,
+            name: name,
 
-              mobile: mobile,
+            mobile: mobile,
 
-              status: "Active",
+            status: "Active",
 
-              referral_code:
-                newReferralCode,
+            referral_code:
+              newReferralCode,
 
-              referred_by:
-                referredBy
+            referred_by:
+              referredBy,
 
-            }])
-            .select()
-            .single();
+            password_hash:
+              password
+
+          }])
+          .select()
+          .single();
 
 
         if (insertError) {
@@ -498,9 +528,9 @@
         }
 
 
-        /* ================================
-           SAVE USER DATA
-           ================================ */
+        /* =========================================
+           SAVE USER INFORMATION
+           ========================================= */
 
         localStorage.setItem(
           "sathi_registered",
@@ -528,12 +558,14 @@
         );
 
         localStorage.setItem(
-          "sathi_referral_code",
+          "sathi_my_referral_code",
           newReferralCode
         );
 
 
-        /* Clear temporary data */
+        /* =========================================
+           CLEAN TEMP DATA
+           ========================================= */
 
         localStorage.removeItem(
           "sathi_temp_name"
@@ -547,9 +579,17 @@
           "sathi_temp_email"
         );
 
+        localStorage.removeItem(
+          "sathi_temp_password"
+        );
+
+
+        /* =========================================
+           SUCCESS
+           ========================================= */
 
         showMessage(
-          "Registration successful! Redirecting...",
+          "Registration successful!",
           "green"
         );
 
@@ -564,9 +604,9 @@
       });
 
 
-    /* ================================
+    /* =========================================
        MESSAGE FUNCTION
-       ================================ */
+       ========================================= */
 
     function showMessage(text, color) {
 
@@ -582,4 +622,4 @@
   </script>
 
 </body>
-        </html>
+  </html>
