@@ -2,1146 +2,1221 @@
 <html lang="en">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sathi Pay - Admin</title>
 
-    <title>Sathi Pay - Admin</title>
+<link rel="stylesheet" href="css/style.css">
 
-    <link rel="stylesheet" href="css/style.css">
+<style>
 
-    <style>
+* {
+    box-sizing: border-box;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+.uid-search,
+.agent-result,
+.history-card,
+.status {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+    margin-bottom: 25px;
+}
 
-        .admin-menu {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 15px !important;
-            margin-top: 20px !important;
-            width: 100% !important;
-        }
+.uid-search h3,
+.agent-result h3,
+.history-card h3 {
+    margin-top: 0;
+    color: #1565c0;
+}
 
-        .admin-menu a {
-            display: block !important;
-            width: 100% !important;
-            padding: 18px 20px !important;
-            background: white !important;
-            border-radius: 12px !important;
-            text-decoration: none !important;
-            font-size: 18px !important;
-            font-weight: bold !important;
-            color: #1565c0 !important;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.10) !important;
-            text-align: left !important;
-        }
+.uid-input-row {
+    display: flex;
+    gap: 10px;
+}
 
-        .uid-search {
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
-            margin-bottom: 25px;
-        }
+.uid-input-row input {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    font-size: 16px;
+    min-width: 0;
+}
 
-        .uid-search h3 {
-            margin-top: 0;
-        }
+.uid-input-row button {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 9px;
+    background: #1565c0;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-        .uid-input-row {
-            display: flex;
-            gap: 10px;
-        }
+.uid-input-row button:active {
+    transform: scale(0.98);
+}
 
-        .uid-input-row input {
-            flex: 1;
-            padding: 14px;
-            border: 1px solid #ccc;
-            border-radius: 9px;
-            font-size: 16px;
-            min-width: 0;
-        }
+#uidMessage {
+    margin-top: 12px;
+    font-weight: bold;
+    text-align: center;
+}
 
-        .uid-input-row button {
-            padding: 14px 18px;
-            border: none;
-            border-radius: 9px;
-            background: #1565c0;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.agent-result,
+.history-card {
+    display: none;
+}
 
-        .agent-result,
-        .history-card {
-            display: none;
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
-            margin-bottom: 25px;
-        }
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
 
-        .agent-result h3,
-        .history-card h3 {
-            color: #1565c0;
-            margin-top: 0;
-        }
+.detail-label {
+    font-weight: bold;
+    color: #555;
+}
 
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
+.detail-value {
+    text-align: right;
+    color: #222;
+    word-break: break-word;
+}
 
-        .detail-label {
-            font-weight: bold;
-            color: #555;
-        }
+.summary-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
 
-        .detail-value {
-            text-align: right;
-            color: #222;
-            word-break: break-word;
-        }
+.summary-item {
+    padding: 15px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+}
 
-        .money {
-            font-weight: bold;
-        }
+.summary-item p {
+    margin: 0 0 6px;
+    color: #64748b;
+}
 
-        .deposit-money {
-            color: #15803d;
-        }
+.summary-item strong {
+    font-size: 20px;
+}
 
-        .withdraw-money {
-            color: #dc2626;
-        }
+.deposit-money {
+    color: #15803d;
+}
 
-        .pending {
-            color: #b45309;
-            font-weight: bold;
-        }
+.withdraw-money {
+    color: #dc2626;
+}
 
-        .approved {
-            color: #15803d;
-            font-weight: bold;
-        }
+.pending {
+    color: #b45309;
+    font-weight: bold;
+}
 
-        .failed {
-            color: #dc2626;
-            font-weight: bold;
-        }
+.approved {
+    color: #15803d;
+    font-weight: bold;
+}
 
-        #uidMessage {
-            margin-top: 12px;
-            font-weight: bold;
-            text-align: center;
-        }
+.failed {
+    color: #dc2626;
+    font-weight: bold;
+}
 
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.table-box {
+    overflow-x: auto;
+}
 
-        .history-table th,
-        .history-table td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        .history-table th {
-            background: #e5e7eb;
-        }
+.history-table th,
+.history-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
 
-        .table-box {
-            overflow-x: auto;
-        }
+.history-table th {
+    background: #e5e7eb;
+}
 
-        .summary-box {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 20px;
-        }
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
 
-        .summary-item {
-            padding: 15px;
-            border-radius: 10px;
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-        }
+.admin-menu a {
+    display: block;
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1565c0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+}
 
-        .summary-item p {
-            margin: 0 0 6px;
-            color: #64748b;
-        }
+.status {
+    margin-top: 25px;
+}
 
-        .summary-item strong {
-            font-size: 20px;
-        }
+@media (max-width: 600px) {
 
-        .status {
-            background: white;
-            padding: 18px;
-            border-radius: 14px;
-            margin-top: 25px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        }
+    .uid-input-row {
+        flex-direction: column;
+    }
 
-        @media (max-width: 600px) {
+    .uid-input-row button {
+        width: 100%;
+    }
 
-            .uid-input-row {
-                flex-direction: column;
-            }
+    .detail-row {
+        flex-direction: column;
+    }
 
-            .uid-input-row button {
-                width: 100%;
-            }
+    .detail-value {
+        text-align: left;
+    }
 
-            .detail-row {
-                flex-direction: column;
-            }
+    .summary-box {
+        grid-template-columns: 1fr;
+    }
 
-            .detail-value {
-                text-align: left;
-            }
+    .history-table {
+        min-width: 500px;
+    }
+}
 
-            .summary-box {
-                grid-template-columns: 1fr;
-            }
-
-            .history-table {
-                min-width: 600px;
-            }
-
-        }
-
-    </style>
+</style>
 
 </head>
 
-
 <body>
-
 
 <header>
 
-    <h1>
-        Sathi Pay - Admin
-    </h1>
+<h1>Sathi Pay - Admin</h1>
 
-    <a href="index.html">
-        Logout
-    </a>
+<a href="index.html">
+Logout
+</a>
 
 </header>
 
-
-
 <main class="container">
 
+<h2>📊 Admin Dashboard</h2>
+
+
+<!-- UID SEARCH -->
+
+<div class="uid-search">
+
+<h3>🔎 Search Agent by UID</h3>
+
+<div class="uid-input-row">
+
+<input
+type="text"
+id="uidInput"
+placeholder="Enter Agent UID"
+autocomplete="off"
+>
+
+<button
+type="button"
+id="searchButton"
+>
+Search
+</button>
+
+</div>
+
+<div id="uidMessage"></div>
+
+</div>
+
+
+<!-- AGENT RESULT -->
+
+<div
+id="agentResult"
+class="agent-result"
+>
 
-    <h2>
-        📊 Admin Dashboard
-    </h2>
+<h3>👤 Agent Details</h3>
 
+<div class="detail-row">
+<span class="detail-label">UID</span>
+<span class="detail-value" id="rUid">-</span>
+</div>
 
+<div class="detail-row">
+<span class="detail-label">Name</span>
+<span class="detail-value" id="rName">-</span>
+</div>
 
-    <!-- UID SEARCH -->
+<div class="detail-row">
+<span class="detail-label">Mobile</span>
+<span class="detail-value" id="rMobile">-</span>
+</div>
 
-    <div class="uid-search">
+<div class="detail-row">
+<span class="detail-label">Status</span>
+<span class="detail-value" id="rStatus">-</span>
+</div>
 
-        <h3>
-            🔎 Search Agent by UID
-        </h3>
 
+<div class="summary-box">
 
-        <div class="uid-input-row">
+<div class="summary-item">
+<p>💰 Total Deposit</p>
+<strong
+class="deposit-money"
+id="rTotalDeposit"
+>
+₹0.00
+</strong>
+</div>
 
-            <input
-                type="text"
-                id="uidInput"
-                placeholder="Enter Agent UID"
-                autocomplete="off"
-            >
+<div class="summary-item">
+<p>💸 Total Withdrawal</p>
+<strong
+class="withdraw-money"
+id="rTotalWithdrawal"
+>
+₹0.00
+</strong>
+</div>
 
+<div class="summary-item">
+<p>⏳ Pending Deposit</p>
+<strong id="rPendingDeposit">
+₹0.00
+</strong>
+</div>
 
-            <button
-                type="button"
-                onclick="searchAgent()"
-            >
-                Search
-            </button>
+<div class="summary-item">
+<p>⏳ Pending Withdrawal</p>
+<strong id="rPendingWithdrawal">
+₹0.00
+</strong>
+</div>
 
-        </div>
+<div class="summary-item">
+<p>✅ Approved Deposit</p>
+<strong
+class="deposit-money"
+id="rApprovedDeposit"
+>
+₹0.00
+</strong>
+</div>
 
+<div class="summary-item">
+<p>✅ Approved Withdrawal</p>
+<strong
+class="withdraw-money"
+id="rApprovedWithdrawal"
+>
+₹0.00
+</strong>
+</div>
 
-        <div id="uidMessage"></div>
+</div>
 
-    </div>
+</div>
 
 
+<!-- DEPOSIT HISTORY -->
 
-    <!-- AGENT RESULT -->
+<div
+id="depositHistoryCard"
+class="history-card"
+>
 
-    <div
-        id="agentResult"
-        class="agent-result"
-    >
+<h3>💰 Deposit History</h3>
 
-        <h3>
-            👤 Agent Details
-        </h3>
+<div class="table-box">
 
+<table class="history-table">
 
-        <div class="detail-row">
+<thead>
 
-            <span class="detail-label">
-                UID
-            </span>
+<tr>
+<th>ID</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
 
-            <span
-                class="detail-value"
-                id="rUid"
-            >
-                -
-            </span>
+</thead>
 
-        </div>
+<tbody id="agentDepositTable">
 
+<tr>
+<td colspan="3">
+No deposits found
+</td>
+</tr>
 
-        <div class="detail-row">
+</tbody>
 
-            <span class="detail-label">
-                Name
-            </span>
+</table>
 
-            <span
-                class="detail-value"
-                id="rName"
-            >
-                -
-            </span>
+</div>
 
-        </div>
+</div>
 
 
-        <div class="detail-row">
+<!-- WITHDRAWAL HISTORY -->
 
-            <span class="detail-label">
-                Mobile
-            </span>
+<div
+id="withdrawalHistoryCard"
+class="history-card"
+>
 
-            <span
-                class="detail-value"
-                id="rMobile"
-            >
-                -
-            </span>
+<h3>💸 Withdrawal History</h3>
 
-        </div>
+<div class="table-box">
 
+<table class="history-table">
 
-        <div class="detail-row">
+<thead>
 
-            <span class="detail-label">
-                Status
-            </span>
+<tr>
+<th>ID</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
 
-            <span
-                class="detail-value"
-                id="rStatus"
-            >
-                -
-            </span>
+</thead>
 
-        </div>
+<tbody id="agentWithdrawalTable">
 
+<tr>
+<td colspan="3">
+No withdrawals found
+</td>
+</tr>
 
-        <!-- SUMMARY -->
+</tbody>
 
-        <div class="summary-box">
+</table>
 
-            <div class="summary-item">
+</div>
 
-                <p>
-                    💰 Total Deposit
-                </p>
+</div>
 
-                <strong
-                    class="deposit-money"
-                    id="rTotalDeposit"
-                >
-                    ₹0.00
-                </strong>
 
-            </div>
+<!-- MAIN ADMIN CARDS -->
 
+<div class="dashboard-grid">
 
-            <div class="summary-item">
+<div class="card">
 
-                <p>
-                    💸 Total Withdrawal
-                </p>
+<h3>👥 Total Agents</h3>
 
-                <strong
-                    class="withdraw-money"
-                    id="rTotalWithdrawal"
-                >
-                    ₹0.00
-                </strong>
+<p id="totalAgents">
+0
+</p>
 
-            </div>
+</div>
 
 
-            <div class="summary-item">
+<div class="card">
 
-                <p>
-                    ⏳ Pending Deposit
-                </p>
+<h3>💰 Total Deposits</h3>
 
-                <strong
-                    id="rPendingDeposit"
-                >
-                    ₹0.00
-                </strong>
+<p id="totalDeposits">
+₹0
+</p>
 
-            </div>
+</div>
 
 
-            <div class="summary-item">
+<div class="card">
 
-                <p>
-                    ⏳ Pending Withdrawal
-                </p>
+<h3>💸 Total Withdrawals</h3>
 
-                <strong
-                    id="rPendingWithdrawal"
-                >
-                    ₹0.00
-                </strong>
+<p id="totalWithdrawals">
+₹0
+</p>
 
-            </div>
+</div>
 
 
-            <div class="summary-item">
+<div class="card">
 
-                <p>
-                    ✅ Approved Deposit
-                </p>
+<h3>💵 Total Commission</h3>
 
-                <strong
-                    class="deposit-money"
-                    id="rApprovedDeposit"
-                >
-                    ₹0.00
-                </strong>
+<p id="totalCommission">
+₹0
+</p>
 
-            </div>
+</div>
 
 
-            <div class="summary-item">
+<div class="card">
 
-                <p>
-                    ✅ Approved Withdrawal
-                </p>
+<h3>⏳ Pending Deposits</h3>
 
-                <strong
-                    class="withdraw-money"
-                    id="rApprovedWithdrawal"
-                >
-                    ₹0.00
-                </strong>
+<p id="pendingDeposits">
+0
+</p>
 
-            </div>
+</div>
 
-        </div>
 
+<div class="card">
 
-    </div>
+<h3>⏳ Pending Withdrawals</h3>
 
+<p id="pendingWithdrawals">
+0
+</p>
 
+</div>
 
-    <!-- DEPOSIT HISTORY -->
+</div>
 
-    <div
-        id="depositHistoryCard"
-        class="history-card"
-    >
 
-        <h3>
-            💰 Deposit History
-        </h3>
+<!-- ADMIN MENU -->
 
+<h2>⚙️ Admin Menu</h2>
 
-        <div class="table-box">
+<div class="admin-menu">
 
-            <table class="history-table">
+<a href="agents.html">
+👥 Agent Management
+</a>
 
-                <thead>
+<a href="deposit.html">
+💰 Deposit
+</a>
 
-                    <tr>
+<a href="withdrawal.html">
+💸 Withdrawal
+</a>
 
-                        <th>
-                            ID
-                        </th>
+<a href="commission.html">
+💵 Commission
+</a>
 
-                        <th>
-                            Amount
-                        </th>
+<a href="transactions.html">
+🧾 Transactions
+</a>
 
-                        <th>
-                            Status
-                        </th>
+</div>
 
-                    </tr>
 
-                </thead>
+<!-- SYSTEM STATUS -->
 
+<div class="status">
 
-                <tbody id="agentDepositTable">
+<b>System Status:</b>
 
-                    <tr>
+<p>🟢 Online</p>
 
-                        <td colspan="3">
-                            No deposits found
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- WITHDRAWAL HISTORY -->
-
-    <div
-        id="withdrawalHistoryCard"
-        class="history-card"
-    >
-
-        <h3>
-            💸 Withdrawal History
-        </h3>
-
-
-        <div class="table-box">
-
-            <table class="history-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            ID
-                        </th>
-
-                        <th>
-                            Amount
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="agentWithdrawalTable">
-
-                    <tr>
-
-                        <td colspan="3">
-                            No withdrawals found
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- MAIN ADMIN CARDS -->
-
-    <div class="dashboard-grid">
-
-
-        <div class="card">
-
-            <h3>
-                👥 Total Agents
-            </h3>
-
-            <p id="totalAgents">
-                0
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>
-                💰 Total Deposits
-            </h3>
-
-            <p id="totalDeposits">
-                ₹0
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>
-                💸 Total Withdrawals
-            </h3>
-
-            <p id="totalWithdrawals">
-                ₹0
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>
-                💵 Total Commission
-            </h3>
-
-            <p id="totalCommission">
-                ₹0
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>
-                ⏳ Pending Deposits
-            </h3>
-
-            <p id="pendingDeposits">
-                0
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>
-                ⏳ Pending Withdrawals
-            </h3>
-
-            <p id="pendingWithdrawals">
-                0
-            </p>
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- ADMIN MENU -->
-
-    <h2>
-        ⚙️ Admin Menu
-    </h2>
-
-
-    <div class="admin-menu">
-
-
-        <a href="agents.html">
-            👥 Agent Management
-        </a>
-
-
-        <a href="deposit.html">
-            💰 Deposit
-        </a>
-
-
-        <a href="withdrawal.html">
-            💸 Withdrawal
-        </a>
-
-
-        <a href="commission.html">
-            💵 Commission
-        </a>
-
-
-        <a href="transactions.html">
-            🧾 Transactions
-        </a>
-
-
-    </div>
-
-
-
-    <!-- SYSTEM STATUS -->
-
-    <div class="status">
-
-        <b>
-            System Status:
-        </b>
-
-        <p>
-            🟢 Online
-        </p>
-
-    </div>
-
+</div>
 
 </main>
 
-
-
-<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
 
-
 const SUPABASE_URL =
-    "https://lozluohksmjxbxixkbmq.supabase.co";
-
+"https://lozluohksmjxbxixkbmq.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
-
+"sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
-
-
-/* =========================================
-   MONEY FORMAT
-========================================= */
 
 function money(value) {
 
-    return "₹" +
-        Number(value || 0).toFixed(2);
+return "₹" +
+Number(value || 0).toFixed(2);
 
 }
 
 
+function statusClass(status) {
 
-/* =========================================
-   SEARCH AGENT BY UID
-========================================= */
+const s =
+String(status || "")
+.toLowerCase();
+
+if (
+s === "approved" ||
+s === "success" ||
+s === "successful"
+) {
+return "approved";
+}
+
+if (s === "failed" || s === "rejected") {
+return "failed";
+}
+
+return "pending";
+
+}
+
 
 async function searchAgent() {
 
+const input =
+document.getElementById("uidInput");
 
-    const uid =
-        document
-            .getElementById("uidInput")
-            .value
-            .trim()
-            .toUpperCase();
+const uid =
+input.value.trim().toUpperCase();
 
+const message =
+document.getElementById("uidMessage");
 
-    const message =
-        document.getElementById("uidMessage");
+const result =
+document.getElementById("agentResult");
 
+const depositCard =
+document.getElementById("depositHistoryCard");
 
-    const result =
-        document.getElementById("agentResult");
+const withdrawalCard =
+document.getElementById("withdrawalHistoryCard");
 
 
-    const depositCard =
-        document.getElementById(
-            "depositHistoryCard"
-        );
+result.style.display = "none";
 
+depositCard.style.display = "none";
 
-    const withdrawalCard =
-        document.getElementById(
-            "withdrawalHistoryCard"
-        );
+withdrawalCard.style.display = "none";
 
 
-    result.style.display =
-        "none";
+if (!uid) {
 
+message.textContent =
+"Please enter UID.";
 
-    depositCard.style.display =
-        "none";
+message.style.color = "red";
 
+return;
 
-    withdrawalCard.style.display =
-        "none";
+}
 
 
-    if (!uid) {
+message.textContent =
+"Searching...";
 
-        message.textContent =
-            "Please enter UID.";
+message.style.color =
+"#1565c0";
 
-        message.style.color =
-            "red";
 
-        return;
+try {
 
-    }
 
+/* FIND AGENT */
 
-    message.textContent =
-        "Searching...";
+const {
+data: agent,
+error: agentError
+} = await supabaseClient
 
-    message.style.color =
-        "#1565c0";
+.from("agents")
 
+.select(`
+id,
+uid,
+name,
+mobile,
+status
+`)
 
-    try {
+.eq("uid", uid)
 
+.maybeSingle();
 
-        /* =================================
-           FIND AGENT
-        ================================= */
 
-        const {
-            data: agent,
-            error: agentError
-        } =
-            await supabaseClient
+if (agentError) {
 
-                .from("agents")
+console.error(agentError);
 
-                .select(`
-                    id,
-                    uid,
-                    name,
-                    mobile,
-                    status
-                `)
+message.textContent =
+"Database error: " +
+agentError.message;
 
-                .eq("uid", uid)
+message.style.color =
+"red";
 
-                .maybeSingle();
+return;
 
+}
 
-        if (agentError) {
 
-            console.error(
-                agentError
-            );
+if (!agent) {
 
+message.textContent =
+"❌ Agent not found.";
 
-            message.textContent =
-                "Database error: " +
-                agentError.message;
+message.style.color =
+"red";
 
+return;
 
-            message.style.color =
-                "red";
+}
 
 
-            return;
+/* LOAD DEPOSITS */
 
-        }
+const {
+data: deposits,
+error: depositError
+} = await supabaseClient
 
+.from("deposits")
 
-        if (!agent) {
+.select(`
+id,
+amount,
+status
+`)
 
-            message.textContent =
-                "❌ Agent not found.";
+.eq("agent_id", agent.id)
 
+.order("id", {
+ascending: false
+});
 
-            message.style.color =
-                "red";
 
+if (depositError) {
 
-            return;
+console.error(depositError);
 
-        }
+message.textContent =
+"Deposit database error: " +
+depositError.message;
 
+message.style.color =
+"red";
 
+return;
 
-        /* =================================
-           LOAD DEPOSITS
-        ================================= */
+}
 
-        const {
-            data: deposits,
-            error: depositError
-        } =
-            await supabaseClient
 
-                .from("deposits")
+/* LOAD WITHDRAWALS */
 
-                .select(`
-                    id,
-                    amount,
-                    status
-                `)
+const {
+data: withdrawals,
+error: withdrawalError
+} = await supabaseClient
 
-                .eq(
-                    "agent_id",
-                    agent.id
-                )
+.from("withdrawals")
 
-                .order(
-                    "id",
-                    {
-                        ascending: false
-                    }
-                );
+.select(`
+id,
+amount,
+status
+`)
 
+.eq("agent_id", agent.id)
 
-        if (depositError) {
+.order("id", {
+ascending: false
+});
 
-            console.error(
-                depositError
-            );
 
+if (withdrawalError) {
 
-            message.textContent =
-                "Deposit database error: " +
-                depositError.message;
+console.error(withdrawalError);
 
+message.textContent =
+"Withdrawal database error: " +
+withdrawalError.message;
 
-            message.style.color =
-                "red";
+message.style.color =
+"red";
 
+return;
 
-            return;
+}
 
-        }
 
+/* CALCULATE DEPOSITS */
 
+let totalDeposit = 0;
 
-        /* =================================
-           LOAD WITHDRAWALS
-        ================================= */
+let pendingDeposit = 0;
 
-        const {
-            data: withdrawals,
-            error: withdrawalError
-        } =
-            await supabaseClient
+let approvedDeposit = 0;
 
-                .from("withdrawals")
 
-                .select(`
-                    id,
-                    amount,
-                    status
-                `)
+(deposits || []).forEach(
+deposit => {
 
-                .eq(
-                    "agent_id",
-                    agent.id
-                )
+const amount =
+Number(deposit.amount || 0);
 
-                .order(
-                    "id",
-                    {
-                        ascending: false
-                    }
-                );
+totalDeposit += amount;
 
+const status =
+String(
+deposit.status || ""
+).toLowerCase();
 
-        if (withdrawalError) {
 
-            console.error(
-                withdrawalError
-            );
+if (status === "pending") {
 
+pendingDeposit += amount;
 
-            message.textContent =
-                "Withdrawal database error: " +
-                withdrawalError.message;
+}
 
 
-            message.style.color =
-                "red";
+if (
+status === "approved" ||
+status === "success" ||
+status === "successful"
+) {
 
+approvedDeposit += amount;
 
-            return;
+}
 
-        }
+});
 
 
+/* CALCULATE WITHDRAWALS */
 
-        /* =================================
-           CALCULATE DEPOSIT TOTALS
-        ================================= */
+let totalWithdrawal = 0;
 
-        let totalDeposit = 0;
+let pendingWithdrawal = 0;
 
-        let pendingDeposit = 0;
+let approvedWithdrawal = 0;
 
-        let approvedDeposit = 0;
 
+(withdrawals || []).forEach(
+withdrawal => {
 
-        (deposits || []).forEach(
-            function(deposit) {
+const amount =
+Number(withdrawal.amount || 0);
 
+totalWithdrawal += amount;
 
-                const amount =
-                    Number(
-                        deposit.amount || 0
-                    );
+const status =
+String(
+withdrawal.status || ""
+).toLowerCase();
 
 
-                totalDeposit +=
-                    amount;
+if (status === "pending") {
 
+pendingWithdrawal += amount;
 
-                const status =
-                    String(
-                        deposit.status || ""
-                    ).toLowerCase();
+}
 
 
-                if (
-                    status === "pending"
-                ) {
+if (
+status === "approved" ||
+status === "success" ||
+status === "successful"
+) {
 
-                    pendingDeposit +=
-                        amount;
+approvedWithdrawal += amount;
 
-                }
+}
 
+});
 
-                if (
-                    status === "approved"
-                    ||
-                    status === "success"
-                    ||
-                    status === "successful"
-                ) {
 
-                    approvedDeposit +=
-                        amount;
+/* SHOW AGENT */
 
-                }
+document.getElementById(
+"rUid"
+).textContent =
+agent.uid || "-";
 
-            }
-        );
 
+document.getElementById(
+"rName"
+).textContent =
+agent.name || "-";
 
 
-        /* =================================
-           CALCULATE WITHDRAWAL TOTALS
-        ================================= */
+document.getElementById(
+"rMobile"
+).textContent =
+agent.mobile || "-";
 
-        let totalWithdrawal = 0;
 
-        let pendingWithdrawal = 0;
+const statusElement =
+document.getElementById("rStatus");
 
-        let approvedWithdrawal = 0;
+statusElement.textContent =
+agent.status || "-";
 
+statusElement.className =
+"detail-value " +
+statusClass(agent.status);
 
-        (withdrawals || []).forEach(
-            function(withdrawal) {
 
+/* SHOW SUMMARY */
 
-                const amount =
-                    Number(
-                        withdrawal.amount || 0
-                    );
+document.getElementById(
+"rTotalDeposit"
+).textContent =
+money(totalDeposit);
 
 
-                totalWithdrawal +=
-                    amount;
+document.getElementById(
+"rTotalWithdrawal"
+).textContent =
+money(totalWithdrawal);
 
 
-                const status =
-                    String(
-                        withdrawal.status || ""
-                    ).toLowerCase();
+document.getElementById(
+"rPendingDeposit"
+).textContent =
+money(pendingDeposit);
 
 
-                if (
-                    status === "pending"
-                ) {
+document.getElementById(
+"rPendingWithdrawal"
+).textContent =
+money(pendingWithdrawal);
 
-                    pendingWithdrawal +=
-                        amount;
 
-                }
+document.getElementById(
+"rApprovedDeposit"
+).textContent =
+money(approvedDeposit);
 
 
-                if (
-                    status === "approved"
-                    ||
-                    status === "success"
-                    ||
-                    status === "successful"
-                ) {
+document.getElementById(
+"rApprovedWithdrawal"
+).textContent =
+money(approvedWithdrawal);
 
-                    approvedWithdrawal +=
-                        amount;
 
-                }
+result.style.display =
+"block";
 
-            }
-        );
 
+/* DEPOSIT TABLE */
 
+const depositTable =
+document.getElementById(
+"agentDepositTable"
+);
 
-        /* =================================
-           SHOW AGENT
-        ================================= */
 
-        document.getElementById(
-            "rUid"
-        ).textContent =
-            agent.uid || "-";
+if (!deposits ||
+deposits.length === 0) {
 
+depositTable.innerHTML = `
+<tr>
+<td colspan="3">
+No deposits found
+</td>
+</tr>
+`;
 
-        document.getElementById(
-            "rName"
-        ).textContent =
-            agent.name || "-";
+} else {
 
+depositTable.innerHTML =
+deposits.map(
+deposit => `
 
-        document.getElementById(
-            "rMobile"
-        ).textContent =
-            agent.mobile || "-";
+<tr>
 
+<td>
+${deposit.id}
+</td>
 
-        document.getElementById(
-            "rStatus"
-        ).textContent =
-            age
+<td class="deposit-money">
+${money(deposit.amount)}
+</td>
+
+<td class="${statusClass(deposit.status)}">
+${deposit.status || "-"}
+</td>
+
+</tr>
+
+`
+).join("");
+
+}
+
+
+depositCard.style.display =
+"block";
+
+
+/* WITHDRAWAL TABLE */
+
+const withdrawalTable =
+document.getElementById(
+"agentWithdrawalTable"
+);
+
+
+if (!withdrawals ||
+withdrawals.length === 0) {
+
+withdrawalTable.innerHTML = `
+<tr>
+<td colspan="3">
+No withdrawals found
+</td>
+</tr>
+`;
+
+} else {
+
+withdrawalTable.innerHTML =
+withdrawals.map(
+withdrawal => `
+
+<tr>
+
+<td>
+${withdrawal.id}
+</td>
+
+<td class="withdraw-money">
+${money(withdrawal.amount)}
+</td>
+
+<td class="${statusClass(withdrawal.status)}">
+${withdrawal.status || "-"}
+</td>
+
+</tr>
+
+`
+).join("");
+
+}
+
+
+withdrawalCard.style.display =
+"block";
+
+
+message.textContent =
+"✅ Agent found successfully.";
+
+message.style.color =
+"#15803d";
+
+} catch (error) {
+
+console.error(error);
+
+message.textContent =
+"Error: " + error.message;
+
+message.style.color =
+"red";
+
+}
+
+}
+
+
+/* SEARCH BUTTON */
+
+document
+.getElementById("searchButton")
+.addEventListener(
+"click",
+searchAgent
+);
+
+
+/* ENTER KEY */
+
+document
+.getElementById("uidInput")
+.addEventListener(
+"keydown",
+function(event) {
+
+if (event.key === "Enter") {
+
+searchAgent();
+
+}
+
+});
+
+
+/* LOAD ADMIN TOTALS */
+
+async function loadAdminTotals() {
+
+try {
+
+
+const {
+count: agentCount
+} = await supabaseClient
+
+.from("agents")
+
+.select("id", {
+count: "exact",
+head: true
+});
+
+
+document.getElementById(
+"totalAgents"
+).textContent =
+agentCount || 0;
+
+
+/* DEPOSITS */
+
+const {
+data: deposits
+} = await supabaseClient
+
+.from("deposits")
+
+.select("amount,status");
+
+
+let totalDeposits = 0;
+
+let pendingDeposits = 0;
+
+
+(deposits || []).forEach(
+deposit => {
+
+const amount =
+Number(deposit.amount || 0);
+
+totalDeposits += amount;
+
+if (
+String(deposit.status || "")
+.toLowerCase()
+=== "pending"
+) {
+
+pendingDeposits++;
+
+}
+
+});
+
+
+document.getElementById(
+"totalDeposits"
+).textContent =
+money(totalDeposits);
+
+
+document.getElementById(
+"pendingDeposits"
+).textContent =
+pendingDeposits;
+
+
+/* WITHDRAWALS */
+
+const {
+data: withdrawals
+} = await supabaseClient
+
+.from("withdrawals")
+
+.select("amount,status");
+
+
+let totalWithdrawals = 0;
+
+let pendingWithdrawals = 0;
+
+
+(withdrawals || []).forEach(
+withdrawal => {
+
+const amount =
+Number(withdrawal.amount || 0);
+
+totalWithdrawals += amount;
+
+if (
+String(withdrawal.status || "")
+.toLowerCase()
+=== "pending"
+) {
+
+pendingWithdrawals++;
+
+}
+
+});
+
+
+document.getElementById(
+"totalWithdrawals"
+).textContent =
+money(totalWithdrawals);
+
+
+document.getElementById(
+"pendingWithdrawals"
+).textContent =
+pendingWithdrawals;
+
+
+} catch (error) {
+
+console.error(
+"Admin totals error:",
+error
+);
+
+}
+
+}
+
+
+loadAdminTotals();
+
+</script>
+
+</body>
+    </html>
