@@ -23,7 +23,7 @@ const COMMISSION_RATE = 0.10;
 
 
 // ===============================
-// LOGIN FUNCTION
+// LOGIN
 // ===============================
 
 function login(event) {
@@ -45,14 +45,11 @@ function login(event) {
         password === "Admin@2026Secure"
     ) {
 
-        message.innerText =
-            "Login successful!";
-
+        message.innerText = "Login successful!";
 
         setTimeout(function () {
 
-            window.location.href =
-                "agents.html";
+            window.location.href = "agents.html";
 
         }, 1000);
 
@@ -67,7 +64,7 @@ function login(event) {
 
 
 // ===============================
-// LOAD ADMIN DASHBOARD
+// ADMIN DASHBOARD
 // ===============================
 
 async function loadAdminDashboard() {
@@ -81,7 +78,7 @@ async function loadAdminDashboard() {
 
 
     // -------------------------------
-    // TOTAL AGENTS
+    // AGENTS
     // -------------------------------
 
     const agentsResult =
@@ -97,6 +94,8 @@ async function loadAdminDashboard() {
             agentsResult.error
         );
 
+        return;
+
     }
 
 
@@ -108,13 +107,11 @@ async function loadAdminDashboard() {
 
     document.getElementById(
         "totalAgents"
-    ).innerText =
-        totalAgents;
-
+    ).innerText = totalAgents;
 
 
     // -------------------------------
-    // TOTAL DEPOSITS
+    // DEPOSITS
     // -------------------------------
 
     const depositsResult =
@@ -138,7 +135,6 @@ async function loadAdminDashboard() {
 
 
     let totalDeposits = 0;
-
     let pendingDeposits = 0;
 
 
@@ -146,7 +142,6 @@ async function loadAdminDashboard() {
 
         const amount =
             Number(deposit.amount) || 0;
-
 
         totalDeposits += amount;
 
@@ -172,9 +167,8 @@ async function loadAdminDashboard() {
         pendingDeposits;
 
 
-
     // -------------------------------
-    // TOTAL WITHDRAWALS
+    // WITHDRAWALS
     // -------------------------------
 
     const withdrawalsResult =
@@ -198,7 +192,6 @@ async function loadAdminDashboard() {
 
 
     let totalWithdrawals = 0;
-
     let pendingWithdrawals = 0;
 
 
@@ -206,7 +199,6 @@ async function loadAdminDashboard() {
 
         const amount =
             Number(withdrawal.amount) || 0;
-
 
         totalWithdrawals += amount;
 
@@ -232,6 +224,126 @@ async function loadAdminDashboard() {
         pendingWithdrawals;
 
 
-
     // -------------------------------
-    // TOTAL
+    // COMMISSION 10%
+    // -------------------------------
+
+    const totalCommission =
+        totalDeposits * COMMISSION_RATE;
+
+
+    document.getElementById(
+        "totalCommission"
+    ).innerText =
+        "₹" + totalCommission.toFixed(2);
+
+}
+
+
+// ===============================
+// LOAD AGENTS
+// ===============================
+
+async function loadAgents() {
+
+    const table =
+        document.getElementById("agentTable");
+
+    if (!table) {
+        return;
+    }
+
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="5">
+                Loading agents...
+            </td>
+        </tr>
+    `;
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("agents")
+            .select("*")
+            .order("id", {
+                ascending: true
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    Error loading agents.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    No agents found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    table.innerHTML = "";
+
+
+    data.forEach(function (agent) {
+
+        const statusClass =
+            agent.status === "Active"
+                ? "active"
+                : "inactive";
+
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${agent.id}
+                </td>
+
+                <td>
+                    ${agent.name}
+                </td>
+
+                <td>
+                    ${agent.mobile}
+                </td>
+
+                <td class="${statusClass}">
+                    ${agent.status}
+                </td>
+
+                <td>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteAgent(${agent.id})"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
