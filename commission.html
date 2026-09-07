@@ -4,49 +4,160 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Sathi Pay - Commission</title>
 
-    <link
-        rel="stylesheet"
-        href="css/style.css"
-    >
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .commission-rule {
+            background: #f1f5f9;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .rate {
+            font-size: 24px;
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        .referral-rule {
+            background: #fff7ed;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #e5e7eb;
+        }
+
+        .success {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .amount {
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        @media (max-width: 600px) {
+            table {
+                min-width: 600px;
+            }
+
+            .table-box {
+                overflow-x: auto;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Sathi Pay - Commission</h1>
+<header>
+    <h1>Sathi Pay - Commission</h1>
 
-        <a href="admin.html">
-            Dashboard
-        </a>
-    </header>
+    <a href="deshboard.html">
+        Dashboard
+    </a>
+</header>
 
-    <main class="container">
 
-        <h2>
-            Commission Details
-        </h2>
+<main class="container">
+
+    <h2>
+        📊 Commission Details
+    </h2>
+
+
+    <!-- DEPOSIT COMMISSION -->
+
+    <div class="commission-rule">
+
+        <h3>
+            💰 Deposit Commission
+        </h3>
 
         <p>
-            Commission Rate:
-            <strong>10%</strong>
+            Approved deposit par commission:
         </p>
+
+        <div class="rate">
+            10%
+        </div>
+
+        <p>
+            Example: ₹1,000 approved deposit =
+            <strong>₹100 commission</strong>
+        </p>
+
+    </div>
+
+
+    <!-- REFERRAL COMMISSION -->
+
+    <div class="referral-rule">
+
+        <h3>
+            🔗 Referral Team Commission
+        </h3>
+
+        <p>
+            Level A → <strong>1%</strong>
+        </p>
+
+        <p>
+            Level B → <strong>0.5%</strong>
+        </p>
+
+        <p>
+            Level C → <strong>0.2%</strong>
+        </p>
+
+    </div>
+
+
+    <!-- COMMISSION TABLE -->
+
+    <div class="table-box">
 
         <table>
 
             <thead>
+
                 <tr>
                     <th>Agent</th>
-                    <th>Deposit</th>
+                    <th>Approved Deposit</th>
                     <th>Commission (10%)</th>
                 </tr>
+
             </thead>
+
 
             <tbody id="commissionTable">
 
@@ -58,67 +169,95 @@
 
             </tbody>
 
+
             <tfoot>
 
                 <tr>
-                    <th>Total</th>
+
+                    <th>
+                        Total
+                    </th>
 
                     <th id="totalDeposit">
-                        ₹0
+                        ₹0.00
                     </th>
 
                     <th id="totalCommission">
-                        ₹0
+                        ₹0.00
                     </th>
+
                 </tr>
 
             </tfoot>
 
         </table>
 
-        <p
-            id="commissionMessage"
-            style="margin-top:15px;"
-        ></p>
+    </div>
 
-    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <p id="commissionMessage"
+       style="margin-top:15px;">
+    </p>
 
-    <script src="js/app.js?v=3"></script>
 
-    <script>
+</main>
 
-        async function loadCommission() {
 
-            const table =
-                document.getElementById(
-                    "commissionTable"
-                );
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-            const message =
-                document.getElementById(
-                    "commissionMessage"
-                );
+<script src="js/app.js?v=4"></script>
 
-            table.innerHTML = `
-                <tr>
-                    <td colspan="3">
-                        Loading commission...
-                    </td>
-                </tr>
-            `;
 
-            const { data, error } =
-                await supabaseClient
-                    .from("deposits")
-                    .select(`
-                        amount,
-                        agent_id,
-                        agents (
-                            name
-                        )
-                    `);
+<script>
+
+    /*
+       Sathi Pay Deposit Commission
+       10%
+    */
+
+    const DEPOSIT_COMMISSION_RATE = 0.10;
+
+
+    async function loadCommission() {
+
+        const table =
+            document.getElementById(
+                "commissionTable"
+            );
+
+        const message =
+            document.getElementById(
+                "commissionMessage"
+            );
+
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="3">
+                    Loading commission...
+                </td>
+            </tr>
+        `;
+
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from("deposits")
+
+                .select(`
+                    amount,
+                    status,
+                    agent_id,
+                    agents (
+                        name
+                    )
+                `);
+
 
             if (error) {
 
@@ -135,92 +274,138 @@
                 message.innerText =
                     "Error: " + error.message;
 
+                message.style.color = "red";
+
                 return;
             }
 
-            if (!data || data.length === 0) {
+
+            /*
+               Only APPROVED deposits
+               will receive commission.
+            */
+
+            const approvedDeposits =
+                (data || []).filter(function(deposit) {
+
+                    return String(
+                        deposit.status || ""
+                    ).toLowerCase() === "approved";
+
+                });
+
+
+            if (approvedDeposits.length === 0) {
 
                 table.innerHTML = `
                     <tr>
                         <td colspan="3">
-                            No deposits found.
+                            No approved deposits found.
                         </td>
                     </tr>
                 `;
 
                 document.getElementById(
                     "totalDeposit"
-                ).innerText = "₹0";
+                ).innerText = "₹0.00";
 
                 document.getElementById(
                     "totalCommission"
-                ).innerText = "₹0";
+                ).innerText = "₹0.00";
+
+                message.innerText =
+                    "Abhi koi approved deposit nahi hai.";
+
+                message.style.color = "#b45309";
 
                 return;
             }
 
+
             const agentTotals = {};
 
-            data.forEach(function (deposit) {
 
-                const agentName =
-                    deposit.agents &&
-                    deposit.agents.name
-                        ? deposit.agents.name
-                        : "Unknown Agent";
+            approvedDeposits.forEach(
+                function(deposit) {
 
-                const amount =
-                    Number(deposit.amount) || 0;
+                    const agentName =
+                        deposit.agents &&
+                        deposit.agents.name
+                            ? deposit.agents.name
+                            : "Unknown Agent";
 
-                if (!agentTotals[agentName]) {
-                    agentTotals[agentName] = 0;
+
+                    const amount =
+                        Number(
+                            deposit.amount
+                        ) || 0;
+
+
+                    if (!agentTotals[agentName]) {
+
+                        agentTotals[agentName] =
+                            0;
+
+                    }
+
+
+                    agentTotals[agentName] +=
+                        amount;
+
                 }
+            );
 
-                agentTotals[agentName] += amount;
-
-            });
 
             table.innerHTML = "";
 
+
             let totalDeposit = 0;
 
+
             Object.keys(agentTotals).forEach(
-                function (agentName) {
+                function(agentName) {
 
                     const depositAmount =
                         agentTotals[agentName];
 
+
                     const commission =
                         depositAmount *
-                        COMMISSION_RATE;
+                        DEPOSIT_COMMISSION_RATE;
+
 
                     totalDeposit +=
                         depositAmount;
 
+
                     table.innerHTML += `
+
                         <tr>
 
                             <td>
                                 ${agentName}
                             </td>
 
-                            <td>
+                            <td class="amount">
                                 ₹${depositAmount.toFixed(2)}
                             </td>
 
-                            <td>
+                            <td class="success">
                                 ₹${commission.toFixed(2)}
                             </td>
 
                         </tr>
+
                     `;
 
                 }
             );
 
+
             const totalCommission =
                 totalDeposit *
-                COMMISSION_RATE;
+                DEPOSIT_COMMISSION_RATE;
+
 
             document.getElementById(
                 "totalDeposit"
@@ -228,20 +413,48 @@
                 "₹" +
                 totalDeposit.toFixed(2);
 
+
             document.getElementById(
                 "totalCommission"
             ).innerText =
                 "₹" +
                 totalCommission.toFixed(2);
 
+
             message.innerText =
-                "Commission calculated successfully.";
+                "✅ Commission calculated on approved deposits at 10%.";
+
+            message.style.color =
+                "#15803d";
 
         }
 
-        loadCommission();
+        catch (error) {
 
-    </script>
+            console.error(error);
+
+            message.innerText =
+                "Something went wrong: " +
+                error.message;
+
+            message.style.color =
+                "red";
+
+        }
+
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            loadCommission();
+
+        }
+    );
+
+</script>
 
 </body>
 
