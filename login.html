@@ -169,13 +169,10 @@
 
 
   <!-- Supabase -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-
-    /* =====================================
-       SUPABASE
-       ===================================== */
 
     const SUPABASE_URL =
       "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -189,10 +186,6 @@
         SUPABASE_KEY
       );
 
-
-    /* =====================================
-       LOGIN
-       ===================================== */
 
     document
       .getElementById("loginForm")
@@ -211,13 +204,7 @@
             .getElementById("password")
             .value;
 
-
-        /* Clear old message */
-
         showMessage("", "");
-
-
-        /* Check mobile */
 
         if (!/^[0-9]{10}$/.test(mobile)) {
 
@@ -229,9 +216,6 @@
           return;
         }
 
-
-        /* Check password */
-
         if (!password) {
 
           showMessage(
@@ -242,23 +226,14 @@
           return;
         }
 
-
-        /* Disable button */
-
         const loginBtn =
           document.getElementById("loginBtn");
 
         loginBtn.disabled = true;
-
-        loginBtn.textContent =
-          "Logging in...";
+        loginBtn.textContent = "Logging in...";
 
 
         try {
-
-          /* =====================================
-             FIND AGENT
-             ===================================== */
 
           const {
             data: agent,
@@ -266,13 +241,11 @@
           } = await supabaseClient
             .from("agents")
             .select(
-              "id, name, mobile, status, referral_code, referred_by, password_hash"
+              "id, uid, name, mobile, status, referral_code, referred_by, password_hash"
             )
             .eq("mobile", mobile)
             .maybeSingle();
 
-
-          /* Database error */
 
           if (error) {
 
@@ -287,8 +260,6 @@
           }
 
 
-          /* Agent not found */
-
           if (!agent) {
 
             showMessage(
@@ -299,10 +270,6 @@
             return;
           }
 
-
-          /* =====================================
-             PASSWORD CHECK
-             ===================================== */
 
           if (
             !agent.password_hash ||
@@ -318,10 +285,6 @@
           }
 
 
-          /* =====================================
-             STATUS CHECK
-             ===================================== */
-
           if (
             agent.status &&
             agent.status.toLowerCase() !== "active"
@@ -336,9 +299,7 @@
           }
 
 
-          /* =====================================
-             SAVE LOGIN DATA
-             ===================================== */
+          /* LOGIN DATA */
 
           localStorage.setItem(
             "sathi_logged_in",
@@ -353,6 +314,11 @@
           localStorage.setItem(
             "sathi_agent_id",
             agent.id
+          );
+
+          localStorage.setItem(
+            "sathi_uid",
+            agent.uid || ""
           );
 
           localStorage.setItem(
@@ -375,7 +341,8 @@
             agent.referral_code || ""
           );
 
-          /* Existing profile compatibility */
+
+          /* OLD PROFILE COMPATIBILITY */
 
           localStorage.setItem(
             "agentName",
@@ -387,10 +354,6 @@
             agent.mobile || mobile
           );
 
-
-          /* =====================================
-             SUCCESS
-             ===================================== */
 
           showMessage(
             "Login successful! Opening dashboard...",
@@ -421,18 +384,12 @@
         finally {
 
           loginBtn.disabled = false;
-
-          loginBtn.textContent =
-            "Login";
+          loginBtn.textContent = "Login";
 
         }
 
       });
 
-
-    /* =====================================
-       MESSAGE
-       ===================================== */
 
     function showMessage(text, color) {
 
@@ -440,7 +397,6 @@
         document.getElementById("message");
 
       message.textContent = text;
-
       message.style.color = color;
 
     }
@@ -448,4 +404,4 @@
   </script>
 
 </body>
-    </html>
+  </html>
