@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sathi Pay - Deposit</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -114,8 +112,16 @@
             font-weight: bold;
         }
 
-    </style>
+        .success {
+            color: #15803d;
+            font-weight: bold;
+        }
 
+        .failed {
+            color: #dc2626;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -140,7 +146,6 @@
 
             <form onsubmit="submitDeposit(event)">
 
-
                 <label>Select Agent</label>
 
                 <select id="depositAgent" required>
@@ -159,19 +164,17 @@
                     id="depositAmount"
                     placeholder="Enter amount"
                     min="1"
+                    step="0.01"
                     required
                 >
 
 
                 <button type="submit">
-
                     Submit Deposit
-
                 </button>
 
 
                 <div id="message"></div>
-
 
             </form>
 
@@ -185,7 +188,6 @@
 
             <h2>Deposit History</h2>
 
-
             <div class="table-box">
 
                 <table>
@@ -193,25 +195,20 @@
                     <thead>
 
                         <tr>
-
                             <th>ID</th>
                             <th>Agent</th>
                             <th>Amount</th>
                             <th>Status</th>
-
                         </tr>
 
                     </thead>
-
 
                     <tbody id="depositTable">
 
                         <tr>
 
                             <td colspan="4">
-
                                 Loading deposits...
-
                             </td>
 
                         </tr>
@@ -228,33 +225,41 @@
     </div>
 
 
-    <!-- SUPABASE LIBRARY -->
+
+    <!-- SUPABASE -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-    <!-- YOUR APP.JS -->
+    <!-- APP.JS -->
 
     <script src="js/app.js"></script>
 
 
     <script>
 
-
-        // LOAD ACTIVE AGENTS
+        // ==============================
+        // LOAD ALL AGENTS
+        // ==============================
 
         async function loadDepositAgents() {
 
             const select =
                 document.getElementById("depositAgent");
 
+            select.innerHTML =
+                '<option value="">Loading agents...</option>';
+
 
             const { data, error } =
                 await supabaseClient
                     .from("agents")
-                    .select("*")
-                    .eq("status", "Active")
+                    .select("id, name, mobile, status")
                     .order("name");
+
+
+            console.log("Agents:", data);
+            console.log("Agent error:", error);
 
 
             if (error) {
@@ -265,7 +270,15 @@
                     '<option value="">Error loading agents</option>';
 
                 return;
+            }
 
+
+            if (!data || data.length === 0) {
+
+                select.innerHTML =
+                    '<option value="">No agents found</option>';
+
+                return;
             }
 
 
@@ -275,15 +288,16 @@
 
             data.forEach(function(agent) {
 
-                select.innerHTML += `
+                const option =
+                    document.createElement("option");
 
-                    <option value="${agent.id}">
+                option.value =
+                    agent.id;
 
-                        ${agent.name} - ${agent.mobile}
+                option.textContent =
+                    agent.name + " - " + agent.mobile;
 
-                    </option>
-
-                `;
+                select.appendChild(option);
 
             });
 
@@ -291,7 +305,9 @@
 
 
 
+        // ==============================
         // SUBMIT DEPOSIT
+        // ==============================
 
         async function submitDeposit(event) {
 
@@ -301,8 +317,10 @@
             const agentId =
                 document.getElementById("depositAgent").value;
 
+
             const amount =
                 document.getElementById("depositAmount").value;
+
 
             const message =
                 document.getElementById("message");
@@ -329,6 +347,10 @@
                 return;
 
             }
+
+
+            message.innerText =
+                "Submitting deposit...";
 
 
             const { error } =
@@ -359,7 +381,9 @@
                 "Deposit submitted successfully!";
 
 
-            document.getElementById("depositAmount").value = "";
+            document.getElementById(
+                "depositAmount"
+            ).value = "";
 
 
             await loadDeposits();
@@ -368,7 +392,9 @@
 
 
 
+        // ==============================
         // LOAD DEPOSIT HISTORY
+        // ==============================
 
         async function loadDeposits() {
 
@@ -401,9 +427,7 @@
                     <tr>
 
                         <td colspan="4">
-
                             Error loading deposits
-
                         </td>
 
                     </tr>
@@ -422,9 +446,7 @@
                     <tr>
 
                         <td colspan="4">
-
                             No deposits found
-
                         </td>
 
                     </tr>
@@ -447,20 +469,47 @@
                         : "Unknown";
 
 
+                let statusClass = "pending";
+
+
+                if (
+                    deposit.status &&
+                    deposit.status.toLowerCase() === "approved"
+                ) {
+
+                    statusClass = "success";
+
+                }
+
+
+                if (
+                    deposit.status &&
+                    deposit.status.toLowerCase() === "failed"
+                ) {
+
+                    statusClass = "failed";
+
+                }
+
+
                 table.innerHTML += `
 
                     <tr>
 
-                        <td>${deposit.id}</td>
+                        <td>
+                            ${deposit.id}
+                        </td>
 
-                        <td>${agentName}</td>
+                        <td>
+                            ${agentName}
+                        </td>
 
-                        <td>₹${deposit.amount}</td>
+                        <td>
+                            ₹${deposit.amount}
+                        </td>
 
-                        <td class="pending">
-
+                        <td class="${statusClass}">
                             ${deposit.status}
-
                         </td>
 
                     </tr>
@@ -473,15 +522,22 @@
 
 
 
-        // LOAD PAGE DATA
+        // ==============================
+        // START
+        // ==============================
 
-        loadDepositAgents();
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
 
-        loadDeposits();
+                loadDepositAgents();
 
+                loadDeposits();
+
+            }
+        );
 
     </script>
 
-
 </body>
-    </html>
+</html>
