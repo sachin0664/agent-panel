@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sathi Pay - Referral</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #202938;
+        }
+
+        .header {
+            background: #202938;
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .referral-box {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .referral-box input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .copy-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 13px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat p {
+            margin: 0 0 8px;
+            color: #777;
+        }
+
+        .stat h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .referral-box {
+                flex-direction: column;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>Sathi Pay - Referral</h2>
+        <a href="dashboard.html">Dashboard</a>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>🔗 My Referral</h2>
+
+            <p>Share your referral link with others.</p>
+
+            <div class="referral-box">
+
+                <input
+                    type="text"
+                    id="referralLink"
+                    readonly
+                >
+
+                <button
+                    class="copy-btn"
+                    onclick="copyReferral()"
+                >
+                    Copy
+                </button>
+
+            </div>
+
+            <div id="message"></div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>📊 Referral Summary</h2>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <p>Total Referrals</p>
+                    <h2 id="totalReferrals">0</h2>
+                </div>
+
+                <div class="stat">
+                    <p>Referral Commission</p>
+                    <h2 id="totalCommission">₹0.00</h2>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>👥 Referral History</h2>
+
+            <p id="history">
+                No referrals found.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/app.js"></script>
+
+
+    <script>
+
+        function createReferralLink() {
+
+            const baseUrl =
+                window.location.origin +
+                window.location.pathname
+                    .replace("referral.html", "");
+
+            const referralCode =
+                localStorage.getItem("referralCode") ||
+                "SATHIPAY";
+
+            const link =
+                baseUrl +
+                "register.html?ref=" +
+                referralCode;
+
+            document.getElementById("referralLink").value = link;
+        }
+
+
+        function copyReferral() {
+
+            const input =
+                document.getElementById("referralLink");
+
+            navigator.clipboard.writeText(input.value)
+                .then(function() {
+
+                    document.getElementById("message").innerText =
+                        "Referral link copied successfully!";
+
+                })
+                .catch(function() {
+
+                    input.select();
+
+                    document.execCommand("copy");
+
+                    document.getElementById("message").innerText =
+                        "Referral link copied successfully!";
+
+                });
+        }
+
+
+        createReferralLink();
+
+    </script>
+
+</body>
+                      </html>
