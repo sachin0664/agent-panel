@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Sathi Pay - My Profile</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
         }
+
 
         body {
             margin: 0;
@@ -17,6 +26,7 @@
             background: #f4f6f8;
             color: #202938;
         }
+
 
         .header {
             background: #202938;
@@ -27,10 +37,12 @@
             align-items: center;
         }
 
+
         .header h2 {
             margin: 0;
             font-size: 22px;
         }
+
 
         .header a {
             color: white;
@@ -38,11 +50,13 @@
             font-weight: bold;
         }
 
+
         .container {
             max-width: 700px;
             margin: auto;
             padding: 20px;
         }
+
 
         .card {
             background: white;
@@ -51,6 +65,7 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
+
 
         .profile-icon {
             width: 80px;
@@ -65,28 +80,34 @@
             margin: 0 auto 15px;
         }
 
+
         .profile-title {
             text-align: center;
             margin-bottom: 25px;
         }
 
+
         .profile-title h2 {
             margin: 5px 0;
         }
+
 
         .profile-title p {
             color: #777;
             margin: 0;
         }
 
+
         .info {
             border-bottom: 1px solid #eee;
             padding: 14px 0;
         }
 
+
         .info:last-child {
             border-bottom: none;
         }
+
 
         .label {
             color: #777;
@@ -94,10 +115,19 @@
             margin-bottom: 5px;
         }
 
+
         .value {
             font-weight: bold;
             font-size: 16px;
         }
+
+
+        .uid-value {
+            color: #2563eb;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
 
         .back-btn {
             display: block;
@@ -110,36 +140,71 @@
             font-weight: bold;
             margin-top: 20px;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
     <div class="header">
 
-        <h2>Sathi Pay - Profile</h2>
+        <h2>
+            Sathi Pay - Profile
+        </h2>
 
-        <a href="deshboard.html">Dashboard</a>
+        <a href="deshboard.html">
+            Dashboard
+        </a>
 
     </div>
 
 
     <div class="container">
 
+
         <div class="card">
+
 
             <div class="profile-icon">
                 👤
             </div>
 
+
             <div class="profile-title">
 
-                <h2>My Profile</h2>
+                <h2>
+                    My Profile
+                </h2>
 
-                <p>Sathi Pay Agent Account</p>
+                <p>
+                    Sathi Pay Agent Account
+                </p>
 
             </div>
 
+
+            <!-- UID -->
+
+            <div class="info">
+
+                <div class="label">
+                    UID
+                </div>
+
+                <div
+                    class="value uid-value"
+                    id="profileUID"
+                >
+                    Loading...
+                </div>
+
+            </div>
+
+
+            <!-- NAME -->
 
             <div class="info">
 
@@ -147,12 +212,17 @@
                     Name
                 </div>
 
-                <div class="value" id="profileName">
+                <div
+                    class="value"
+                    id="profileName"
+                >
                     Agent
                 </div>
 
             </div>
 
+
+            <!-- MOBILE -->
 
             <div class="info">
 
@@ -160,12 +230,17 @@
                     Mobile Number
                 </div>
 
-                <div class="value" id="profileMobile">
+                <div
+                    class="value"
+                    id="profileMobile"
+                >
                     Not available
                 </div>
 
             </div>
 
+
+            <!-- STATUS -->
 
             <div class="info">
 
@@ -180,6 +255,8 @@
             </div>
 
 
+            <!-- ACCOUNT TYPE -->
+
             <div class="info">
 
                 <div class="label">
@@ -193,9 +270,13 @@
             </div>
 
 
-            <a class="back-btn" href="deshboard.html">
+            <a
+                class="back-btn"
+                href="deshboard.html"
+            >
                 ← Back to Dashboard
             </a>
+
 
         </div>
 
@@ -204,35 +285,61 @@
 
     <script>
 
-        /*
-         * Agar registration/login ke time
-         * naam aur mobile localStorage me save hai,
-         * to yahan automatically show hoga.
-         */
 
         const name =
-            localStorage.getItem("agentName");
+            localStorage.getItem(
+                "agentName"
+            );
+
 
         const mobile =
-            localStorage.getItem("agentMobile");
+            localStorage.getItem(
+                "agentMobile"
+            );
+
+
+        const uid =
+            localStorage.getItem(
+                "sathi_uid"
+            );
 
 
         if (name) {
 
-            document.getElementById("profileName").innerText =
-                name;
+            document
+                .getElementById("profileName")
+                .innerText = name;
 
         }
 
 
         if (mobile) {
 
-            document.getElementById("profileMobile").innerText =
-                mobile;
+            document
+                .getElementById("profileMobile")
+                .innerText = mobile;
+
+        }
+
+
+        if (uid) {
+
+            document
+                .getElementById("profileUID")
+                .innerText = uid;
+
+        } else {
+
+            document
+                .getElementById("profileUID")
+                .innerText =
+                "UID not available";
 
         }
 
     </script>
 
+
 </body>
-</html>
+
+                    </html>
