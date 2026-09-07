@@ -1,153 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Sathi Pay - Login</title>
+  <title>Sathi Pay - Agent Login</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-        }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef4ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .login-page {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+    .login-card {
+      width: 92%;
+      max-width: 430px;
+      background: white;
+      padding: 30px 25px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+    }
 
-        .login-box {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            padding: 30px 24px;
-            border-radius: 16px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.12);
-        }
+    h1 {
+      text-align: center;
+      margin: 0;
+      color: #2563eb;
+      font-size: 34px;
+    }
 
-        .logo {
-            text-align: center;
-            font-size: 32px;
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 8px;
-        }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-top: 8px;
+      margin-bottom: 30px;
+      font-size: 18px;
+    }
 
-        .subtitle {
-            text-align: center;
-            color: #777;
-            margin-bottom: 28px;
-        }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 18px;
+      margin-bottom: 7px;
+      color: #222;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-weight: bold;
-        }
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 16px;
+      outline: none;
+    }
 
-        input {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
+    input:focus {
+      border-color: #2563eb;
+    }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #1f2937;
-            color: white;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    .login-btn {
+      width: 100%;
+      padding: 15px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 9px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-        #loginMessage {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
-        }
+    .login-btn:disabled {
+      background: #8aaef5;
+      cursor: not-allowed;
+    }
 
-        .register {
-            text-align: center;
-            margin-top: 20px;
-        }
+    .message {
+      text-align: center;
+      margin-top: 18px;
+      font-weight: bold;
+      min-height: 20px;
+    }
 
-        .register a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: bold;
-        }
-    </style>
+    .register-link {
+      text-align: center;
+      margin-top: 22px;
+      color: #555;
+    }
+
+    .register-link a {
+      color: #2563eb;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="login-page">
+  <div class="login-card">
 
-        <div class="login-box">
+    <h1>Sathi Pay</h1>
 
-            <div class="logo">Sathi Pay</div>
-
-            <div class="subtitle">
-                Agent Login
-            </div>
-
-            <!-- IMPORTANT: onsubmit added -->
-            <form onsubmit="login(event)">
-
-                <label>Mobile Number</label>
-
-                <input
-                    type="tel"
-                    id="username"
-                    placeholder="Enter mobile number"
-                    required
-                >
-
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter password"
-                    required
-                >
-
-                <button type="submit">
-                    Login
-                </button>
-
-                <!-- Login message -->
-                <p id="loginMessage"></p>
-
-            </form>
-
-            <div class="register">
-                New agent?
-                <a href="register.html">Register</a>
-            </div>
-
-        </div>
-
+    <div class="subtitle">
+      Agent Login
     </div>
 
-    <!-- IMPORTANT: JavaScript file -->
-    <script src="js/app.js"></script>
+    <form id="loginForm">
+
+      <label for="mobile">
+        Mobile Number
+      </label>
+
+      <input
+        type="tel"
+        id="mobile"
+        name="username"
+        autocomplete="username"
+        inputmode="numeric"
+        maxlength="10"
+        placeholder="Enter mobile number"
+        required
+      >
+
+      <label for="password">
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="password"
+        name="password"
+        autocomplete="current-password"
+        placeholder="Enter password"
+        required
+      >
+
+      <button
+        type="submit"
+        class="login-btn"
+        id="loginBtn"
+      >
+        Login
+      </button>
+
+    </form>
+
+    <div
+      id="message"
+      class="message"
+    ></div>
+
+    <div class="register-link">
+      New agent?
+      <a href="register.html">Register</a>
+    </div>
+
+  </div>
+
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+
+    /* =====================================
+       SUPABASE
+       ===================================== */
+
+    const SUPABASE_URL =
+      "https://lozluohksmjxbxixkbmq.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    /* =====================================
+       LOGIN
+       ===================================== */
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const mobile =
+          document
+            .getElementById("mobile")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+
+        /* Clear old message */
+
+        showMessage("", "");
+
+
+        /* Check mobile */
+
+        if (!/^[0-9]{10}$/.test(mobile)) {
+
+          showMessage(
+            "Please enter a valid 10 digit mobile number.",
+            "red"
+          );
+
+          return;
+        }
+
+
+        /* Check password */
+
+        if (!password) {
+
+          showMessage(
+            "Please enter your password.",
+            "red"
+          );
+
+          return;
+        }
+
+
+        /* Disable button */
+
+        const loginBtn =
+          document.getElementById("loginBtn");
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+          "Logging in...";
+
+
+        try {
+
+          /* =====================================
+             FIND AGENT
+             ===================================== */
+
+          const {
+            data: agent,
+            error
+          } = await supabaseClient
+            .from("agents")
+            .select(
+              "id, name, mobile, status, referral_code, referred_by, password_hash"
+            )
+            .eq("mobile", mobile)
+            .maybeSingle();
+
+
+          /* Database error */
+
+          if (error) {
+
+            console.error(error);
+
+            showMessage(
+              "Database error: " + error.message,
+              "red"
+            );
+
+            return;
+          }
+
+
+          /* Agent not found */
+
+          if (!agent) {
+
+            showMessage(
+              "Invalid mobile number or password.",
+              "red"
+            );
+
+            return;
+          }
+
+
+          /* =====================================
+             PASSWORD CHECK
+             ===================================== */
+
+          if (
+            !agent.password_hash ||
+            agent.password_hash !== password
+          ) {
+
+            showMessage(
+              "Invalid mobile number or password.",
+              "red"
+            );
+
+            return;
+          }
+
+
+          /* =====================================
+             STATUS CHECK
+             ===================================== */
+
+          if (
+            agent.status &&
+            agent.status.toLowerCase() !== "active"
+          ) {
+
+            showMessage(
+              "Your agent account is inactive.",
+              "red"
+            );
+
+            return;
+          }
+
+
+          /* =====================================
+             SAVE LOGIN DATA
+             ===================================== */
+
+          localStorage.setItem(
+            "sathi_logged_in",
+            "true"
+          );
+
+          localStorage.setItem(
+            "sathi_registered",
+            "true"
+          );
+
+          localStorage.setItem(
+            "sathi_agent_id",
+            agent.id
+          );
+
+          localStorage.setItem(
+            "sathi_name",
+            agent.name || "Agent"
+          );
+
+          localStorage.setItem(
+            "sathi_mobile",
+            agent.mobile || mobile
+          );
+
+          localStorage.setItem(
+            "sathi_referral_code",
+            agent.referral_code || ""
+          );
+
+          localStorage.setItem(
+            "sathi_my_referral_code",
+            agent.referral_code || ""
+          );
+
+          /* Existing profile compatibility */
+
+          localStorage.setItem(
+            "agentName",
+            agent.name || "Agent"
+          );
+
+          localStorage.setItem(
+            "agentMobile",
+            agent.mobile || mobile
+          );
+
+
+          /* =====================================
+             SUCCESS
+             ===================================== */
+
+          showMessage(
+            "Login successful! Opening dashboard...",
+            "green"
+          );
+
+
+          setTimeout(function() {
+
+            window.location.href =
+              "deshboard.html";
+
+          }, 1000);
+
+        }
+
+        catch (err) {
+
+          console.error(err);
+
+          showMessage(
+            "Something went wrong. Please try again.",
+            "red"
+          );
+
+        }
+
+        finally {
+
+          loginBtn.disabled = false;
+
+          loginBtn.textContent =
+            "Login";
+
+        }
+
+      });
+
+
+    /* =====================================
+       MESSAGE
+       ===================================== */
+
+    function showMessage(text, color) {
+
+      const message =
+        document.getElementById("message");
+
+      message.textContent = text;
+
+      message.style.color = color;
+
+    }
+
+  </script>
 
 </body>
-</html>
+    </html>
