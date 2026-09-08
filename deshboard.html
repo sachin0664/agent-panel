@@ -470,7 +470,6 @@ const supabaseClient =
 function getLoginUID() {
 
     const possibleKeys = [
-
         "sathiPayUID",
         "agentUID",
         "uid",
@@ -478,9 +477,7 @@ function getLoginUID() {
         "sathi_pay_uid",
         "userUID",
         "userUid"
-
     ];
-
 
     for (
         let i = 0;
@@ -493,7 +490,6 @@ function getLoginUID() {
                 possibleKeys[i]
             );
 
-
         if (
             value &&
             String(value).trim() !== ""
@@ -504,7 +500,6 @@ function getLoginUID() {
         }
 
     }
-
 
     return null;
 
@@ -518,11 +513,8 @@ function getLoginUID() {
 async function findAgent(uidValue) {
 
     if (!uidValue) {
-
         return null;
-
     }
-
 
     const cleanUID =
         String(uidValue)
@@ -535,10 +527,9 @@ async function findAgent(uidValue) {
     const {
         data: exactAgent,
         error: exactError
-    } = await supabaseClient
-
+    } =
+        await supabaseClient
         .from("agents")
-
         .select(`
             id,
             uid,
@@ -546,12 +537,7 @@ async function findAgent(uidValue) {
             mobile,
             status
         `)
-
-        .eq(
-            "uid",
-            cleanUID
-        )
-
+        .eq("uid", cleanUID)
         .maybeSingle();
 
 
@@ -577,10 +563,9 @@ async function findAgent(uidValue) {
     const {
         data: allAgents,
         error: allAgentError
-    } = await supabaseClient
-
+    } =
+        await supabaseClient
         .from("agents")
-
         .select(`
             id,
             uid,
@@ -603,9 +588,7 @@ async function findAgent(uidValue) {
 
 
     if (!allAgents) {
-
         return null;
-
     }
 
 
@@ -635,9 +618,7 @@ async function findAgent(uidValue) {
 
 
         if (!dbUID) {
-
             continue;
-
         }
 
 
@@ -674,20 +655,15 @@ async function findAgent(uidValue) {
 function isTodayIndia(dateValue) {
 
     if (!dateValue) {
-
         return false;
-
     }
-
 
     const date =
         new Date(dateValue);
 
 
     if (
-        isNaN(
-            date.getTime()
-        )
+        isNaN(date.getTime())
     ) {
 
         return false;
@@ -716,14 +692,11 @@ function isTodayIndia(dateValue) {
                 month: "2-digit",
                 day: "2-digit"
             }
-        ).format(
-            new Date()
-        );
+        ).format(new Date());
 
 
     return (
-        indiaDate ===
-        todayIndia
+        indiaDate === todayIndia
     );
 
 }
@@ -735,6 +708,8 @@ function isTodayIndia(dateValue) {
 
 async function loadDashboard() {
 
+    let loginUID = null;
+
     try {
 
         console.log(
@@ -744,7 +719,7 @@ async function loadDashboard() {
 
         /* GET UID */
 
-        const loginUID =
+        loginUID =
             getLoginUID();
 
 
@@ -787,7 +762,7 @@ async function loadDashboard() {
         }
 
 
-        /* SHOW LOGIN UID FIRST */
+        /* SHOW LOGIN UID */
 
         document.getElementById(
             "agentUID"
@@ -905,10 +880,9 @@ async function loadDashboard() {
         const {
             data: deposits,
             error: depositError
-        } = await supabaseClient
-
+        } =
+            await supabaseClient
             .from("deposits")
-
             .select(`
                 id,
                 amount,
@@ -916,7 +890,6 @@ async function loadDashboard() {
                 created_at,
                 approved_at
             `)
-
             .eq(
                 "agent_id",
                 agent.id
@@ -938,15 +911,9 @@ async function loadDashboard() {
 
 
             document.getElementById(
-                "agentName"
-            ).textContent =
-                "Deposit database error";
-
-
-            document.getElementById(
                 "accountStatus"
             ).textContent =
-                "● Database Error";
+                "● Deposit Database Error";
 
 
             document.getElementById(
@@ -999,12 +966,6 @@ async function loadDashboard() {
         );
 
 
-        console.log(
-            "Approved Deposit:",
-            approvedDeposit
-        );
-
-
         /* =================================
            COMMISSION 10%
         ================================= */
@@ -1024,27 +985,25 @@ async function loadDashboard() {
            LOAD WITHDRAWALS
         ================================= */
 
-        let withdrawals = [];
-
-
         const {
             data: withdrawalData,
             error: withdrawalError
-        } = await supabaseClient
-
+        } =
+            await supabaseClient
             .from("withdrawals")
-
             .select(`
                 id,
                 amount,
                 status,
                 created_at
             `)
-
             .eq(
                 "agent_id",
                 agent.id
             );
+
+
+        let withdrawals = [];
 
 
         if (withdrawalError) {
@@ -1178,11 +1137,6 @@ async function loadDashboard() {
                 let dateToCheck = null;
 
 
-                /*
-                   Approved deposit:
-                   approved_at is priority
-                */
-
                 if (
                     status === "approved" &&
                     deposit.approved_at
@@ -1236,8 +1190,6 @@ async function loadDashboard() {
         );
 
 
-        /* SHOW TODAY */
-
         document.getElementById(
             "todayTransactions"
         ).textContent =
@@ -1265,74 +1217,120 @@ async function loadDashboard() {
             "Agent:",
             agent
         );
-   console.log(
-        "Approved Deposit:",
-        approvedDeposit
-    );
 
-    console.log(
-        "Commission:",
-        totalCommission
-    );
+        console.log(
+            "Approved Deposit:",
+            approvedDeposit
+        );
 
-    console.log(
-        "Approved Withdrawal:",
-        approvedWithdrawal
-    );
+        console.log(
+            "Commission:",
+            totalCommission
+        );
 
-    console.log(
-        "Wallet:",
-        walletBalance
-    );
+        console.log(
+            "Approved Withdrawal:",
+            approvedWithdrawal
+        );
 
-    console.log(
-        "Total Transactions:",
-        totalTransactions
-    );
+        console.log(
+            "Wallet:",
+            walletBalance
+        );
 
-    console.log(
-        "Today's Transactions:",
-        todayCount
-    );
+        console.log(
+            "Total Transactions:",
+            totalTransactions
+        );
+          /* =================================
+           DEBUG
+        ================================= */
 
-    console.log(
-        "=============================="
-    );
+        console.log(
+            "=============================="
+        );
+
+        console.log(
+            "SATHI PAY DASHBOARD"
+        );
+
+        console.log(
+            "UID:",
+            loginUID
+        );
+
+        console.log(
+            "Agent:",
+            agent
+        );
+
+        console.log(
+            "Approved Deposit:",
+            approvedDeposit
+        );
+
+        console.log(
+            "Commission:",
+            totalCommission
+        );
+
+        console.log(
+            "Approved Withdrawal:",
+            approvedWithdrawal
+        );
+
+        console.log(
+            "Wallet:",
+            walletBalance
+        );
+
+        console.log(
+            "Total Transactions:",
+            totalTransactions
+        );
+
+        console.log(
+            "Today's Transactions:",
+            todayCount
+        );
+
+        console.log(
+            "=============================="
+        );
 
 
-} catch (error) {
+    } catch (error) {
 
-    console.error(
-        "Dashboard error:",
-        error
-    );
-
-    document.getElementById(
-        "agentUID"
-    ).textContent =
-        loginUID || "UID Error";
-
-    document.getElementById(
-        "agentName"
-    ).textContent =
-        "Dashboard error";
-
-    document.getElementById(
-        "accountStatus"
-    ).textContent =
-        "● Error - Please refresh";
-
-    document.getElementById(
-        "accountStatus"
-    ).className =
-        "error";
-
-}
+        console.error(
+            "Dashboard error:",
+            error
+        );
 
 
-/* =========================================
-   END LOAD DASHBOARD
-========================================= */
+        document.getElementById(
+            "agentUID"
+        ).textContent =
+            "UID Error";
+
+
+        document.getElementById(
+            "agentName"
+        ).textContent =
+            "Dashboard error";
+
+
+        document.getElementById(
+            "accountStatus"
+        ).textContent =
+            "● Error - Please refresh";
+
+
+        document.getElementById(
+            "accountStatus"
+        ).className =
+            "error";
+
+    }
 
 }
 
