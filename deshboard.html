@@ -535,7 +535,8 @@ async function findAgent(uidValue) {
             uid,
             name,
             mobile,
-            status
+            status,
+            wallet_balance
         `)
         .eq("uid", cleanUID)
         .maybeSingle();
@@ -571,7 +572,8 @@ async function findAgent(uidValue) {
             uid,
             name,
             mobile,
-            status
+            status,
+            wallet_balance
         `);
 
 
@@ -708,8 +710,6 @@ function isTodayIndia(dateValue) {
 
 async function loadDashboard() {
 
-    let loginUID = null;
-
     try {
 
         console.log(
@@ -719,7 +719,7 @@ async function loadDashboard() {
 
         /* GET UID */
 
-        loginUID =
+        const loginUID =
             getLoginUID();
 
 
@@ -1028,61 +1028,20 @@ async function loadDashboard() {
 
 
         /* =================================
-           APPROVED WITHDRAWAL TOTAL
-        ================================= */
-
-        let approvedWithdrawal = 0;
-
-
-        (
-            withdrawals || []
-        ).forEach(
-            function(withdrawal) {
-
-                const amount =
-                    Number(
-                        withdrawal.amount || 0
-                    );
-
-
-                const status =
-                    String(
-                        withdrawal.status || ""
-                    )
-                    .toLowerCase()
-                    .trim();
-
-
-                if (
-                    status === "approved"
-                ) {
-
-                    approvedWithdrawal +=
-                        amount;
-
-                }
-
-            }
-        );
-
-
-        /* =================================
-           WALLET
+           WALLET FROM DATABASE
         ================================= */
 
         const walletBalance =
-            totalCommission -
-            approvedWithdrawal;
+            Number(
+                agent.wallet_balance || 0
+            );
 
 
         document.getElementById(
             "walletBalance"
         ).textContent =
             "₹" +
-            Math.max(
-                walletBalance,
-                0
-            ).toFixed(2);
+            walletBalance.toFixed(2);
 
 
         /* =================================
@@ -1196,9 +1155,7 @@ async function loadDashboard() {
             todayCount;
 
 
-        /* =================================
-           DEBUG
-        ================================= */
+        /* DEBUG */
 
         console.log(
             "=============================="
@@ -1229,58 +1186,7 @@ async function loadDashboard() {
         );
 
         console.log(
-            "Approved Withdrawal:",
-            approvedWithdrawal
-        );
-
-        console.log(
-            "Wallet:",
-            walletBalance
-        );
-
-        console.log(
-            "Total Transactions:",
-            totalTransactions
-        );
-          /* =================================
-           DEBUG
-        ================================= */
-
-        console.log(
-            "=============================="
-        );
-
-        console.log(
-            "SATHI PAY DASHBOARD"
-        );
-
-        console.log(
-            "UID:",
-            loginUID
-        );
-
-        console.log(
-            "Agent:",
-            agent
-        );
-
-        console.log(
-            "Approved Deposit:",
-            approvedDeposit
-        );
-
-        console.log(
-            "Commission:",
-            totalCommission
-        );
-
-        console.log(
-            "Approved Withdrawal:",
-            approvedWithdrawal
-        );
-
-        console.log(
-            "Wallet:",
+            "Wallet From Database:",
             walletBalance
         );
 
@@ -1343,7 +1249,7 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        console.log(
+      console.log(
             "SATHI PAY DASHBOARD READY"
         );
 
@@ -1370,4 +1276,4 @@ setInterval(
 
 </body>
 
-</html>
+</html>  
