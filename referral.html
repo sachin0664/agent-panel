@@ -5,7 +5,8 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Referral</title>
 
@@ -22,204 +23,103 @@ body {
     color: #202938;
 }
 
-.header {
-    background: #202938;
+header {
+    background: #111827;
     color: white;
-    padding: 18px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header h2 {
-    margin: 0;
+    padding: 18px;
     font-size: 22px;
-}
-
-.header a {
-    color: white;
-    text-decoration: none;
     font-weight: bold;
 }
 
 .container {
-    max-width: 700px;
-    margin: auto;
     padding: 20px;
+    max-width: 600px;
+    margin: auto;
 }
 
 .card {
     background: white;
     padding: 20px;
-    border-radius: 14px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.card h2 {
+h2 {
     margin-top: 0;
 }
 
-.referral-box {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
+.rate {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
 }
 
-.referral-box input {
-    flex: 1;
-    padding: 13px;
-    border: 1px solid #ddd;
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 14px;
+    margin-top: 10px;
 }
 
-.copy-btn {
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
     border: none;
+    border-radius: 8px;
     background: #2563eb;
     color: white;
-    padding: 13px 18px;
-    border-radius: 8px;
+    font-size: 16px;
     font-weight: bold;
-    cursor: pointer;
 }
 
-.levels {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.level {
-    padding: 18px 10px;
-    border-radius: 12px;
+.summary {
     text-align: center;
-    background: #f8fafc;
+    font-size: 18px;
 }
 
-.level h3 {
-    margin: 0 0 8px;
-}
-
-.percentage {
+.number {
     font-size: 28px;
     font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.level-a {
-    border-top: 5px solid #16a34a;
-}
-
-.level-b {
-    border-top: 5px solid #2563eb;
-}
-
-.level-c {
-    border-top: 5px solid #ea580c;
-}
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.stat {
-    background: #f8fafc;
-    padding: 18px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.stat p {
-    margin: 0 0 8px;
-    color: #777;
-}
-
-.stat h2 {
-    margin: 0;
-    font-size: 25px;
-}
-
-#history {
-    margin: 0;
+    margin-top: 8px;
 }
 
 .history-item {
     background: #f8fafc;
-    padding: 12px;
+    padding: 14px;
     margin-bottom: 10px;
     border-radius: 8px;
-    line-height: 1.6;
+    border-left: 4px solid #2563eb;
 }
 
-#message {
+.message {
     text-align: center;
-    margin-top: 12px;
+    margin-top: 10px;
     font-weight: bold;
-}
-
-.note {
-    margin-top: 15px;
-    padding: 12px;
-    background: #fff7ed;
-    border-radius: 8px;
-    color: #9a3412;
-    font-size: 14px;
-}
-
-.loading {
-    text-align: center;
-    color: #2563eb;
-}
-
-@media (max-width: 600px) {
-
-    .referral-box {
-        flex-direction: column;
-    }
-
-    .levels {
-        grid-template-columns: 1fr;
-    }
-
-    .stats {
-        grid-template-columns: 1fr;
-    }
-
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<div class="header">
-
-    <h2>Sathi Pay - Referral</h2>
-
-    <a href="dashboard.html">
-        Dashboard
-    </a>
-
-</div>
+<header>
+    Sathi Pay
+</header>
 
 
 <div class="container">
 
 
-<div class="card">
+    <!-- REFERRAL LINK -->
 
-    <h2>🔗 My Referral</h2>
+    <div class="card">
 
-    <p>
-        Share your referral link with new agents.
-    </p>
-
-    <div class="referral-box">
+        <h2>Referral Link</h2>
 
         <input
             type="text"
@@ -227,140 +127,97 @@ body {
             readonly
         >
 
-        <button
-            class="copy-btn"
-            onclick="copyReferral()"
-        >
-            Copy
+        <button onclick="copyReferral()">
+            Copy Referral Link
         </button>
 
-    </div>
-
-    <div id="message"></div>
-
-</div>
-
-
-<div class="card">
-
-    <h2>💰 Referral Commission</h2>
-
-    <p>
-        Your referral commission levels
-    </p>
-
-    <div class="levels">
-
-        <div class="level level-a">
-
-            <h3>Level A</h3>
-
-            <div class="percentage">
-                1%
-            </div>
-
-            <small>
-                Direct Referral
-            </small>
-
-        </div>
-
-
-        <div class="level level-b">
-
-            <h3>Level B</h3>
-
-            <div class="percentage">
-                0.5%
-            </div>
-
-            <small>
-                Second Level
-            </small>
-
-        </div>
-
-
-        <div class="level level-c">
-
-            <h3>Level C</h3>
-
-            <div class="percentage">
-                0.2%
-            </div>
-
-            <small>
-                Third Level
-            </small>
-
+        <div
+            id="message"
+            class="message">
         </div>
 
     </div>
 
-    <div class="note">
 
-        Approved deposits par referral commission
-        automatically calculate hoga.
+    <!-- LEVEL RATES -->
+
+    <div class="card">
+
+        <h2>Referral Commission</h2>
+
+        <div class="rate">
+            Level A — 1%
+        </div>
+
+        <div class="rate">
+            Level B — 0.5%
+        </div>
+
+        <div class="rate">
+            Level C — 0.2%
+        </div>
+
+        <p>
+            Approved deposits par referral commission
+            automatically calculate hoga.
+        </p>
 
     </div>
 
-</div>
 
+    <!-- SUMMARY -->
 
-<div class="card">
+    <div class="card summary">
 
-    <h2>📊 Referral Summary</h2>
+        <h2>📊 Referral Summary</h2>
 
-    <div class="stats">
+        <p>Total Referrals</p>
 
-        <div class="stat">
-
-            <p>Total Referrals</p>
-
-            <h2 id="totalReferrals">
-                0
-            </h2>
-
+        <div
+            id="totalReferrals"
+            class="number">
+            0
         </div>
 
+        <br>
 
-        <div class="stat">
+        <p>Referral Commission</p>
 
-            <p>Referral Commission</p>
-
-            <h2 id="totalCommission">
-                ₹0.00
-            </h2>
-
+        <div
+            id="totalCommission"
+            class="number">
+            ₹0.00
         </div>
 
     </div>
 
-</div>
 
+    <!-- HISTORY -->
 
-<div class="card">
+    <div class="card">
 
-    <h2>👥 Referral History</h2>
+        <h2>👥 Referral History</h2>
 
-    <div id="history">
-
-        <div class="loading">
-            Loading referral data...
+        <div id="history">
+            Loading...
         </div>
 
     </div>
 
-</div>
-
 
 </div>
 
+
+<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
+
+/* =========================
+   SUPABASE CONFIG
+========================= */
 
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -375,9 +232,65 @@ const supabaseClient =
     );
 
 
+/* =========================
+   REFERRAL LINK
+========================= */
+
+function createReferralLink() {
+
+    const baseUrl =
+        window.location.origin +
+        window.location.pathname
+            .replace("referral.html", "");
+
+    const referralCode =
+        localStorage.getItem("referralCode") ||
+        "SATHIPAY";
+
+    const link =
+        baseUrl +
+        "register.html?ref=" +
+        referralCode;
+
+    document.getElementById("referralLink").value =
+        link;
+}
+
+
+function copyReferral() {
+
+    const input =
+        document.getElementById("referralLink");
+
+    navigator.clipboard.writeText(input.value)
+        .then(function() {
+
+            document.getElementById("message").innerText =
+                "Referral link copied successfully!";
+
+        })
+        .catch(function() {
+
+            input.select();
+
+            document.execCommand("copy");
+
+            document.getElementById("message").innerText =
+                "Referral link copied successfully!";
+
+        });
+
+}
+
+
+/* =========================
+   GET LOGIN UID
+========================= */
+
 function getLoginUID() {
 
-    const keys = [
+    const possibleKeys = [
+
         "sathiPayUID",
         "agentUID",
         "uid",
@@ -385,14 +298,18 @@ function getLoginUID() {
         "sathi_pay_uid",
         "userUID",
         "userUid"
+
     ];
 
-    for (const key of keys) {
+    for (const key of possibleKeys) {
 
         const value =
             localStorage.getItem(key);
 
-        if (value && value.trim() !== "") {
+        if (
+            value &&
+            value.trim() !== ""
+        ) {
 
             return value.trim();
 
@@ -404,52 +321,59 @@ function getLoginUID() {
 }
 
 
+/* =========================
+   LOAD REFERRAL DATA
+========================= */
+
 async function loadReferralData() {
+
+    const history =
+        document.getElementById("history");
+
+    const totalReferrals =
+        document.getElementById("totalReferrals");
+
+    const totalCommission =
+        document.getElementById("totalCommission");
+
 
     const loginUID =
         getLoginUID();
 
-    console.log(
-        "Referral Login UID:",
-        loginUID
-    );
-
 
     if (!loginUID) {
 
-        document.getElementById(
-            "history"
-        ).innerHTML =
-        "<b>Please login again.</b>";
+        history.innerText =
+            "Please login again.";
 
         return;
     }
 
 
+    /* FIND AGENT BY UID */
+
     const { data: agents, error: agentError } =
         await supabaseClient
         .from("agents")
-        .select("id,uid,name")
+        .select("id, uid, name, mobile")
         .ilike("uid", loginUID);
 
 
-    console.log(
-        "Agent result:",
-        agents,
-        agentError
-    );
+    if (agentError) {
+
+        console.error(agentError);
+
+        history.innerText =
+            "Agent account loading error.";
+
+        return;
+    }
 
 
-    if (
-        agentError ||
-        !agents ||
-        agents.length === 0
-    ) {
+    if (!agents || agents.length === 0) {
 
-        document.getElementById(
-            "history"
-        ).innerHTML =
-        "<b>Agent account not found.</b>";
+        history.innerText =
+            "Agent account not found.";
 
         return;
     }
@@ -459,37 +383,37 @@ async function loadReferralData() {
         agents[0];
 
 
-    const { data: commissions, error } =
+    /* LOAD REFERRAL COMMISSIONS */
+
+    const {
+        data: commissions,
+        error: commissionError
+    } =
         await supabaseClient
         .from("referral_commissions")
-        .select(
-            "id,source_agent_id,level,rate,amount,deposit_id,status,created_at"
-        )
-        .eq(
-            "agent_id",
-            agent.id
-        )
-        .order(
-            "id",
-            {
-                ascending: false
-            }
-        );
+        .select(`
+            id,
+            agent_id,
+            source_agent_id,
+            level,
+            rate,
+            amount,
+            deposit_id,
+            status,
+            created_at
+        `)
+        .eq("agent_id", agent.id)
+        .order("id", {
+            ascending: false
+        });
 
 
-    console.log(
-        "Referral commissions:",
-        commissions,
-        error
-    );
+    if (commissionError) {
 
+        console.error(commissionError);
 
-    if (error) {
-
-        document.getElementById(
-            "history"
-        ).innerHTML =
-        "<b>Referral data loading error.</b>";
+        history.innerText =
+            "Referral data loading error.";
 
         return;
     }
@@ -499,192 +423,110 @@ async function loadReferralData() {
         commissions || [];
 
 
-    const totalCommission =
+    /* TOTAL COMMISSION */
+
+    const commission =
         rows.reduce(
             function(sum, row) {
 
                 return sum +
-                Number(
-                    row.amount || 0
-                );
+                    Number(row.amount || 0);
 
             },
             0
         );
 
 
+    totalCommission.innerText =
+        "₹" + commission.toFixed(2);
+
+
+    /* TOTAL UNIQUE REFERRALS */
+
     const referralAgents =
-        new Set(
-            rows
-            .map(
-                function(row) {
-                    return row.source_agent_id;
-                }
-            )
-            .filter(
-                function(id) {
-                    return id !== null;
-                }
-            )
-        );
+        new Set();
+
+    rows.forEach(function(row) {
+
+        if (row.source_agent_id) {
+
+            referralAgents.add(
+                row.source_agent_id
+            );
+
+        }
+
+    });
 
 
-    document.getElementById(
-        "totalCommission"
-    ).innerText =
-    "₹" +
-    totalCommission.toFixed(2);
+    totalReferrals.innerText =
+        referralAgents.size;
 
 
-    document.getElementById(
-        "totalReferrals"
-    ).innerText =
-    referralAgents.size;
-
+    /* NO DATA */
 
     if (rows.length === 0) {
 
-        document.getElementById(
-            "history"
-        ).innerHTML =
-        "No referral commission found.";
+        history.innerText =
+            "No referral commission found.";
 
         return;
     }
 
 
-    document.getElementById(
-        "history"
-    ).innerHTML =
+    /* HISTORY */
 
-    rows.map(
-        function(row) {
+    history.innerHTML =
+        rows.map(function(row) {
 
             return `
+                <div class="history-item">
 
-            <div class="history-item">
+                    <b>
+                        Level ${row.level}
+                    </b>
 
-                <b>
-                    Level ${row.level}
-                </b>
+                    <br><br>
 
-                — ${Number(
-                    row.rate || 0
-                ).toFixed(2)}%
+                    Rate:
+                    ${Number(row.rate || 0).toFixed(2)}%
 
-                <br>
+                    <br>
 
-                Commission:
-                <b>
-                    ₹${Number(
-                        row.amount || 0
-                    ).toFixed(2)}
-                </b>
+                    Commission:
+                    <b>
+                        ₹${Number(row.amount || 0).toFixed(2)}
+                    </b>
 
-                <br>
+                    <br>
 
-                Deposit ID:
-                ${row.deposit_id}
+                    Deposit ID:
+                    ${row.deposit_id || "-"}
 
-                <br>
+                    <br>
 
-                Status:
-                ${row.status}
+                    Status:
+                    ${row.status || "-"}
 
-            </div>
-
+                </div>
             `;
 
-        }
-    ).join("");
+        }).join("");
 
 }
 
 
-function createReferralLink() {
+/* =========================
+   START
+========================= */
 
-    const baseUrl =
-        window.location.origin +
-        window.location.pathname
-        .replace(
-            "referral.html",
-            ""
-        );
+createReferralLink();
 
-
-    const referralCode =
-        localStorage.getItem(
-            "referralCode"
-        ) ||
-        "SATHIPAY";
-
-
-    document.getElementById(
-        "referralLink"
-    ).value =
-        baseUrl +
-        "register.html?ref=" +
-        referralCode;
-
-}
-
-
-function copyReferral() {
-
-    const input =
-        document.getElementById(
-            "referralLink"
-        );
-
-
-    navigator.clipboard
-    .writeText(
-        input.value
-    )
-    .then(
-        function() {
-
-            document.getElementById(
-                "message"
-            ).innerText =
-            "Referral link copied successfully!";
-
-        }
-    )
-    .catch(
-        function() {
-
-            input.select();
-
-            document.execCommand(
-                "copy"
-            );
-
-            document.getElementById(
-                "message"
-            ).innerText =
-            "Referral link copied successfully!";
-
-        }
-    );
-
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        createReferralLink();
-
-        loadReferralData();
-
-    }
-);
+loadReferralData();
 
 </script>
 
 
 </body>
 
-        </html>
+    </html>
