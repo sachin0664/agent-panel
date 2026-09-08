@@ -254,7 +254,9 @@ header h1 {
 
         <div class="card">
 
-            <p>Wallet Balance</p>
+            <p>
+                Wallet Balance
+            </p>
 
             <h2 id="walletBalance">
                 ₹0.00
@@ -265,7 +267,9 @@ header h1 {
 
         <div class="card">
 
-            <p>Total Commission</p>
+            <p>
+                Total Commission
+            </p>
 
             <h2 id="totalCommission">
                 ₹0.00
@@ -276,7 +280,9 @@ header h1 {
 
         <div class="card">
 
-            <p>Total Transactions</p>
+            <p>
+                Total Transactions
+            </p>
 
             <h2 id="totalTransactions">
                 0
@@ -287,7 +293,9 @@ header h1 {
 
         <div class="card">
 
-            <p>Today's Transactions</p>
+            <p>
+                Today's Transactions
+            </p>
 
             <h2 id="todayTransactions">
                 0
@@ -305,29 +313,43 @@ header h1 {
         style="padding:20px;margin-top:20px;">
 
         <h3 style="margin-top:0;color:#15803d;">
+
             💵 Commission Rule
+
         </h3>
 
         <p>
+
             Approved deposit par
             <b>10% commission</b>
             calculate hoga.
+
         </p>
 
         <p>
+
             Example:
             <b>₹1,000</b> approved deposit =
             <b>₹100 commission</b>.
+
         </p>
 
         <p>
+
             Referral Team Commission:
+
             <br>
+
             Level A = <b>1%</b>
+
             <br>
+
             Level B = <b>0.5%</b>
+
             <br>
+
             Level C = <b>0.2%</b>
+
         </p>
 
     </div>
@@ -340,37 +362,54 @@ header h1 {
         <a
             class="deposit"
             href="deposit.html">
+
             💰 Deposit Money
+
         </a>
+
 
         <a
             class="withdrawal"
             href="withdrawal.html">
+
             💸 Withdraw Money
+
         </a>
+
 
         <a
             class="commission"
             href="commission.html">
+
             📊 Commission
+
         </a>
+
 
         <a
             class="transactions"
             href="transactions.html">
+
             📜 Transaction History
+
         </a>
+
 
         <a
             class="profile"
             href="profile.html">
+
             👤 My Profile
+
         </a>
+
 
         <a
             class="referral"
             href="referral.html">
+
             🔗 Referral
+
         </a>
 
     </div>
@@ -381,7 +420,9 @@ header h1 {
     <div class="status-card">
 
         <div class="status-title">
+
             Account Status
+
         </div>
 
         <div
@@ -413,6 +454,7 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -469,10 +511,6 @@ function getLoginUID() {
 }
 
 
-const loginUID =
-    getLoginUID();
-
-
 /* =========================================
    FIND AGENT
 ========================================= */
@@ -492,9 +530,7 @@ async function findAgent(uidValue) {
         .toUpperCase();
 
 
-    /* =====================================
-       EXACT UID
-    ===================================== */
+    /* EXACT UID */
 
     const {
         data: exactAgent,
@@ -536,9 +572,7 @@ async function findAgent(uidValue) {
     }
 
 
-    /* =====================================
-       NORMALIZED SEARCH
-    ===================================== */
+    /* NORMALIZED SEARCH */
 
     const {
         data: allAgents,
@@ -576,8 +610,7 @@ async function findAgent(uidValue) {
 
 
     const normalizedLogin =
-        cleanUID
-        .replace(
+        cleanUID.replace(
             /[^A-Z0-9]/g,
             ""
         );
@@ -608,8 +641,6 @@ async function findAgent(uidValue) {
         }
 
 
-        /* Exact normalized */
-
         if (
             dbUID === normalizedLogin
         ) {
@@ -618,8 +649,6 @@ async function findAgent(uidValue) {
 
         }
 
-
-        /* Login UID may have short suffix */
 
         if (
             normalizedLogin.startsWith(dbUID) &&
@@ -639,16 +668,93 @@ async function findAgent(uidValue) {
 
 
 /* =========================================
-   START DASHBOARD
+   INDIA TODAY CHECK
+========================================= */
+
+function isTodayIndia(dateValue) {
+
+    if (!dateValue) {
+
+        return false;
+
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    const indiaDate =
+        new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone: "Asia/Kolkata",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }
+        ).format(date);
+
+
+    const todayIndia =
+        new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone: "Asia/Kolkata",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }
+        ).format(
+            new Date()
+        );
+
+
+    return (
+        indiaDate ===
+        todayIndia
+    );
+
+}
+
+
+/* =========================================
+   LOAD DASHBOARD
 ========================================= */
 
 async function loadDashboard() {
 
     try {
 
-        /* =================================
-           UID CHECK
-        ================================= */
+        console.log(
+            "SATHI PAY: Loading dashboard..."
+        );
+
+
+        /* GET UID */
+
+        const loginUID =
+            getLoginUID();
+
+
+        console.log(
+            "Login UID:",
+            loginUID
+        );
+
+
+        /* UID CHECK */
 
         if (!loginUID) {
 
@@ -676,19 +782,20 @@ async function loadDashboard() {
                 "error";
 
 
-            console.error(
-                "No login UID found in localStorage."
-            );
-
-
             return;
 
         }
 
 
-        /* =================================
-           FIND AGENT
-        ================================= */
+        /* SHOW LOGIN UID FIRST */
+
+        document.getElementById(
+            "agentUID"
+        ).textContent =
+            loginUID;
+
+
+        /* FIND AGENT */
 
         const agent =
             await findAgent(
@@ -696,13 +803,13 @@ async function loadDashboard() {
             );
 
 
+        console.log(
+            "Agent:",
+            agent
+        );
+
+
         if (!agent) {
-
-            document.getElementById(
-                "agentUID"
-            ).textContent =
-                loginUID;
-
 
             document.getElementById(
                 "agentName"
@@ -727,14 +834,12 @@ async function loadDashboard() {
         }
 
 
-        /* =================================
-           SHOW AGENT
-        ================================= */
+        /* SHOW AGENT */
 
         document.getElementById(
             "agentUID"
         ).textContent =
-            agent.uid;
+            agent.uid || loginUID;
 
 
         document.getElementById(
@@ -747,9 +852,7 @@ async function loadDashboard() {
             );
 
 
-        /* =================================
-           ACCOUNT STATUS
-        ================================= */
+        /* ACCOUNT STATUS */
 
         const agentStatus =
             String(
@@ -781,7 +884,10 @@ async function loadDashboard() {
                 "accountStatus"
             ).textContent =
                 "● " +
-                agent.status;
+                (
+                    agent.status ||
+                    "Active"
+                );
 
 
             document.getElementById(
@@ -817,6 +923,12 @@ async function loadDashboard() {
             );
 
 
+        console.log(
+            "Deposits:",
+            deposits
+        );
+
+
         if (depositError) {
 
             console.error(
@@ -829,6 +941,18 @@ async function loadDashboard() {
                 "agentName"
             ).textContent =
                 "Deposit database error";
+
+
+            document.getElementById(
+                "accountStatus"
+            ).textContent =
+                "● Database Error";
+
+
+            document.getElementById(
+                "accountStatus"
+            ).className =
+                "error";
 
 
             return;
@@ -875,6 +999,12 @@ async function loadDashboard() {
         );
 
 
+        console.log(
+            "Approved Deposit:",
+            approvedDeposit
+        );
+
+
         /* =================================
            COMMISSION 10%
         ================================= */
@@ -894,8 +1024,11 @@ async function loadDashboard() {
            LOAD WITHDRAWALS
         ================================= */
 
+        let withdrawals = [];
+
+
         const {
-            data: withdrawals,
+            data: withdrawalData,
             error: withdrawalError
         } = await supabaseClient
 
@@ -921,7 +1054,18 @@ async function loadDashboard() {
                 withdrawalError
             );
 
+        } else {
+
+            withdrawals =
+                withdrawalData || [];
+
         }
+
+
+        console.log(
+            "Withdrawals:",
+            withdrawals
+        );
 
 
         /* =================================
@@ -1011,67 +1155,17 @@ async function loadDashboard() {
 
         /* =================================
            TODAY'S TRANSACTIONS
-           
-           IMPORTANT:
-           Approved deposit ke liye
-           approved_at use hoga.
-           
-           Isliye agar:
-           created_at = 7 Sep
-           approved_at = 8 Sep
-
-           to 8 Sep ka transaction count hoga.
         ================================= */
-
-        const now =
-            new Date();
-
-
-        const startOfToday =
-            new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                now.getDate(),
-                0,
-                0,
-                0,
-                0
-            );
-
-
-        const endOfToday =
-            new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                now.getDate(),
-                23,
-                59,
-                59,
-                999
-            );
-
 
         let todayCount = 0;
 
 
-        /* =================================
-           TODAY'S DEPOSITS
-        ================================= */
+        /* TODAY'S DEPOSITS */
 
         (
             deposits || []
         ).forEach(
             function(deposit) {
-
-                if (
-                    !deposit.created_at &&
-                    !deposit.approved_at
-                ) {
-
-                    return;
-
-                }
-
 
                 const status =
                     String(
@@ -1095,26 +1189,22 @@ async function loadDashboard() {
                 ) {
 
                     dateToCheck =
-                        new Date(
-                            deposit.approved_at
-                        );
+                        deposit.approved_at;
 
                 } else if (
                     deposit.created_at
                 ) {
 
                     dateToCheck =
-                        new Date(
-                            deposit.created_at
-                        );
+                        deposit.created_at;
 
                 }
 
 
                 if (
-                    dateToCheck &&
-                    dateToCheck >= startOfToday &&
-                    dateToCheck <= endOfToday
+                    isTodayIndia(
+                        dateToCheck
+                    )
                 ) {
 
                     todayCount++;
@@ -1125,9 +1215,7 @@ async function loadDashboard() {
         );
 
 
-        /* =================================
-           TODAY'S WITHDRAWALS
-        ================================= */
+        /* TODAY'S WITHDRAWALS */
 
         (
             withdrawals || []
@@ -1135,23 +1223,9 @@ async function loadDashboard() {
             function(withdrawal) {
 
                 if (
-                    !withdrawal.created_at
-                ) {
-
-                    return;
-
-                }
-
-
-                const date =
-                    new Date(
+                    isTodayIndia(
                         withdrawal.created_at
-                    );
-
-
-                if (
-                    date >= startOfToday &&
-                    date <= endOfToday
+                    )
                 ) {
 
                     todayCount++;
@@ -1162,9 +1236,7 @@ async function loadDashboard() {
         );
 
 
-        /* =================================
-           SHOW TODAY COUNT
-        ================================= */
+        /* SHOW TODAY */
 
         document.getElementById(
             "todayTransactions"
@@ -1183,36 +1255,121 @@ async function loadDashboard() {
         console.log(
             "SATHI PAY DASHBOARD"
         );
-        // =========================================================
-    // FINAL DASHBOARD REFRESH
-    // =========================================================
 
-    try {
-        await loadDashboard();
-    } catch (error) {
-        console.error("Dashboard refresh error:", error);
+        console.log(
+            "UID:",
+            loginUID
+        );
+
+        console.log(
+            "Agent:",
+            agent
+        );
+   console.log(
+        "Approved Deposit:",
+        approvedDeposit
+    );
+
+    console.log(
+        "Commission:",
+        totalCommission
+    );
+
+    console.log(
+        "Approved Withdrawal:",
+        approvedWithdrawal
+    );
+
+    console.log(
+        "Wallet:",
+        walletBalance
+    );
+
+    console.log(
+        "Total Transactions:",
+        totalTransactions
+    );
+
+    console.log(
+        "Today's Transactions:",
+        todayCount
+    );
+
+    console.log(
+        "=============================="
+    );
+
+
+} catch (error) {
+
+    console.error(
+        "Dashboard error:",
+        error
+    );
+
+    document.getElementById(
+        "agentUID"
+    ).textContent =
+        loginUID || "UID Error";
+
+    document.getElementById(
+        "agentName"
+    ).textContent =
+        "Dashboard error";
+
+    document.getElementById(
+        "accountStatus"
+    ).textContent =
+        "● Error - Please refresh";
+
+    document.getElementById(
+        "accountStatus"
+    ).className =
+        "error";
+
+}
+
+
+/* =========================================
+   END LOAD DASHBOARD
+========================================= */
+
+}
+
+
+/* =========================================
+   PAGE READY
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        console.log(
+            "SATHI PAY DASHBOARD READY"
+        );
+
+        loadDashboard();
+
     }
+);
 
-    // =========================================================
-    // AUTO REFRESH
-    // =========================================================
 
-    setInterval(async function () {
-        try {
-            await loadDashboard();
-        } catch (error) {
-            console.error("Auto refresh error:", error);
-        }
-    }, 30000);
+/* =========================================
+   AUTO REFRESH
+========================================= */
 
-    // =========================================================
-    // PAGE READY
-    // =========================================================
+setInterval(
+    function () {
 
-    console.log("SATHI PAY DASHBOARD READY");
+        loadDashboard();
 
-});
+    },
+    30000
+);
+
 </script>
 
 </body>
+
 </html>
