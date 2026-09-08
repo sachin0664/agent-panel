@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Referral</title>
@@ -358,6 +359,7 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 
 const SUPABASE_URL =
@@ -390,12 +392,9 @@ function getLoginUID() {
         const value =
             localStorage.getItem(key);
 
-        if (
-            value &&
-            value.trim() !== ""
-        ) {
+        if (value && value.trim() !== "") {
 
-            return value.trim().toUpperCase();
+            return value.trim();
 
         }
 
@@ -410,32 +409,54 @@ async function loadReferralData() {
     const loginUID =
         getLoginUID();
 
+    console.log(
+        "Referral Login UID:",
+        loginUID
+    );
+
+
     if (!loginUID) {
 
-        document.getElementById("history").innerHTML =
-            "<b>Please login again.</b>";
+        document.getElementById(
+            "history"
+        ).innerHTML =
+        "<b>Please login again.</b>";
 
         return;
     }
 
 
-    const { data: agent, error: agentError } =
+    const { data: agents, error: agentError } =
         await supabaseClient
         .from("agents")
         .select("id,uid,name")
-        .eq("uid", loginUID)
-        .maybeSingle();
+        .ilike("uid", loginUID);
 
 
-    if (agentError || !agent) {
+    console.log(
+        "Agent result:",
+        agents,
+        agentError
+    );
 
-        console.error(agentError);
 
-        document.getElementById("history").innerHTML =
-            "<b>Agent account not found.</b>";
+    if (
+        agentError ||
+        !agents ||
+        agents.length === 0
+    ) {
+
+        document.getElementById(
+            "history"
+        ).innerHTML =
+        "<b>Agent account not found.</b>";
 
         return;
     }
+
+
+    const agent =
+        agents[0];
 
 
     const { data: commissions, error } =
@@ -444,18 +465,31 @@ async function loadReferralData() {
         .select(
             "id,source_agent_id,level,rate,amount,deposit_id,status,created_at"
         )
-        .eq("agent_id", agent.id)
-        .order("id", {
-            ascending: false
-        });
+        .eq(
+            "agent_id",
+            agent.id
+        )
+        .order(
+            "id",
+            {
+                ascending: false
+            }
+        );
+
+
+    console.log(
+        "Referral commissions:",
+        commissions,
+        error
+    );
 
 
     if (error) {
 
-        console.error(error);
-
-        document.getElementById("history").innerHTML =
-            "<b>Referral data loading error.</b>";
+        document.getElementById(
+            "history"
+        ).innerHTML =
+        "<b>Referral data loading error.</b>";
 
         return;
     }
@@ -470,7 +504,9 @@ async function loadReferralData() {
             function(sum, row) {
 
                 return sum +
-                    Number(row.amount || 0);
+                Number(
+                    row.amount || 0
+                );
 
             },
             0
@@ -479,9 +515,15 @@ async function loadReferralData() {
 
     const referralAgents =
         new Set(
-            rows.map(
+            rows
+            .map(
                 function(row) {
                     return row.source_agent_id;
+                }
+            )
+            .filter(
+                function(id) {
+                    return id !== null;
                 }
             )
         );
@@ -490,61 +532,71 @@ async function loadReferralData() {
     document.getElementById(
         "totalCommission"
     ).innerText =
-        "₹" +
-        totalCommission.toFixed(2);
+    "₹" +
+    totalCommission.toFixed(2);
 
 
     document.getElementById(
         "totalReferrals"
     ).innerText =
-        referralAgents.size;
+    referralAgents.size;
 
 
     if (rows.length === 0) {
 
-        document.getElementById("history").innerHTML =
-            "No referral commission found.";
+        document.getElementById(
+            "history"
+        ).innerHTML =
+        "No referral commission found.";
 
         return;
     }
 
 
-    document.getElementById("history").innerHTML =
+    document.getElementById(
+        "history"
+    ).innerHTML =
 
-        rows.map(
-            function(row) {
+    rows.map(
+        function(row) {
 
-                return `
+            return `
 
-                    <div class="history-item">
+            <div class="history-item">
 
-                        <b>Level ${row.level}</b>
+                <b>
+                    Level ${row.level}
+                </b>
 
-                        — ${Number(row.rate).toFixed(2)}%
+                — ${Number(
+                    row.rate || 0
+                ).toFixed(2)}%
 
-                        <br>
+                <br>
 
-                        Commission:
-                        <b>
-                            ₹${Number(row.amount).toFixed(2)}
-                        </b>
+                Commission:
+                <b>
+                    ₹${Number(
+                        row.amount || 0
+                    ).toFixed(2)}
+                </b>
 
-                        <br>
+                <br>
 
-                        Deposit ID:
-                        ${row.deposit_id}
+                Deposit ID:
+                ${row.deposit_id}
 
-                        <br>
+                <br>
 
-                        Status:
-                        ${row.status}
+                Status:
+                ${row.status}
 
-                    </div>
+            </div>
 
-                `;
+            `;
 
-            }
-        ).join("");
+        }
+    ).join("");
 
 }
 
@@ -554,11 +606,18 @@ function createReferralLink() {
     const baseUrl =
         window.location.origin +
         window.location.pathname
-        .replace("referral.html", "");
+        .replace(
+            "referral.html",
+            ""
+        );
+
 
     const referralCode =
-        localStorage.getItem("referralCode") ||
+        localStorage.getItem(
+            "referralCode"
+        ) ||
         "SATHIPAY";
+
 
     document.getElementById(
         "referralLink"
@@ -566,6 +625,7 @@ function createReferralLink() {
         baseUrl +
         "register.html?ref=" +
         referralCode;
+
 }
 
 
@@ -576,15 +636,18 @@ function copyReferral() {
             "referralLink"
         );
 
+
     navigator.clipboard
-    .writeText(input.value)
+    .writeText(
+        input.value
+    )
     .then(
         function() {
 
             document.getElementById(
                 "message"
             ).innerText =
-                "Referral link copied successfully!";
+            "Referral link copied successfully!";
 
         }
     )
@@ -593,12 +656,14 @@ function copyReferral() {
 
             input.select();
 
-            document.execCommand("copy");
+            document.execCommand(
+                "copy"
+            );
 
             document.getElementById(
                 "message"
             ).innerText =
-                "Referral link copied successfully!";
+            "Referral link copied successfully!";
 
         }
     );
@@ -618,6 +683,7 @@ document.addEventListener(
 );
 
 </script>
+
 
 </body>
 
