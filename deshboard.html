@@ -469,41 +469,14 @@ const supabaseClient =
 
 function getLoginUID() {
 
-    const possibleKeys = [
-        "sathiPayUID",
-        "agentUID",
-        "uid",
-        "UID",
-        "sathi_pay_uid",
-        "userUID",
-        "userUid"
-    ];
+    const loginUID = localStorage.getItem("sathiPayUID");
 
-    for (
-        let i = 0;
-        i < possibleKeys.length;
-        i++
-    ) {
-
-        const value =
-            localStorage.getItem(
-                possibleKeys[i]
-            );
-
-        if (
-            value &&
-            String(value).trim() !== ""
-        ) {
-
-            return String(value).trim();
-
-        }
-
+    if (!loginUID || loginUID.trim() === "") {
+        return null;
     }
 
-    return null;
-
-}
+    return loginUID.trim().toUpperCase();
+      }
 
 
 /* =========================================
