@@ -5,8 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Withdrawal</title>
 
@@ -101,25 +100,10 @@ input:focus{
     font-weight:bold;
 }
 
-.wallet-box{
-    margin-top:15px;
-    padding:16px;
-    background:#ecfdf5;
-    border:1px solid #bbf7d0;
-    border-radius:10px;
-}
-
-.wallet-title{
-    color:#166534;
+.limit-info{
+    margin-top:8px;
+    color:#64748b;
     font-size:14px;
-    font-weight:bold;
-}
-
-.wallet-amount{
-    color:#15803d;
-    font-size:25px;
-    font-weight:bold;
-    margin-top:5px;
 }
 
 .submit-btn{
@@ -317,62 +301,33 @@ th{
 
             <div>
                 <b>UID:</b>
-
                 <span
                     id="selectedUID"
                     class="uid"
                 >
                     -
                 </span>
-
             </div>
-
 
             <div>
                 <b>Name:</b>
-
                 <span id="selectedName">
                     -
                 </span>
-
             </div>
-
 
             <div>
                 <b>Mobile:</b>
-
                 <span id="selectedMobile">
                     -
                 </span>
-
             </div>
-
 
             <div>
                 <b>Status:</b>
-
                 <span id="selectedStatus">
                     -
                 </span>
-
-            </div>
-
-
-            <!-- WALLET -->
-
-            <div class="wallet-box">
-
-                <div class="wallet-title">
-                    Available Wallet
-                </div>
-
-                <div
-                    class="wallet-amount"
-                    id="availableWallet"
-                >
-                    ₹0.00
-                </div>
-
             </div>
 
         </div>
@@ -386,11 +341,18 @@ th{
         <input
             type="number"
             id="withdrawAmount"
-            placeholder="Enter withdrawal amount"
-            min="1"
+            placeholder="Enter amount ₹110 - ₹50,000"
+            min="110"
+            max="50000"
             step="0.01"
             required
         >
+
+        <div class="limit-info">
+            Minimum withdrawal: <b>₹110</b>
+            &nbsp; | &nbsp;
+            Maximum withdrawal: <b>₹50,000</b>
+        </div>
 
 
         <button
@@ -419,23 +381,19 @@ th{
         </p>
 
         <p>
-            2. Available wallet check hoga.
+            2. Amount ₹110 se ₹50,000 ke beech enter karo.
         </p>
 
         <p>
-            3. Amount wallet se zyada nahi ho sakta.
+            3. Withdrawal submit karo.
         </p>
 
         <p>
-            4. Withdrawal request <b>Pending</b> rahegi.
+            4. Request <b>Pending</b> rahegi.
         </p>
 
         <p>
             5. Admin <b>Approve</b> ya <b>Reject</b> karega.
-        </p>
-
-        <p>
-            6. Approved withdrawal Dashboard wallet se minus hoga.
         </p>
 
     </div>
@@ -512,7 +470,6 @@ th{
 </div>
 
 
-
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -541,12 +498,10 @@ window.supabase.createClient(
 
 
 /* =========================================
-   GLOBAL
+   GLOBAL AGENTS
 ========================================= */
 
 let withdrawalAgents = [];
-
-let selectedAgentWallet = 0;
 
 
 /* =========================================
@@ -600,11 +555,7 @@ async function loadWithdrawalAgents(){
 
         if(error){
 
-            console.error(
-                "Agent loading error:",
-                error
-            );
-
+            console.error(error);
 
             select.innerHTML =
                 `<option value="">
@@ -672,177 +623,10 @@ async function loadWithdrawalAgents(){
 
         console.error(error);
 
-
         select.innerHTML =
             `<option value="">
                 Error loading agents
             </option>`;
-
-    }
-
-}
-
-
-/* =========================================
-   GET AGENT WALLET
-========================================= */
-
-async function getAgentWallet(agentId){
-
-    try{
-
-        /* APPROVED DEPOSITS */
-
-        const {
-            data: deposits,
-            error: depositError
-        } =
-        await supabaseClient
-
-        .from("deposits")
-
-        .select(`
-            amount,
-            status
-        `)
-
-        .eq(
-            "agent_id",
-            agentId
-        );
-
-
-        if(depositError){
-
-            console.error(
-                "Deposit wallet error:",
-                depositError
-            );
-
-            return 0;
-
-        }
-
-
-        let approvedDeposit =
-            0;
-
-
-        (deposits || []).forEach(
-            function(deposit){
-
-                const status =
-                    String(
-                        deposit.status || ""
-                    )
-                    .toLowerCase()
-                    .trim();
-
-
-                if(
-                    status === "approved"
-                ){
-
-                    approvedDeposit +=
-                        Number(
-                            deposit.amount || 0
-                        );
-
-                }
-
-            }
-        );
-
-
-        /* COMMISSION = 10% */
-
-        const commission =
-            approvedDeposit * 0.10;
-
-
-        /* APPROVED WITHDRAWALS */
-
-        const {
-            data: withdrawals,
-            error: withdrawalError
-        } =
-        await supabaseClient
-
-        .from("withdrawals")
-
-        .select(`
-            amount,
-            status
-        `)
-
-        .eq(
-            "agent_id",
-            agentId
-        );
-
-
-        if(withdrawalError){
-
-            console.error(
-                "Withdrawal wallet error:",
-                withdrawalError
-            );
-
-            return commission;
-
-        }
-
-
-        let approvedWithdrawal =
-            0;
-
-
-        (withdrawals || []).forEach(
-            function(withdrawal){
-
-                const status =
-                    String(
-                        withdrawal.status || ""
-                    )
-                    .toLowerCase()
-                    .trim();
-
-
-                if(
-                    status === "approved"
-                ){
-
-                    approvedWithdrawal +=
-                        Number(
-                            withdrawal.amount || 0
-                        );
-
-                }
-
-            }
-        );
-
-
-        const wallet =
-            commission -
-            approvedWithdrawal;
-
-
-        return Math.max(
-            wallet,
-            0
-        );
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Wallet calculation error:",
-            error
-        );
-
-        return 0;
 
     }
 
@@ -861,7 +645,7 @@ document
 );
 
 
-async function showAgentInfo(){
+function showAgentInfo(){
 
     const agentId =
         document.getElementById(
@@ -875,22 +659,12 @@ async function showAgentInfo(){
         );
 
 
-    const walletElement =
-        document.getElementById(
-            "availableWallet"
-        );
-
-
     if(!agentId){
 
         info.style.display =
             "none";
 
-        selectedAgentWallet =
-            0;
-
         return;
-
     }
 
 
@@ -910,11 +684,7 @@ async function showAgentInfo(){
         info.style.display =
             "none";
 
-        selectedAgentWallet =
-            0;
-
         return;
-
     }
 
 
@@ -944,21 +714,6 @@ async function showAgentInfo(){
 
     info.style.display =
         "block";
-
-
-    walletElement.textContent =
-        "Loading...";
-
-
-    selectedAgentWallet =
-        await getAgentWallet(
-            agent.id
-        );
-
-
-    walletElement.textContent =
-        "₹" +
-        selectedAgentWallet.toFixed(2);
 
 }
 
@@ -1010,70 +765,52 @@ async function submitWithdrawal(event){
         "";
 
 
-    /* AGENT CHECK */
+    /* =====================================
+       AGENT VALIDATION
+    ===================================== */
 
     if(!agentId){
 
         message.textContent =
-            "Please select an agent.";
+            "❌ Please select an agent.";
 
         message.style.color =
             "red";
 
         return;
-
     }
 
 
-    /* AMOUNT CHECK */
+    /* =====================================
+       AMOUNT VALIDATION
+    ===================================== */
 
     if(
         !amount ||
-        amount <= 0
+        amount < 110
     ){
 
         message.textContent =
-            "Please enter a valid amount.";
+            "❌ Minimum withdrawal ₹110 hai.";
 
         message.style.color =
             "red";
 
         return;
-
     }
 
 
-    /* REFRESH WALLET BEFORE SUBMIT */
-
-    selectedAgentWallet =
-        await getAgentWallet(
-            agentId
-        );
-
-
-    document.getElementById(
-        "availableWallet"
-    ).textContent =
-        "₹" +
-        selectedAgentWallet.toFixed(2);
-
-
-    /* WALLET CHECK */
-
     if(
-        amount >
-        selectedAgentWallet
+        amount > 50000
     ){
 
         message.textContent =
-            "❌ Insufficient wallet balance. Available: ₹"
-            + selectedAgentWallet.toFixed(2);
+            "❌ Maximum withdrawal ₹50,000 hai.";
 
         message.style.color =
             "red";
 
         return;
-
     }
 
 
@@ -1107,11 +844,7 @@ async function submitWithdrawal(event){
 
         if(error){
 
-            console.error(
-                "Submit withdrawal error:",
-                error
-            );
-
+            console.error(error);
 
             message.textContent =
                 "❌ Error: "
@@ -1121,7 +854,6 @@ async function submitWithdrawal(event){
                 "red";
 
             return;
-
         }
 
 
@@ -1138,27 +870,25 @@ async function submitWithdrawal(event){
             "";
 
 
-        await loadWithdrawals();
-
-
-        selectedAgentWallet =
-            await getAgentWallet(
-                agentId
-            );
+        document.getElementById(
+            "withdrawAgent"
+        ).value =
+            "";
 
 
         document.getElementById(
-            "availableWallet"
-        ).textContent =
-            "₹" +
-            selectedAgentWallet.toFixed(2);
+            "agentInfo"
+        ).style.display =
+            "none";
+
+
+        await loadWithdrawals();
 
     }
 
     catch(error){
 
         console.error(error);
-
 
         message.textContent =
             "❌ Something went wrong.";
@@ -1259,7 +989,6 @@ async function loadWithdrawals(){
             agent_id,
             amount,
             status,
-            created_at,
             agents (
                 uid,
                 name,
@@ -1279,7 +1008,6 @@ async function loadWithdrawals(){
 
             console.error(error);
 
-
             table.innerHTML = `
 
                 <tr>
@@ -1296,7 +1024,6 @@ async function loadWithdrawals(){
             `;
 
             return;
-
         }
 
 
@@ -1318,7 +1045,6 @@ async function loadWithdrawals(){
             `;
 
             return;
-
         }
 
 
@@ -1339,7 +1065,8 @@ async function loadWithdrawals(){
                     ? agent.uid
                     : "-";
 
-            const agentName =
+
+                const agentName =
                     agent &&
                     agent.name
                     ? agent.name
@@ -1414,21 +1141,26 @@ async function loadWithdrawals(){
                             ${withdrawal.id}
                         </td>
 
+
                         <td class="uid">
                             ${uid}
                         </td>
+
 
                         <td>
                             ${agentName}
                         </td>
 
+
                         <td class="amount">
                             ₹${amount}
                         </td>
 
+
                         <td class="${getStatusClass(status)}">
                             ${status}
                         </td>
+
 
                         <td>
                             ${action}
@@ -1479,7 +1211,10 @@ async function updateWithdrawalStatus(
         : "Reject this withdrawal?";
 
 
-    if(!confirm(question)){
+    if(
+        !confirm(question)
+    ){
+
         return;
     }
 
@@ -1495,7 +1230,7 @@ async function updateWithdrawalStatus(
         .from("withdrawals")
 
         .update({
-            status: newStatus
+            status:newStatus
         })
 
         .eq(
@@ -1511,8 +1246,8 @@ async function updateWithdrawalStatus(
             console.error(error);
 
             alert(
-                "❌ Update failed:\n" +
-                error.message
+                "❌ Update failed:\n"
+                + error.message
             );
 
             return;
@@ -1525,8 +1260,8 @@ async function updateWithdrawalStatus(
         ){
 
             alert(
-                "❌ Update nahi hua.\n\n" +
-                "Supabase RLS policy check karo."
+                "❌ Update nahi hua.\n\n"
+                + "Supabase RLS policy check karo."
             );
 
             return;
@@ -1561,9 +1296,11 @@ async function updateWithdrawalStatus(
         console.error(error);
 
         alert(
-            "❌ Error:\n" +
-            error.message
-        );
+            "❌ Error:\n"
+                + error.message
+            );
+
+        }
 
     }
 
@@ -1585,6 +1322,193 @@ document.addEventListener(
     }
 );
 
+
+/* =========================================
+   WITHDRAWAL LIMIT
+========================================= */
+
+const MIN_WITHDRAWAL = 110;
+const MAX_WITHDRAWAL = 50000;
+
+
+/* =========================================
+   EXTRA VALIDATION
+========================================= */
+
+document
+.getElementById("withdrawAmount")
+.addEventListener(
+    "input",
+    function(){
+
+        const amount =
+            Number(this.value);
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+        if(
+            amount > 0 &&
+            amount < MIN_WITHDRAWAL
+        ){
+
+            message.textContent =
+                "⚠️ Minimum withdrawal ₹110 hai.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        else if(
+            amount > MAX_WITHDRAWAL
+        ){
+
+            message.textContent =
+                "⚠️ Maximum withdrawal ₹50,000 hai.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        else{
+
+            message.textContent =
+                "";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   FINAL SUBMIT LIMIT CHECK
+========================================= */
+
+const originalSubmitWithdrawal =
+    submitWithdrawal;
+
+
+/*
+   Limit check form submit se pehle
+*/
+
+document
+.getElementById("withdrawalForm")
+.removeEventListener(
+    "submit",
+    submitWithdrawal
+);
+
+
+document
+.getElementById("withdrawalForm")
+.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const amount =
+            Number(
+                document.getElementById(
+                    "withdrawAmount"
+                ).value
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        if(
+            !amount ||
+            amount <= 0
+        ){
+
+            message.textContent =
+                "⚠️ Please enter a valid amount.";
+
+            message.style.color =
+                "#dc2626";
+
+            return;
+
+        }
+
+
+        if(
+            amount < MIN_WITHDRAWAL
+        ){
+
+            message.textContent =
+                "⚠️ Minimum withdrawal ₹110 hai.";
+
+            message.style.color =
+                "#dc2626";
+
+            return;
+
+        }
+
+
+        if(
+            amount > MAX_WITHDRAWAL
+        ){
+
+            message.textContent =
+                "⚠️ Maximum withdrawal ₹50,000 hai.";
+
+            message.style.color =
+                "#dc2626";
+
+            return;
+
+        }
+
+
+        /*
+           Original withdrawal function
+        */
+
+        await originalSubmitWithdrawal(
+            event
+        );
+
+    }
+);
+
+
+/* =========================================
+   PAGE READY
+========================================= */
+
+console.log(
+    "================================="
+);
+
+console.log(
+    "SATHI PAY WITHDRAWAL READY"
+);
+
+console.log(
+    "Minimum Withdrawal: ₹110"
+);
+
+console.log(
+    "Maximum Withdrawal: ₹50,000"
+);
+
+console.log(
+    "================================="
+);
 
 </script>
 
