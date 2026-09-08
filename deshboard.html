@@ -85,6 +85,7 @@ header h1 {
     font-weight: bold;
     color: #2563eb;
     letter-spacing: 1px;
+    word-break: break-all;
 }
 
 .agent-name {
@@ -167,26 +168,13 @@ header h1 {
     font-weight: bold;
 }
 
-.commission-rule {
-    padding: 20px;
-    margin-top: 20px;
-}
-
-.commission-rule h3 {
-    margin-top: 0;
-    color: #15803d;
-}
-
-.commission-rule p {
-    line-height: 1.6;
+.error {
+    color: #dc2626;
+    font-weight: bold;
 }
 
 .loading {
     color: #2563eb;
-}
-
-.error {
-    color: #dc2626;
 }
 
 @media (max-width: 600px) {
@@ -309,9 +297,12 @@ header h1 {
 
     <!-- COMMISSION RULE -->
 
-    <div class="commission-rule">
+    <div class="commission-rule"
+         style="padding:20px;margin-top:20px;background:white;border-radius:14px;box-shadow:0 4px 15px rgba(0,0,0,0.08);">
 
-        <h3>💵 Commission Rule</h3>
+        <h3 style="margin-top:0;color:#15803d;">
+            💵 Commission Rule
+        </h3>
 
         <p>
             Approved deposit par
@@ -426,14 +417,201 @@ const supabaseClient =
 
 
 /* =========================================
-   GET UID
+   GET LOGIN UID
 ========================================= */
 
-const uid =
+const loginUID =
     localStorage.getItem("sathiPayUID") ||
     localStorage.getItem("agentUID") ||
     localStorage.getItem("uid") ||
     localStorage.getItem("UID");
+
+
+/* =========================================
+   FIND AGENT
+========================================= */
+
+async function findAgent(uidValue) {
+
+    if (!uidValue) {
+        return null;
+    }
+
+    const cleanUID =
+        String(uidValue)
+        .trim()
+        .toUpperCase();
+
+
+    /* -----------------------------------------
+       FIRST: EXACT UID
+    ----------------------------------------- */
+
+    const {
+        data:exactAgent,
+        error:exactError
+    } = await supabaseClient
+
+        .from("agents")
+
+        .select(`
+            id,
+            uid,
+            name,
+            mobile,
+            status
+        `)
+
+        .eq(
+            "uid",
+            cleanUID
+        )
+
+        .maybeSingle();
+
+
+    if (exactError) {
+
+        console.error(
+            "Exact UID search error:",
+            exactError
+        );
+
+    }
+
+
+    if (exactAgent) {
+
+        return exactAgent;
+
+    }
+
+
+    /* -----------------------------------------
+       SECOND: NORMALIZED UID SEARCH
+       
+       Example:
+       SPE28EB03D05
+       database:
+       SPE28EB03D
+    ----------------------------------------- */
+
+    const {
+        data:allAgents,
+        error:allAgentError
+    } = await supabaseClient
+
+        .from("agents")
+
+        .select(`
+            id,
+            uid,
+            name,
+            mobile,
+            status
+        `);
+
+
+    if (allAgentError) {
+
+        console.error(
+            "Agent list error:",
+            allAgentError
+        );
+
+        return null;
+
+    }
+
+
+    if (!allAgents) {
+
+        return null;
+
+    }
+
+
+    /* -----------------------------------------
+       COMPARE UID
+
+       We first compare exact normalized value.
+       Then allow login UID to have a short
+       extra suffix.
+    ----------------------------------------- */
+
+    const normalizedLogin =
+        cleanUID
+        .replace(/[^A-Z0-9]/g, "");
+
+
+    let matchedAgent = null;
+
+
+    for (
+        let i = 0;
+        i < allAgents.length;
+        i++
+    ) {
+
+        const dbUID =
+            String(
+                allAgents[i].uid || ""
+            )
+            .trim()
+            .toUpperCase()
+            .replace(
+                /[^A-Z0-9]/g,
+                ""
+            );
+
+
+        if (!dbUID) {
+            continue;
+        }
+
+
+        /* Exact normalized match */
+
+        if (
+            dbUID === normalizedLogin
+        ) {
+
+            matchedAgent =
+                allAgents[i];
+
+            break;
+
+        }
+
+
+        /* -------------------------------------
+           LOGIN UID has extra suffix.
+           
+           Example:
+           LOGIN  = SPE28EB03D05
+           DB      = SPE28EB03D
+           
+           Difference = 05
+        ------------------------------------- */
+
+        if (
+            normalizedLogin.startsWith(dbUID) &&
+            normalizedLogin.length - dbUID.length <= 3
+        ) {
+
+            matchedAgent =
+                allAgents[i];
+
+            break;
+
+        }
+
+    }
+
+
+    return matchedAgent;
+
+}
 
 
 /* =========================================
@@ -448,22 +626,30 @@ async function loadDashboard() {
            UID CHECK
         --------------------------------- */
 
-        if (!uid) {
+        if (!loginUID) {
 
-            document.getElementById("agentUID")
-                .textContent = "UID not found";
+            document.getElementById(
+                "agentUID"
+            ).textContent =
+                "UID not found";
 
-            document.getElementById("agentName")
-                .textContent =
+            document.getElementById(
+                "agentName"
+            ).textContent =
                 "Please login again.";
 
-            document.getElementById("accountStatus")
-                .textContent = "● Login Required";
+            document.getElementById(
+                "accountStatus"
+            ).textContent =
+                "● Login Required";
 
-            document.getElementById("accountStatus")
-                .className = "error";
+            document.getElementById(
+                "accountStatus"
+            ).className =
+                "error";
 
             return;
+
         }
 
 
@@ -471,58 +657,34 @@ async function loadDashboard() {
            FIND AGENT
         --------------------------------- */
 
-        const {
-            data: agent,
-            error: agentError
-        } = await supabaseClient
-
-            .from("agents")
-
-            .select(`
-                id,
-                uid,
-                name,
-                mobile,
-                status
-            `)
-
-            .eq("uid", uid)
-
-            .maybeSingle();
-
-
-        if (agentError) {
-
-            console.error(
-                "Agent error:",
-                agentError
-            );
-
-            document.getElementById("agentName")
-                .textContent =
-                "Database error";
-
-            return;
-        }
+        const agent =
+            await findAgent(loginUID);
 
 
         if (!agent) {
 
-            document.getElementById("agentUID")
-                .textContent = uid;
+            document.getElementById(
+                "agentUID"
+            ).textContent =
+                loginUID;
 
-            document.getElementById("agentName")
-                .textContent =
+            document.getElementById(
+                "agentName"
+            ).textContent =
                 "Agent account not found";
 
-            document.getElementById("accountStatus")
-                .textContent =
+            document.getElementById(
+                "accountStatus"
+            ).textContent =
                 "● Agent Not Found";
 
-            document.getElementById("accountStatus")
-                .className = "error";
+            document.getElementById(
+                "accountStatus"
+            ).className =
+                "error";
 
             return;
+
         }
 
 
@@ -530,14 +692,20 @@ async function loadDashboard() {
            SHOW AGENT
         --------------------------------- */
 
-        document.getElementById("agentUID")
-            .textContent =
+        document.getElementById(
+            "agentUID"
+        ).textContent =
             agent.uid;
 
-        document.getElementById("agentName")
-            .textContent =
+
+        document.getElementById(
+            "agentName"
+        ).textContent =
             "Agent: " +
-            (agent.name || "Unknown");
+            (
+                agent.name ||
+                "Unknown"
+            );
 
 
         /* ---------------------------------
@@ -545,26 +713,39 @@ async function loadDashboard() {
         --------------------------------- */
 
         const agentStatus =
-            String(agent.status || "Active")
+            String(
+                agent.status ||
+                "Active"
+            )
             .toLowerCase();
 
-        if (agentStatus === "active") {
 
-            document.getElementById("accountStatus")
-                .textContent =
+        if (
+            agentStatus === "active"
+        ) {
+
+            document.getElementById(
+                "accountStatus"
+            ).textContent =
                 "● Active";
 
-            document.getElementById("accountStatus")
-                .className = "active";
+            document.getElementById(
+                "accountStatus"
+            ).className =
+                "active";
 
         } else {
 
-            document.getElementById("accountStatus")
-                .textContent =
-                "● " + agent.status;
+            document.getElementById(
+                "accountStatus"
+            ).textContent =
+                "● " +
+                agent.status;
 
-            document.getElementById("accountStatus")
-                .className = "error";
+            document.getElementById(
+                "accountStatus"
+            ).className =
+                "error";
 
         }
 
@@ -600,15 +781,26 @@ async function loadDashboard() {
                 depositError
             );
 
+            document.getElementById(
+                "agentName"
+            ).textContent =
+                "Deposit database error";
+
             return;
+
         }
 
 
-        let approvedDeposit =
-            0;
+        /* =================================
+           APPROVED DEPOSIT TOTAL
+        ================================= */
+
+        let approvedDeposit = 0;
 
 
-        (deposits || []).forEach(
+        (
+            deposits || []
+        ).forEach(
             function(deposit) {
 
                 const amount =
@@ -619,7 +811,8 @@ async function loadDashboard() {
                 const status =
                     String(
                         deposit.status || ""
-                    ).toLowerCase()
+                    )
+                    .toLowerCase()
                     .trim();
 
 
@@ -689,11 +882,12 @@ async function loadDashboard() {
            APPROVED WITHDRAWALS
         ================================= */
 
-        let approvedWithdrawal =
-            0;
+        let approvedWithdrawal = 0;
 
 
-        (withdrawals || []).forEach(
+        (
+            withdrawals || []
+        ).forEach(
             function(withdrawal) {
 
                 const amount =
@@ -704,7 +898,8 @@ async function loadDashboard() {
                 const status =
                     String(
                         withdrawal.status || ""
-                    ).toLowerCase()
+                    )
+                    .toLowerCase()
                     .trim();
 
 
@@ -722,10 +917,10 @@ async function loadDashboard() {
 
 
         /* =================================
-           WALLET
+           WALLET BALANCE
            
-           Commission earned
-           MINUS approved withdrawals
+           Current wallet model:
+           Commission - Approved Withdrawal
         ================================= */
 
         const walletBalance =
@@ -748,10 +943,16 @@ async function loadDashboard() {
         ================================= */
 
         const depositCount =
-            (deposits || []).length;
+            (
+                deposits || []
+            ).length;
+
 
         const withdrawalCount =
-            (withdrawals || []).length;
+            (
+                withdrawals || []
+            ).length;
+
 
         const totalTransactions =
             depositCount +
@@ -771,6 +972,7 @@ async function loadDashboard() {
         const now =
             new Date();
 
+
         const startOfToday =
             new Date(
                 now.getFullYear(),
@@ -782,16 +984,23 @@ async function loadDashboard() {
         let todayCount = 0;
 
 
-        (deposits || []).forEach(
+        (
+            deposits || []
+        ).forEach(
             function(deposit) {
 
-                if (!deposit.created_at)
+                if (
+                    !deposit.created_at
+                ) {
                     return;
+                }
+
 
                 const date =
                     new Date(
                         deposit.created_at
                     );
+
 
                 if (
                     date >= startOfToday
@@ -805,16 +1014,23 @@ async function loadDashboard() {
         );
 
 
-        (withdrawals || []).forEach(
+        (
+            withdrawals || []
+        ).forEach(
             function(withdrawal) {
 
-                if (!withdrawal.created_at)
+                if (
+                    !withdrawal.created_at
+                ) {
                     return;
+                }
+
 
                 const date =
                     new Date(
                         withdrawal.created_at
                     );
+
 
                 if (
                     date >= startOfToday
@@ -834,8 +1050,17 @@ async function loadDashboard() {
             todayCount;
 
 
+        /* =================================
+           DEBUG
+        ================================= */
+
         console.log(
-            "Agent:",
+            "Login UID:",
+            loginUID
+        );
+
+        console.log(
+            "Matched Agent:",
             agent
         );
 
@@ -868,10 +1093,23 @@ async function loadDashboard() {
             error
         );
 
+
         document.getElementById(
             "agentName"
         ).textContent =
             "Something went wrong";
+
+
+        document.getElementById(
+            "accountStatus"
+        ).textContent =
+            "● Dashboard Error";
+
+
+        document.getElementById(
+            "accountStatus"
+        ).className =
+            "error";
 
     }
 
@@ -891,4 +1129,4 @@ document.addEventListener(
 
 </body>
 
-      </html>
+            </html>
