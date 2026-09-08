@@ -329,6 +329,13 @@ th{
                 </span>
             </div>
 
+            <div>
+                <b>Wallet Balance:</b>
+                ₹<span id="selectedBalance">
+                    0.00
+                </span>
+            </div>
+
         </div>
 
 
@@ -400,6 +407,10 @@ th{
 
         <p>
             5. Admin <b>Approve</b> ya <b>Reject</b> karega.
+        </p>
+
+        <p>
+            6. Approve hone par wallet se amount deduct hoga.
         </p>
 
     </div>
@@ -539,7 +550,8 @@ async function loadWithdrawalAgents(){
             uid,
             name,
             mobile,
-            status
+            status,
+            wallet_balance
         `)
 
         .order(
@@ -721,6 +733,14 @@ function showAgentInfo(){
         agent.status || "-";
 
 
+    document.getElementById(
+        "selectedBalance"
+    ).textContent =
+        Number(
+            agent.wallet_balance || 0
+        ).toFixed(2);
+
+
     info.style.display =
         "block";
 
@@ -747,6 +767,23 @@ document
             );
 
 
+        const agentId =
+            document.getElementById(
+                "withdrawAgent"
+            ).value;
+
+
+        const agent =
+            withdrawalAgents.find(
+                function(item){
+
+                    return String(item.id)
+                    === String(agentId);
+
+                }
+            );
+
+
         if(
             amount > 0 &&
             amount < MIN_WITHDRAWAL
@@ -766,6 +803,19 @@ document
 
             message.textContent =
                 "⚠️ Maximum withdrawal ₹50,000 hai.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        else if(
+            agent &&
+            amount > Number(agent.wallet_balance || 0)
+        ){
+
+            message.textContent =
+                "⚠️ Wallet balance insufficient hai.";
 
             message.style.color =
                 "#dc2626";
@@ -871,6 +921,49 @@ async function submitWithdrawal(event){
     }
 
 
+    const agent =
+        withdrawalAgents.find(
+            function(item){
+
+                return String(item.id)
+                === String(agentId);
+
+            }
+        );
+
+
+    if(!agent){
+
+        message.textContent =
+            "❌ Agent not found.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    const walletBalance =
+        Number(
+            agent.wallet_balance || 0
+        );
+
+
+    if(
+        amount > walletBalance
+    ){
+
+        message.textContent =
+            "⚠️ Wallet balance insufficient hai.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
     button.disabled =
         true;
 
@@ -938,6 +1031,8 @@ async function submitWithdrawal(event){
         ).style.display =
             "none";
 
+
+        await loadWithdrawalAgents();
 
         await loadWithdrawals();
 
@@ -1182,163 +1277,51 @@ async function loadWithdrawals(){
 
                 else{
 
-                    action = `
+                const {
+                data,
+                error
+            } =
+            await supabaseClient
 
-                        <span class="done">
-                            ${status}
-                        </span>
+            .from("withdrawals")
 
-                    `;
+            .update({
+                status:"Rejected"
+            })
 
-                }
+            .eq(
+                "id",
+                withdrawalId
+            )
 
-
-                table.innerHTML += `
-
-                    <tr>
-
-                        <td>
-                            ${withdrawal.id}
-                        </td>
-
-
-                        <td class="uid">
-                            ${uid}
-                        </td>
+            .select();
 
 
-                        <td>
-                            ${agentName}
-                        </td>
+            if(error){
 
+                console.error(error);
 
-                        <td class="amount">
-                            ₹${amount}
-                        </td>
+                alert(
+                    "❌ Rejection failed:\n" +
+                    error.message
+                );
 
-
-                        <td class="${getStatusClass(status)}">
-                            ${status}
-                        </td>
-
-
-                        <td>
-                            ${action}
-                        </td>
-
-                    </tr>
-
-                `;
-
+                return;
             }
-        );
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td colspan="6">
-                    ❌ Something went wrong.
-                </td>
-
-            </tr>
-
-        `;
-
-    }
-
-}
 
 
-/* =========================================
-   APPROVE / REJECT
-========================================= */
+            if(
+                !data ||
+                data.length === 0
+            ){
 
-async function updateWithdrawalStatus(
-    withdrawalId,
-    newStatus
-){
+                alert(
+                    "❌ Withdrawal reject nahi hua."
+                );
 
-    const question =
-        newStatus === "Approved"
-        ? "Approve this withdrawal?"
-        : "Reject this withdrawal?";
+                return;
+            }
 
-
-    if(
-        !confirm(question)
-    ){
-
-        return;
-    }
-
-
-    try{
-
-        const {
-            data,
-            error
-        } =
-        await supabaseClient
-
-        .from("withdrawals")
-
-        .update({
-            status:newStatus
-        })
-
-    .eq(
-            "id",
-            withdrawalId
-        )
-
-        .select();
-
-
-        if(error){
-
-            console.error(error);
-
-            alert(
-                "❌ Update failed:\n"
-                + error.message
-            );
-
-            return;
-        }
-
-
-        if(
-            !data ||
-            data.length === 0
-        ){
-
-            alert(
-                "❌ Update nahi hua.\n\n"
-                + "Supabase RLS policy check karo."
-            );
-
-            return;
-        }
-
-
-        if(
-            newStatus === "Approved"
-        ){
-
-            alert(
-                "✅ Withdrawal approved successfully."
-            );
-
-        }
-
-        else{
 
             alert(
                 "❌ Withdrawal rejected successfully."
@@ -1346,6 +1329,8 @@ async function updateWithdrawalStatus(
 
         }
 
+
+        await loadWithdrawalAgents();
 
         await loadWithdrawals();
 
@@ -1356,8 +1341,8 @@ async function updateWithdrawalStatus(
         console.error(error);
 
         alert(
-            "❌ Error:\n"
-            + error.message
+            "❌ Error:\n" +
+            error.message
         );
 
     }
