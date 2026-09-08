@@ -268,6 +268,7 @@ body{
 
 <body>
 
+
 <header>
 
 <h1>Sathi Pay - Admin</h1>
@@ -516,6 +517,16 @@ Approved deposit par <b>10%</b> commission calculate ho raha hai.
 Example: ₹1,000 approved deposit = ₹100 commission.
 </p>
 
+<p>
+Referral Team Commission:
+<br>
+Level A = <b>1%</b>
+<br>
+Level B = <b>0.5%</b>
+<br>
+Level C = <b>0.2%</b>
+</p>
+
 </div>
 
 
@@ -756,10 +767,17 @@ System Status:
 </main>
 
 
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
+
+
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
 
 const SUPABASE_URL =
 "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -774,16 +792,16 @@ SUPABASE_KEY
 );
 
 
-/* ================================
+/* =========================================
    COMMISSION RATE
-================================ */
+========================================= */
 
 const COMMISSION_RATE = 0.10;
 
 
-/* ================================
-   MONEY
-================================ */
+/* =========================================
+   MONEY FORMAT
+========================================= */
 
 function money(value){
 
@@ -793,14 +811,15 @@ Number(value || 0).toFixed(2);
 }
 
 
-/* ================================
+/* =========================================
    STATUS CLASS
-================================ */
+========================================= */
 
 function statusClass(status){
 
 const s =
 String(status || "")
+.trim()
 .toLowerCase();
 
 if(
@@ -827,9 +846,9 @@ return "pending";
 }
 
 
-/* ================================
+/* =========================================
    SEARCH AGENT
-================================ */
+========================================= */
 
 async function searchAgent(){
 
@@ -854,19 +873,27 @@ const withdrawalCard =
 document.getElementById("withdrawalHistoryCard");
 
 
-result.style.display = "none";
+/* HIDE OLD RESULT */
 
-depositCard.style.display = "none";
+result.style.display =
+"none";
 
-withdrawalCard.style.display = "none";
+depositCard.style.display =
+"none";
 
+withdrawalCard.style.display =
+"none";
+
+
+/* EMPTY UID */
 
 if(!uid){
 
 message.textContent =
 "Please enter UID.";
 
-message.style.color = "red";
+message.style.color =
+"red";
 
 return;
 
@@ -883,11 +910,13 @@ message.style.color =
 try{
 
 
-/* FIND AGENT */
+/* =========================================
+   GET ALL AGENTS
+========================================= */
 
 const {
-data:agent,
-error:agentError
+data: agents,
+error: agentError
 } =
 await supabaseClient
 
@@ -899,45 +928,75 @@ uid,
 name,
 mobile,
 status
-`)
-
-.eq("uid",uid)
-
-.maybeSingle();
+`);
 
 
 if(agentError){
 
-console.error(agentError);
+console.error(
+"Agent database error:",
+agentError
+);
 
 message.textContent =
 "Database error: " +
 agentError.message;
 
-message.style.color = "red";
+message.style.color =
+"red";
 
 return;
 
 }
 
+
+/* =========================================
+   NORMALIZED UID MATCH
+   EXTRA SPACE + CAPITALIZATION FIX
+========================================= */
+
+const agent =
+(agents || []).find(function(a){
+
+return String(a.uid || "")
+.trim()
+.toUpperCase() === uid;
+
+});
+
+
+/* AGENT NOT FOUND */
 
 if(!agent){
 
 message.textContent =
 "❌ Agent not found.";
 
-message.style.color = "red";
+message.style.color =
+"red";
+
+console.log(
+"Searching UID:",
+uid
+);
+
+console.log(
+"Available agents:",
+agents
+);
 
 return;
 
 }
 
 
-/* LOAD DEPOSITS */
+/* =========================================
+   LOAD DEPOSITS
+========================================= */
 
 const {
-data:deposits,
-error:depositError
+data: deposits,
+error: depositError
 } =
 await supabaseClient
 
@@ -949,7 +1008,10 @@ amount,
 status
 `)
 
-.eq("agent_id",agent.id)
+.eq(
+"agent_id",
+agent.id
+)
 
 .order(
 "id",
@@ -961,24 +1023,30 @@ ascending:false
 
 if(depositError){
 
-console.error(depositError);
+console.error(
+"Deposit error:",
+depositError
+);
 
 message.textContent =
 "Deposit error: " +
 depositError.message;
 
-message.style.color = "red";
+message.style.color =
+"red";
 
 return;
 
 }
 
 
-/* LOAD WITHDRAWALS */
+/* =========================================
+   LOAD WITHDRAWALS
+========================================= */
 
 const {
-data:withdrawals,
-error:withdrawalError
+data: withdrawals,
+error: withdrawalError
 } =
 await supabaseClient
 
@@ -990,7 +1058,10 @@ amount,
 status
 `)
 
-.eq("agent_id",agent.id)
+.eq(
+"agent_id",
+agent.id
+)
 
 .order(
 "id",
@@ -1002,46 +1073,61 @@ ascending:false
 
 if(withdrawalError){
 
-console.error(withdrawalError);
+console.error(
+"Withdrawal error:",
+withdrawalError
+);
 
 message.textContent =
 "Withdrawal error: " +
 withdrawalError.message;
 
-message.style.color = "red";
+message.style.color =
+"red";
 
 return;
 
 }
 
 
-/* ================================
-   CALCULATE DEPOSIT
-================================ */
+/* =========================================
+   DEPOSIT CALCULATION
+========================================= */
 
-let totalDeposit = 0;
+let totalDeposit =
+0;
 
-let pendingDeposit = 0;
+let pendingDeposit =
+0;
 
-let approvedDeposit = 0;
+let approvedDeposit =
+0;
 
 
 (deposits || []).forEach(
-deposit => {
+function(deposit){
 
 const amount =
-Number(deposit.amount || 0);
+Number(
+deposit.amount || 0
+);
 
-totalDeposit += amount;
+totalDeposit +=
+amount;
+
 
 const status =
-String(deposit.status || "")
+String(
+deposit.status || ""
+)
+.trim()
 .toLowerCase();
 
 
 if(status === "pending"){
 
-pendingDeposit += amount;
+pendingDeposit +=
+amount;
 
 }
 
@@ -1052,7 +1138,8 @@ status === "success" ||
 status === "successful"
 ){
 
-approvedDeposit += amount;
+approvedDeposit +=
+amount;
 
 }
 
@@ -1060,33 +1147,44 @@ approvedDeposit += amount;
 );
 
 
-/* ================================
-   CALCULATE WITHDRAWAL
-================================ */
+/* =========================================
+   WITHDRAWAL CALCULATION
+========================================= */
 
-let totalWithdrawal = 0;
+let totalWithdrawal =
+0;
 
-let pendingWithdrawal = 0;
+let pendingWithdrawal =
+0;
 
-let approvedWithdrawal = 0;
+let approvedWithdrawal =
+0;
 
 
 (withdrawals || []).forEach(
-withdrawal => {
+function(withdrawal){
 
 const amount =
-Number(withdrawal.amount || 0);
+Number(
+withdrawal.amount || 0
+);
 
-totalWithdrawal += amount;
+totalWithdrawal +=
+amount;
+
 
 const status =
-String(withdrawal.status || "")
+String(
+withdrawal.status || ""
+)
+.trim()
 .toLowerCase();
 
 
 if(status === "pending"){
 
-pendingWithdrawal += amount;
+pendingWithdrawal +=
+amount;
 
 }
 
@@ -1097,7 +1195,8 @@ status === "success" ||
 status === "successful"
 ){
 
-approvedWithdrawal += amount;
+approvedWithdrawal +=
+amount;
 
 }
 
@@ -1105,90 +1204,121 @@ approvedWithdrawal += amount;
 );
 
 
-/* ================================
-   COMMISSION - 10%
-================================ */
+/* =========================================
+   10% COMMISSION
+========================================= */
 
 const commission =
-approvedDeposit * COMMISSION_RATE;
+approvedDeposit *
+COMMISSION_RATE;
 
 
-/* ================================
+/* =========================================
    AGENT DETAILS
-================================ */
+========================================= */
 
-document.getElementById("rUid")
-.textContent =
+document.getElementById(
+"rUid"
+).textContent =
 agent.uid || "-";
 
 
-document.getElementById("rName")
-.textContent =
+document.getElementById(
+"rName"
+).textContent =
 agent.name || "-";
 
 
-document.getElementById("rMobile")
-.textContent =
+document.getElementById(
+"rMobile"
+).textContent =
 agent.mobile || "-";
 
 
 const statusElement =
-document.getElementById("rStatus");
+document.getElementById(
+"rStatus"
+);
 
 statusElement.textContent =
 agent.status || "-";
 
 statusElement.className =
 "detail-value " +
-statusClass(agent.status);
+statusClass(
+agent.status
+);
 
 
-/* ================================
+/* =========================================
    SUMMARY
-================================ */
+========================================= */
 
-document.getElementById("rTotalDeposit")
-.textContent =
-money(totalDeposit);
-
-
-document.getElementById("rTotalWithdrawal")
-.textContent =
-money(totalWithdrawal);
+document.getElementById(
+"rTotalDeposit"
+).textContent =
+money(
+totalDeposit
+);
 
 
-document.getElementById("rPendingDeposit")
-.textContent =
-money(pendingDeposit);
+document.getElementById(
+"rTotalWithdrawal"
+).textContent =
+money(
+totalWithdrawal
+);
 
 
-document.getElementById("rPendingWithdrawal")
-.textContent =
-money(pendingWithdrawal);
+document.getElementById(
+"rPendingDeposit"
+).textContent =
+money(
+pendingDeposit
+);
 
 
-document.getElementById("rApprovedDeposit")
-.textContent =
-money(approvedDeposit);
+document.getElementById(
+"rPendingWithdrawal"
+).textContent =
+money(
+pendingWithdrawal
+);
 
 
-document.getElementById("rApprovedWithdrawal")
-.textContent =
-money(approvedWithdrawal);
+document.getElementById(
+"rApprovedDeposit"
+).textContent =
+money(
+approvedDeposit
+);
 
 
-document.getElementById("rCommission")
-.textContent =
-money(commission);
+document.getElementById(
+"rApprovedWithdrawal"
+).textContent =
+money(
+approvedWithdrawal
+);
 
+
+document.getElementById(
+"rCommission"
+).textContent =
+money(
+commission
+);
+
+
+/* SHOW RESULT */
 
 result.style.display =
 "block";
 
 
-/* ================================
-   DEPOSIT TABLE
-================================ */
+/* =========================================
+   DEPOSIT HISTORY TABLE
+========================================= */
 
 const depositTable =
 document.getElementById(
@@ -1217,12 +1347,14 @@ No deposits found
 
 depositTable.innerHTML =
 deposits.map(
-deposit => {
+function(deposit){
 
 const status =
 String(
 deposit.status || ""
-).toLowerCase();
+)
+.trim()
+.toLowerCase();
 
 let action = "";
 
@@ -1298,9 +1430,9 @@ depositCard.style.display =
 "block";
 
 
-/* ================================
-   WITHDRAWAL TABLE
-================================ */
+/* =========================================
+   WITHDRAWAL HISTORY TABLE
+========================================= */
 
 const withdrawalTable =
 document.getElementById(
@@ -1329,12 +1461,14 @@ No withdrawals found
 
 withdrawalTable.innerHTML =
 withdrawals.map(
-withdrawal => {
+function(withdrawal){
 
 const status =
 String(
 withdrawal.status || ""
-).toLowerCase();
+)
+.trim()
+.toLowerCase();
 
 let action = "";
 
@@ -1410,6 +1544,8 @@ withdrawalCard.style.display =
 "block";
 
 
+/* SUCCESS MESSAGE */
+
 message.textContent =
 "✅ Agent found successfully.";
 
@@ -1419,22 +1555,26 @@ message.style.color =
 
 }catch(error){
 
-console.error(error);
+console.error(
+"Search error:",
+error
+);
 
 message.textContent =
 "Error: " +
 error.message;
 
-message.style.color = "red";
+message.style.color =
+"red";
 
 }
 
 }
 
 
-/* ================================
+/* =========================================
    UPDATE DEPOSIT STATUS
-================================ */
+========================================= */
 
 async function updateDepositStatus(
 depositId,
@@ -1469,7 +1609,10 @@ await supabaseClient
 status:newStatus
 })
 
-.eq("id",depositId);
+.eq(
+"id",
+depositId
+);
 
 
 if(error){
@@ -1499,7 +1642,6 @@ await searchAgent();
 
 await loadAdminTotals();
 
-
 }catch(error){
 
 console.error(error);
@@ -1514,9 +1656,9 @@ error.message
 }
 
 
-/* ================================
+/* =========================================
    UPDATE WITHDRAWAL STATUS
-================================ */
+========================================= */
 
 async function updateWithdrawalStatus(
 withdrawalId,
@@ -1551,7 +1693,10 @@ await supabaseClient
 status:newStatus
 })
 
-.eq("id",withdrawalId);
+.eq(
+"id",
+withdrawalId
+);
 
 
 if(error){
@@ -1581,7 +1726,6 @@ await searchAgent();
 
 await loadAdminTotals();
 
-
 }catch(error){
 
 console.error(error);
@@ -1596,16 +1740,18 @@ error.message
 }
 
 
-/* ================================
+/* =========================================
    ADMIN TOTALS
-================================ */
+========================================= */
 
 async function loadAdminTotals(){
 
 try{
 
 
-/* AGENTS */
+/* =========================================
+   TOTAL AGENTS
+========================================= */
 
 const {
 count:agentCount,
@@ -1634,7 +1780,9 @@ agentCount || 0;
 }
 
 
-/* DEPOSITS */
+/* =========================================
+   TOTAL DEPOSITS
+========================================= */
 
 const {
 data:deposits,
@@ -1652,29 +1800,41 @@ status
 
 if(depositError){
 
-console.error(depositError);
+console.error(
+"Admin deposit error:",
+depositError
+);
 
 }else{
 
-let totalDeposits = 0;
+let totalDeposits =
+0;
 
-let pendingDeposits = 0;
+let pendingDeposits =
+0;
 
-let approvedDeposits = 0;
+let approvedDeposits =
+0;
 
 
 (deposits || []).forEach(
-deposit => {
+function(deposit){
 
 const amount =
-Number(deposit.amount || 0);
+Number(
+deposit.amount || 0
+);
 
-totalDeposits += amount;
+totalDeposits +=
+amount;
+
 
 const status =
 String(
 deposit.status || ""
-).toLowerCase();
+)
+.trim()
+.toLowerCase();
 
 
 if(status === "pending"){
@@ -1690,7 +1850,8 @@ status === "success" ||
 status === "successful"
 ){
 
-approvedDeposits += amount;
+approvedDeposits +=
+amount;
 
 }
 
@@ -1701,7 +1862,9 @@ approvedDeposits += amount;
 document.getElementById(
 "totalDeposits"
 ).textContent =
-money(totalDeposits);
+money(
+totalDeposits
+);
 
 
 document.getElementById(
@@ -1710,7 +1873,7 @@ document.getElementById(
 pendingDeposits;
 
 
-/* TOTAL COMMISSION = 10% */
+/* 10% COMMISSION */
 
 const totalCommission =
 approvedDeposits *
@@ -1720,126 +1883,11 @@ COMMISSION_RATE;
 document.getElementById(
 "totalCommission"
 ).textContent =
-money(totalCommission);
-
-}
-
-
-/* WITHDRAWALS */
-
-const {
-data:withdrawals,
-error:withdrawalError
-} =
-await supabaseClient
-
-.from("withdrawals")
-
-.select(`
-amount,
-status
-`);
-
-
-if(withdrawalError){
-
-console.error(withdrawalError);
-
-}else{
-
-let totalWithdrawals = 0;
-
-let pendingWithdrawals = 0;
-
-
-(withdrawals || []).forEach(
-withdrawal => {
-
-const amount =
-Number(withdrawal.amount || 0);
-
-totalWithdrawals += amount;
-
-const status =
-String(
-withdrawal.status || ""
-).toLowerCase();
-
-
-if(status === "pending"){
-
-pendingWithdrawals++;
-
-}
-
-}
-);
-
-
-document.getElementById(
-"totalWithdrawals"
-).textContent =
-money(totalWithdrawals);
-
-
-document.getElementById(
-"pendingWithdrawals"
-).textContent =
-pendingWithdrawals;
-
-}
-
-
-}catch(error){
-
-console.error(
-"Admin totals error:",
-error
+money(
+totalCommission
 );
 
 }
 
-}
 
-
-/* ================================
-   SEARCH BUTTON
-================================ */
-
-document.getElementById(
-"searchButton"
-).addEventListener(
-"click",
-searchAgent
-);
-
-
-/* ENTER KEY SEARCH */
-
-document.getElementById(
-"uidInput"
-).addEventListener(
-"keydown",
-function(event){
-
-if(event.key === "Enter"){
-
-searchAgent();
-
-}
-
-}
-);
-
-
-/* ================================
-   LOAD TOTALS ON PAGE OPEN
-================================ */
-
-loadAdminTotals();
-
-</script>
-
-</body>
-
-    </html>
+/* =
