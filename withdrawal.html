@@ -100,10 +100,14 @@ input:focus{
     font-weight:bold;
 }
 
-.limit-info{
-    margin-top:8px;
-    color:#64748b;
-    font-size:14px;
+.limit-box{
+    margin-top:10px;
+    padding:12px;
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    border-radius:9px;
+    color:#1e40af;
+    font-weight:bold;
 }
 
 .submit-btn{
@@ -241,11 +245,8 @@ th{
 
 </head>
 
-
 <body>
 
-
-<!-- HEADER -->
 
 <div class="header">
 
@@ -291,8 +292,6 @@ th{
 
         </select>
 
-
-        <!-- AGENT INFORMATION -->
 
         <div
             id="agentInfo"
@@ -348,10 +347,17 @@ th{
             required
         >
 
-        <div class="limit-info">
-            Minimum withdrawal: <b>₹110</b>
+
+        <div class="limit-box">
+
+            Minimum withdrawal:
+            ₹110
+
             &nbsp; | &nbsp;
-            Maximum withdrawal: <b>₹50,000</b>
+
+            Maximum withdrawal:
+            ₹50,000
+
         </div>
 
 
@@ -401,7 +407,6 @@ th{
 </div>
 
 
-
 <!-- WITHDRAWAL HISTORY -->
 
 <div class="card">
@@ -419,29 +424,17 @@ th{
 
                 <tr>
 
-                    <th>
-                        ID
-                    </th>
+                    <th>ID</th>
 
-                    <th>
-                        UID
-                    </th>
+                    <th>UID</th>
 
-                    <th>
-                        Agent
-                    </th>
+                    <th>Agent</th>
 
-                    <th>
-                        Amount
-                    </th>
+                    <th>Amount</th>
 
-                    <th>
-                        Status
-                    </th>
+                    <th>Status</th>
 
-                    <th>
-                        Action
-                    </th>
+                    <th>Action</th>
 
                 </tr>
 
@@ -498,6 +491,15 @@ window.supabase.createClient(
 
 
 /* =========================================
+   WITHDRAWAL LIMIT
+========================================= */
+
+const MIN_WITHDRAWAL = 110;
+
+const MAX_WITHDRAWAL = 50000;
+
+
+/* =========================================
    GLOBAL AGENTS
 ========================================= */
 
@@ -505,7 +507,7 @@ let withdrawalAgents = [];
 
 
 /* =========================================
-   LOAD ACTIVE AGENTS
+   LOAD AGENTS
 ========================================= */
 
 async function loadWithdrawalAgents(){
@@ -540,11 +542,6 @@ async function loadWithdrawalAgents(){
             status
         `)
 
-        .eq(
-            "status",
-            "Active"
-        )
-
         .order(
             "name",
             {
@@ -555,7 +552,10 @@ async function loadWithdrawalAgents(){
 
         if(error){
 
-            console.error(error);
+            console.error(
+                "Agents error:",
+                error
+            );
 
             select.innerHTML =
                 `<option value="">
@@ -576,7 +576,7 @@ async function loadWithdrawalAgents(){
 
             select.innerHTML =
                 `<option value="">
-                    No active agents found
+                    No agents found
                 </option>`;
 
             return;
@@ -617,11 +617,20 @@ async function loadWithdrawalAgents(){
             }
         );
 
+
+        console.log(
+            "Agents loaded:",
+            withdrawalAgents.length
+        );
+
     }
 
     catch(error){
 
-        console.error(error);
+        console.error(
+            "Agents exception:",
+            error
+        );
 
         select.innerHTML =
             `<option value="">
@@ -719,6 +728,62 @@ function showAgentInfo(){
 
 
 /* =========================================
+   AMOUNT VALIDATION
+========================================= */
+
+document
+.getElementById("withdrawAmount")
+.addEventListener(
+    "input",
+    function(){
+
+        const amount =
+            Number(this.value);
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        if(
+            amount > 0 &&
+            amount < MIN_WITHDRAWAL
+        ){
+
+            message.textContent =
+                "⚠️ Minimum withdrawal ₹110 hai.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        else if(
+            amount > MAX_WITHDRAWAL
+        ){
+
+            message.textContent =
+                "⚠️ Maximum withdrawal ₹50,000 hai.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        else{
+
+            message.textContent =
+                "";
+
+        }
+
+    }
+);
+
+
+/* =========================================
    SUBMIT WITHDRAWAL
 ========================================= */
 
@@ -765,50 +830,42 @@ async function submitWithdrawal(event){
         "";
 
 
-    /* =====================================
-       AGENT VALIDATION
-    ===================================== */
-
     if(!agentId){
 
         message.textContent =
-            "❌ Please select an agent.";
+            "⚠️ Please select an agent.";
 
         message.style.color =
-            "red";
+            "#dc2626";
 
         return;
     }
 
-
-    /* =====================================
-       AMOUNT VALIDATION
-    ===================================== */
 
     if(
         !amount ||
-        amount < 110
+        amount < MIN_WITHDRAWAL
     ){
 
         message.textContent =
-            "❌ Minimum withdrawal ₹110 hai.";
+            "⚠️ Minimum withdrawal ₹110 hai.";
 
         message.style.color =
-            "red";
+            "#dc2626";
 
         return;
     }
 
 
     if(
-        amount > 50000
+        amount > MAX_WITHDRAWAL
     ){
 
         message.textContent =
-            "❌ Maximum withdrawal ₹50,000 hai.";
+            "⚠️ Maximum withdrawal ₹50,000 hai.";
 
         message.style.color =
-            "red";
+            "#dc2626";
 
         return;
     }
@@ -851,7 +908,7 @@ async function submitWithdrawal(event){
                 + error.message;
 
             message.style.color =
-                "red";
+                "#dc2626";
 
             return;
         }
@@ -861,7 +918,7 @@ async function submitWithdrawal(event){
             "✅ Withdrawal submitted successfully!";
 
         message.style.color =
-            "green";
+            "#15803d";
 
 
         document.getElementById(
@@ -894,7 +951,7 @@ async function submitWithdrawal(event){
             "❌ Something went wrong.";
 
         message.style.color =
-            "red";
+            "#dc2626";
 
     }
 
@@ -1085,14 +1142,17 @@ async function loadWithdrawals(){
 
 
                 const statusLower =
-                    String(status).toLowerCase();
+                    String(
+                        status
+                    ).toLowerCase();
 
 
                 let action = "";
 
 
                 if(
-                    statusLower === "pending"
+                    statusLower ===
+                    "pending"
                 ){
 
                     action = `
@@ -1197,7 +1257,7 @@ async function loadWithdrawals(){
 
 
 /* =========================================
-   APPROVE / REJECT WITHDRAWAL
+   APPROVE / REJECT
 ========================================= */
 
 async function updateWithdrawalStatus(
@@ -1233,7 +1293,7 @@ async function updateWithdrawalStatus(
             status:newStatus
         })
 
-        .eq(
+    .eq(
             "id",
             withdrawalId
         )
@@ -1297,10 +1357,8 @@ async function updateWithdrawalStatus(
 
         alert(
             "❌ Error:\n"
-                + error.message
-            );
-
-        }
+            + error.message
+        );
 
     }
 
@@ -1322,196 +1380,7 @@ document.addEventListener(
     }
 );
 
-
-/* =========================================
-   WITHDRAWAL LIMIT
-========================================= */
-
-const MIN_WITHDRAWAL = 110;
-const MAX_WITHDRAWAL = 50000;
-
-
-/* =========================================
-   EXTRA VALIDATION
-========================================= */
-
-document
-.getElementById("withdrawAmount")
-.addEventListener(
-    "input",
-    function(){
-
-        const amount =
-            Number(this.value);
-
-        const message =
-            document.getElementById(
-                "message"
-            );
-
-        if(
-            amount > 0 &&
-            amount < MIN_WITHDRAWAL
-        ){
-
-            message.textContent =
-                "⚠️ Minimum withdrawal ₹110 hai.";
-
-            message.style.color =
-                "#dc2626";
-
-        }
-
-        else if(
-            amount > MAX_WITHDRAWAL
-        ){
-
-            message.textContent =
-                "⚠️ Maximum withdrawal ₹50,000 hai.";
-
-            message.style.color =
-                "#dc2626";
-
-        }
-
-        else{
-
-            message.textContent =
-                "";
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   FINAL SUBMIT LIMIT CHECK
-========================================= */
-
-const originalSubmitWithdrawal =
-    submitWithdrawal;
-
-
-/*
-   Limit check form submit se pehle
-*/
-
-document
-.getElementById("withdrawalForm")
-.removeEventListener(
-    "submit",
-    submitWithdrawal
-);
-
-
-document
-.getElementById("withdrawalForm")
-.addEventListener(
-    "submit",
-    async function(event){
-
-        event.preventDefault();
-
-
-        const amount =
-            Number(
-                document.getElementById(
-                    "withdrawAmount"
-                ).value
-            );
-
-
-        const message =
-            document.getElementById(
-                "message"
-            );
-
-
-        if(
-            !amount ||
-            amount <= 0
-        ){
-
-            message.textContent =
-                "⚠️ Please enter a valid amount.";
-
-            message.style.color =
-                "#dc2626";
-
-            return;
-
-        }
-
-
-        if(
-            amount < MIN_WITHDRAWAL
-        ){
-
-            message.textContent =
-                "⚠️ Minimum withdrawal ₹110 hai.";
-
-            message.style.color =
-                "#dc2626";
-
-            return;
-
-        }
-
-
-        if(
-            amount > MAX_WITHDRAWAL
-        ){
-
-            message.textContent =
-                "⚠️ Maximum withdrawal ₹50,000 hai.";
-
-            message.style.color =
-                "#dc2626";
-
-            return;
-
-        }
-
-
-        /*
-           Original withdrawal function
-        */
-
-        await originalSubmitWithdrawal(
-            event
-        );
-
-    }
-);
-
-
-/* =========================================
-   PAGE READY
-========================================= */
-
-console.log(
-    "================================="
-);
-
-console.log(
-    "SATHI PAY WITHDRAWAL READY"
-);
-
-console.log(
-    "Minimum Withdrawal: ₹110"
-);
-
-console.log(
-    "Maximum Withdrawal: ₹50,000"
-);
-
-console.log(
-    "================================="
-);
-
 </script>
-
 
 </body>
 
