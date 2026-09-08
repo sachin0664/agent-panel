@@ -782,6 +782,8 @@ async function loadDashboard() {
             "Agent:",
             agent
         );
+          localStorage.setItem("sathiPayAgentId", agent.id);
+localStorage.setItem("sathiPayUID", agent.uid);
 
 
         if (!agent) {
