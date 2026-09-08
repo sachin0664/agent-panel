@@ -4,11 +4,12 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Admin</title>
 
-<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -18,128 +19,175 @@
 
 body{
     margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f8;
+    color:#222;
 }
 
-.uid-search,
-.agent-result,
-.history-card,
-.status{
-    background:#fff;
-    padding:20px;
-    border-radius:14px;
-    box-shadow:0 3px 10px rgba(0,0,0,.10);
-    margin-bottom:25px;
-}
-
-.uid-search h3,
-.agent-result h3,
-.history-card h3{
-    margin-top:0;
-    color:#1565c0;
-}
-
-.uid-input-row{
+header{
+    background:#222;
+    color:white;
+    padding:22px 20px;
     display:flex;
-    gap:10px;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.uid-input-row input{
-    flex:1;
-    width:100%;
-    padding:15px;
-    border:1px solid #ccc;
-    border-radius:9px;
-    font-size:16px;
-    min-width:0;
-    outline:none;
+header h1{
+    margin:0;
+    font-size:26px;
 }
 
-.uid-input-row input:focus{
-    border-color:#1565c0;
+header a{
+    color:white;
+    text-decoration:none;
 }
 
-.uid-input-row button{
-    padding:15px 25px;
-    border:0;
-    border-radius:9px;
-    background:#1565c0;
-    color:#fff;
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+h2{
+    margin-top:0;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.search-title{
+    color:#1565c0;
+    font-size:22px;
     font-weight:bold;
-    font-size:16px;
+    margin-bottom:15px;
+}
+
+input{
+    width:100%;
+    padding:16px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+button{
+    width:100%;
+    padding:16px;
+    border:0;
+    border-radius:10px;
+    background:#1565c0;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
     cursor:pointer;
     position:relative;
     z-index:9999;
     pointer-events:auto;
 }
 
-.uid-input-row button:active{
-    transform:scale(.98);
+button:active{
+    transform:scale(.99);
 }
 
-#uidMessage{
-    margin-top:12px;
+.message{
+    margin-top:15px;
+    padding:12px;
+    border-radius:8px;
     font-weight:bold;
-    text-align:center;
 }
 
-.agent-result,
-.history-card{
-    display:none;
-}
-
-.detail-row{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    padding:12px 0;
-    border-bottom:1px solid #eee;
-}
-
-.detail-label{
-    font-weight:bold;
-    color:#555;
-}
-
-.detail-value{
-    text-align:right;
-    color:#222;
-    word-break:break-word;
-}
-
-.summary-box{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    margin-top:20px;
-}
-
-.summary-item{
-    padding:15px;
-    border-radius:10px;
-    background:#f8fafc;
-    border:1px solid #e5e7eb;
-}
-
-.summary-item p{
-    margin:0 0 6px;
-    color:#64748b;
-}
-
-.summary-item strong{
-    font-size:20px;
-}
-
-.deposit-money{
+.success{
+    background:#e8f5e9;
     color:#15803d;
 }
 
-.withdraw-money{
-    color:#dc2626;
+.error{
+    background:#ffebee;
+    color:#c62828;
 }
 
-.pending{
-    color:#b45309;
+.info{
+    background:#e3f2fd;
+    color:#1565c0;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.stat-title{
+    color:#1565c0;
     font-weight:bold;
+    font-size:18px;
+}
+
+.stat-value{
+    font-size:28px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.result{
+    margin-top:20px;
+}
+
+.agent-box{
+    background:#f8fafc;
+    border-radius:12px;
+    padding:18px;
+}
+
+.agent-row{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:10px 0;
+    border-bottom:1px solid #ddd;
+}
+
+.agent-row:last-child{
+    border-bottom:0;
+}
+
+.label{
+    font-weight:bold;
+}
+
+.uid{
+    color:#1565c0;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    padding:12px 8px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+}
+
+th{
+    background:#e3eaf2;
 }
 
 .approved{
@@ -147,122 +195,28 @@ body{
     font-weight:bold;
 }
 
-.failed{
+.pending{
+    color:#b45309;
+    font-weight:bold;
+}
+
+.rejected{
     color:#dc2626;
     font-weight:bold;
 }
 
-.table-box{
-    width:100%;
-    overflow-x:auto;
-}
-
-.history-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-.history-table th,
-.history-table td{
-    padding:11px;
-    border-bottom:1px solid #ddd;
-    text-align:left;
-}
-
-.history-table th{
-    background:#e5e7eb;
-}
-
-.action-box{
-    display:flex;
-    gap:7px;
-    flex-wrap:wrap;
-}
-
-.action-btn{
-    border:0;
-    padding:9px 12px;
-    border-radius:7px;
-    color:#fff;
-    font-weight:bold;
-    cursor:pointer;
-    font-size:13px;
-}
-
-.approve-btn{
-    background:#16a34a;
-}
-
-.reject-btn{
-    background:#dc2626;
-}
-
-.action-done{
-    font-weight:bold;
-}
-
-.admin-menu{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
-    margin-top:20px;
-}
-
-.admin-menu a{
-    display:block;
-    width:100%;
-    padding:18px 20px;
-    background:#fff;
-    border-radius:12px;
-    text-decoration:none;
-    font-size:18px;
-    font-weight:bold;
-    color:#1565c0;
-    box-shadow:0 3px 10px rgba(0,0,0,.10);
-}
-
-.status{
-    margin-top:25px;
-}
-
-.commission-info{
-    margin-top:20px;
-    padding:16px;
-    background:#f0fdf4;
-    border:1px solid #bbf7d0;
-    border-radius:10px;
-}
-
-.commission-info h4{
-    margin:0 0 8px;
-    color:#15803d;
-}
-
 @media(max-width:600px){
 
-    .uid-input-row{
-        flex-direction:column;
-    }
-
-    .uid-input-row input,
-    .uid-input-row button{
-        width:100%;
-    }
-
-    .detail-row{
-        flex-direction:column;
-    }
-
-    .detail-value{
-        text-align:left;
-    }
-
-    .summary-box{
+    .stats{
         grid-template-columns:1fr;
     }
 
-    .history-table{
-        min-width:700px;
+    .container{
+        padding:12px;
+    }
+
+    header h1{
+        font-size:22px;
     }
 
 }
@@ -271,39 +225,44 @@ body{
 
 </head>
 
+
 <body>
+
 
 <header>
 
 <h1>Sathi Pay - Admin</h1>
 
-<a href="index.html">
-Logout
+<a href="admin.html">
+Dashboard
 </a>
 
 </header>
 
 
-<main class="container">
+<div class="container">
 
 
 <h2>📊 Admin Dashboard</h2>
 
 
-<!-- UID SEARCH -->
+<!-- SEARCH -->
 
-<div class="uid-search">
+<div class="card">
 
-<h3>🔎 Search Agent by UID</h3>
+<div class="search-title">
+🔎 Search Agent by UID
+</div>
 
-<div class="uid-input-row">
 
 <input
 type="text"
 id="uidInput"
 placeholder="Enter Agent UID"
+value=""
 autocomplete="off"
 >
+
 
 <button
 type="button"
@@ -313,245 +272,90 @@ onclick="searchAgent()"
 Search
 </button>
 
-</div>
 
-<div id="uidMessage"></div>
-
-</div>
-
-
-<!-- AGENT RESULT -->
-
-<div id="agentResult" class="agent-result">
-
-<h3>👤 Agent Details</h3>
-
-<div class="detail-row">
-<span class="detail-label">UID</span>
-<span class="detail-value" id="rUid">-</span>
-</div>
-
-<div class="detail-row">
-<span class="detail-label">Name</span>
-<span class="detail-value" id="rName">-</span>
-</div>
-
-<div class="detail-row">
-<span class="detail-label">Mobile</span>
-<span class="detail-value" id="rMobile">-</span>
-</div>
-
-<div class="detail-row">
-<span class="detail-label">Status</span>
-<span class="detail-value" id="rStatus">-</span>
+<div
+id="message"
+class="message info"
+>
+Ready to search.
 </div>
 
 
-<div class="summary-box">
-
-<div class="summary-item">
-<p>💰 Total Deposit</p>
-<strong class="deposit-money" id="rTotalDeposit">₹0.00</strong>
+<div
+id="searchResult"
+class="result"
+>
 </div>
 
-<div class="summary-item">
-<p>💸 Total Withdrawal</p>
-<strong class="withdraw-money" id="rTotalWithdrawal">₹0.00</strong>
+
 </div>
 
-<div class="summary-item">
-<p>⏳ Pending Deposit</p>
-<strong id="rPendingDeposit">₹0.00</strong>
+
+<!-- TOTALS -->
+
+<div class="stats">
+
+
+<div class="stat">
+
+<div class="stat-title">
+👥 Total Agents
 </div>
 
-<div class="summary-item">
-<p>⏳ Pending Withdrawal</p>
-<strong id="rPendingWithdrawal">₹0.00</strong>
-</div>
-
-<div class="summary-item">
-<p>✅ Approved Deposit</p>
-<strong class="deposit-money" id="rApprovedDeposit">₹0.00</strong>
-</div>
-
-<div class="summary-item">
-<p>✅ Approved Withdrawal</p>
-<strong class="withdraw-money" id="rApprovedWithdrawal">₹0.00</strong>
-</div>
-
-<div class="summary-item">
-<p>💵 Commission</p>
-<strong class="deposit-money" id="rCommission">₹0.00</strong>
+<div
+class="stat-value"
+id="totalAgents"
+>
+0
 </div>
 
 </div>
 
 
-<div class="commission-info">
+<div class="stat">
 
-<h4>💵 Commission Rule</h4>
+<div class="stat-title">
+💰 Total Deposits
+</div>
 
-<p>
-Approved deposit par <b>10%</b> commission.
-</p>
-
-<p>
-₹1,000 approved deposit = ₹100 commission.
-</p>
-
+<div
+class="stat-value"
+id="totalDeposits"
+>
+₹0.00
 </div>
 
 </div>
 
 
-<!-- DEPOSIT HISTORY -->
+<div class="stat">
 
-<div id="depositHistoryCard" class="history-card">
+<div class="stat-title">
+💸 Total Withdrawals
+</div>
 
-<h3>💰 Deposit History</h3>
-
-<div class="table-box">
-
-<table class="history-table">
-
-<thead>
-
-<tr>
-<th>ID</th>
-<th>Amount</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-
-</thead>
-
-<tbody id="agentDepositTable">
-
-<tr>
-<td colspan="4">No deposits found</td>
-</tr>
-
-</tbody>
-
-</table>
-
+<div
+class="stat-value"
+id="totalWithdrawals"
+>
+₹0.00
 </div>
 
 </div>
 
 
-<!-- WITHDRAWAL HISTORY -->
-
-<div id="withdrawalHistoryCard" class="history-card">
-
-<h3>💸 Withdrawal History</h3>
-
-<div class="table-box">
-
-<table class="history-table">
-
-<thead>
-
-<tr>
-<th>ID</th>
-<th>Amount</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-
-</thead>
-
-<tbody id="agentWithdrawalTable">
-
-<tr>
-<td colspan="4">No withdrawals found</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
 </div>
 
 
-<!-- ADMIN TOTALS -->
-
-<div class="dashboard-grid">
-
-<div class="card">
-<h3>👥 Total Agents</h3>
-<p id="totalAgents">0</p>
 </div>
-
-<div class="card">
-<h3>💰 Total Deposits</h3>
-<p id="totalDeposits">₹0.00</p>
-</div>
-
-<div class="card">
-<h3>💸 Total Withdrawals</h3>
-<p id="totalWithdrawals">₹0.00</p>
-</div>
-
-<div class="card">
-<h3>💵 Total Commission</h3>
-<p id="totalCommission">₹0.00</p>
-</div>
-
-<div class="card">
-<h3>⏳ Pending Deposits</h3>
-<p id="pendingDeposits">0</p>
-</div>
-
-<div class="card">
-<h3>⏳ Pending Withdrawals</h3>
-<p id="pendingWithdrawals">0</p>
-</div>
-
-</div>
-
-
-<h2>⚙️ Admin Menu</h2>
-
-<div class="admin-menu">
-
-<a href="agents.html">👥 Agent Management</a>
-
-<a href="deposit.html">💰 Deposit</a>
-
-<a href="withdrawal.html">💸 Withdrawal</a>
-
-<a href="commission.html">💵 Commission</a>
-
-<a href="transactions.html">🧾 Transactions</a>
-
-</div>
-
-
-<div class="status">
-
-<b>System Status:</b>
-
-<p>🟢 Online</p>
-
-</div>
-
-
-</main>
-
-
-<!-- SUPABASE -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
 
-/* =========================================
-   SUPABASE CONNECTION
-========================================= */
+
+/* =====================================
+   SUPABASE
+===================================== */
 
 const SUPABASE_URL =
 "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -566,463 +370,332 @@ SUPABASE_KEY
 );
 
 
-/* =========================================
-   COMMISSION
-========================================= */
+/* =====================================
+   ELEMENTS
+===================================== */
 
-const COMMISSION_RATE = 0.10;
+const uidInput =
+document.getElementById("uidInput");
 
+const searchButton =
+document.getElementById("searchButton");
 
-/* =========================================
-   MONEY
-========================================= */
+const message =
+document.getElementById("message");
 
-function money(value){
-
-return "₹" +
-Number(value || 0).toFixed(2);
-
-}
+const searchResult =
+document.getElementById("searchResult");
 
 
-/* =========================================
-   STATUS
-========================================= */
+/* =====================================
+   NORMALIZE UID
+===================================== */
 
-function statusClass(status){
+function normalizeUID(uid){
 
-const s =
-String(status || "").toLowerCase();
-
-if(
-s === "approved" ||
-s === "success" ||
-s === "successful"
-){
-
-return "approved";
-
-}
-
-if(
-s === "rejected" ||
-s === "failed"
-){
-
-return "failed";
-
-}
-
-return "pending";
+return String(uid || "")
+.trim()
+.toUpperCase()
+.replace(/\s+/g,"");
 
 }
 
 
-/* =========================================
+/* =====================================
    SEARCH AGENT
-========================================= */
+===================================== */
 
 async function searchAgent(){
 
-const input =
-document.getElementById("uidInput");
-
-const message =
-document.getElementById("uidMessage");
-
-const result =
-document.getElementById("agentResult");
-
-const depositCard =
-document.getElementById("depositHistoryCard");
-
-const withdrawalCard =
-document.getElementById("withdrawalHistoryCard");
+const enteredUID =
+normalizeUID(uidInput.value);
 
 
-const uid =
-input.value.trim().toUpperCase();
+searchResult.innerHTML = "";
 
 
-result.style.display = "none";
+if(!enteredUID){
 
-depositCard.style.display = "none";
-
-withdrawalCard.style.display = "none";
-
-
-if(!uid){
+message.className =
+"message error";
 
 message.textContent =
-"❌ UID enter karo.";
-
-message.style.color = "red";
+"❌ Please enter Agent UID.";
 
 return;
 
 }
 
 
+message.className =
+"message info";
+
 message.textContent =
 "🔎 Searching...";
-
-message.style.color =
-"#1565c0";
 
 
 try{
 
 
-/* =========================================
-   FIND AGENT
-========================================= */
+/* =====================================
+   GET ALL AGENTS
+===================================== */
 
-const response =
+const {
+data:agents,
+error:agentError
+} =
 await supabaseClient
 
 .from("agents")
 
 .select(
 "id,uid,name,mobile,status"
-)
-
-.eq("uid",uid)
-
-.limit(1)
-
-.maybeSingle();
-
-
-const agent =
-response.data;
-
-const agentError =
-response.error;
+);
 
 
 if(agentError){
 
 console.error(
-"AGENT ERROR:",
+"Agent error:",
 agentError
 );
+
+message.className =
+"message error";
 
 message.textContent =
 "❌ Database error: " +
 agentError.message;
 
-message.style.color = "red";
+return;
+
+}
+
+
+if(!agents){
+
+message.className =
+"message error";
+
+message.textContent =
+"❌ No agent data received.";
 
 return;
 
 }
+
+
+/* =====================================
+   FIND UID
+===================================== */
+
+const agent =
+agents.find(
+item =>
+normalizeUID(item.uid) === enteredUID
+);
 
 
 if(!agent){
 
+message.className =
+"message error";
+
 message.textContent =
 "❌ Agent not found.";
 
-message.style.color = "red";
+console.log(
+"Entered UID:",
+enteredUID
+);
+
+console.log(
+"Database agents:",
+agents
+);
 
 return;
 
 }
 
 
-/* =========================================
-   DEPOSITS
-========================================= */
+/* =====================================
+   AGENT FOUND
+===================================== */
 
-const depositResponse =
+message.className =
+"message success";
+
+message.textContent =
+"✅ Agent found successfully.";
+
+
+/* =====================================
+   GET DEPOSITS
+===================================== */
+
+const {
+data:deposits,
+error:depositError
+} =
 await supabaseClient
 
 .from("deposits")
 
-.select(
-"id,agent_id,amount,status"
-)
+.select("*")
 
-.eq("agent_id",agent.id)
-
-.order(
-"id",
-{
-ascending:false
-}
+.eq(
+"agent_id",
+agent.id
 );
-
-
-const deposits =
-depositResponse.data || [];
-
-const depositError =
-depositResponse.error;
 
 
 if(depositError){
 
 console.error(
-"DEPOSIT ERROR:",
+"Deposit error:",
 depositError
 );
+
+message.className =
+"message error";
 
 message.textContent =
 "❌ Deposit error: " +
 depositError.message;
 
-message.style.color = "red";
-
 return;
 
 }
 
 
-/* =========================================
-   WITHDRAWALS
-========================================= */
+/* =====================================
+   GET WITHDRAWALS
+===================================== */
 
-const withdrawalResponse =
+const {
+data:withdrawals,
+error:withdrawalError
+} =
 await supabaseClient
 
 .from("withdrawals")
 
-.select(
-"id,agent_id,amount,status"
-)
+.select("*")
 
-.eq("agent_id",agent.id)
-
-.order(
-"id",
-{
-ascending:false
-}
+.eq(
+"agent_id",
+agent.id
 );
-
-
-const withdrawals =
-withdrawalResponse.data || [];
-
-const withdrawalError =
-withdrawalResponse.error;
 
 
 if(withdrawalError){
 
 console.error(
-"WITHDRAWAL ERROR:",
+"Withdrawal error:",
 withdrawalError
 );
+
+message.className =
+"message error";
 
 message.textContent =
 "❌ Withdrawal error: " +
 withdrawalError.message;
-
-message.style.color = "red";
 
 return;
 
 }
 
 
-/* =========================================
-   DEPOSIT CALCULATION
-========================================= */
+/* =====================================
+   DEPOSIT TOTAL
+===================================== */
 
-let totalDeposit = 0;
+let approvedDeposit =
+0;
 
-let pendingDeposit = 0;
+let totalDeposit =
+0;
 
-let approvedDeposit = 0;
 
-
-deposits.forEach(
+(deposits || []).forEach(
 deposit => {
 
 const amount =
-Number(deposit.amount || 0);
+Number(
+deposit.amount || 0
+);
 
 totalDeposit += amount;
 
-const status =
-String(
-deposit.status || ""
-).toLowerCase();
-
-
-if(status === "pending"){
-
-pendingDeposit += amount;
-
-}
-
 
 if(
-status === "approved" ||
-status === "success" ||
-status === "successful"
+String(
+deposit.status || ""
+).toLowerCase() ===
+"approved"
 ){
 
 approvedDeposit += amount;
 
 }
 
-}
-);
+});
 
 
-/* =========================================
-   WITHDRAWAL CALCULATION
-========================================= */
+/* =====================================
+   COMMISSION 10%
+===================================== */
 
-let totalWithdrawal = 0;
-
-let pendingWithdrawal = 0;
-
-let approvedWithdrawal = 0;
+const commission =
+approvedDeposit * 0.10;
 
 
-withdrawals.forEach(
+/* =====================================
+   WITHDRAWAL TOTAL
+===================================== */
+
+let totalWithdrawal =
+0;
+
+
+(withdrawals || []).forEach(
 withdrawal => {
 
 const amount =
-Number(withdrawal.amount || 0);
+Number(
+withdrawal.amount || 0
+);
+
+if(
+String(
+withdrawal.status || ""
+).toLowerCase() ===
+"approved"
+){
 
 totalWithdrawal += amount;
 
-const status =
-String(
-withdrawal.status || ""
-).toLowerCase();
-
-
-if(status === "pending"){
-
-pendingWithdrawal += amount;
-
 }
+
+});
+
+
+/* =====================================
+   SHOW RESULT
+===================================== */
+
+let depositRows = "";
 
 
 if(
-status === "approved" ||
-status === "success" ||
-status === "successful"
+!deposits ||
+deposits.length === 0
 ){
 
-approvedWithdrawal += amount;
-
-}
-
-}
-);
-
-
-/* =========================================
-   COMMISSION
-========================================= */
-
-const commission =
-approvedDeposit *
-COMMISSION_RATE;
-
-
-/* =========================================
-   AGENT DETAILS
-========================================= */
-
-document.getElementById(
-"rUid"
-).textContent =
-agent.uid || "-";
-
-
-document.getElementById(
-"rName"
-).textContent =
-agent.name || "-";
-
-
-document.getElementById(
-"rMobile"
-).textContent =
-agent.mobile || "-";
-
-
-const statusElement =
-document.getElementById("rStatus");
-
-statusElement.textContent =
-agent.status || "-";
-
-statusElement.className =
-"detail-value " +
-statusClass(agent.status);
-
-
-/* =========================================
-   SUMMARY
-========================================= */
-
-document.getElementById(
-"rTotalDeposit"
-).textContent =
-money(totalDeposit);
-
-
-document.getElementById(
-"rTotalWithdrawal"
-).textContent =
-money(totalWithdrawal);
-
-
-document.getElementById(
-"rPendingDeposit"
-).textContent =
-money(pendingDeposit);
-
-
-document.getElementById(
-"rPendingWithdrawal"
-).textContent =
-money(pendingWithdrawal);
-
-
-document.getElementById(
-"rApprovedDeposit"
-).textContent =
-money(approvedDeposit);
-
-
-document.getElementById(
-"rApprovedWithdrawal"
-).textContent =
-money(approvedWithdrawal);
-
-
-document.getElementById(
-"rCommission"
-).textContent =
-money(commission);
-
-
-result.style.display =
-"block";
-
-
-/* =========================================
-   DEPOSIT TABLE
-========================================= */
-
-const depositTable =
-document.getElementById(
-"agentDepositTable"
-);
-
-
-if(deposits.length === 0){
-
-depositTable.innerHTML = `
+depositRows = `
 
 <tr>
 
@@ -1036,7 +709,7 @@ No deposits found
 
 }else{
 
-depositTable.innerHTML =
+depositRows =
 deposits.map(
 deposit => {
 
@@ -1045,62 +718,44 @@ String(
 deposit.status || ""
 ).toLowerCase();
 
+let statusClass =
+"";
 
-let action = "";
-
-
-if(status === "pending"){
-
-action = `
-
-<div class="action-box">
-
-<button
-class="action-btn approve-btn"
-onclick="updateDepositStatus(${deposit.id},'approved')"
->
-✅ Approve
-</button>
-
-<button
-class="action-btn reject-btn"
-onclick="updateDepositStatus(${deposit.id},'rejected')"
->
-❌ Reject
-</button>
-
-</div>
-
-`;
-
-}else{
-
-action = `
-
-<span class="action-done">
-${deposit.status || "-"}
-</span>
-
-`;
-
+if(status === "approved"){
+statusClass = "approved";
 }
 
+if(status === "pending"){
+statusClass = "pending";
+}
+
+if(status === "rejected"){
+statusClass = "rejected";
+}
 
 return `
 
 <tr>
 
-<td>${deposit.id}</td>
-
-<td class="deposit-money">
-${money(deposit.amount)}
+<td>
+${deposit.id ?? "-"}
 </td>
 
-<td class="${statusClass(deposit.status)}">
+<td>
+₹${Number(
+deposit.amount || 0
+).toFixed(2)}
+</td>
+
+<td class="${statusClass}">
 ${deposit.status || "-"}
 </td>
 
-<td>${action}</td>
+<td>
+₹${(
+Number(deposit.amount || 0) * 0.10
+).toFixed(2)}
+</td>
 
 </tr>
 
@@ -1112,481 +767,197 @@ ${deposit.status || "-"}
 }
 
 
-depositCard.style.display =
-"block";
+searchResult.innerHTML = `
+
+<div class="agent-box">
+
+<h3>
+👤 Agent Details
+</h3>
 
 
-/* =========================================
-   WITHDRAWAL TABLE
-========================================= */
+<div class="agent-row">
 
-const withdrawalTable =
-document.getElementById(
-"agentWithdrawalTable"
-);
+<span class="label">
+ID
+</span>
+
+<span>
+${agent.id}
+</span>
+
+</div>
 
 
-if(withdrawals.length === 0){
+<div class="agent-row">
 
-withdrawalTable.innerHTML = `
+<span class="label">
+UID
+</span>
+
+<span class="uid">
+${agent.uid}
+</span>
+
+</div>
+
+
+<div class="agent-row">
+
+<span class="label">
+Name
+</span>
+
+<span>
+${agent.name || "-"}
+</span>
+
+</div>
+
+
+<div class="agent-row">
+
+<span class="label">
+Mobile
+</span>
+
+<span>
+${agent.mobile || "-"}
+</span>
+
+</div>
+
+
+<div class="agent-row">
+
+<span class="label">
+Status
+</span>
+
+<span>
+${agent.status || "-"}
+</span>
+
+</div>
+
+
+<div class="agent-row">
+
+<span class="label">
+Total Deposit
+</span>
+
+<span>
+₹${totalDeposit.toFixed(2)}
+</span>
+
+</div>
+
+
+<div class="agent-row">
+
+<span class="label">
+Approved Deposit
+</span>
+
+<span>
+₹${approvedDeposit.toFixed(2)}
+</span>
+
+</div>
+
+
+<div class="agent-row">
+
+<span class="label">
+Commission 10%
+</span>
+
+<span>
+₹${commission.toFixed(2)}
+</span>
+
+</div>
+
+
+<div class="agent-row">
+
+<span class="label">
+Approved Withdrawal
+</span>
+
+<span>
+₹${totalWithdrawal.toFixed(2)}
+</span>
+
+</div>
+
+
+</div>
+
+
+<div class="card">
+
+<h3>
+💰 Deposit History
+</h3>
+
+
+<table>
+
+<thead>
 
 <tr>
 
-<td colspan="4">
-No withdrawals found
-</td>
+<th>ID</th>
+
+<th>Amount</th>
+
+<th>Status</th>
+
+<th>10% Commission</th>
 
 </tr>
 
-`;
-
-}else{
-
-withdrawalTable.innerHTML =
-withdrawals.map(
-withdrawal => {
-
-const status =
-String(
-withdrawal.status || ""
-).toLowerCase();
+</thead>
 
 
-let action = "";
+<tbody>
 
+${depositRows}
 
-if(status === "pending"){
+</tbody>
 
-action = `
+</table>
 
-<div class="action-box">
-
-<button
-class="action-btn approve-btn"
-onclick="updateWithdrawalStatus(${withdrawal.id},'approved')"
->
-✅ Approve
-</button>
-
-<button
-class="action-btn reject-btn"
-onclick="updateWithdrawalStatus(${withdrawal.id},'rejected')"
->
-❌ Reject
-</button>
 
 </div>
 
 `;
 
-}else{
-
-action = `
-
-<span class="action-done">
-${withdrawal.status || "-"}
-</span>
-
-`;
-
-}
-
-
-return `
-
-<tr>
-
-<td>${withdrawal.id}</td>
-
-<td class="withdraw-money">
-${money(withdrawal.amount)}
-</td>
-
-<td class="${statusClass(withdrawal.status)}">
-${withdrawal.status || "-"}
-</td>
-
-<td>${action}</td>
-
-</tr>
-
-`;
-
-}
-).join("");
-
-}
-
-
-withdrawalCard.style.display =
-"block";
-
-
-message.textContent =
-"✅ Agent found successfully.";
-
-message.style.color =
-"#15803d";
 
 
 }catch(error){
 
-console.error(
-"SEARCH ERROR:",
-error
-);
+console.error(error);
+
+message.className =
+"message error";
 
 message.textContent =
 "❌ Error: " +
 error.message;
 
-message.style.color =
-"red";
-
 }
 
 }
 
 
-/* =========================================
-   UPDATE DEPOSIT
-========================================= */
-
-async function updateDepositStatus(
-depositId,
-newStatus
-){
-
-if(
-!confirm(
-newStatus === "approved"
-?
-"Approve this deposit?"
-:
-"Reject this deposit?"
-)
-){
-
-return;
-
-}
-
-
-const {
-error
-} =
-await supabaseClient
-
-.from("deposits")
-
-.update({
-status:newStatus
-})
-
-.eq("id",depositId);
-
-
-if(error){
-
-alert(
-"❌ Update failed:\n" +
-error.message
-);
-
-return;
-
-}
-
-
-alert(
-"✅ Deposit status updated."
-);
-
-
-await searchAgent();
-
-await loadAdminTotals();
-
-}
-
-
-/* =========================================
-   UPDATE WITHDRAWAL
-========================================= */
-
-async function updateWithdrawalStatus(
-withdrawalId,
-newStatus
-){
-
-if(
-!confirm(
-newStatus === "approved"
-?
-"Approve this withdrawal?"
-:
-"Reject this withdrawal?"
-)
-){
-
-return;
-
-}
-
-
-const {
-error
-} =
-await supabaseClient
-
-.from("withdrawals")
-
-.update({
-status:newStatus
-})
-
-.eq("id",withdrawalId);
-
-
-if(error){
-
-alert(
-"❌ Update failed:\n" +
-error.message
-);
-
-return;
-
-}
-
-
-alert(
-"✅ Withdrawal status updated."
-);
-
-
-await searchAgent();
-
-await loadAdminTotals();
-
-}
-
-
-/* =========================================
-   ADMIN TOTALS
-========================================= */
-
-async function loadAdminTotals(){
-
-try{
-
-
-/* AGENTS */
-
-const agentResponse =
-await supabaseClient
-
-.from("agents")
-
-.select(
-"id",
-{
-count:"exact",
-head:true
-}
-);
-
-
-if(agentResponse.error){
-
-console.error(
-"AGENTS TOTAL ERROR:",
-agentResponse.error
-);
-
-document.getElementById(
-"totalAgents"
-).textContent = "ERROR";
-
-}else{
-
-document.getElementById(
-"totalAgents"
-).textContent =
-agentResponse.count || 0;
-
-}
-
-
-/* DEPOSITS */
-
-const depositResponse =
-await supabaseClient
-
-.from("deposits")
-
-.select(
-"amount,status"
-);
-
-
-if(depositResponse.error){
-
-console.error(
-"DEPOSITS TOTAL ERROR:",
-depositResponse.error
-);
-
-}else{
-
-let total = 0;
-
-let pending = 0;
-
-let approved = 0;
-
-
-(depositResponse.data || []).forEach(
-deposit => {
-
-const amount =
-Number(deposit.amount || 0);
-
-total += amount;
-
-const status =
-String(
-deposit.status || ""
-).toLowerCase();
-
-
-if(status === "pending"){
-
-pending++;
-
-}
-
-
-if(
-status === "approved" ||
-status === "success" ||
-status === "successful"
-){
-
-approved += amount;
-
-}
-
-}
-);
-
-
-document.getElementById(
-"totalDeposits"
-).textContent =
-money(total);
-
-
-document.getElementById(
-"pendingDeposits"
-).textContent =
-pending;
-
-
-document.getElementById(
-"totalCommission"
-).textContent =
-money(
-approved *
-COMMISSION_RATE
-);
-
-}
-
-
-/* WITHDRAWALS */
-
-const withdrawalResponse =
-await supabaseClient
-
-.from("withdrawals")
-
-.select(
-"amount,status"
-);
-
-
-if(withdrawalResponse.error){
-
-console.error(
-"WITHDRAWALS TOTAL ERROR:",
-withdrawalResponse.error
-);
-
-}else{
-
-let total = 0;
-
-let pending = 0;
-
-
-(withdrawalResponse.data || []).forEach(
-withdrawal => {
-
-const amount =
-Number(withdrawal.amount || 0);
-
-total += amount;
-
-const status =
-String(
-withdrawal.status || ""
-).toLowerCase();
-
-
-if(status === "pending"){
-
-pending++;
-
-}
-
-}
-);
-
-
-document.getElementById(
-"totalWithdrawals"
-).textContent =
-money(total);
-
-
-document.getElementById(
-"pendingWithdrawals"
-).textContent =
-pending;
-
-}
-
-
-}catch(error){
-
-console.error(
-"ADMIN TOTAL ERROR:",
-error
-);
-
-}
-
-}
-
-
-/* =========================================
-   ENTER KEY
-========================================= */
-
-document.getElementById(
-"uidInput"
-).addEventListener(
+/* =====================================
+   ENTER KEY SEARCH
+===================================== */
+
+uidInput.addEventListener(
 "keydown",
 function(event){
 
@@ -1600,21 +971,126 @@ searchAgent();
 );
 
 
-/* =========================================
-   PAGE LOAD
-========================================= */
+/* =====================================
+   TOTALS
+===================================== */
 
-window.addEventListener(
-"load",
-function(){
+async function loadAdminTotals(){
+
+try{
+
+
+const {
+data:agents,
+error:agentsError
+} =
+await supabaseClient
+
+.from("agents")
+
+.select("id");
+
+
+if(agentsError){
+
+console.error(
+agentsError
+);
+
+return;
+
+}
+
+
+document.getElementById(
+"totalAgents"
+).textContent =
+agents.length;
+
+
+const {
+data:deposits,
+error:depositError
+} =
+await supabaseClient
+
+.from("deposits")
+
+.select("amount");
+
+
+if(!depositError){
+
+let total = 0;
+
+(deposits || []).forEach(
+item => {
+
+total += Number(
+item.amount || 0
+);
+
+});
+
+document.getElementById(
+"totalDeposits"
+).textContent =
+"₹" + total.toFixed(2);
+
+}
+
+
+const {
+data:withdrawals,
+error:withdrawalError
+} =
+await supabaseClient
+
+.from("withdrawals")
+
+.select("amount");
+
+
+if(!withdrawalError){
+
+let total = 0;
+
+(withdrawals || []).forEach(
+item => {
+
+total += Number(
+item.amount || 0
+);
+
+});
+
+document.getElementById(
+"totalWithdrawals"
+).textContent =
+"₹" + total.toFixed(2);
+
+}
+
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+
+/* =====================================
+   PAGE LOAD
+===================================== */
 
 loadAdminTotals();
 
-}
-);
 
 </script>
 
+
 </body>
 
-    </html>
+</html>
