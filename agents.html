@@ -3,265 +3,145 @@
 
 <head>
 
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Sathi Pay - Agents</title>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        body {
-
-            margin: 0;
-
-            font-family: Arial, sans-serif;
-
-            background: #f4f6f8;
-
-            color: #1f2937;
-
-        }
-
-
-        .header {
-
-            background: #1f2937;
-
-            color: white;
-
-            padding: 18px 20px;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-        }
-
-
-        .header h1 {
-
-            margin: 0;
-
-            font-size: 24px;
-
-        }
-
-
-        .header a {
-
-            color: white;
-
-            text-decoration: none;
-
-        }
-
-
-        .container {
-
-            max-width: 950px;
-
-            margin: auto;
-
-            padding: 20px;
-
-        }
-
-
-        .top-section {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .add-btn {
-
-            background: #2563eb;
-
-            color: white;
-
-            border: none;
-
-            padding: 12px 18px;
-
-            border-radius: 8px;
-
-            font-size: 15px;
-
-            cursor: pointer;
-
-        }
-
-
-        .agent-form {
-
-            display: none;
-
-            background: white;
-
-            padding: 20px;
-
-            border-radius: 12px;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        label {
-
-            display: block;
-
-            font-weight: bold;
-
-            margin-bottom: 6px;
-
-        }
-
-
-        input,
-        select {
-
-            width: 100%;
-
-            padding: 12px;
-
-            margin-bottom: 15px;
-
-            border: 1px solid #ddd;
-
-            border-radius: 8px;
-
-        }
-
-
-        .save-btn {
-
-            width: 100%;
-
-            padding: 13px;
-
-            border: none;
-
-            border-radius: 8px;
-
-            background: #16a34a;
-
-            color: white;
-
-            font-size: 16px;
-
-            cursor: pointer;
-
-        }
-
-
-        #agentMessage {
-
-            text-align: center;
-
-            margin-top: 10px;
-
-            font-weight: bold;
-
-        }
-
-
-        .table-box {
-
-            background: white;
-
-            overflow-x: auto;
-
-            border-radius: 12px;
-
-        }
-
-
-        table {
-
-            width: 100%;
-
-            border-collapse: collapse;
-
-            min-width: 650px;
-
-        }
-
-
-        th,
-        td {
-
-            padding: 15px;
-
-            text-align: left;
-
-            border-bottom: 1px solid #ddd;
-
-        }
-
-
-        th {
-
-            background: #e5e7eb;
-
-        }
-
-
-        .active {
-
-            color: green;
-
-            font-weight: bold;
-
-        }
-
-
-        .inactive {
-
-            color: red;
-
-            font-weight: bold;
-
-        }
-
-
-        .delete-btn {
-
-            background: #dc2626;
-
-            color: white;
-
-            border: none;
-
-            padding: 8px 12px;
-
-            border-radius: 6px;
-
-            cursor: pointer;
-
-        }
-
-
-    </style>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Sathi Pay - Agents</title>
+
+<link
+rel="stylesheet"
+href="css/style.css"
+>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+}
+
+.container{
+    padding:20px;
+}
+
+.agent-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.agent-header h2{
+    margin:0;
+}
+
+.add-btn{
+    background:#1565c0;
+    color:#fff;
+    border:0;
+    padding:14px 18px;
+    border-radius:9px;
+    font-size:16px;
+    font-weight:bold;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.table-box{
+    width:100%;
+    overflow-x:auto;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+.agent-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:750px;
+}
+
+.agent-table th,
+.agent-table td{
+    padding:14px 12px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
+    white-space:nowrap;
+}
+
+.agent-table th{
+    background:#e5e7eb;
+    color:#1f2937;
+    font-weight:bold;
+}
+
+.agent-table tr:last-child td{
+    border-bottom:0;
+}
+
+.uid{
+    font-weight:bold;
+    color:#1565c0;
+    letter-spacing:.5px;
+}
+
+.active{
+    color:#15803d;
+    font-weight:bold;
+}
+
+.pending{
+    color:#b45309;
+    font-weight:bold;
+}
+
+.rejected,
+.inactive{
+    color:#dc2626;
+    font-weight:bold;
+}
+
+.message{
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:10px;
+    background:#f8fafc;
+    font-weight:bold;
+}
+
+.empty{
+    text-align:center !important;
+    padding:30px !important;
+    color:#64748b;
+}
+
+@media(max-width:600px){
+
+    .container{
+        padding:12px;
+    }
+
+    .agent-header{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .add-btn{
+        text-align:center;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -269,172 +149,455 @@
 <body>
 
 
-    <div class="header">
+<header>
 
-        <h1>Sathi Pay - Agents</h1>
+<h1>Sathi Pay - Agents</h1>
 
-        <a href="admin.html">
-            Dashboard
-        </a>
+<a href="admin.html">
+Dashboard
+</a>
 
-    </div>
+</header>
 
 
+<main class="container">
 
-    <div class="container">
 
+<div class="agent-header">
 
-        <div class="top-section">
+<h2>👥 Agent List</h2>
 
-            <h2>Agent List</h2>
+<a
+href="register.html"
+class="add-btn"
+>
++ Add New Agent
+</a>
 
-            <button
-                class="add-btn"
-                onclick="showAgentForm()"
-            >
-                + Add New Agent
-            </button>
+</div>
 
-        </div>
 
+<div
+id="message"
+class="message"
+>
+Loading agents...
+</div>
 
 
-        <!-- ADD AGENT FORM -->
+<div class="table-box">
 
-        <div
-            class="agent-form"
-            id="agentForm"
-        >
 
-            <h2>Add New Agent</h2>
+<table class="agent-table">
 
 
-            <form onsubmit="addAgent(event)">
+<thead>
 
+<tr>
 
-                <label>Agent Name</label>
+<th>ID</th>
 
-                <input
-                    type="text"
-                    id="agentName"
-                    placeholder="Enter agent name"
-                    required
-                >
+<th>UID</th>
 
+<th>Agent Name</th>
 
+<th>Mobile</th>
 
-                <label>Mobile Number</label>
+<th>Status</th>
 
-                <input
-                    type="tel"
-                    id="agentMobile"
-                    placeholder="Enter 10 digit mobile number"
-                    maxlength="10"
-                    required
-                >
+</tr>
 
+</thead>
 
 
-                <label>Status</label>
+<tbody id="agentTable">
 
-                <select id="agentStatus">
 
-                    <option value="Active">
-                        Active
-                    </option>
+<tr>
 
-                    <option value="Inactive">
-                        Inactive
-                    </option>
+<td
+colspan="5"
+class="empty"
+>
+Loading...
+</td>
 
-                </select>
+</tr>
 
+</tbody>
 
 
-                <button
-                    type="submit"
-                    class="save-btn"
-                >
-                    Save Agent
-                </button>
+</table>
 
 
-                <div id="agentMessage"></div>
+</div>
 
 
-            </form>
+</main>
 
-        </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-        <!-- AGENT TABLE -->
+<script>
 
-        <div class="table-box">
 
-            <table>
+/* =================================
+   SUPABASE
+================================= */
 
-                <thead>
+const SUPABASE_URL =
+"https://lozluohksmjxbxixkbmq.supabase.co";
 
-                    <tr>
+const SUPABASE_KEY =
+"sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
-                        <th>ID</th>
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
-                        <th>Agent Name</th>
 
-                        <th>Mobile</th>
+/* =================================
+   UID GENERATOR
+================================= */
 
-                        <th>Status</th>
+function generateUID(){
 
-                        <th>Action</th>
+const chars =
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-                    </tr>
+let uid = "SP";
 
-                </thead>
+for(let i = 0; i < 8; i++){
 
+uid += chars.charAt(
+Math.floor(
+Math.random() * chars.length
+)
+);
 
-                <tbody id="agentTable">
+}
 
-                    <tr>
+return uid;
 
-                        <td colspan="5">
+}
 
-                            Loading agents...
 
-                        </td>
+/* =================================
+   LOAD AGENTS
+================================= */
 
-                    </tr>
+async function loadAgents(){
 
-                </tbody>
+const message =
+document.getElementById("message");
 
-            </table>
+const table =
+document.getElementById("agentTable");
 
-        </div>
 
+message.textContent =
+"Loading agents...";
 
-    </div>
+message.style.color =
+"#1565c0";
 
 
+try{
 
-    <!-- SUPABASE LIBRARY -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+/* GET AGENTS */
 
+const {
+data:agents,
+error
+} =
+await supabaseClient
 
-    <!-- YOUR JAVASCRIPT -->
+.from("agents")
 
-    <script src="js/app.js"></script>
+.select(`
+id,
+uid,
+name,
+mobile,
+status
+`)
 
+.order(
+"id",
+{
+ascending:true
+}
+);
 
-    <!-- LOAD DATA -->
 
-    <script>
+if(error){
 
-        loadAgents();
+console.error(error);
 
-    </script>
+message.textContent =
+"❌ Database error: " +
+error.message;
+
+message.style.color =
+"#dc2626";
+
+table.innerHTML = `
+
+<tr>
+
+<td
+colspan="5"
+class="empty"
+>
+Unable to load agents.
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+if(!agents || agents.length === 0){
+
+message.textContent =
+"⚠️ No agents found.";
+
+message.style.color =
+"#b45309";
+
+table.innerHTML = `
+
+<tr>
+
+<td
+colspan="5"
+class="empty"
+>
+No agents found.
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+/* =================================
+   CHECK / CREATE UID
+================================= */
+
+for(const agent of agents){
+
+if(
+!agent.uid ||
+String(agent.uid).trim() === ""
+){
+
+let newUID = generateUID();
+
+
+/* MAKE SURE UID IS UNIQUE */
+
+let uidExists = true;
+
+while(uidExists){
+
+const {
+data:existing
+} =
+await supabaseClient
+
+.from("agents")
+
+.select("id")
+
+.eq("uid",newUID)
+
+.maybeSingle();
+
+
+if(!existing){
+
+uidExists = false;
+
+}else{
+
+newUID = generateUID();
+
+}
+
+}
+
+
+/* SAVE UID */
+
+const {
+error:updateError
+} =
+await supabaseClient
+
+.from("agents")
+
+.update({
+uid:newUID
+})
+
+.eq("id",agent.id);
+
+
+if(updateError){
+
+console.error(
+"UID update error:",
+updateError
+);
+
+}else{
+
+agent.uid = newUID;
+
+}
+
+}
+
+}
+
+
+/* =================================
+   SHOW AGENTS
+================================= */
+
+table.innerHTML =
+agents.map(
+agent => {
+
+const status =
+String(
+agent.status || "active"
+).toLowerCase();
+
+
+let statusClass = "active";
+
+
+if(
+status === "pending"
+){
+
+statusClass = "pending";
+
+}
+
+if(
+status === "rejected"
+){
+
+statusClass = "rejected";
+
+}
+
+if(
+status === "inactive"
+){
+
+statusClass = "inactive";
+
+}
+
+
+return `
+
+<tr>
+
+<td>
+${agent.id ?? "-"}
+</td>
+
+<td class="uid">
+${agent.uid || "-"}
+</td>
+
+<td>
+${agent.name || "-"}
+</td>
+
+<td>
+${agent.mobile || "-"}
+</td>
+
+<td class="${statusClass}">
+${agent.status || "active"}
+</td>
+
+</tr>
+
+`;
+
+}
+).join("");
+
+
+message.textContent =
+"✅ " +
+agents.length +
+" agents loaded successfully.";
+
+message.style.color =
+"#15803d";
+
+
+}catch(error){
+
+console.error(error);
+
+message.textContent =
+"❌ Error: " +
+error.message;
+
+message.style.color =
+"#dc2626";
+
+table.innerHTML = `
+
+<tr>
+
+<td
+colspan="5"
+class="empty"
+>
+Something went wrong.
+</td>
+
+</tr>
+
+`;
+
+}
+
+}
+
+
+/* =================================
+   START
+================================= */
+
+loadAgents();
+
+
+</script>
 
 
 </body>
 
-    </html>
+</html>
