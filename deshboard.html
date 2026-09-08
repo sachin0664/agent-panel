@@ -5,7 +5,8 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Dashboard</title>
 
@@ -199,11 +200,13 @@ header h1 {
 
     <h1>Sathi Pay</h1>
 
-    <a class="logout" href="login.html">
+    <a class="logout"
+       href="login.html">
         Logout
     </a>
 
 </header>
+
 
 <div class="container">
 
@@ -299,7 +302,7 @@ header h1 {
 
     <div
         class="commission-rule"
-        style="padding:20px;margin-top:20px;background:white;border-radius:14px;box-shadow:0 4px 15px rgba(0,0,0,0.08);">
+        style="padding:20px;margin-top:20px;">
 
         <h3 style="margin-top:0;color:#15803d;">
             💵 Commission Rule
@@ -383,7 +386,7 @@ header h1 {
 
         <div
             id="accountStatus"
-            class="active">
+            class="loading">
 
             ● Loading...
 
@@ -397,6 +400,7 @@ header h1 {
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
@@ -421,11 +425,52 @@ const supabaseClient =
    GET LOGIN UID
 ========================================= */
 
+function getLoginUID() {
+
+    const possibleKeys = [
+
+        "sathiPayUID",
+        "agentUID",
+        "uid",
+        "UID",
+        "sathi_pay_uid",
+        "userUID",
+        "userUid"
+
+    ];
+
+
+    for (
+        let i = 0;
+        i < possibleKeys.length;
+        i++
+    ) {
+
+        const value =
+            localStorage.getItem(
+                possibleKeys[i]
+            );
+
+
+        if (
+            value &&
+            String(value).trim() !== ""
+        ) {
+
+            return String(value).trim();
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
 const loginUID =
-    localStorage.getItem("sathiPayUID") ||
-    localStorage.getItem("agentUID") ||
-    localStorage.getItem("uid") ||
-    localStorage.getItem("UID");
+    getLoginUID();
 
 
 /* =========================================
@@ -435,8 +480,11 @@ const loginUID =
 async function findAgent(uidValue) {
 
     if (!uidValue) {
+
         return null;
+
     }
+
 
     const cleanUID =
         String(uidValue)
@@ -444,7 +492,9 @@ async function findAgent(uidValue) {
         .toUpperCase();
 
 
-    /* EXACT UID */
+    /* =====================================
+       EXACT UID
+    ===================================== */
 
     const {
         data: exactAgent,
@@ -472,7 +522,7 @@ async function findAgent(uidValue) {
     if (exactError) {
 
         console.error(
-            "Exact UID search error:",
+            "Exact UID error:",
             exactError
         );
 
@@ -486,7 +536,9 @@ async function findAgent(uidValue) {
     }
 
 
-    /* NORMALIZED UID SEARCH */
+    /* =====================================
+       NORMALIZED SEARCH
+    ===================================== */
 
     const {
         data: allAgents,
@@ -525,10 +577,10 @@ async function findAgent(uidValue) {
 
     const normalizedLogin =
         cleanUID
-        .replace(/[^A-Z0-9]/g, "");
-
-
-    let matchedAgent = null;
+        .replace(
+            /[^A-Z0-9]/g,
+            ""
+        );
 
 
     for (
@@ -550,89 +602,53 @@ async function findAgent(uidValue) {
 
 
         if (!dbUID) {
+
             continue;
+
         }
 
+
+        /* Exact normalized */
 
         if (
             dbUID === normalizedLogin
         ) {
 
-            matchedAgent =
-                allAgents[i];
-
-            break;
+            return allAgents[i];
 
         }
 
+
+        /* Login UID may have short suffix */
 
         if (
             normalizedLogin.startsWith(dbUID) &&
             normalizedLogin.length - dbUID.length <= 3
         ) {
 
-            matchedAgent =
-                allAgents[i];
-
-            break;
+            return allAgents[i];
 
         }
 
     }
 
 
-    return matchedAgent;
+    return null;
 
 }
 
 
 /* =========================================
-   INDIA DATE
-========================================= */
-
-function getIndiaDate(dateValue) {
-
-    if (!dateValue) {
-        return null;
-    }
-
-    const date =
-        new Date(dateValue);
-
-
-    if (
-        isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return null;
-
-    }
-
-
-    return new Intl.DateTimeFormat(
-        "en-CA",
-        {
-            timeZone: "Asia/Kolkata",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit"
-        }
-    ).format(date);
-
-}
-
-
-/* =========================================
-   DASHBOARD
+   START DASHBOARD
 ========================================= */
 
 async function loadDashboard() {
 
     try {
 
-        /* UID CHECK */
+        /* =================================
+           UID CHECK
+        ================================= */
 
         if (!loginUID) {
 
@@ -641,27 +657,38 @@ async function loadDashboard() {
             ).textContent =
                 "UID not found";
 
+
             document.getElementById(
                 "agentName"
             ).textContent =
                 "Please login again.";
+
 
             document.getElementById(
                 "accountStatus"
             ).textContent =
                 "● Login Required";
 
+
             document.getElementById(
                 "accountStatus"
             ).className =
                 "error";
+
+
+            console.error(
+                "No login UID found in localStorage."
+            );
+
 
             return;
 
         }
 
 
-        /* FIND AGENT */
+        /* =================================
+           FIND AGENT
+        ================================= */
 
         const agent =
             await findAgent(
@@ -676,27 +703,33 @@ async function loadDashboard() {
             ).textContent =
                 loginUID;
 
+
             document.getElementById(
                 "agentName"
             ).textContent =
                 "Agent account not found";
+
 
             document.getElementById(
                 "accountStatus"
             ).textContent =
                 "● Agent Not Found";
 
+
             document.getElementById(
                 "accountStatus"
             ).className =
                 "error";
+
 
             return;
 
         }
 
 
-        /* SHOW AGENT */
+        /* =================================
+           SHOW AGENT
+        ================================= */
 
         document.getElementById(
             "agentUID"
@@ -714,14 +747,17 @@ async function loadDashboard() {
             );
 
 
-        /* ACCOUNT STATUS */
+        /* =================================
+           ACCOUNT STATUS
+        ================================= */
 
         const agentStatus =
             String(
                 agent.status ||
                 "Active"
             )
-            .toLowerCase();
+            .toLowerCase()
+            .trim();
 
 
         if (
@@ -732,6 +768,7 @@ async function loadDashboard() {
                 "accountStatus"
             ).textContent =
                 "● Active";
+
 
             document.getElementById(
                 "accountStatus"
@@ -745,6 +782,7 @@ async function loadDashboard() {
             ).textContent =
                 "● " +
                 agent.status;
+
 
             document.getElementById(
                 "accountStatus"
@@ -786,10 +824,12 @@ async function loadDashboard() {
                 depositError
             );
 
+
             document.getElementById(
                 "agentName"
             ).textContent =
                 "Deposit database error";
+
 
             return;
 
@@ -836,7 +876,7 @@ async function loadDashboard() {
 
 
         /* =================================
-           10% COMMISSION
+           COMMISSION 10%
         ================================= */
 
         const totalCommission =
@@ -885,7 +925,7 @@ async function loadDashboard() {
 
 
         /* =================================
-           APPROVED WITHDRAWALS
+           APPROVED WITHDRAWAL TOTAL
         ================================= */
 
         let approvedWithdrawal = 0;
@@ -924,7 +964,7 @@ async function loadDashboard() {
 
 
         /* =================================
-           WALLET BALANCE
+           WALLET
         ================================= */
 
         const walletBalance =
@@ -971,35 +1011,67 @@ async function loadDashboard() {
 
         /* =================================
            TODAY'S TRANSACTIONS
-           APPROVAL DATE BASED
-           INDIA TIMEZONE
+           
+           IMPORTANT:
+           Approved deposit ke liye
+           approved_at use hoga.
+           
+           Isliye agar:
+           created_at = 7 Sep
+           approved_at = 8 Sep
+
+           to 8 Sep ka transaction count hoga.
         ================================= */
 
-        const todayIndia =
-            new Intl.DateTimeFormat(
-                "en-CA",
-                {
-                    timeZone: "Asia/Kolkata",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit"
-                }
-            ).format(
-                new Date()
+        const now =
+            new Date();
+
+
+        const startOfToday =
+            new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                0,
+                0,
+                0,
+                0
+            );
+
+
+        const endOfToday =
+            new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                23,
+                59,
+                59,
+                999
             );
 
 
         let todayCount = 0;
 
 
-        /* ---------------------------------
-           TODAY'S APPROVED DEPOSITS
-        --------------------------------- */
+        /* =================================
+           TODAY'S DEPOSITS
+        ================================= */
 
         (
             deposits || []
         ).forEach(
             function(deposit) {
+
+                if (
+                    !deposit.created_at &&
+                    !deposit.approved_at
+                ) {
+
+                    return;
+
+                }
+
 
                 const status =
                     String(
@@ -1009,45 +1081,40 @@ async function loadDashboard() {
                     .trim();
 
 
+                let dateToCheck = null;
+
+
+                /*
+                   Approved deposit:
+                   approved_at is priority
+                */
+
                 if (
-                    status !== "approved"
+                    status === "approved" &&
+                    deposit.approved_at
                 ) {
 
-                    return;
+                    dateToCheck =
+                        new Date(
+                            deposit.approved_at
+                        );
+
+                } else if (
+                    deposit.created_at
+                ) {
+
+                    dateToCheck =
+                        new Date(
+                            deposit.created_at
+                        );
 
                 }
 
 
                 if (
-                    !deposit.approved_at
-                ) {
-
-                    return;
-
-                }
-
-
-                const approvedDate =
-                    getIndiaDate(
-                        deposit.approved_at
-                    );
-
-
-                console.log(
-                    "Deposit ID:",
-                    deposit.id,
-                    "Approved At:",
-                    deposit.approved_at,
-                    "India Date:",
-                    approvedDate,
-                    "Today:",
-                    todayIndia
-                );
-
-
-                if (
-                    approvedDate ===
-                    todayIndia
+                    dateToCheck &&
+                    dateToCheck >= startOfToday &&
+                    dateToCheck <= endOfToday
                 ) {
 
                     todayCount++;
@@ -1058,9 +1125,9 @@ async function loadDashboard() {
         );
 
 
-        /* ---------------------------------
+        /* =================================
            TODAY'S WITHDRAWALS
-        --------------------------------- */
+        ================================= */
 
         (
             withdrawals || []
@@ -1076,15 +1143,15 @@ async function loadDashboard() {
                 }
 
 
-                const withdrawalDate =
-                    getIndiaDate(
+                const date =
+                    new Date(
                         withdrawal.created_at
                     );
 
 
                 if (
-                    withdrawalDate ===
-                    todayIndia
+                    date >= startOfToday &&
+                    date <= endOfToday
                 ) {
 
                     todayCount++;
@@ -1095,7 +1162,9 @@ async function loadDashboard() {
         );
 
 
-        /* SHOW TODAY COUNT */
+        /* =================================
+           SHOW TODAY COUNT
+        ================================= */
 
         document.getElementById(
             "todayTransactions"
@@ -1108,543 +1177,42 @@ async function loadDashboard() {
         ================================= */
 
         console.log(
-            "Login UID:",
-            loginUID
+            "=============================="
         );
 
         console.log(
-            "Matched Agent:",
-            agent
+            "SATHI PAY DASHBOARD"
         );
-
-        console.log(
-            "Approved Deposit:",
-            approvedDeposit
-        );
-
-        console.log(
-            "Commission:",
-            totalCommission
-        );
-
-        console.log(
-            "Approved Withdrawal:",
-            approvedWithdrawal
-        );
-
-        console.log(
-            "Wallet:",
-            walletBalance
-        );
-
-        console.log(
-            "Today's Transactions:",
-            todayCount
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Dashboard error:",
-            error
-        );
-
-
-        document.getElementById(
-            "agentName"
-        ).textContent =
-            "Something went wrong";
-
-
-        document.getElementById(
-            "accountStatus"
-        ).textContent =
-            "● Dashboard Error";
-
-
-        document.getElementById(
-            "accountStatus"
-        ).className =
-            "error";
-
-    }
-
-}
-
-
-/* =========================================
-   START DASHBOARD
-========================================= */
-<script>
-
-/* =========================================
-   START DASHBOARD
-========================================= */
-
-async function loadDashboard() {
+        // =========================================================
+    // FINAL DASHBOARD REFRESH
+    // =========================================================
 
     try {
-
-        /* =================================
-           LOGIN UID CHECK
-        ================================= */
-
-        if (!loginUID) {
-
-            document.getElementById("agentUID").textContent =
-                "UID not found";
-
-            document.getElementById("agentName").textContent =
-                "Please login again.";
-
-            document.getElementById("accountStatus").textContent =
-                "● Login Required";
-
-            document.getElementById("accountStatus").className =
-                "error";
-
-            return;
-        }
-
-
-        /* =================================
-           FIND AGENT
-        ================================= */
-
-        const agent = await findAgent(loginUID);
-
-
-        if (!agent) {
-
-            document.getElementById("agentUID").textContent =
-                loginUID;
-
-            document.getElementById("agentName").textContent =
-                "Agent account not found";
-
-            document.getElementById("accountStatus").textContent =
-                "● Agent Not Found";
-
-            document.getElementById("accountStatus").className =
-                "error";
-
-            return;
-        }
-
-
-        /* =================================
-           SHOW AGENT
-        ================================= */
-
-        document.getElementById("agentUID").textContent =
-            agent.uid;
-
-        document.getElementById("agentName").textContent =
-            "Agent: " + (agent.name || "Unknown");
-
-
-        /* =================================
-           ACCOUNT STATUS
-        ================================= */
-
-        const agentStatus =
-            String(agent.status || "active")
-            .toLowerCase()
-            .trim();
-
-
-        if (agentStatus === "active") {
-
-            document.getElementById("accountStatus").textContent =
-                "● Active";
-
-            document.getElementById("accountStatus").className =
-                "active";
-
-        } else {
-
-            document.getElementById("accountStatus").textContent =
-                "● " + agent.status;
-
-            document.getElementById("accountStatus").className =
-                "error";
-        }
-
-
-        /* =================================
-           LOAD DEPOSITS
-        ================================= */
-
-        const {
-            data: deposits,
-            error: depositError
-        } = await supabaseClient
-
-            .from("deposits")
-
-            .select(`
-                id,
-                agent_id,
-                amount,
-                status,
-                created_at,
-                approved_at
-            `)
-
-            .eq("agent_id", agent.id);
-
-
-        if (depositError) {
-
-            console.error(
-                "Deposit error:",
-                depositError
-            );
-
-            document.getElementById("agentName").textContent =
-                "Deposit database error";
-
-            return;
-        }
-
-
-        /* =================================
-           APPROVED DEPOSIT
-        ================================= */
-
-        let approvedDeposit = 0;
-
-
-        (deposits || []).forEach(function(deposit) {
-
-            const amount =
-                Number(deposit.amount || 0);
-
-            const status =
-                String(deposit.status || "")
-                .toLowerCase()
-                .trim();
-
-
-            if (status === "approved") {
-
-                approvedDeposit += amount;
-
-            }
-
-        });
-
-
-        /* =================================
-           10% COMMISSION
-        ================================= */
-
-        const totalCommission =
-            approvedDeposit * 0.10;
-
-
-        document.getElementById(
-            "totalCommission"
-        ).textContent =
-            "₹" + totalCommission.toFixed(2);
-
-
-        /* =================================
-           LOAD WITHDRAWALS
-        ================================= */
-
-        const {
-            data: withdrawals,
-            error: withdrawalError
-        } = await supabaseClient
-
-            .from("withdrawals")
-
-            .select(`
-                id,
-                agent_id,
-                amount,
-                status,
-                created_at
-            `)
-
-            .eq("agent_id", agent.id);
-
-
-        if (withdrawalError) {
-
-            console.error(
-                "Withdrawal error:",
-                withdrawalError
-            );
-
-        }
-
-
-        /* =================================
-           APPROVED WITHDRAWAL
-        ================================= */
-
-        let approvedWithdrawal = 0;
-
-
-        (withdrawals || []).forEach(function(withdrawal) {
-
-            const amount =
-                Number(withdrawal.amount || 0);
-
-            const status =
-                String(withdrawal.status || "")
-                .toLowerCase()
-                .trim();
-
-
-            if (status === "approved") {
-
-                approvedWithdrawal += amount;
-
-            }
-
-        });
-
-
-        /* =================================
-           WALLET BALANCE
-        ================================= */
-
-        const walletBalance =
-            totalCommission -
-            approvedWithdrawal;
-
-
-        document.getElementById(
-            "walletBalance"
-        ).textContent =
-            "₹" +
-            Math.max(walletBalance, 0).toFixed(2);
-
-
-        /* =================================
-           TOTAL TRANSACTIONS
-        ================================= */
-
-        const depositCount =
-            (deposits || []).length;
-
-        const withdrawalCount =
-            (withdrawals || []).length;
-
-        const totalTransactions =
-            depositCount +
-            withdrawalCount;
-
-
-        document.getElementById(
-            "totalTransactions"
-        ).textContent =
-            totalTransactions;
-
-
-        /* =================================
-           TODAY DATE
-        ================================= */
-
-        const now = new Date();
-
-        const todayYear =
-            now.getFullYear();
-
-        const todayMonth =
-            now.getMonth();
-
-        const todayDate =
-            now.getDate();
-
-
-        /* =================================
-           TODAY'S TRANSACTIONS
-           
-           IMPORTANT:
-           Approved deposit ke liye
-           approved_at check hoga.
-           
-           Isse agar deposit kal create hua
-           aur aaj approve hua, to aaj ki
-           transaction count hogi.
-        ================================= */
-
-        let todayCount = 0;
-
-
-        /* ---------------------------------
-           TODAY'S APPROVED DEPOSITS
-        --------------------------------- */
-
-        (deposits || []).forEach(function(deposit) {
-
-            const status =
-                String(deposit.status || "")
-                .toLowerCase()
-                .trim();
-
-
-            if (
-                status === "approved" &&
-                deposit.approved_at
-            ) {
-
-                const approvedDate =
-                    new Date(deposit.approved_at);
-
-
-                if (
-                    approvedDate.getFullYear() === todayYear &&
-                    approvedDate.getMonth() === todayMonth &&
-                    approvedDate.getDate() === todayDate
-                ) {
-
-                    todayCount++;
-
-                }
-
-            }
-
-        });
-
-
-        /* ---------------------------------
-           TODAY'S WITHDRAWALS
-        --------------------------------- */
-
-        (withdrawals || []).forEach(function(withdrawal) {
-
-            if (!withdrawal.created_at) {
-                return;
-            }
-
-
-            const withdrawalDate =
-                new Date(withdrawal.created_at);
-
-
-            if (
-                withdrawalDate.getFullYear() === todayYear &&
-                withdrawalDate.getMonth() === todayMonth &&
-                withdrawalDate.getDate() === todayDate
-            ) {
-
-                todayCount++;
-
-            }
-
-        });
-
-
-        document.getElementById(
-            "todayTransactions"
-        ).textContent =
-            todayCount;
-
-
-        /* =================================
-           DEBUG
-        ================================= */
-
-        console.log(
-            "Login UID:",
-            loginUID
-        );
-
-        console.log(
-            "Matched Agent:",
-            agent
-        );
-
-        console.log(
-            "Deposits:",
-            deposits
-        );
-
-        console.log(
-            "Approved Deposit:",
-            approvedDeposit
-        );
-
-        console.log(
-            "Total Commission 10%:",
-            totalCommission
-        );
-
-        console.log(
-            "Withdrawals:",
-            withdrawals
-        );
-
-        console.log(
-            "Approved Withdrawal:",
-            approvedWithdrawal
-        );
-
-        console.log(
-            "Wallet Balance:",
-            walletBalance
-        );
-
-        console.log(
-            "Total Transactions:",
-            totalTransactions
-        );
-
-        console.log(
-            "Today's Transactions:",
-            todayCount
-        );
-
+        await loadDashboard();
+    } catch (error) {
+        console.error("Dashboard refresh error:", error);
     }
 
-    catch (error) {
+    // =========================================================
+    // AUTO REFRESH
+    // =========================================================
 
-        console.error(
-            "Dashboard error:",
-            error
-        );
+    setInterval(async function () {
+        try {
+            await loadDashboard();
+        } catch (error) {
+            console.error("Auto refresh error:", error);
+        }
+    }, 30000);
 
+    // =========================================================
+    // PAGE READY
+    // =========================================================
 
-        document.getElementById(
-            "agentName"
-        ).textContent =
-            "Something went wrong";
+    console.log("SATHI PAY DASHBOARD READY");
 
-
-        document.getElementById(
-            "accountStatus"
-        ).textContent =
-            "● Dashboard Error";
-
-
-        document.getElementById(
-            "accountStatus"
-        ).className =
-            "error";
-
-    }
-
-}
-
-
-/* =========================================
-   LOAD DASHBOARD
-========================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    loadDashboard
-);
-
+});
 </script>
 
 </body>
-
 </html>
