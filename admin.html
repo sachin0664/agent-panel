@@ -4,7 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Admin</title>
 
@@ -18,6 +20,35 @@
 
 body{
     margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f8;
+    color:#202938;
+}
+
+header{
+    background:#202938;
+    color:white;
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+header h1{
+    margin:0;
+    font-size:25px;
+}
+
+header a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
 }
 
 .uid-search,
@@ -50,7 +81,6 @@ body{
     border:1px solid #ccc;
     border-radius:9px;
     font-size:16px;
-    min-width:0;
     outline:none;
 }
 
@@ -59,6 +89,9 @@ body{
 }
 
 .uid-input-row button{
+    position:relative;
+    z-index:9999;
+    pointer-events:auto;
     padding:15px 25px;
     border:0;
     border-radius:9px;
@@ -67,6 +100,7 @@ body{
     font-weight:bold;
     font-size:16px;
     cursor:pointer;
+    touch-action:manipulation;
 }
 
 #uidMessage{
@@ -153,6 +187,7 @@ body{
 .history-table{
     width:100%;
     border-collapse:collapse;
+    min-width:600px;
 }
 
 .history-table th,
@@ -195,11 +230,36 @@ body{
     font-weight:bold;
 }
 
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+.card h3{
+    margin-top:0;
+}
+
+.card p{
+    font-size:25px;
+    font-weight:bold;
+    margin:10px 0 0;
+}
+
 .admin-menu{
     display:flex;
     flex-direction:column;
     gap:15px;
     margin-top:20px;
+    margin-bottom:25px;
 }
 
 .admin-menu a{
@@ -255,8 +315,8 @@ body{
         grid-template-columns:1fr;
     }
 
-    .history-table{
-        min-width:700px;
+    .dashboard-grid{
+        grid-template-columns:1fr;
     }
 
 }
@@ -286,7 +346,9 @@ Logout
 <h2>📊 Admin Dashboard</h2>
 
 
-<!-- UID SEARCH -->
+<!-- ================================
+     UID SEARCH
+================================ -->
 
 <div class="uid-search">
 
@@ -304,6 +366,7 @@ autocomplete="off"
 <button
 type="button"
 id="searchButton"
+onclick="searchAgent()"
 >
 Search
 </button>
@@ -315,7 +378,9 @@ Search
 </div>
 
 
-<!-- AGENT RESULT -->
+<!-- ================================
+     AGENT RESULT
+================================ -->
 
 <div
 id="agentResult"
@@ -394,9 +459,7 @@ id="rStatus"
 
 <div class="summary-item">
 
-<p>
-💰 Total Deposit
-</p>
+<p>💰 Total Deposit</p>
 
 <strong
 class="deposit-money"
@@ -410,9 +473,7 @@ id="rTotalDeposit"
 
 <div class="summary-item">
 
-<p>
-💸 Total Withdrawal
-</p>
+<p>💸 Total Withdrawal</p>
 
 <strong
 class="withdraw-money"
@@ -426,9 +487,7 @@ id="rTotalWithdrawal"
 
 <div class="summary-item">
 
-<p>
-⏳ Pending Deposit
-</p>
+<p>⏳ Pending Deposit</p>
 
 <strong id="rPendingDeposit">
 ₹0.00
@@ -439,9 +498,7 @@ id="rTotalWithdrawal"
 
 <div class="summary-item">
 
-<p>
-⏳ Pending Withdrawal
-</p>
+<p>⏳ Pending Withdrawal</p>
 
 <strong id="rPendingWithdrawal">
 ₹0.00
@@ -452,9 +509,7 @@ id="rTotalWithdrawal"
 
 <div class="summary-item">
 
-<p>
-✅ Approved Deposit
-</p>
+<p>✅ Approved Deposit</p>
 
 <strong
 class="deposit-money"
@@ -468,9 +523,7 @@ id="rApprovedDeposit"
 
 <div class="summary-item">
 
-<p>
-✅ Approved Withdrawal
-</p>
+<p>✅ Approved Withdrawal</p>
 
 <strong
 class="withdraw-money"
@@ -484,9 +537,7 @@ id="rApprovedWithdrawal"
 
 <div class="summary-item">
 
-<p>
-💵 Commission
-</p>
+<p>💵 Commission</p>
 
 <strong
 class="deposit-money"
@@ -501,8 +552,6 @@ id="rCommission"
 </div>
 
 
-<!-- COMMISSION RULE -->
-
 <div class="commission-info">
 
 <h4>
@@ -510,7 +559,7 @@ id="rCommission"
 </h4>
 
 <p>
-Approved deposit par <b>10%</b> commission calculate ho raha hai.
+Approved deposit par <b>10%</b> commission calculate hoga.
 </p>
 
 <p>
@@ -518,7 +567,7 @@ Example: ₹1,000 approved deposit = ₹100 commission.
 </p>
 
 <p>
-Referral Team Commission:
+Referral Team:
 <br>
 Level A = <b>1%</b>
 <br>
@@ -529,11 +578,12 @@ Level C = <b>0.2%</b>
 
 </div>
 
-
 </div>
 
 
-<!-- DEPOSIT HISTORY -->
+<!-- ================================
+     DEPOSIT HISTORY
+================================ -->
 
 <div
 id="depositHistoryCard"
@@ -543,7 +593,6 @@ class="history-card"
 <h3>
 💰 Deposit History
 </h3>
-
 
 <div class="table-box">
 
@@ -561,7 +610,6 @@ class="history-card"
 </tr>
 
 </thead>
-
 
 <tbody id="agentDepositTable">
 
@@ -582,7 +630,9 @@ No deposits found
 </div>
 
 
-<!-- WITHDRAWAL HISTORY -->
+<!-- ================================
+     WITHDRAWAL HISTORY
+================================ -->
 
 <div
 id="withdrawalHistoryCard"
@@ -592,7 +642,6 @@ class="history-card"
 <h3>
 💸 Withdrawal History
 </h3>
-
 
 <div class="table-box">
 
@@ -610,7 +659,6 @@ class="history-card"
 </tr>
 
 </thead>
-
 
 <tbody id="agentWithdrawalTable">
 
@@ -631,7 +679,9 @@ No withdrawals found
 </div>
 
 
-<!-- ADMIN TOTALS -->
+<!-- ================================
+     ADMIN TOTALS
+================================ -->
 
 <div class="dashboard-grid">
 
@@ -717,7 +767,9 @@ No withdrawals found
 </div>
 
 
-<!-- ADMIN MENU -->
+<!-- ================================
+     ADMIN MENU
+================================ -->
 
 <h2>
 ⚙️ Admin Menu
@@ -749,7 +801,9 @@ No withdrawals found
 </div>
 
 
-<!-- SYSTEM STATUS -->
+<!-- ================================
+     SYSTEM STATUS
+================================ -->
 
 <div class="status">
 
@@ -776,7 +830,7 @@ System Status:
 
 
 /* =========================================
-   SUPABASE CONFIG
+   SUPABASE
 ========================================= */
 
 const SUPABASE_URL =
@@ -793,20 +847,34 @@ SUPABASE_KEY
 
 
 /* =========================================
-   COMMISSION RATE
+   COMMISSION
 ========================================= */
 
 const COMMISSION_RATE = 0.10;
 
 
 /* =========================================
-   MONEY FORMAT
+   MONEY
 ========================================= */
 
 function money(value){
 
 return "₹" +
 Number(value || 0).toFixed(2);
+
+}
+
+
+/* =========================================
+   NORMALIZE UID
+========================================= */
+
+function normalizeUID(value){
+
+return String(value || "")
+.trim()
+.toUpperCase()
+.replace(/\s+/g,"");
 
 }
 
@@ -855,11 +923,6 @@ async function searchAgent(){
 const input =
 document.getElementById("uidInput");
 
-const uid =
-input.value
-.trim()
-.toUpperCase();
-
 const message =
 document.getElementById("uidMessage");
 
@@ -872,25 +935,25 @@ document.getElementById("depositHistoryCard");
 const withdrawalCard =
 document.getElementById("withdrawalHistoryCard");
 
+const uid =
+normalizeUID(input.value);
+
 
 /* HIDE OLD RESULT */
 
-result.style.display =
-"none";
+result.style.display = "none";
 
-depositCard.style.display =
-"none";
+depositCard.style.display = "none";
 
-withdrawalCard.style.display =
-"none";
+withdrawalCard.style.display = "none";
 
 
-/* EMPTY UID */
+/* CHECK UID */
 
 if(!uid){
 
 message.textContent =
-"Please enter UID.";
+"Please enter Agent UID.";
 
 message.style.color =
 "red";
@@ -900,8 +963,10 @@ return;
 }
 
 
+/* SEARCHING */
+
 message.textContent =
-"Searching...";
+"🔎 Searching...";
 
 message.style.color =
 "#1565c0";
@@ -910,13 +975,13 @@ message.style.color =
 try{
 
 
-/* =========================================
+/* =====================================
    GET ALL AGENTS
-========================================= */
+===================================== */
 
 const {
-data: agents,
-error: agentError
+data:agents,
+error:agentError
 } =
 await supabaseClient
 
@@ -950,35 +1015,25 @@ return;
 }
 
 
-/* =========================================
-   NORMALIZED UID MATCH
-   EXTRA SPACE + CAPITALIZATION FIX
-========================================= */
+/* =====================================
+   FIND UID LOCALLY
+   This avoids case/space issue
+===================================== */
 
 const agent =
-(agents || []).find(function(a){
+(agents || []).find(
+item =>
+normalizeUID(item.uid) === uid
+);
 
-return String(a.uid || "")
-.trim()
-.toUpperCase() === uid;
-
-});
-
-
-/* AGENT NOT FOUND */
 
 if(!agent){
 
 message.textContent =
-"❌ Agent not found.";
+"❌ Agent not found for UID: " + uid;
 
 message.style.color =
 "red";
-
-console.log(
-"Searching UID:",
-uid
-);
 
 console.log(
 "Available agents:",
@@ -990,13 +1045,13 @@ return;
 }
 
 
-/* =========================================
+/* =====================================
    LOAD DEPOSITS
-========================================= */
+===================================== */
 
 const {
-data: deposits,
-error: depositError
+data:deposits,
+error:depositError
 } =
 await supabaseClient
 
@@ -1004,6 +1059,7 @@ await supabaseClient
 
 .select(`
 id,
+agent_id,
 amount,
 status
 `)
@@ -1040,13 +1096,13 @@ return;
 }
 
 
-/* =========================================
+/* =====================================
    LOAD WITHDRAWALS
-========================================= */
+===================================== */
 
 const {
-data: withdrawals,
-error: withdrawalError
+data:withdrawals,
+error:withdrawalError
 } =
 await supabaseClient
 
@@ -1054,6 +1110,7 @@ await supabaseClient
 
 .select(`
 id,
+agent_id,
 amount,
 status
 `)
@@ -1090,31 +1147,24 @@ return;
 }
 
 
-/* =========================================
+/* =====================================
    DEPOSIT CALCULATION
-========================================= */
+===================================== */
 
-let totalDeposit =
-0;
+let totalDeposit = 0;
 
-let pendingDeposit =
-0;
+let pendingDeposit = 0;
 
-let approvedDeposit =
-0;
+let approvedDeposit = 0;
 
 
 (deposits || []).forEach(
-function(deposit){
+deposit => {
 
 const amount =
-Number(
-deposit.amount || 0
-);
+Number(deposit.amount || 0);
 
-totalDeposit +=
-amount;
-
+totalDeposit += amount;
 
 const status =
 String(
@@ -1126,8 +1176,7 @@ deposit.status || ""
 
 if(status === "pending"){
 
-pendingDeposit +=
-amount;
+pendingDeposit += amount;
 
 }
 
@@ -1138,8 +1187,7 @@ status === "success" ||
 status === "successful"
 ){
 
-approvedDeposit +=
-amount;
+approvedDeposit += amount;
 
 }
 
@@ -1147,31 +1195,24 @@ amount;
 );
 
 
-/* =========================================
+/* =====================================
    WITHDRAWAL CALCULATION
-========================================= */
+===================================== */
 
-let totalWithdrawal =
-0;
+let totalWithdrawal = 0;
 
-let pendingWithdrawal =
-0;
+let pendingWithdrawal = 0;
 
-let approvedWithdrawal =
-0;
+let approvedWithdrawal = 0;
 
 
 (withdrawals || []).forEach(
-function(withdrawal){
+withdrawal => {
 
 const amount =
-Number(
-withdrawal.amount || 0
-);
+Number(withdrawal.amount || 0);
 
-totalWithdrawal +=
-amount;
-
+totalWithdrawal += amount;
 
 const status =
 String(
@@ -1183,8 +1224,7 @@ withdrawal.status || ""
 
 if(status === "pending"){
 
-pendingWithdrawal +=
-amount;
+pendingWithdrawal += amount;
 
 }
 
@@ -1195,8 +1235,7 @@ status === "success" ||
 status === "successful"
 ){
 
-approvedWithdrawal +=
-amount;
+approvedWithdrawal += amount;
 
 }
 
@@ -1204,18 +1243,18 @@ amount;
 );
 
 
-/* =========================================
-   10% COMMISSION
-========================================= */
+/* =====================================
+   COMMISSION
+===================================== */
 
 const commission =
 approvedDeposit *
 COMMISSION_RATE;
 
 
-/* =========================================
+/* =====================================
    AGENT DETAILS
-========================================= */
+===================================== */
 
 document.getElementById(
 "rUid"
@@ -1245,69 +1284,53 @@ agent.status || "-";
 
 statusElement.className =
 "detail-value " +
-statusClass(
-agent.status
-);
+statusClass(agent.status);
 
 
-/* =========================================
+/* =====================================
    SUMMARY
-========================================= */
+===================================== */
 
 document.getElementById(
 "rTotalDeposit"
 ).textContent =
-money(
-totalDeposit
-);
+money(totalDeposit);
 
 
 document.getElementById(
 "rTotalWithdrawal"
 ).textContent =
-money(
-totalWithdrawal
-);
+money(totalWithdrawal);
 
 
 document.getElementById(
 "rPendingDeposit"
 ).textContent =
-money(
-pendingDeposit
-);
+money(pendingDeposit);
 
 
 document.getElementById(
 "rPendingWithdrawal"
 ).textContent =
-money(
-pendingWithdrawal
-);
+money(pendingWithdrawal);
 
 
 document.getElementById(
 "rApprovedDeposit"
 ).textContent =
-money(
-approvedDeposit
-);
+money(approvedDeposit);
 
 
 document.getElementById(
 "rApprovedWithdrawal"
 ).textContent =
-money(
-approvedWithdrawal
-);
+money(approvedWithdrawal);
 
 
 document.getElementById(
 "rCommission"
 ).textContent =
-money(
-commission
-);
+money(commission);
 
 
 /* SHOW RESULT */
@@ -1316,9 +1339,9 @@ result.style.display =
 "block";
 
 
-/* =========================================
-   DEPOSIT HISTORY TABLE
-========================================= */
+/* =====================================
+   DEPOSIT TABLE
+===================================== */
 
 const depositTable =
 document.getElementById(
@@ -1347,7 +1370,7 @@ No deposits found
 
 depositTable.innerHTML =
 deposits.map(
-function(deposit){
+deposit => {
 
 const status =
 String(
@@ -1430,9 +1453,9 @@ depositCard.style.display =
 "block";
 
 
-/* =========================================
-   WITHDRAWAL HISTORY TABLE
-========================================= */
+/* =====================================
+   WITHDRAWAL TABLE
+===================================== */
 
 const withdrawalTable =
 document.getElementById(
@@ -1461,7 +1484,7 @@ No withdrawals found
 
 withdrawalTable.innerHTML =
 withdrawals.map(
-function(withdrawal){
+withdrawal => {
 
 const status =
 String(
@@ -1544,7 +1567,7 @@ withdrawalCard.style.display =
 "block";
 
 
-/* SUCCESS MESSAGE */
+/* SUCCESS */
 
 message.textContent =
 "✅ Agent found successfully.";
@@ -1561,7 +1584,7 @@ error
 );
 
 message.textContent =
-"Error: " +
+"❌ Error: " +
 error.message;
 
 message.style.color =
@@ -1573,7 +1596,7 @@ message.style.color =
 
 
 /* =========================================
-   UPDATE DEPOSIT STATUS
+   UPDATE DEPOSIT
 ========================================= */
 
 async function updateDepositStatus(
@@ -1581,7 +1604,7 @@ depositId,
 newStatus
 ){
 
-const text =
+const confirmText =
 newStatus === "approved"
 ?
 "Approve this deposit?"
@@ -1589,7 +1612,7 @@ newStatus === "approved"
 "Reject this deposit?";
 
 
-if(!confirm(text)){
+if(!confirm(confirmText)){
 
 return;
 
@@ -1617,8 +1640,6 @@ depositId
 
 if(error){
 
-console.error(error);
-
 alert(
 "❌ Update failed:\n" +
 error.message
@@ -1637,6 +1658,8 @@ newStatus === "approved"
 "❌ Deposit rejected successfully."
 );
 
+
+/* REFRESH CURRENT SEARCH */
 
 await searchAgent();
 
@@ -1657,7 +1680,7 @@ error.message
 
 
 /* =========================================
-   UPDATE WITHDRAWAL STATUS
+   UPDATE WITHDRAWAL
 ========================================= */
 
 async function updateWithdrawalStatus(
@@ -1665,7 +1688,7 @@ withdrawalId,
 newStatus
 ){
 
-const text =
+const confirmText =
 newStatus === "approved"
 ?
 "Approve this withdrawal?"
@@ -1673,7 +1696,7 @@ newStatus === "approved"
 "Reject this withdrawal?";
 
 
-if(!confirm(text)){
+if(!confirm(confirmText)){
 
 return;
 
@@ -1701,8 +1724,6 @@ withdrawalId
 
 if(error){
 
-console.error(error);
-
 alert(
 "❌ Update failed:\n" +
 error.message
@@ -1721,6 +1742,8 @@ newStatus === "approved"
 "❌ Withdrawal rejected successfully."
 );
 
+
+/* REFRESH */
 
 await searchAgent();
 
@@ -1749,145 +1772,6 @@ async function loadAdminTotals(){
 try{
 
 
-/* =========================================
-   TOTAL AGENTS
-========================================= */
-
-const {
-count:agentCount,
-error:agentError
-} =
-await supabaseClient
-
-.from("agents")
-
-.select(
-"id",
-{
-count:"exact",
-head:true
-}
-);
-
-
-if(!agentError){
-
-document.getElementById(
-"totalAgents"
-).textContent =
-agentCount || 0;
-
-}
-
-
-/* =========================================
-   TOTAL DEPOSITS
-========================================= */
-
-const {
-data:deposits,
-error:depositError
-} =
-await supabaseClient
-
-.from("deposits")
-
-.select(`
-amount,
-status
-`);
-
-
-if(depositError){
-
-console.error(
-"Admin deposit error:",
-depositError
-);
-
-}else{
-
-let totalDeposits =
-0;
-
-let pendingDeposits =
-0;
-
-let approvedDeposits =
-0;
-
-
-(deposits || []).forEach(
-function(deposit){
-
-const amount =
-Number(
-deposit.amount || 0
-);
-
-totalDeposits +=
-amount;
-
-
-const status =
-String(
-deposit.status || ""
-)
-.trim()
-.toLowerCase();
-
-
-if(status === "pending"){
-
-pendingDeposits++;
-
-}
-
-
-if(
-status === "approved" ||
-status === "success" ||
-status === "successful"
-){
-
-approvedDeposits +=
-amount;
-
-}
-
-}
-);
-
-
-document.getElementById(
-"totalDeposits"
-).textContent =
-money(
-totalDeposits
-);
-
-
-document.getElementById(
-"pendingDeposits"
-).textContent =
-pendingDeposits;
-
-
-/* 10% COMMISSION */
-
-const totalCommission =
-approvedDeposits *
-COMMISSION_RATE;
-
-
-document.getElementById(
-"totalCommission"
-).textContent =
-money(
-totalCommission
-);
-
-}
-
-
-/* =
+/* =====================================
+   AGENTS
+=========================
