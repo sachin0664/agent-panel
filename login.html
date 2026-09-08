@@ -168,8 +168,6 @@
   </div>
 
 
-  <!-- Supabase -->
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -225,6 +223,7 @@
 
           return;
         }
+
 
         const loginBtn =
           document.getElementById("loginBtn");
@@ -299,7 +298,24 @@
           }
 
 
-          /* LOGIN DATA */
+          /*
+           * CLEAR OLD LOGIN UID KEYS
+           *
+           * This prevents an old Agent UID
+           * from being used by Dashboard/Referral.
+           */
+
+          localStorage.removeItem("agentUID");
+          localStorage.removeItem("uid");
+          localStorage.removeItem("UID");
+          localStorage.removeItem("sathi_pay_uid");
+          localStorage.removeItem("userUID");
+          localStorage.removeItem("userUid");
+
+
+          /*
+           * CURRENT AGENT LOGIN
+           */
 
           localStorage.setItem(
             "sathi_logged_in",
@@ -316,10 +332,27 @@
             agent.id
           );
 
+
+          /*
+           * IMPORTANT:
+           * Dashboard + Referral use sathiPayUID
+           */
+
+          localStorage.setItem(
+            "sathiPayUID",
+            (agent.uid || "").trim().toUpperCase()
+          );
+
+
+          /*
+           * Keep old key also for compatibility
+           */
+
           localStorage.setItem(
             "sathi_uid",
             agent.uid || ""
           );
+
 
           localStorage.setItem(
             "sathi_name",
@@ -342,7 +375,9 @@
           );
 
 
-          /* OLD PROFILE COMPATIBILITY */
+          /*
+           * OLD PROFILE COMPATIBILITY
+           */
 
           localStorage.setItem(
             "agentName",
@@ -364,7 +399,7 @@
           setTimeout(function() {
 
             window.location.href =
-              "deshboard.html";
+              "dashboard.html";
 
           }, 1000);
 
@@ -404,4 +439,4 @@
   </script>
 
 </body>
-  </html>
+</html>
