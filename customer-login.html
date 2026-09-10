@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -15,157 +16,275 @@
         rel="stylesheet"
         href="css/style.css"
     >
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Sathi Pay</h1>
+<header>
 
+    <h1>Sathi Pay</h1>
+
+    <a href="customer-register.html">
+        Register
+    </a>
+
+</header>
+
+
+<main class="container">
+
+    <h2>Customer Login</h2>
+
+
+    <form id="customerLoginForm">
+
+        <label>
+            Email Address
+        </label>
+
+        <input
+            type="email"
+            id="customerEmail"
+            placeholder="Enter your email"
+            required
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="customerPassword"
+            placeholder="Enter your password"
+            required
+        >
+
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+
+    <p id="customerLoginMessage"></p>
+
+
+    <p>
+        Don't have an account?
         <a href="customer-register.html">
-            Register
+            Register here
         </a>
-    </header>
+    </p>
 
-    <main class="container">
-
-        <h2>Customer Login</h2>
-
-        <form id="customerLoginForm">
-
-            <label>
-                Email Address
-            </label>
-
-            <input
-                type="email"
-                id="customerEmail"
-                placeholder="Enter your email"
-                required
-            >
-
-            <label>
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="customerPassword"
-                placeholder="Enter your password"
-                required
-            >
-
-            <button type="submit">
-                Login
-            </button>
-
-        </form>
-
-        <p id="customerLoginMessage"></p>
-
-        <p>
-            Don't have an account?
-            <a href="customer-register.html">
-                Register here
-            </a>
-        </p>
-
-    </main>
+</main>
 
 
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- SUPABASE -->
 
-    <!-- Sathi Pay App -->
-    <script src="js/app.js?v=3"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/app.js?v=5"></script>
 
 
-    <script>
+<script>
 
-        const loginForm =
+const loginForm =
+    document.getElementById("customerLoginForm");
+
+const message =
+    document.getElementById("customerLoginMessage");
+
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
             document.getElementById(
-                "customerLoginForm"
+                "customerEmail"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "customerPassword"
+            ).value;
+
+
+        message.innerText =
+            "Logging in...";
+
+
+        try {
+
+            /* ==============================
+               SUPABASE AUTH LOGIN
+            ============================== */
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth.signInWithPassword({
+
+                    email: email,
+
+                    password: password
+
+                });
+
+
+            if (error) {
+
+                console.error(error);
+
+                message.innerText =
+                    "Login failed: " +
+                    error.message;
+
+                return;
+            }
+
+
+            if (!data.user) {
+
+                message.innerText =
+                    "Login failed.";
+
+                return;
+            }
+
+
+            /* ==============================
+               LOAD CUSTOMER PROFILE
+            ============================== */
+
+            const {
+                data: customer,
+                error: customerError
+            } =
+                await supabaseClient
+                    .from("customers")
+                    .select(`
+                        id,
+                        uid,
+                        name,
+                        mobile,
+                        invitation_code,
+                        wallet_balance,
+                        bonus_balance,
+                        deposit_balance,
+                        commission_balance,
+                        referral_balance,
+                        withdrawal_balance,
+                        sell_on,
+                        upi_id,
+                        qr_code_url,
+                        status
+                    `)
+                    .eq(
+                        "id",
+                        data.user.id
+                    )
+                    .maybeSingle();
+
+
+            if (customerError) {
+
+                console.error(
+                    "Customer profile error:",
+                    customerError
+                );
+
+                message.innerText =
+                    "Login successful, but customer profile could not be loaded.";
+
+                return;
+            }
+
+
+            if (!customer) {
+
+                message.innerText =
+                    "Customer profile not found.";
+
+                return;
+            }
+
+
+            /* ==============================
+               SAVE CUSTOMER SESSION INFO
+            ============================== */
+
+            localStorage.setItem(
+                "sathiPayCustomerId",
+                customer.id
             );
 
 
-        loginForm.addEventListener(
-            "submit",
-            async function(event) {
-
-                event.preventDefault();
-
-
-                const email =
-                    document.getElementById(
-                        "customerEmail"
-                    ).value.trim();
+            localStorage.setItem(
+                "sathiPayUID",
+                customer.uid
+            );
 
 
-                const password =
-                    document.getElementById(
-                        "customerPassword"
-                    ).value;
+            localStorage.setItem(
+                "sathiPayInvitationCode",
+                customer.invitation_code || ""
+            );
 
 
-                const message =
-                    document.getElementById(
-                        "customerLoginMessage"
-                    );
+            localStorage.setItem(
+                "sathiPayCustomerName",
+                customer.name || ""
+            );
 
 
-                message.innerText =
-                    "Logging in...";
+            localStorage.setItem(
+                "sathiPayCustomerMobile",
+                customer.mobile || ""
+            );
 
 
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient.auth.signInWithPassword({
+            /* ==============================
+               LOGIN SUCCESS
+            ============================== */
 
-                        email: email,
-
-                        password: password
-
-                    });
+            message.innerText =
+                "Login successful!";
 
 
-                if (error) {
+            setTimeout(function() {
 
-                    console.error(error);
+                window.location.href =
+                    "deshboard.html";
 
-                    message.innerText =
-                        "Login failed: " +
-                        error.message;
+            }, 700);
 
-                    return;
-                }
+        }
 
 
-                if (!data.user) {
+        catch (error) {
 
-                    message.innerText =
-                        "Login failed.";
+            console.error(error);
 
-                    return;
-                }
+            message.innerText =
+                "Login failed: " +
+                error.message;
 
+        }
 
-                message.innerText =
-                    "Login successful!";
+    }
+);
 
-
-                setTimeout(function() {
-
-                    window.location.href =
-                        "index.html";
-
-                }, 1000);
-
-            }
-        );
-
-    </script>
+</script>
 
 </body>
 
