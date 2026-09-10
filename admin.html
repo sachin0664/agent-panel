@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Sathi Pay - Admin Panel</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -20,8 +16,26 @@
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#f3f6fb;
+    background:#f4f7fb;
     color:#172033;
+}
+
+.header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:24px 16px;
+    text-align:center;
+    border-radius:0 0 24px 24px;
+}
+
+.header h1{
+    margin:0;
+    font-size:25px;
+}
+
+.header p{
+    margin:7px 0 0;
+    opacity:.9;
 }
 
 .container{
@@ -31,43 +45,24 @@ body{
     padding:15px;
 }
 
-.header{
-    background:#1d4ed8;
-    color:white;
-    padding:20px;
-    border-radius:0 0 18px 18px;
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.header h1{
-    margin:0;
-    font-size:26px;
-}
-
-.header p{
-    margin:7px 0 0;
-    opacity:.9;
-}
-
 .card{
     background:white;
-    border-radius:15px;
+    border-radius:18px;
     padding:18px;
-    margin-bottom:18px;
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
+    margin-bottom:16px;
+    box-shadow:0 4px 16px rgba(0,0,0,.07);
 }
 
 .card h2{
-    margin-top:0;
-    font-size:20px;
+    margin:0 0 15px;
+    font-size:19px;
 }
 
 input{
     width:100%;
     padding:14px;
-    border:1px solid #d1d5db;
-    border-radius:10px;
+    border:1px solid #d8dee9;
+    border-radius:12px;
     font-size:16px;
     margin-bottom:10px;
     outline:none;
@@ -75,17 +70,16 @@ input{
 
 button{
     border:0;
-    border-radius:10px;
-    padding:13px 16px;
+    border-radius:11px;
+    padding:12px 15px;
     font-size:15px;
+    font-weight:bold;
     cursor:pointer;
 }
 
-.searchBtn{
-    width:100%;
+.blue{
     background:#2563eb;
     color:white;
-    font-weight:bold;
 }
 
 .green{
@@ -98,61 +92,53 @@ button{
     color:white;
 }
 
-.blue{
-    background:#2563eb;
-    color:white;
-}
-
 .gray{
     background:#64748b;
     color:white;
 }
 
-.status{
-    padding:12px;
-    border-radius:10px;
-    background:#eef2ff;
-    margin-top:12px;
+.full{
+    width:100%;
 }
 
-.success{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.error{
-    background:#fee2e2;
-    color:#991b1b;
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:16px;
 }
 
 .stat{
-    padding:18px;
-    border-radius:14px;
     background:white;
-    margin-bottom:15px;
-    box-shadow:0 3px 10px rgba(0,0,0,.07);
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
 }
 
 .statTitle{
-    font-size:17px;
-    font-weight:bold;
+    font-size:13px;
+    color:#64748b;
 }
 
 .statValue{
-    font-size:28px;
+    font-size:23px;
     font-weight:bold;
-    margin-top:8px;
+    margin-top:7px;
 }
 
-.agentBox{
-    margin-top:18px;
+.item{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    padding:15px;
+    margin-top:10px;
 }
 
 .row{
     display:flex;
     justify-content:space-between;
     gap:10px;
-    padding:13px 0;
+    padding:10px 0;
     border-bottom:1px solid #e5e7eb;
 }
 
@@ -166,21 +152,72 @@ button{
 
 .value{
     text-align:right;
-}
-
-.item{
-    border:1px solid #e5e7eb;
-    border-radius:12px;
-    padding:15px;
-    margin-top:10px;
-    background:#fafafa;
+    word-break:break-word;
 }
 
 .actions{
-    margin-top:12px;
     display:flex;
     gap:8px;
     flex-wrap:wrap;
+    margin-top:12px;
+}
+
+.status{
+    padding:12px;
+    border-radius:11px;
+    margin-top:10px;
+    background:#eef2ff;
+}
+
+.success{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.error{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    background:#e2e8f0;
+}
+
+.approved{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.pending{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.rejected{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.commissionBox{
+    background:linear-gradient(135deg,#eff6ff,#f5f3ff);
+    border-radius:15px;
+    padding:16px;
+}
+
+.rate{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid #ddd;
+}
+
+.rate:last-child{
+    border-bottom:0;
 }
 
 .small{
@@ -192,215 +229,198 @@ button{
     display:none;
 }
 
-</style>
+@media(max-width:600px){
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
 
+    .row{
+        flex-direction:column;
+    }
+
+    .value{
+        text-align:left;
+    }
+}
+</style>
 </head>
 
 <body>
 
 <div class="header">
+    <h1>🛡️ Sathi Pay Admin</h1>
+    <p>Customer Management Dashboard</p>
+</div>
 
-    <h1>🛡️ Sathi Pay Admin Panel</h1>
+<div class="container">
 
-    <p>Admin Management Dashboard</p>
+<!-- DASHBOARD STATS -->
+
+<div class="stats">
+
+    <div class="stat">
+        <div class="statTitle">👥 Total Customers</div>
+        <div id="totalCustomers" class="statValue">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="statTitle">💰 Total Deposit</div>
+        <div id="totalDeposits" class="statValue">₹0.00</div>
+    </div>
+
+    <div class="stat">
+        <div class="statTitle">💸 Total Withdrawal</div>
+        <div id="totalWithdrawals" class="statValue">₹0.00</div>
+    </div>
+
+    <div class="stat">
+        <div class="statTitle">💵 Total Commission</div>
+        <div id="totalCommission" class="statValue">₹0.00</div>
+    </div>
 
 </div>
 
 
-<div class="container">
-
-
-<!-- ================= SEARCH AGENT ================= -->
+<!-- SEARCH CUSTOMER -->
 
 <div class="card">
 
-    <h2>🔎 Search Agent</h2>
+    <h2>🔎 Search Customer</h2>
 
     <input
-        id="agentUID"
+        id="customerUID"
         type="text"
-        placeholder="Enter Agent UID"
+        placeholder="Enter Customer UID"
         autocomplete="off"
     >
 
     <button
-        class="searchBtn"
-        onclick="searchAgent()"
+        class="blue full"
+        onclick="searchCustomer()"
     >
-        Search
+        Search Customer
     </button>
 
-    <div
-        id="searchStatus"
-        class="status"
-    >
+    <div id="searchStatus" class="status">
         Ready to search.
     </div>
 
-    <div
-        id="agentDetails"
-        class="agentBox hidden"
-    ></div>
+    <div id="customerDetails"></div>
 
 </div>
 
 
-<!-- ================= ADMIN TOTALS ================= -->
-
-<div class="stat">
-
-    <div class="statTitle">
-        👥 Total Agents
-    </div>
-
-    <div
-        id="totalAgents"
-        class="statValue"
-    >
-        0
-    </div>
-
-</div>
-
-
-<div class="stat">
-
-    <div class="statTitle">
-        💰 Total Deposits
-    </div>
-
-    <div
-        id="totalDeposits"
-        class="statValue"
-    >
-        ₹0.00
-    </div>
-
-</div>
-
-
-<div class="stat">
-
-    <div class="statTitle">
-        💸 Total Withdrawals
-    </div>
-
-    <div
-        id="totalWithdrawals"
-        class="statValue"
-    >
-        ₹0.00
-    </div>
-
-</div>
-
-
-<!-- ================= DEPOSIT REQUESTS ================= -->
+<!-- DEPOSIT REQUESTS -->
 
 <div class="card">
 
     <h2>💰 Deposit Requests</h2>
 
     <button
-        class="blue"
-        onclick="loadAdminDeposits()"
+        class="blue full"
+        onclick="loadDeposits()"
     >
         View Deposit Requests
     </button>
 
-    <div id="adminDepositList">
-    </div>
+    <div id="depositList"></div>
 
 </div>
 
 
-<!-- ================= WITHDRAWAL REQUESTS ================= -->
+<!-- WITHDRAWAL REQUESTS -->
 
 <div class="card">
 
     <h2>💸 Withdrawal Requests</h2>
 
     <button
-        class="blue"
-        onclick="loadAdminWithdrawals()"
+        class="blue full"
+        onclick="loadWithdrawals()"
     >
         View Withdrawal Requests
     </button>
 
-    <div id="adminWithdrawalList">
-    </div>
+    <div id="withdrawalList"></div>
 
 </div>
 
 
-<!-- ================= ALL AGENTS ================= -->
+<!-- ALL CUSTOMERS -->
 
 <div class="card">
 
-    <h2>👥 All Agents</h2>
+    <h2>👥 All Customers</h2>
 
     <button
-        class="blue"
-        onclick="loadAllAgents()"
+        class="blue full"
+        onclick="loadCustomers()"
     >
-        View All Agents
+        View All Customers
     </button>
 
-    <div id="allAgentsList">
-    </div>
+    <div id="customerList"></div>
 
 </div>
 
 
-<!-- ================= AGENT TRANSACTIONS ================= -->
+<!-- COMMISSION -->
 
 <div class="card">
 
-    <h2>📊 Agent Transactions</h2>
+    <h2>💵 Deposit Commission</h2>
 
-    <input
-        id="transactionUID"
-        type="text"
-        placeholder="Enter Agent UID"
-    >
+    <div class="commissionBox">
 
-    <button
-        class="blue"
-        onclick="loadAgentTransactions()"
-    >
-        View Transactions
-    </button>
-
-    <div id="transactionList">
-    </div>
-
-</div>
-
-
-<!-- ================= COMMISSION ================= -->
-
-<div class="card">
-
-    <h2>💵 Commission</h2>
-
-    <div class="item">
-
-        <b>Deposit Commission Rate</b>
-
-        <div
-            style="font-size:26px;font-weight:bold;margin-top:8px;"
-        >
-            10%
+        <div class="rate">
+            <span>Base Commission</span>
+            <b>6%</b>
         </div>
+
+        <div class="rate">
+            <span>Single Deposit ₹10,000+</span>
+            <b>8%</b>
+        </div>
+
+        <div class="rate">
+            <span>Single Deposit ₹20,000+</span>
+            <b>10%</b>
+        </div>
+
+        <br>
 
         <div class="small">
-            Approved deposit × 10%
+            Commission is calculated on each approved
+            single deposit transaction.
         </div>
 
     </div>
 
 </div>
 
+
+<!-- REFERRAL -->
+
+<div class="card">
+
+    <h2>👥 Referral Commission</h2>
+
+    <div class="item">
+        <b>Level A</b>
+        <span style="float:right">1%</span>
+    </div>
+
+    <div class="item">
+        <b>Level B</b>
+        <span style="float:right">0.5%</span>
+    </div>
+
+    <div class="item">
+        <b>Level C</b>
+        <span style="float:right">0.2%</span>
+    </div>
+
+</div>
 
 </div>
 
@@ -408,7 +428,7 @@ button{
 <script>
 
 /* =====================================================
-   SUPABASE CONFIG
+   SUPABASE
 ===================================================== */
 
 const SUPABASE_URL =
@@ -418,10 +438,10 @@ const SUPABASE_KEY =
 "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
 const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 /* =====================================================
@@ -431,366 +451,266 @@ const supabaseClient =
 function money(value){
 
     return "₹" +
-        Number(value || 0)
-        .toFixed(2);
+        Number(value || 0).toFixed(2);
 
 }
 
 
-function setStatus(message,type=""){
+function statusBadge(status){
 
-    const box =
-        document.getElementById("searchStatus");
+    const s =
+        String(status || "pending").toLowerCase();
 
-    box.className = "status " + type;
+    let cls = "pending";
 
-    box.textContent = message;
+    if(
+        s === "approved" ||
+        s === "success" ||
+        s === "successful"
+    ){
+        cls = "approved";
+    }
 
+    if(
+        s === "rejected" ||
+        s === "failed"
+    ){
+        cls = "rejected";
+    }
+
+    return `
+        <span class="badge ${cls}">
+            ${status || "Pending"}
+        </span>
+    `;
+}
+
+
+function commissionRate(amount){
+
+    const n = Number(amount || 0);
+
+    if(n >= 20000){
+        return 0.10;
+    }
+
+    if(n >= 10000){
+        return 0.08;
+    }
+
+    return 0.06;
+}
+
+
+function commissionAmount(amount){
+
+    return Number(amount || 0) *
+        commissionRate(amount);
 }
 
 
 /* =====================================================
-   SEARCH AGENT
+   SEARCH CUSTOMER
 ===================================================== */
 
-async function searchAgent(){
-
-    const input =
-        document.getElementById("agentUID");
+async function searchCustomer(){
 
     const uid =
-        input.value
+        document
+        .getElementById("customerUID")
+        .value
         .trim()
         .toUpperCase();
 
-    const details =
-        document.getElementById("agentDetails");
+    const status =
+        document.getElementById("searchStatus");
 
-    details.classList.add("hidden");
-    details.innerHTML = "";
+    const box =
+        document.getElementById("customerDetails");
+
+    box.innerHTML = "";
 
     if(!uid){
 
-        setStatus(
-            "Please enter Agent UID.",
-            "error"
-        );
+        status.className = "status error";
+        status.textContent =
+            "Please enter Customer UID.";
 
         return;
     }
 
-
-    setStatus("Searching...");
+    status.className = "status";
+    status.textContent =
+        "Searching customer...";
 
 
     const {
-        data:agent,
+        data:customer,
         error
-    } = await supabaseClient
-
-        .from("agents")
-
-        .select(
-            "id,uid,name,mobile,status"
-        )
-
+    } =
+    await supabaseClient
+        .from("customers")
+        .select("*")
         .eq("uid",uid)
-
         .maybeSingle();
 
 
     if(error){
 
-        setStatus(
-            "Database error: " +
-            error.message,
-            "error"
-        );
+        status.className =
+            "status error";
+
+        status.textContent =
+            error.message;
 
         return;
     }
 
 
-    if(!agent){
+    if(!customer){
 
-        setStatus(
-            "Agent not found.",
-            "error"
-        );
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Customer not found.";
 
         return;
     }
 
 
-    /* ---------- DEPOSITS ---------- */
+    const wallet =
+        Number(customer.wallet_balance || 0);
 
-    const {
-        data:deposits
-    } = await supabaseClient
+    const bonus =
+        Number(customer.bonus_balance || 0);
 
-        .from("deposits")
-
-        .select(
-            "id,amount,status"
-        )
-
-        .eq(
-            "agent_id",
-            agent.id
-        )
-
-        .order(
-            "id",
-            {ascending:false}
-        );
-
-
-    /* ---------- WITHDRAWALS ---------- */
-
-    const {
-        data:withdrawals
-    } = await supabaseClient
-
-        .from("withdrawals")
-
-        .select(
-            "id,amount,status"
-        )
-
-        .eq(
-            "agent_id",
-            agent.id
-        )
-
-        .order(
-            "id",
-            {ascending:false}
-        );
-
-
-    let totalDeposit = 0;
-    let approvedDeposit = 0;
-
-    (deposits || []).forEach(d => {
-
-        const amount =
-            Number(d.amount || 0);
-
-        totalDeposit += amount;
-
-        if(
-            String(d.status)
-            .toLowerCase()
-            === "approved"
-        ){
-
-            approvedDeposit += amount;
-
-        }
-
-    });
-
-
-    let approvedWithdrawal = 0;
-
-    (withdrawals || []).forEach(w => {
-
-        if(
-            String(w.status)
-            .toLowerCase()
-            === "approved"
-        ){
-
-            approvedWithdrawal +=
-                Number(w.amount || 0);
-
-        }
-
-    });
-
+    const depositBalance =
+        Number(customer.deposit_balance || 0);
 
     const commission =
-        approvedDeposit * 0.10;
+        Number(customer.commission_balance || 0);
+
+    const referral =
+        Number(customer.referral_balance || 0);
+
+    const withdrawalBalance =
+        Number(customer.withdrawal_balance || 0);
 
 
-    details.innerHTML = `
+    box.innerHTML = `
 
-        <div class="card">
+        <div class="item">
 
-            <h2>👤 Agent Details</h2>
+            <h3>👤 Customer Details</h3>
 
             <div class="row">
-                <span class="label">ID</span>
+                <span class="label">Name</span>
                 <span class="value">
-                    ${agent.id}
+                    ${customer.name || "-"}
                 </span>
             </div>
 
             <div class="row">
                 <span class="label">UID</span>
                 <span class="value">
-                    ${agent.uid || "-"}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Name</span>
-                <span class="value">
-                    ${agent.name || "-"}
+                    ${customer.uid || "-"}
                 </span>
             </div>
 
             <div class="row">
                 <span class="label">Mobile</span>
                 <span class="value">
-                    ${agent.mobile || "-"}
+                    ${customer.mobile || "-"}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Invitation Code</span>
+                <span class="value">
+                    ${customer.invitation_code || "-"}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Referred By</span>
+                <span class="value">
+                    ${customer.referred_by || "-"}
                 </span>
             </div>
 
             <div class="row">
                 <span class="label">Status</span>
                 <span class="value">
-                    ${agent.status || "-"}
+                    ${customer.status || "Active"}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Total Deposit
-                </span>
+                <span class="label">Wallet</span>
                 <span class="value">
-                    ${money(totalDeposit)}
+                    ${money(wallet)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Approved Deposit
-                </span>
+                <span class="label">₹99 Bonus</span>
                 <span class="value">
-                    ${money(approvedDeposit)}
+                    ${money(bonus)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Commission 10%
+                <span class="label">Deposit Balance</span>
+                <span class="value">
+                    ${money(depositBalance)}
                 </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Commission Balance</span>
                 <span class="value">
                     ${money(commission)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Approved Withdrawal
-                </span>
+                <span class="label">Referral Income</span>
                 <span class="value">
-                    ${money(approvedWithdrawal)}
+                    ${money(referral)}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Withdrawal Balance</span>
+                <span class="value">
+                    ${money(withdrawalBalance)}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Sell Status</span>
+                <span class="value">
+                    ${customer.sell_on ? "🟢 ON" : "🔴 OFF"}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">UPI ID</span>
+                <span class="value">
+                    ${customer.upi_id || "-"}
                 </span>
             </div>
 
         </div>
-
-
-        <div class="card">
-
-            <h2>💰 Deposit History</h2>
-
-            ${
-                deposits &&
-                deposits.length
-                ?
-                deposits.map(d => `
-
-                    <div class="item">
-
-                        <b>
-                            Deposit #${d.id}
-                        </b>
-
-                        <br>
-
-                        Amount:
-                        ${money(d.amount)}
-
-                        <br>
-
-                        Status:
-                        ${d.status}
-
-                        <br>
-
-                        Commission:
-                        ${
-                            String(d.status)
-                            .toLowerCase()
-                            === "approved"
-                            ?
-                            money(
-                                Number(d.amount || 0)
-                                * 0.10
-                            )
-                            :
-                            "₹0.00"
-                        }
-
-                    </div>
-
-                `).join("")
-                :
-                "<p>No deposits found.</p>"
-            }
-
-        </div>
-
-
-        <div class="card">
-
-            <h2>💸 Withdrawal History</h2>
-
-            ${
-                withdrawals &&
-                withdrawals.length
-                ?
-                withdrawals.map(w => `
-
-                    <div class="item">
-
-                        <b>
-                            Withdrawal #${w.id}
-                        </b>
-
-                        <br>
-
-                        Amount:
-                        ${money(w.amount)}
-
-                        <br>
-
-                        Status:
-                        ${w.status}
-
-                    </div>
-
-                `).join("")
-                :
-                "<p>No withdrawals found.</p>"
-            }
-
-        </div>
-
     `;
 
 
-    details.classList.remove("hidden");
+    status.className =
+        "status success";
 
-
-    setStatus(
-        "✅ Agent found successfully.",
-        "success"
-    );
-
+    status.textContent =
+        "✅ Customer found successfully.";
 }
 
 
@@ -800,44 +720,50 @@ async function searchAgent(){
 
 async function loadAdminTotals(){
 
-
     const {
-        count:agentCount
-    } = await supabaseClient
-
-        .from("agents")
-
-        .select(
-            "*",
-            {
-                count:"exact",
-                head:true
-            }
-        );
+        count
+    } =
+    await supabaseClient
+        .from("customers")
+        .select("*",{
+            count:"exact",
+            head:true
+        });
 
 
     document.getElementById(
-        "totalAgents"
+        "totalCustomers"
     ).textContent =
-        agentCount || 0;
+        count || 0;
 
 
     const {
         data:deposits
-    } = await supabaseClient
-
+    } =
+    await supabaseClient
         .from("deposits")
-
-        .select("amount");
+        .select("amount,status");
 
 
     let totalDeposit = 0;
+    let totalCommission = 0;
 
 
     (deposits || []).forEach(d => {
 
         totalDeposit +=
             Number(d.amount || 0);
+
+        if(
+            String(d.status)
+            .toLowerCase()
+            === "approved"
+        ){
+
+            totalCommission +=
+                commissionAmount(d.amount);
+
+        }
 
     });
 
@@ -848,12 +774,17 @@ async function loadAdminTotals(){
         money(totalDeposit);
 
 
+    document.getElementById(
+        "totalCommission"
+    ).textContent =
+        money(totalCommission);
+
+
     const {
         data:withdrawals
-    } = await supabaseClient
-
+    } =
+    await supabaseClient
         .from("withdrawals")
-
         .select("amount");
 
 
@@ -880,11 +811,11 @@ async function loadAdminTotals(){
    DEPOSIT REQUESTS
 ===================================================== */
 
-async function loadAdminDeposits(){
+async function loadDeposits(){
 
     const box =
         document.getElementById(
-            "adminDepositList"
+            "depositList"
         );
 
     box.innerHTML =
@@ -894,26 +825,21 @@ async function loadAdminDeposits(){
     const {
         data,
         error
-    } = await supabaseClient
-
+    } =
+    await supabaseClient
         .from("deposits")
-
-        .select(
-            "id,agent_id,amount,status"
-        )
-
-        .order(
-            "id",
-            {ascending:false}
-        );
+        .select("*")
+        .order("id",{
+            ascending:false
+        });
 
 
     if(error){
 
         box.innerHTML =
-            "<div class='status error'>" +
-            error.message +
-            "</div>";
+        `<div class="status error">
+            ${error.message}
+        </div>`;
 
         return;
     }
@@ -922,64 +848,91 @@ async function loadAdminDeposits(){
     if(!data || !data.length){
 
         box.innerHTML =
-            "<p>No deposits found.</p>";
+            "<p>No deposit requests.</p>";
 
         return;
     }
 
 
-    box.innerHTML = data.map(d => `
+    box.innerHTML =
+    data.map(d => {
+
+        const rate =
+            commissionRate(d.amount) * 100;
+
+        const commission =
+            commissionAmount(d.amount);
+
+        return `
 
         <div class="item">
 
-            <b>Deposit ID:</b>
-            ${d.id}
+            <b>💰 Deposit #${d.id}</b>
 
-            <br>
+            <div class="row">
+                <span class="label">Amount</span>
+                <span class="value">
+                    ${money(d.amount)}
+                </span>
+            </div>
 
-            <b>Agent ID:</b>
-            ${d.agent_id}
+            <div class="row">
+                <span class="label">Status</span>
+                <span class="value">
+                    ${statusBadge(d.status)}
+                </span>
+            </div>
 
-            <br>
+            <div class="row">
+                <span class="label">Commission Rate</span>
+                <span class="value">
+                    ${rate}%
+                </span>
+            </div>
 
-            <b>Amount:</b>
-            ${money(d.amount)}
+            <div class="row">
+                <span class="label">Commission</span>
+                <span class="value">
+                    ${money(commission)}
+                </span>
+            </div>
 
-            <br>
-
-            <b>Status:</b>
-            ${d.status}
+            <div class="row">
+                <span class="label">Customer ID</span>
+                <span class="value">
+                    ${d.customer_id || "-"}
+                </span>
+            </div>
 
             <div class="actions">
 
                 <button
                     class="green"
-                    onclick="
-                    updateDepositStatus(
+                    onclick="updateDeposit(
                         ${d.id},
                         'approved'
                     )"
                 >
-                    Approve
+                    ✅ Approve
                 </button>
 
                 <button
                     class="red"
-                    onclick="
-                    updateDepositStatus(
+                    onclick="updateDeposit(
                         ${d.id},
                         'rejected'
                     )"
                 >
-                    Reject
+                    ❌ Reject
                 </button>
 
             </div>
 
         </div>
 
-    `).join("");
+        `;
 
+    }).join("");
 }
 
 
@@ -987,33 +940,22 @@ async function loadAdminDeposits(){
    UPDATE DEPOSIT
 ===================================================== */
 
-async function updateDepositStatus(
-    id,
-    status
-){
+async function updateDeposit(id,status){
 
     const {
         error
-    } = await supabaseClient
-
+    } =
+    await supabaseClient
         .from("deposits")
-
         .update({
             status:status
         })
-
-        .eq(
-            "id",
-            id
-        );
+        .eq("id",id);
 
 
     if(error){
 
-        alert(
-            "❌ " +
-            error.message
-        );
+        alert("❌ " + error.message);
 
         return;
     }
@@ -1026,22 +968,20 @@ async function updateDepositStatus(
     );
 
 
-    await loadAdminDeposits();
-
+    await loadDeposits();
     await loadAdminTotals();
-
 }
 
 
 /* =====================================================
-   WITHDRAWAL REQUESTS
+   WITHDRAWALS
 ===================================================== */
 
-async function loadAdminWithdrawals(){
+async function loadWithdrawals(){
 
     const box =
         document.getElementById(
-            "adminWithdrawalList"
+            "withdrawalList"
         );
 
     box.innerHTML =
@@ -1051,24 +991,21 @@ async function loadAdminWithdrawals(){
     const {
         data,
         error
-    } = await supabaseClient
-
+    } =
+    await supabaseClient
         .from("withdrawals")
-
         .select("*")
-
-        .order(
-            "id",
-            {ascending:false}
-        );
+        .order("id",{
+            ascending:false
+        });
 
 
     if(error){
 
         box.innerHTML =
-            "<div class='status error'>" +
-            error.message +
-            "</div>";
+        `<div class="status error">
+            ${error.message}
+        </div>`;
 
         return;
     }
@@ -1077,56 +1014,67 @@ async function loadAdminWithdrawals(){
     if(!data || !data.length){
 
         box.innerHTML =
-            "<p>No withdrawals found.</p>";
+            "<p>No withdrawal requests.</p>";
 
         return;
     }
 
 
-    box.innerHTML = data.map(w => `
+    box.innerHTML =
+    data.map(w => `
 
         <div class="item">
 
-            <b>Withdrawal ID:</b>
-            ${w.id}
+            <b>💸 Withdrawal #${w.id}</b>
 
-            <br>
+            <div class="row">
+                <span class="label">Amount</span>
+                <span class="value">
+                    ${money(w.amount)}
+                </span>
+            </div>
 
-            <b>Agent ID:</b>
-            ${w.agent_id ?? "-"}
+            <div class="row">
+                <span class="label">Status</span>
+                <span class="value">
+                    ${statusBadge(w.status)}
+                </span>
+            </div>
 
-            <br>
+            <div class="row">
+                <span class="label">UPI ID</span>
+                <span class="value">
+                    ${w.upi_id || "-"}
+                </span>
+            </div>
 
-            <b>Amount:</b>
-            ${money(w.amount)}
-
-            <br>
-
-            <b>Status:</b>
-            ${w.status || "-"}
+            <div class="row">
+                <span class="label">Customer ID</span>
+                <span class="value">
+                    ${w.customer_id || "-"}
+                </span>
+            </div>
 
             <div class="actions">
 
                 <button
                     class="green"
-                    onclick="
-                    updateWithdrawalStatus(
+                    onclick="updateWithdrawal(
                         ${w.id},
                         'approved'
                     )"
                 >
-                    Approve
+                    ✅ Approve
                 </button>
 
                 <button
                     class="red"
-                    onclick="
-                    updateWithdrawalStatus(
+                    onclick="updateWithdrawal(
                         ${w.id},
                         'rejected'
                     )"
                 >
-                    Reject
+                    ❌ Reject
                 </button>
 
             </div>
@@ -1134,7 +1082,6 @@ async function loadAdminWithdrawals(){
         </div>
 
     `).join("");
-
 }
 
 
@@ -1142,33 +1089,22 @@ async function loadAdminWithdrawals(){
    UPDATE WITHDRAWAL
 ===================================================== */
 
-async function updateWithdrawalStatus(
-    id,
-    status
-){
+async function updateWithdrawal(id,status){
 
     const {
         error
-    } = await supabaseClient
-
+    } =
+    await supabaseClient
         .from("withdrawals")
-
         .update({
             status:status
         })
-
-        .eq(
-            "id",
-            id
-        );
+        .eq("id",id);
 
 
     if(error){
 
-        alert(
-            "❌ " +
-            error.message
-        );
+        alert("❌ " + error.message);
 
         return;
     }
@@ -1181,51 +1117,45 @@ async function updateWithdrawalStatus(
     );
 
 
-    await loadAdminWithdrawals();
-
+    await loadWithdrawals();
     await loadAdminTotals();
 
 }
 
 
 /* =====================================================
-   ALL AGENTS
+   ALL CUSTOMERS
 ===================================================== */
 
-async function loadAllAgents(){
+async function loadCustomers(){
 
     const box =
         document.getElementById(
-            "allAgentsList"
+            "customerList"
         );
 
     box.innerHTML =
-        "<p>Loading...</p>";
+        "<p>Loading customers...</p>";
 
 
     const {
         data,
         error
-    } = await supabaseClient
-
-        .from("agents")
-
-        .select(
-            "id,uid,name,mobile,status"
-        )
-
-        .order(
-            "id",
-            {ascending:false}
-        );
+    } =
+    await supabaseClient
+        .from("customers")
+        .select("*")
+        .order("created_at",{
+            ascending:false
+        });
 
 
     if(error){
 
         box.innerHTML =
-            "<div class='status error'>" +
-            error.message +
-            "</div>";
+        `<div class="status error">
+            ${error.message}
+        </div>`;
 
         return;
     }
@@ -1234,209 +1164,59 @@ async function loadAllAgents(){
     if(!data || !data.length){
 
         box.innerHTML =
-            "<p>No agents found.</p>";
+            "<p>No customers found.</p>";
+
         return;
     }
 
-    box.innerHTML = data.map(a => `
+
+    box.innerHTML =
+    data.map(c => `
 
         <div class="item">
 
-            <b>ID:</b>
-            ${a.id}
+            <h3>
+                👤 ${c.name || "-"}
+            </h3>
 
-            <br>
+            <div class="row">
+                <span class="label">UID</span>
+                <span class="value">
+                    ${c.uid || "-"}
+                </span>
+            </div>
 
-            <b>UID:</b>
-            ${a.uid || "-"}
+            <div class="row">
+                <span class="label">Mobile</span>
+                <span class="value">
+                    ${c.mobile || "-"}
+                </span>
+            </div>
 
-            <br>
+            <div class="row">
+                <span class="label">Wallet</span>
+                <span class="value">
+                    ${money(c.wallet_balance)}
+                </span>
+            </div>
 
-            <b>Name:</b>
-            ${a.name || "-"}
+            <div class="row">
+                <span class="label">Status</span>
+                <span class="value">
+                    ${c.status || "Active"}
+                </span>
+            </div>
 
-            <br>
-
-            <b>Mobile:</b>
-            ${a.mobile || "-"}
-
-            <br>
-
-            <b>Status:</b>
-            ${a.status || "-"}
+            <div class="row">
+                <span class="label">Sell</span>
+                <span class="value">
+                    ${c.sell_on ? "🟢 ON" : "🔴 OFF"}
+                </span>
+            </div>
 
         </div>
 
     `).join("");
-
-}
-
-
-/* =====================================================
-   AGENT TRANSACTIONS
-===================================================== */
-
-async function loadAgentTransactions(){
-
-    const uid =
-        document
-        .getElementById("transactionUID")
-        .value
-        .trim()
-        .toUpperCase();
-
-    const box =
-        document.getElementById("transactionList");
-
-    if(!uid){
-
-        box.innerHTML =
-            "<div class='status error'>Enter Agent UID.</div>";
-
-        return;
-    }
-
-    box.innerHTML = "<p>Searching...</p>";
-
-    const {
-        data:agent,
-        error
-    } = await supabaseClient
-        .from("agents")
-        .select("id,uid,name")
-        .eq("uid",uid)
-        .maybeSingle();
-
-    if(error){
-
-        box.innerHTML =
-            "<div class='status error'>" +
-            error.message +
-            "</div>";
-
-        return;
-    }
-
-    if(!agent){
-
-        box.innerHTML =
-            "<div class='status error'>" +
-            "Agent not found." +
-            "</div>";
-
-        return;
-    }
-
-    const {
-        data:deposits
-    } = await supabaseClient
-        .from("deposits")
-        .select("id,amount,status")
-        .eq("agent_id",agent.id)
-        .order("id",{ascending:false});
-
-    const {
-        data:withdrawals
-    } = await supabaseClient
-        .from("withdrawals")
-        .select("id,amount,status")
-        .eq("agent_id",agent.id)
-        .order("id",{ascending:false});
-
-    let html = `
-
-        <div class="item">
-
-            <b>Agent:</b>
-            ${agent.name || "-"}
-
-            <br>
-
-            <b>UID:</b>
-            ${agent.uid}
-
-        </div>
-
-        <h3>💰 Deposits</h3>
-
-    `;
-
-    if(!deposits || !deposits.length){
-
-        html += "<p>No deposits found.</p>";
-
-    }else{
-
-        deposits.forEach(d => {
-
-            html += `
-
-                <div class="item">
-
-                    Deposit #${d.id}
-
-                    <br>
-
-                    Amount:
-                    ${money(d.amount)}
-
-                    <br>
-
-                    Status:
-                    ${d.status}
-
-                    <br>
-
-                    Commission:
-                    ${
-                        String(d.status).toLowerCase() === "approved"
-                        ? money(Number(d.amount || 0) * 0.10)
-                        : "₹0.00"
-                    }
-
-                </div>
-
-            `;
-
-        });
-
-    }
-
-    html += `<h3>💸 Withdrawals</h3>`;
-
-    if(!withdrawals || !withdrawals.length){
-
-        html += "<p>No withdrawals found.</p>";
-
-    }else{
-
-        withdrawals.forEach(w => {
-
-            html += `
-
-                <div class="item">
-
-                    Withdrawal #${w.id}
-
-                    <br>
-
-                    Amount:
-                    ${money(w.amount)}
-
-                    <br>
-
-                    Status:
-                    ${w.status}
-
-                </div>
-
-            `;
-
-        });
-
-    }
-
-    box.innerHTML = html;
 
 }
 
