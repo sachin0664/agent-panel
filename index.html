@@ -3,19 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Panel</title>
-    <link rel="stylesheet" href="css/style.css">
+
+    <title>Sathi Pay</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .hero {
+            max-width: 900px;
+            margin: auto;
+            padding: 70px 20px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #667085;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .register {
+            background: #2563eb;
+            color: white;
+        }
+
+        .login {
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .features {
+            max-width: 900px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px 18px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #667085;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #667085;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .hero h2 {
+                font-size: 30px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
 <header>
-    <h1>Agent Panel</h1>
-    <a href="login.html">Login</a>
+    <h1>Sathi Pay</h1>
+    <a href="customer-login.html">Login</a>
 </header>
 
-<div class="container">
-    <p>Welcome to Agent Panel</p>
-</div>
+<section class="hero">
 
-    </body>
-</html>
+    <h2>Welcome to Sathi Pay</h2>
+
+    <p>
+        Manage your deposits, wallet, earnings,
+        referrals and withdrawals from one secure dashboard.
+    </p>
+
+    <div class="buttons">
+        <a class="btn register" href="customer-register.html">
+            Create Account
+        </a>
+
+        <a class="btn login" href="customer-login.html">
+            Login
+        </a>
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="card">
+        <h3>💰 Deposit</h3>
+        <p>
+            Submit your deposit and track its approval status.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>👛 Wallet</h3>
+        <p>
+            View your available balance and transaction history.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>👥 Referral</h3>
+        <p>
+            Manage your referral team and applicable earnings.
+        </p>
+    </div>
+
+</section>
+
+<footer>
+    © 2026 Sathi Pay. All rights reserved.
+</footer>
+
+</body>
+    </html>
