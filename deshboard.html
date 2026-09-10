@@ -2,438 +2,805 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Dashboard</title>
 
 <style>
 
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #202938;
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+    padding-bottom:85px;
 }
 
-header {
-    background: #202938;
-    color: white;
-    padding: 18px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 18px 24px;
+    border-radius:0 0 25px 25px;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 25px;
+.header-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.logout {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
+.logo{
+    font-size:24px;
+    font-weight:bold;
 }
 
-.container {
-    padding: 20px;
-    max-width: 1000px;
-    margin: auto;
+.logout{
+    color:white;
+    text-decoration:none;
+    font-size:13px;
+    background:rgba(255,255,255,.18);
+    padding:8px 12px;
+    border-radius:20px;
 }
 
-.welcome {
-    margin-bottom: 20px;
+.container{
+    max-width:700px;
+    margin:auto;
+    padding:16px;
 }
 
-.welcome h2 {
-    margin-bottom: 5px;
+/* PROFILE */
+
+.profile-card{
+    background:white;
+    margin-top:-35px;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 6px 22px rgba(0,0,0,.10);
 }
 
-.welcome p {
-    color: #666;
+.profile-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.uid-card,
-.card,
-.status-card,
-.commission-rule {
-    background: white;
-    border-radius: 14px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+.profile-name{
+    font-size:21px;
+    font-weight:bold;
 }
 
-.uid-card {
-    padding: 20px;
-    margin-bottom: 20px;
+.uid{
+    margin-top:6px;
+    color:#6b7280;
+    font-size:13px;
 }
 
-.uid-title {
-    color: #777;
-    font-size: 14px;
-    margin-bottom: 7px;
+.uid b{
+    color:#6c5ce7;
 }
 
-.uid-number {
-    font-size: 24px;
-    font-weight: bold;
-    color: #2563eb;
-    letter-spacing: 1px;
-    word-break: break-all;
+.status{
+    background:#e8fff5;
+    color:#00a878;
+    padding:7px 11px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
 }
 
-.agent-name {
-    margin-top: 10px;
-    color: #555;
+/* WALLET */
+
+.wallet{
+    margin-top:16px;
+    background:linear-gradient(135deg,#6c5ce7,#4834d4);
+    color:white;
+    padding:22px;
+    border-radius:20px;
 }
 
-.cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+.wallet-title{
+    font-size:13px;
+    opacity:.85;
 }
 
-.card {
-    padding: 20px;
+.wallet-amount{
+    font-size:32px;
+    font-weight:bold;
+    margin:7px 0 15px;
 }
 
-.card p {
-    margin: 0 0 8px;
-    color: #777;
+.wallet-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
 }
 
-.card h2 {
-    margin: 0;
-    font-size: 25px;
+.wallet-row span{
+    opacity:.8;
 }
 
-.menu {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+/* CARDS */
+
+.cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:16px;
 }
 
-.menu a {
-    color: white;
-    text-decoration: none;
-    padding: 16px;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: bold;
+.card{
+    background:white;
+    padding:17px;
+    border-radius:17px;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
 }
 
-.deposit {
-    background: #16a34a;
+.card-title{
+    color:#777;
+    font-size:12px;
+    margin-bottom:8px;
 }
 
-.withdrawal {
-    background: #dc2626;
+.card-value{
+    font-size:20px;
+    font-weight:bold;
 }
 
-.commission {
-    background: #2563eb;
+.green{
+    color:#00a878;
 }
 
-.transactions {
-    background: #7c3aed;
+.orange{
+    color:#f39c12;
 }
 
-.profile {
-    background: #475569;
+.blue{
+    color:#3867d6;
 }
 
-.referral {
-    background: #ea580c;
+.purple{
+    color:#6c5ce7;
 }
 
-.status-card {
-    padding: 18px;
-    margin-top: 20px;
+/* COMMISSION */
+
+.commission-box{
+    background:white;
+    margin-top:16px;
+    padding:18px;
+    border-radius:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
 }
 
-.status-title {
-    color: #777;
-    margin-bottom: 8px;
+.commission-box h3{
+    margin:0 0 12px;
 }
 
-.active {
-    color: #16a34a;
-    font-weight: bold;
+.rate{
+    display:flex;
+    justify-content:space-between;
+    padding:9px 0;
+    border-bottom:1px solid #eee;
+    font-size:14px;
 }
 
-.error {
-    color: #dc2626;
-    font-weight: bold;
+.rate:last-child{
+    border-bottom:0;
 }
 
-.loading {
-    color: #2563eb;
+/* SELL */
+
+.sell-box{
+    margin-top:16px;
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
 }
 
-@media (max-width: 600px) {
+.sell-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-    .cards {
-        grid-template-columns: 1fr;
+.sell-title{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.switch{
+    position:relative;
+    width:55px;
+    height:30px;
+}
+
+.switch input{
+    display:none;
+}
+
+.slider{
+    position:absolute;
+    inset:0;
+    background:#d1d5db;
+    border-radius:30px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.slider:before{
+    content:"";
+    position:absolute;
+    width:22px;
+    height:22px;
+    left:4px;
+    top:4px;
+    background:white;
+    border-radius:50%;
+    transition:.3s;
+}
+
+input:checked + .slider{
+    background:#00b894;
+}
+
+input:checked + .slider:before{
+    transform:translateX(25px);
+}
+
+.sell-status{
+    margin-top:12px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.sell-open{
+    color:#00a878;
+}
+
+.sell-closed{
+    color:#dc2626;
+}
+
+/* QUICK ACTIONS */
+
+.section-title{
+    margin:22px 0 10px;
+    font-size:18px;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.action{
+    background:white;
+    padding:16px 8px;
+    border-radius:16px;
+    text-align:center;
+    text-decoration:none;
+    color:#172033;
+    box-shadow:0 4px 14px rgba(0,0,0,.06);
+    font-size:13px;
+    font-weight:bold;
+}
+
+.action-icon{
+    font-size:25px;
+    display:block;
+    margin-bottom:7px;
+}
+
+/* REFERRAL */
+
+.referral-box{
+    margin-top:16px;
+    background:linear-gradient(135deg,#ff9f43,#ee5253);
+    color:white;
+    padding:18px;
+    border-radius:18px;
+}
+
+.referral-code{
+    background:rgba(255,255,255,.18);
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+    font-weight:bold;
+    letter-spacing:1px;
+    word-break:break-all;
+}
+
+.referral-link{
+    margin-top:8px;
+    font-size:12px;
+    opacity:.9;
+    word-break:break-all;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:70px;
+    background:white;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    box-shadow:0 -4px 18px rgba(0,0,0,.10);
+    z-index:100;
+}
+
+.bottom-nav a{
+    text-decoration:none;
+    color:#667085;
+    text-align:center;
+    font-size:11px;
+}
+
+.bottom-nav span{
+    display:block;
+    font-size:22px;
+    margin-bottom:3px;
+}
+
+.bottom-nav .active{
+    color:#6c5ce7;
+    font-weight:bold;
+}
+
+.plus{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px !important;
+    margin-top:-25px;
+    border:5px solid #f4f7fb;
+}
+
+/* MESSAGE */
+
+#message{
+    text-align:center;
+    margin-top:15px;
+    font-size:13px;
+    color:#666;
+}
+
+@media(max-width:500px){
+
+    .cards{
+        grid-template-columns:1fr 1fr;
     }
 
-    .menu {
-        grid-template-columns: 1fr;
+    .actions{
+        grid-template-columns:1fr 1fr 1fr;
     }
 
 }
 
 </style>
-
 </head>
+
 
 <body>
 
 <header>
 
-    <h1>Sathi Pay</h1>
+    <div class="header-row">
 
-    <a class="logout"
-       href="login.html">
-        Logout
-    </a>
+        <div class="logo">
+            Sathi Pay
+        </div>
+
+        <a class="logout"
+           href="customer-login.html"
+           onclick="logoutCustomer()">
+            Logout
+        </a>
+
+    </div>
 
 </header>
 
 
 <div class="container">
 
-    <div class="welcome">
 
-        <h2>Agent Dashboard</h2>
+    <!-- PROFILE -->
 
-        <p>
-            Welcome to your Sathi Pay account.
-        </p>
+    <div class="profile-card">
 
-    </div>
+        <div class="profile-top">
 
+            <div>
 
-    <!-- UID -->
+                <div class="profile-name"
+                     id="customerName">
+                    Loading...
+                </div>
 
-    <div class="uid-card">
+                <div class="uid">
+                    UID:
+                    <b id="customerUID">
+                        Loading...
+                    </b>
+                </div>
 
-        <div class="uid-title">
-            UID Number
-        </div>
+            </div>
 
-        <div
-            class="uid-number"
-            id="agentUID">
-
-            Loading...
-
-        </div>
-
-        <div
-            class="agent-name"
-            id="agentName">
-
-            Loading agent...
+            <div class="status"
+                 id="accountStatus">
+                Active
+            </div>
 
         </div>
 
     </div>
 
 
-    <!-- DASHBOARD CARDS -->
+    <!-- WALLET -->
+
+    <div class="wallet">
+
+        <div class="wallet-title">
+            Available Wallet Balance
+        </div>
+
+        <div class="wallet-amount"
+             id="walletBalance">
+            ₹0.00
+        </div>
+
+        <div class="wallet-row">
+
+            <span>
+                Bonus
+            </span>
+
+            <b id="bonusBalance">
+                ₹0.00
+            </b>
+
+        </div>
+
+        <div class="wallet-row">
+
+            <span>
+                Commission
+            </span>
+
+            <b id="commissionBalance">
+                ₹0.00
+            </b>
+
+        </div>
+
+    </div>
+
+
+    <!-- BALANCE CARDS -->
 
     <div class="cards">
 
         <div class="card">
 
-            <p>
-                Wallet Balance
-            </p>
+            <div class="card-title">
+                Deposit Balance
+            </div>
 
-            <h2 id="walletBalance">
+            <div class="card-value blue"
+                 id="depositBalance">
                 ₹0.00
-            </h2>
+            </div>
 
         </div>
 
 
         <div class="card">
 
-            <p>
-                Total Commission
-            </p>
+            <div class="card-title">
+                Withdrawal Balance
+            </div>
 
-            <h2 id="totalCommission">
+            <div class="card-value green"
+                 id="withdrawalBalance">
                 ₹0.00
-            </h2>
+            </div>
 
         </div>
 
 
         <div class="card">
 
-            <p>
-                Total Transactions
-            </p>
+            <div class="card-title">
+                Referral Income
+            </div>
 
-            <h2 id="totalTransactions">
-                0
-            </h2>
+            <div class="card-value orange"
+                 id="referralBalance">
+                ₹0.00
+            </div>
 
         </div>
 
 
         <div class="card">
 
-            <p>
-                Today's Transactions
-            </p>
+            <div class="card-title">
+                Today's Earnings
+            </div>
 
-            <h2 id="todayTransactions">
-                0
-            </h2>
+            <div class="card-value purple"
+                 id="todayEarnings">
+                ₹0.00
+            </div>
 
         </div>
 
     </div>
 
 
-    <!-- COMMISSION RULE -->
+    <!-- COMMISSION -->
 
-    <div
-        class="commission-rule"
-        style="padding:20px;margin-top:20px;">
+    <div class="commission-box">
 
-        <h3 style="margin-top:0;color:#15803d;">
-
-            💵 Commission Rule
-
+        <h3>
+            💰 Commission & Income
         </h3>
 
-        <p>
+        <div class="rate">
 
-            Approved deposit par
-            <b>10% commission</b>
-            calculate hoga.
+            <span>
+                Deposit Commission
+            </span>
 
-        </p>
-
-        <p>
-
-            Example:
-            <b>₹1,000</b> approved deposit =
-            <b>₹100 commission</b>.
-
-        </p>
-
-        <p>
-
-            Referral Team Commission:
-
-            <br>
-
-            Level A = <b>1%</b>
-
-            <br>
-
-            Level B = <b>0.5%</b>
-
-            <br>
-
-            Level C = <b>0.2%</b>
-
-        </p>
-
-    </div>
-
-
-    <!-- MENU -->
-
-    <div class="menu">
-
-        <a
-            class="deposit"
-            href="deposit.html">
-
-            💰 Deposit Money
-
-        </a>
-
-
-        <a
-            class="withdrawal"
-            href="withdrawal.html">
-
-            💸 Withdraw Money
-
-        </a>
-
-
-        <a
-            class="commission"
-            href="commission.html">
-
-            📊 Commission
-
-        </a>
-
-
-        <a
-            class="transactions"
-            href="transactions.html">
-
-            📜 Transaction History
-
-        </a>
-
-
-        <a
-            class="profile"
-            href="profile.html">
-
-            👤 My Profile
-
-        </a>
-
-
-        <a
-            class="referral"
-            href="referral.html">
-
-            🔗 Referral
-
-        </a>
-
-    </div>
-
-
-    <!-- ACCOUNT STATUS -->
-
-    <div class="status-card">
-
-        <div class="status-title">
-
-            Account Status
+            <b>
+                6%
+            </b>
 
         </div>
 
-        <div
-            id="accountStatus"
-            class="loading">
+        <div class="rate">
 
-            ● Loading...
+            <span>
+                Level A
+            </span>
+
+            <b>
+                1%
+            </b>
+
+        </div>
+
+        <div class="rate">
+
+            <span>
+                Level B
+            </span>
+
+            <b>
+                0.5%
+            </b>
+
+        </div>
+
+        <div class="rate">
+
+            <span>
+                Level C
+            </span>
+
+            <b>
+                0.2%
+            </b>
 
         </div>
 
     </div>
+
+
+    <!-- SELL -->
+
+    <div class="sell-box">
+
+        <div class="sell-header">
+
+            <div class="sell-title">
+                Selling
+            </div>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="sellToggle"
+                    onchange="changeSellStatus()">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+        <div id="sellStatus"
+             class="sell-status sell-closed">
+
+            ● Closed - Selling OFF
+
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <h3 class="section-title">
+        Quick Actions
+    </h3>
+
+    <div class="actions">
+
+        <a class="action"
+           href="deposit.html">
+
+            <span class="action-icon">
+                💰
+            </span>
+
+            Deposit
+
+        </a>
+
+
+        <a class="action"
+           href="withdrawal.html">
+
+            <span class="action-icon">
+                💸
+            </span>
+
+            Withdraw
+
+        </a>
+
+
+        <a class="action"
+           href="transactions.html">
+
+            <span class="action-icon">
+                📜
+            </span>
+
+            History
+
+        </a>
+
+
+        <a class="action"
+           href="profile.html">
+
+            <span class="action-icon">
+                👤
+            </span>
+
+            Profile
+
+        </a>
+
+
+        <a class="action"
+           href="referral.html">
+
+            <span class="action-icon">
+                👥
+            </span>
+
+            Team
+
+        </a>
+
+
+        <a class="action"
+           href="commission.html">
+
+            <span class="action-icon">
+                📊
+            </span>
+
+            Earnings
+
+        </a>
+
+    </div>
+
+
+    <!-- REFERRAL -->
+
+    <div class="referral-box">
+
+        <b>
+            🔗 Invite & Earn
+        </b>
+
+        <div class="referral-code"
+             id="invitationCode">
+            Loading...
+        </div>
+
+        <div class="referral-link"
+             id="referralLink">
+            Loading referral link...
+        </div>
+
+    </div>
+
+
+    <div id="message">
+        Loading dashboard...
+    </div>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+    <a href="deshboard.html"
+       class="active">
+
+        <span>⌂</span>
+        Home
+
+    </a>
+
+
+    <a href="deposit.html">
+
+        <span>💰</span>
+        Deposit
+
+    </a>
+
+
+    <a href="deposit.html">
+
+        <span class="plus">+</span>
+
+    </a>
+
+
+    <a href="referral.html">
+
+        <span>👥</span>
+        Team
+
+    </a>
+
+
+    <a href="profile.html">
+
+        <span>💼</span>
+        Assets
+
+    </a>
 
 </div>
 
@@ -445,16 +812,11 @@ header h1 {
 
 <script>
 
-/* =========================================
-   SUPABASE CONFIG
-========================================= */
-
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
 
 const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
-
 
 const supabaseClient =
     window.supabase.createClient(
@@ -463,770 +825,416 @@ const supabaseClient =
     );
 
 
-/* =========================================
-   GET LOGIN UID
-========================================= */
+/* =====================================
+   CUSTOMER ID
+===================================== */
 
-function getLoginUID() {
+function getCustomerId(){
 
-    const loginUID = localStorage.getItem("sathiPayUID");
-
-    if (!loginUID || loginUID.trim() === "") {
-        return null;
-    }
-
-    return loginUID.trim().toUpperCase();
-      }
-
-
-/* =========================================
-   FIND AGENT
-========================================= */
-
-async function findAgent(uidValue) {
-
-    if (!uidValue) {
-        return null;
-    }
-
-    const cleanUID =
-        String(uidValue)
-        .trim()
-        .toUpperCase();
-
-
-    /* EXACT UID */
-
-    const {
-        data: exactAgent,
-        error: exactError
-    } =
-        await supabaseClient
-        .from("agents")
-        .select(`
-            id,
-            uid,
-            name,
-            mobile,
-            status,
-            wallet_balance
-        `)
-        .eq("uid", cleanUID)
-        .maybeSingle();
-
-
-    if (exactError) {
-
-        console.error(
-            "Exact UID error:",
-            exactError
+    const id =
+        localStorage.getItem(
+            "sathiPayCustomerId"
         );
 
+    if(id && id.trim() !== ""){
+        return id.trim();
     }
-
-
-    if (exactAgent) {
-
-        return exactAgent;
-
-    }
-
-
-    /* NORMALIZED SEARCH */
-
-    const {
-        data: allAgents,
-        error: allAgentError
-    } =
-        await supabaseClient
-        .from("agents")
-        .select(`
-            id,
-            uid,
-            name,
-            mobile,
-            status,
-            wallet_balance
-        `);
-
-
-    if (allAgentError) {
-
-        console.error(
-            "Agent list error:",
-            allAgentError
-        );
-
-        return null;
-
-    }
-
-
-    if (!allAgents) {
-        return null;
-    }
-
-
-    const normalizedLogin =
-        cleanUID.replace(
-            /[^A-Z0-9]/g,
-            ""
-        );
-
-
-    for (
-        let i = 0;
-        i < allAgents.length;
-        i++
-    ) {
-
-        const dbUID =
-            String(
-                allAgents[i].uid || ""
-            )
-            .trim()
-            .toUpperCase()
-            .replace(
-                /[^A-Z0-9]/g,
-                ""
-            );
-
-
-        if (!dbUID) {
-            continue;
-        }
-
-
-        if (
-            dbUID === normalizedLogin
-        ) {
-
-            return allAgents[i];
-
-        }
-
-
-        if (
-            normalizedLogin.startsWith(dbUID) &&
-            normalizedLogin.length - dbUID.length <= 3
-        ) {
-
-            return allAgents[i];
-
-        }
-
-    }
-
 
     return null;
-
 }
 
 
-/* =========================================
-   INDIA TODAY CHECK
-========================================= */
+/* =====================================
+   LOAD CUSTOMER
+===================================== */
 
-function isTodayIndia(dateValue) {
+async function loadDashboard(){
 
-    if (!dateValue) {
-        return false;
-    }
+    const message =
+        document.getElementById("message");
 
-    const date =
-        new Date(dateValue);
+    try{
 
-
-    if (
-        isNaN(date.getTime())
-    ) {
-
-        return false;
-
-    }
+        const customerId =
+            getCustomerId();
 
 
-    const indiaDate =
-        new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone: "Asia/Kolkata",
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
-            }
-        ).format(date);
+        if(!customerId){
 
-
-    const todayIndia =
-        new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone: "Asia/Kolkata",
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
-            }
-        ).format(new Date());
-
-
-    return (
-        indiaDate === todayIndia
-    );
-
-}
-
-
-/* =========================================
-   LOAD DASHBOARD
-========================================= */
-
-async function loadDashboard() {
-
-    try {
-
-        console.log(
-            "SATHI PAY: Loading dashboard..."
-        );
-
-
-        /* GET UID */
-
-        const loginUID =
-            getLoginUID();
-
-
-        console.log(
-            "Login UID:",
-            loginUID
-        );
-
-
-        /* UID CHECK */
-
-        if (!loginUID) {
-
-            document.getElementById(
-                "agentUID"
-            ).textContent =
-                "UID not found";
-
-
-            document.getElementById(
-                "agentName"
-            ).textContent =
+            message.innerText =
                 "Please login again.";
 
-
-            document.getElementById(
-                "accountStatus"
-            ).textContent =
-                "● Login Required";
-
-
-            document.getElementById(
-                "accountStatus"
-            ).className =
-                "error";
-
+            window.location.href =
+                "customer-login.html";
 
             return;
-
         }
 
 
-        /* SHOW LOGIN UID */
+        /* CUSTOMER PROFILE */
 
-        document.getElementById(
-            "agentUID"
-        ).textContent =
-            loginUID;
-
-
-        /* FIND AGENT */
-
-        const agent =
-            await findAgent(
-                loginUID
-            );
-
-
-        console.log(
-            "Agent:",
-            agent
-        );
-          localStorage.setItem("sathiPayAgentId", agent.id);
-localStorage.setItem("sathiPayUID", agent.uid);
-
-
-        if (!agent) {
-
-            document.getElementById(
-                "agentName"
-            ).textContent =
-                "Agent account not found";
+        const {
+            data: customer,
+            error
+        } =
+            await supabaseClient
+            .from("customers")
+            .select(`
+                id,
+                name,
+                mobile,
+                uid,
+                invitation_code,
+                wallet_balance,
+                bonus_balance,
+                deposit_balance,
+                commission_balance,
+                referral_balance,
+                withdrawal_balance,
+                sell_on,
+                status
+            `)
+            .eq("id", customerId)
+            .maybeSingle();
 
 
-            document.getElementById(
-                "accountStatus"
-            ).textContent =
-                "● Agent Not Found";
-
-
-            document.getElementById(
-                "accountStatus"
-            ).className =
-                "error";
-
-
-            return;
-
+        if(error){
+            throw error;
         }
 
 
-        /* SHOW AGENT */
+        if(!customer){
+
+            message.innerText =
+                "Customer account not found.";
+
+            return;
+        }
+
+
+        /* NAME */
 
         document.getElementById(
-            "agentUID"
-        ).textContent =
-            agent.uid || loginUID;
+            "customerName"
+        ).innerText =
+            customer.name || "Customer";
 
+
+        /* UID */
 
         document.getElementById(
-            "agentName"
-        ).textContent =
-            "Agent: " +
-            (
-                agent.name ||
-                "Unknown"
-            );
+            "customerUID"
+        ).innerText =
+            customer.uid || "Not available";
 
 
-        /* ACCOUNT STATUS */
+        /* STATUS */
 
-        const agentStatus =
+        const accountStatus =
             String(
-                agent.status ||
-                "Active"
-            )
-            .toLowerCase()
-            .trim();
-
-
-        if (
-            agentStatus === "active"
-        ) {
-
-            document.getElementById(
-                "accountStatus"
-            ).textContent =
-                "● Active";
-
-
-            document.getElementById(
-                "accountStatus"
-            ).className =
-                "active";
-
-        } else {
-
-            document.getElementById(
-                "accountStatus"
-            ).textContent =
-                "● " +
-                (
-                    agent.status ||
-                    "Active"
-                );
-
-
-            document.getElementById(
-                "accountStatus"
-            ).className =
-                "error";
-
-        }
-
-
-        /* =================================
-           LOAD DEPOSITS
-        ================================= */
-
-        const {
-            data: deposits,
-            error: depositError
-        } =
-            await supabaseClient
-            .from("deposits")
-            .select(`
-                id,
-                amount,
-                status,
-                created_at,
-                approved_at
-            `)
-            .eq(
-                "agent_id",
-                agent.id
-            );
-
-
-        console.log(
-            "Deposits:",
-            deposits
-        );
-
-
-        if (depositError) {
-
-            console.error(
-                "Deposit error:",
-                depositError
-            );
-
-
-            document.getElementById(
-                "accountStatus"
-            ).textContent =
-                "● Deposit Database Error";
-
-
-            document.getElementById(
-                "accountStatus"
-            ).className =
-                "error";
-
-
-            return;
-
-        }
-
-
-        /* =================================
-           APPROVED DEPOSIT TOTAL
-        ================================= */
-
-        let approvedDeposit = 0;
-
-
-        (
-            deposits || []
-        ).forEach(
-            function(deposit) {
-
-                const amount =
-                    Number(
-                        deposit.amount || 0
-                    );
-
-
-                const status =
-                    String(
-                        deposit.status || ""
-                    )
-                    .toLowerCase()
-                    .trim();
-
-
-                if (
-                    status === "approved"
-                ) {
-
-                    approvedDeposit +=
-                        amount;
-
-                }
-
-            }
-        );
-
-
-        /* =================================
-           COMMISSION 10%
-        ================================= */
-
-        const totalCommission =
-            approvedDeposit * 0.10;
+                customer.status || "Active"
+            ).toLowerCase();
 
 
         document.getElementById(
-            "totalCommission"
-        ).textContent =
-            "₹" +
-            totalCommission.toFixed(2);
+            "accountStatus"
+        ).innerText =
+            accountStatus === "active"
+            ? "Active"
+            : customer.status;
 
 
-        /* =================================
-           LOAD WITHDRAWALS
-        ================================= */
-
-        const {
-            data: withdrawalData,
-            error: withdrawalError
-        } =
-            await supabaseClient
-            .from("withdrawals")
-            .select(`
-                id,
-                amount,
-                status,
-                created_at
-            `)
-            .eq(
-                "agent_id",
-                agent.id
-            );
-
-
-        let withdrawals = [];
-
-
-        if (withdrawalError) {
-
-            console.error(
-                "Withdrawal error:",
-                withdrawalError
-            );
-
-        } else {
-
-            withdrawals =
-                withdrawalData || [];
-
-        }
-
-
-        console.log(
-            "Withdrawals:",
-            withdrawals
-        );
-
-
-        /* =================================
-           WALLET FROM DATABASE
-        ================================= */
-
-        const walletBalance =
-            Number(
-                agent.wallet_balance || 0
-            );
-
+        /* WALLET */
 
         document.getElementById(
             "walletBalance"
-        ).textContent =
+        ).innerText =
             "₹" +
-            walletBalance.toFixed(2);
+            Number(
+                customer.wallet_balance || 0
+            ).toFixed(2);
 
 
-        /* =================================
-           TOTAL TRANSACTIONS
-        ================================= */
+        /* BONUS */
 
-        const depositCount =
-            (
-                deposits || []
-            ).length;
-
-
-        const withdrawalCount =
-            (
-                withdrawals || []
-            ).length;
+        document.getElementById(
+            "bonusBalance"
+        ).innerText =
+            "₹" +
+            Number(
+                customer.bonus_balance || 0
+            ).toFixed(2);
 
 
-        const totalTransactions =
-            depositCount +
-            withdrawalCount;
+        /* DEPOSIT */
+
+        document.getElementById(
+            "depositBalance"
+        ).innerText =
+            "₹" +
+            Number(
+                customer.deposit_balance || 0
+            ).toFixed(2);
+
+
+        /* COMMISSION */
+
+        document.getElementById(
+            "commissionBalance"
+        ).innerText =
+            "₹" +
+            Number(
+                customer.commission_balance || 0
+            ).toFixed(2);
+
+
+        /* REFERRAL */
+
+        document.getElementById(
+            "referralBalance"
+        ).innerText =
+            "₹" +
+            Number(
+                customer.referral_balance || 0
+            ).toFixed(2);
+
+
+        /* WITHDRAWAL */
+
+        document.getElementById(
+            "withdrawalBalance"
+        ).innerText =
+            "₹" +
+            Number(
+                customer.withdrawal_balance || 0
+            ).toFixed(2);
+
+
+        /* SELL STATUS */
+
+        const sellToggle =
+            document.getElementById(
+                "sellToggle"
+            );
+
+        const sellStatus =
+            document.getElementById(
+                "sellStatus"
+            );
+
+
+        sellToggle.checked =
+            customer.sell_on === true;
+
+
+        updateSellText(
+            customer.sell_on === true
+        );
+
+
+        /* INVITATION CODE */
+
+        const invitationCode =
+            customer.invitation_code || "";
 
 
         document.getElementById(
-            "totalTransactions"
-        ).textContent =
-            totalTransactions;
+            "invitationCode"
+        ).innerText =
+            invitationCode ||
+            "Not available";
 
 
-        /* =================================
-           TODAY'S TRANSACTIONS
-        ================================= */
+        /* REFERRAL LINK */
 
-        let todayCount = 0;
+        if(invitationCode){
 
+            const link =
+                window.location.origin +
+                "/?invite=" +
+                encodeURIComponent(
+                    invitationCode
+                );
 
-        /* TODAY'S DEPOSITS */
+            document.getElementById(
+                "referralLink"
+            ).innerText =
+                link;
 
-        (
-            deposits || []
-        ).forEach(
-            function(deposit) {
-
-                const status =
-                    String(
-                        deposit.status || ""
-                    )
-                    .toLowerCase()
-                    .trim();
-
-
-                let dateToCheck = null;
-
-
-                if (
-                    status === "approved" &&
-                    deposit.approved_at
-                ) {
-
-                    dateToCheck =
-                        deposit.approved_at;
-
-                } else if (
-                    deposit.created_at
-                ) {
-
-                    dateToCheck =
-                        deposit.created_at;
-
-                }
-
-
-                if (
-                    isTodayIndia(
-                        dateToCheck
-                    )
-                ) {
-
-                    todayCount++;
-
-                }
-
-            }
-        );
-
-
-        /* TODAY'S WITHDRAWALS */
-
-        (
-            withdrawals || []
-        ).forEach(
-            function(withdrawal) {
-
-                if (
-                    isTodayIndia(
-                        withdrawal.created_at
-                    )
-                ) {
-
-                    todayCount++;
-
-                }
-
-            }
-        );
+        }
 
 
         document.getElementById(
-            "todayTransactions"
-        ).textContent =
-            todayCount;
+            "todayEarnings"
+        ).innerText =
+            "₹0.00";
 
 
-        /* DEBUG */
-
-        console.log(
-            "=============================="
-        );
-
-        console.log(
-            "SATHI PAY DASHBOARD"
-        );
-
-        console.log(
-            "UID:",
-            loginUID
-        );
-
-        console.log(
-            "Agent:",
-            agent
-        );
-
-        console.log(
-            "Approved Deposit:",
-            approvedDeposit
-        );
-
-        console.log(
-            "Commission:",
-            totalCommission
-        );
-
-        console.log(
-            "Wallet From Database:",
-            walletBalance
-        );
-
-        console.log(
-            "Total Transactions:",
-            totalTransactions
-        );
-
-        console.log(
-            "Today's Transactions:",
-            todayCount
-        );
-
-        console.log(
-            "=============================="
-        );
+        message.innerText =
+            "Dashboard updated";
 
 
-    } catch (error) {
+    }catch(error){
 
         console.error(
             "Dashboard error:",
             error
         );
 
-
-        document.getElementById(
-            "agentUID"
-        ).textContent =
-            "UID Error";
-
-
-        document.getElementById(
-            "agentName"
-        ).textContent =
-            "Dashboard error";
-
-
-        document.getElementById(
-            "accountStatus"
-        ).textContent =
-            "● Error - Please refresh";
-
-
-        document.getElementById(
-            "accountStatus"
-        ).className =
-            "error";
+        message.innerText =
+            "Dashboard error: " +
+            error.message;
 
     }
 
 }
 
 
-/* =========================================
-   PAGE READY
-========================================= */
+/* =====================================
+   SELL STATUS TEXT
+===================================== */
+
+function updateSellText(isOn){
+
+    const status =
+        document.getElementById(
+            "sellStatus"
+        );
+
+
+    if(isOn){
+
+        status.innerText =
+            "● Open - Selling ON";
+
+        status.className =
+            "sell-status sell-open";
+
+    }else{
+
+        status.innerText =
+            "● Closed - Selling OFF";
+
+        status.className =
+            "sell-status sell-closed";
+
+    }
+
+}
+
+
+/* =====================================
+   CHANGE SELL STATUS
+===================================== */
+
+async function changeSellStatus(){
+
+    const customerId =
+        getCustomerId();
+
+    if(!customerId){
+
+        window.location.href =
+            "customer-login.html";
+
+        return;
+    }
+
+
+    const toggle =
+        document.getElementById(
+            "sellToggle"
+        );
+
+
+    const newStatus =
+        toggle.checked;
+
+
+    updateSellText(
+        newStatus
+    );
+
+
+    try{
+
+        const {
+            error
+        } =
+            await supabaseClient
+            .from("customers")
+            .update({
+                sell_on: newStatus
+            })
+            .eq("id", customerId);
+
+
+        if(error){
+
+            toggle.checked =
+                !newStatus;
+
+            updateSellText(
+                !newStatus
+            );
+
+            throw error;
+        }
+
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            newStatus
+            ? "Selling is now ON."
+            : "Selling is now OFF.";
+
+
+    }catch(error){
+
+        console.error(
+            "Sell status error:",
+            error
+        );
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "Unable to update selling status.";
+
+    }
+
+}
+
+
+/* =====================================
+   LOGOUT
+===================================== */
+
+function logoutCustomer(){
+
+    localStorage.removeItem(
+        "sathiPayCustomerId"
+    );
+
+    localStorage.removeItem(
+        "sathiPayUID"
+    );
+
+    localStorage.removeItem(
+        "sathiPayInvitationCode"
+    );
+
+}
+
+
+/* =====================================
+   START
+===================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
-
-      console.log(
-            "SATHI PAY DASHBOARD READY"
-        );
+    function(){
 
         loadDashboard();
 
@@ -1234,12 +1242,12 @@ document.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================
    AUTO REFRESH
-========================================= */
+===================================== */
 
 setInterval(
-    function () {
+    function(){
 
         loadDashboard();
 
@@ -1250,5 +1258,4 @@ setInterval(
 </script>
 
 </body>
-
-</html>  
+      </html>
