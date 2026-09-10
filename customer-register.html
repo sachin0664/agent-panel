@@ -4,231 +4,549 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Sathi Pay - Customer Registration</title>
 
-    <link
-        rel="stylesheet"
-        href="css/style.css"
-    >
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <style>
+        body {
+            background: #f4f7fb;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 30px auto;
+        }
+
+        .bonus-box {
+            background: linear-gradient(135deg, #6c5ce7, #00b894);
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .bonus-box strong {
+            font-size: 24px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 7px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #customerRegisterMessage {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .invite-info {
+            font-size: 13px;
+            color: #666;
+            margin-top: -8px;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>Sathi Pay</h1>
+<header>
+    <h1>Sathi Pay</h1>
 
+    <a href="customer-login.html">
+        Customer Login
+    </a>
+</header>
+
+
+<main class="container">
+
+    <h2>Customer Registration</h2>
+
+    <div class="bonus-box">
+        🎁 New User Bonus<br>
+        <strong>₹99</strong>
+        <br>
+        Register and get ₹99 bonus
+    </div>
+
+
+    <form id="customerRegisterForm">
+
+        <label>
+            Full Name
+        </label>
+
+        <input
+            type="text"
+            id="customerName"
+            placeholder="Enter your full name"
+            required
+        >
+
+
+        <label>
+            Mobile Number
+        </label>
+
+        <input
+            type="tel"
+            id="customerMobile"
+            placeholder="10 digit mobile number"
+            maxlength="10"
+            inputmode="numeric"
+            required
+        >
+
+
+        <label>
+            Email Address
+        </label>
+
+        <input
+            type="email"
+            id="customerEmail"
+            placeholder="Enter email address"
+            required
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="customerPassword"
+            placeholder="Create password"
+            minlength="6"
+            required
+        >
+
+
+        <label>
+            Invitation Code
+        </label>
+
+        <input
+            type="text"
+            id="invitationCode"
+            placeholder="Enter invitation code"
+        >
+
+        <div class="invite-info">
+            Invitation code is optional.
+        </div>
+
+
+        <button type="submit">
+            Create Customer Account
+        </button>
+
+    </form>
+
+
+    <p id="customerRegisterMessage"></p>
+
+
+    <p>
+        Already have an account?
         <a href="customer-login.html">
-            Customer Login
+            Login here
         </a>
-    </header>
+    </p>
 
-    <main class="container">
+</main>
 
-        <h2>Customer Registration</h2>
 
-        <form id="customerRegisterForm">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-            <label>
-                Full Name
-            </label>
+<script src="js/app.js?v=4"></script>
 
-            <input
-                type="text"
-                id="customerName"
-                placeholder="Enter your name"
-                required
-            >
 
-            <label>
-                Mobile Number
-            </label>
+<script>
 
-            <input
-                type="tel"
-                id="customerMobile"
-                placeholder="10 digit mobile number"
-                maxlength="10"
-                required
-            >
+const registerForm =
+    document.getElementById("customerRegisterForm");
 
-            <label>
-                Email Address
-            </label>
+const message =
+    document.getElementById("customerRegisterMessage");
 
-            <input
-                type="email"
-                id="customerEmail"
-                placeholder="Enter email address"
-                required
-            >
+const invitationInput =
+    document.getElementById("invitationCode");
 
-            <label>
-                Password
-            </label>
 
-            <input
-                type="password"
-                id="customerPassword"
-                placeholder="Create password"
-                minlength="6"
-                required
-            >
+// ========================================
+// AUTOMATIC INVITATION CODE FROM URL
+// ========================================
 
-            <button type="submit">
-                Create Customer Account
-            </button>
+const urlParams =
+    new URLSearchParams(window.location.search);
 
-        </form>
+const urlInvite =
+    urlParams.get("invite");
 
-        <p id="customerRegisterMessage"></p>
+if (urlInvite) {
 
-        <p>
-            Already have an account?
-            <a href="customer-login.html">
-                Login here
-            </a>
-        </p>
+    invitationInput.value =
+        urlInvite.trim().toUpperCase();
 
-    </main>
+    invitationInput.readOnly = true;
+}
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="js/app.js?v=3"></script>
+// ========================================
+// GENERATE UNIQUE UID
+// ========================================
 
-    <script>
+function generateUID() {
 
-        const registerForm =
+    const randomPart =
+        Math.random()
+            .toString(36)
+            .substring(2, 10)
+            .toUpperCase();
+
+    const timePart =
+        Date.now()
+            .toString(36)
+            .substring(2, 8)
+            .toUpperCase();
+
+    return "SP" + timePart + randomPart;
+}
+
+
+// ========================================
+// GENERATE INVITATION CODE
+// ========================================
+
+function generateInvitationCode() {
+
+    const randomPart =
+        Math.random()
+            .toString(36)
+            .substring(2, 10)
+            .toUpperCase();
+
+    return "INV" + randomPart;
+}
+
+
+// ========================================
+// REGISTRATION
+// ========================================
+
+registerForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        message.innerText =
+            "Creating account...";
+
+
+        const name =
             document.getElementById(
-                "customerRegisterForm"
-            );
+                "customerName"
+            ).value.trim();
 
-        registerForm.addEventListener(
-            "submit",
-            async function(event) {
 
-                event.preventDefault();
+        const mobile =
+            document.getElementById(
+                "customerMobile"
+            ).value.trim();
 
-                const name =
-                    document.getElementById(
-                        "customerName"
-                    ).value.trim();
 
-                const mobile =
-                    document.getElementById(
-                        "customerMobile"
-                    ).value.trim();
+        const email =
+            document.getElementById(
+                "customerEmail"
+            ).value.trim();
 
-                const email =
-                    document.getElementById(
-                        "customerEmail"
-                    ).value.trim();
 
-                const password =
-                    document.getElementById(
-                        "customerPassword"
-                    ).value;
+        const password =
+            document.getElementById(
+                "customerPassword"
+            ).value;
 
-                const message =
-                    document.getElementById(
-                        "customerRegisterMessage"
-                    );
 
-                message.innerText = "";
+        const referredBy =
+            invitationInput.value
+                .trim()
+                .toUpperCase();
 
-                if (!/^[0-9]{10}$/.test(mobile)) {
 
-                    message.innerText =
-                        "Please enter a valid 10 digit mobile number.";
+        // ========================================
+        // VALIDATION
+        // ========================================
 
-                    return;
-                }
+        if (!/^[0-9]{10}$/.test(mobile)) {
 
-                if (password.length < 6) {
+            message.innerText =
+                "Please enter a valid 10 digit mobile number.";
 
-                    message.innerText =
-                        "Password must be at least 6 characters.";
+            return;
+        }
 
-                    return;
-                }
+
+        if (password.length < 6) {
+
+            message.innerText =
+                "Password must be at least 6 characters.";
+
+            return;
+        }
+
+
+        try {
+
+            // ========================================
+            // CHECK MOBILE
+            // ========================================
+
+            const {
+                data: existingMobile,
+                error: mobileError
+            } =
+                await supabaseClient
+                    .from("customers")
+                    .select("id")
+                    .eq("mobile", mobile)
+                    .maybeSingle();
+
+
+            if (mobileError) {
+
+                throw mobileError;
+            }
+
+
+            if (existingMobile) {
 
                 message.innerText =
-                    "Creating account...";
+                    "This mobile number is already registered.";
+
+                return;
+            }
+
+
+            // ========================================
+            // CHECK INVITATION CODE
+            // ========================================
+
+            let validReferral = null;
+
+            if (referredBy) {
 
                 const {
-                    data,
-                    error
-                } =
-                    await supabaseClient.auth.signUp({
-                        email: email,
-                        password: password
-                    });
-
-                if (error) {
-
-                    console.error(error);
-
-                    message.innerText =
-                        "Registration error: " +
-                        error.message;
-
-                    return;
-                }
-
-                if (!data.user) {
-
-                    message.innerText =
-                        "Account creation failed.";
-
-                    return;
-                }
-
-                const {
-                    error: profileError
+                    data: referralUser,
+                    error: referralError
                 } =
                     await supabaseClient
                         .from("customers")
-                        .insert([
-                            {
-                                id: data.user.id,
-                                name: name,
-                                mobile: mobile,
-                                status: "Active"
-                            }
-                        ]);
+                        .select("id, invitation_code")
+                        .eq(
+                            "invitation_code",
+                            referredBy
+                        )
+                        .maybeSingle();
 
-                if (profileError) {
 
-                    console.error(profileError);
+                if (referralError) {
+
+                    throw referralError;
+                }
+
+
+                if (!referralUser) {
 
                     message.innerText =
-                        "Account created, but profile setup failed: " +
-                        profileError.message;
+                        "Invalid invitation code.";
 
                     return;
                 }
 
-                message.innerText =
-                    "Customer registration successful!";
 
-                registerForm.reset();
-
-                setTimeout(function() {
-
-                    window.location.href =
-                        "customer-login.html";
-
-                }, 1500);
-
+                validReferral =
+                    referralUser.invitation_code;
             }
-        );
 
-    </script>
+
+            // ========================================
+            // CREATE AUTH ACCOUNT
+            // ========================================
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth.signUp({
+
+                    email: email,
+
+                    password: password
+
+                });
+
+
+            if (error) {
+
+                throw error;
+            }
+
+
+            if (!data.user) {
+
+                throw new Error(
+                    "Account creation failed."
+                );
+            }
+
+
+            // ========================================
+            // UNIQUE UID
+            // ========================================
+
+            const uid =
+                generateUID();
+
+
+            // ========================================
+            // UNIQUE INVITATION CODE
+            // ========================================
+
+            const invitationCode =
+                generateInvitationCode();
+
+
+            // ========================================
+            // CREATE CUSTOMER PROFILE
+            // ₹99 BONUS
+            // ========================================
+
+            const {
+                error: profileError
+            } =
+                await supabaseClient
+                    .from("customers")
+                    .insert({
+
+                        id: data.user.id,
+
+                        name: name,
+
+                        mobile: mobile,
+
+                        uid: uid,
+
+                        invitation_code:
+                            invitationCode,
+
+                        referred_by:
+                            validReferral,
+
+                        wallet_balance: 99,
+
+                        bonus_balance: 99,
+
+                        deposit_balance: 0,
+
+                        commission_balance: 0,
+
+                        referral_balance: 0,
+
+                        withdrawal_balance: 0,
+
+                        sell_on: false,
+
+                        upi_id: null,
+
+                        qr_code_url: null,
+
+                        status: "Active",
+
+                        bonus_received: true
+
+                    });
+
+
+            if (profileError) {
+
+                console.error(profileError);
+
+                throw profileError;
+            }
+
+
+            // ========================================
+            // SAVE CUSTOMER SESSION INFO
+            // ========================================
+
+            localStorage.setItem(
+                "sathiPayCustomerId",
+                data.user.id
+            );
+
+            localStorage.setItem(
+                "sathiPayUID",
+                uid
+            );
+
+
+            localStorage.setItem(
+                "sathiPayInvitationCode",
+                invitationCode
+            );
+
+
+            // ========================================
+            // SUCCESS
+            // ========================================
+
+            message.innerText =
+                "Registration successful! ₹99 bonus added.";
+
+            registerForm.reset();
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "customer-login.html";
+
+            }, 1500);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.innerText =
+                "Registration failed: " +
+                error.message;
+        }
+
+    }
+);
+
+</script>
 
 </body>
-
 </html>
