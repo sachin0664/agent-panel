@@ -420,10 +420,16 @@ loginForm.addEventListener(
                 "Success";
 
 
+            /*
+             * IMPORTANT:
+             * Customer login ke baad
+             * customer dashboard open hoga.
+             */
+
             setTimeout(function() {
 
                 window.location.href =
-                    "dashboard.html";
+                    "customer-dashboard.html";
 
             }, 500);
 
@@ -528,9 +534,11 @@ forgotPasswordLink.addEventListener(
 
             /*
              * GitHub Pages URL:
+             *
              * https://sachin0664.github.io/agent-panel/
              *
-             * This automatically creates:
+             * Reset page:
+             *
              * https://sachin0664.github.io/agent-panel/reset-password.html
              */
 
