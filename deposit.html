@@ -107,6 +107,7 @@ input[type="file"]{
     font-size:22px;
     font-weight:bold;
     color:#15803d;
+    margin:5px 0;
 }
 
 button{
@@ -119,10 +120,12 @@ button{
     color:white;
     font-size:17px;
     font-weight:bold;
+    cursor:pointer;
 }
 
 button:disabled{
     opacity:.6;
+    cursor:not-allowed;
 }
 
 #message{
@@ -171,6 +174,80 @@ th{
     color:#6b7280;
 }
 
+.payment-box{
+    background:linear-gradient(135deg,#ecfeff,#eff6ff);
+    border:1px solid #bae6fd;
+    border-radius:16px;
+    padding:18px;
+    text-align:center;
+    margin-bottom:18px;
+}
+
+.payment-box h3{
+    margin:0 0 12px;
+    color:#075985;
+}
+
+#paymentQR{
+    width:230px;
+    max-width:100%;
+    border-radius:14px;
+    border:1px solid #d1d5db;
+    padding:8px;
+    background:white;
+    display:none;
+    margin:12px auto;
+}
+
+.upi-box{
+    background:white;
+    border-radius:10px;
+    padding:12px;
+    margin-top:10px;
+    word-break:break-all;
+}
+
+.upi-label{
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:5px;
+}
+
+.upi-value{
+    font-size:17px;
+    font-weight:bold;
+    color:#075985;
+}
+
+.payment-note{
+    font-size:13px;
+    color:#64748b;
+    margin-top:10px;
+    line-height:1.5;
+}
+
+.loading-payment{
+    color:#64748b;
+    padding:10px;
+}
+
+.payment-error{
+    color:#dc2626;
+    font-weight:bold;
+}
+
+.copy-btn{
+    width:auto;
+    margin:8px 0 0;
+    padding:8px 14px;
+    font-size:13px;
+    background:#2563eb;
+}
+
+.copy-btn:disabled{
+    opacity:.6;
+}
+
 @media(max-width:600px){
 
     .container{
@@ -181,19 +258,29 @@ th{
         padding:16px;
     }
 
+    .header h2{
+        font-size:18px;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
+
+
+<!-- HEADER -->
 
 <div class="header">
 
     <h2>💰 Sathi Pay Deposit</h2>
 
-    <a href="dashboard.html">Dashboard</a>
+    <a href="dashboard.html">
+        Dashboard
+    </a>
 
 </div>
 
@@ -211,12 +298,82 @@ th{
 
             <div>
                 <b>Name:</b>
-                <span id="customerName">Loading...</span>
+                <span id="customerName">
+                    Loading...
+                </span>
             </div>
 
             <div>
                 <b>UID:</b>
-                <span id="customerUID" class="uid">Loading...</span>
+                <span
+                    id="customerUID"
+                    class="uid"
+                >
+                    Loading...
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT DETAILS -->
+
+        <div class="payment-box">
+
+            <h3>
+                💳 Make Payment
+            </h3>
+
+
+            <div
+                id="paymentLoading"
+                class="loading-payment"
+            >
+                Loading payment details...
+            </div>
+
+
+            <img
+                id="paymentQR"
+                src=""
+                alt="Sathi Pay Payment QR"
+            >
+
+
+            <div
+                id="upiContainer"
+                class="upi-box"
+                style="display:none;"
+            >
+
+                <div class="upi-label">
+                    UPI ID
+                </div>
+
+                <div
+                    id="paymentUPI"
+                    class="upi-value"
+                >
+                    -
+                </div>
+
+                <button
+                    type="button"
+                    class="copy-btn"
+                    id="copyUPIButton"
+                    onclick="copyUPI()"
+                >
+                    📋 Copy UPI ID
+                </button>
+
+            </div>
+
+
+            <div
+                id="paymentNote"
+                class="payment-note"
+            >
+                Payment karne ke baad UTR aur payment proof submit karein.
             </div>
 
         </div>
@@ -225,6 +382,9 @@ th{
         <!-- DEPOSIT FORM -->
 
         <form id="depositForm">
+
+
+            <!-- AMOUNT -->
 
             <label>
                 Deposit Amount (₹)
@@ -239,6 +399,8 @@ th{
                 required
             >
 
+
+            <!-- COMMISSION -->
 
             <div class="commission-box">
 
@@ -260,6 +422,8 @@ th{
             </div>
 
 
+            <!-- UTR -->
+
             <label>
                 UTR / Transaction ID
             </label>
@@ -269,9 +433,12 @@ th{
                 id="utr"
                 maxlength="100"
                 placeholder="Enter UTR number"
+                autocomplete="off"
                 required
             >
 
+
+            <!-- PAYMENT PROOF -->
 
             <label>
                 Payment Proof
@@ -280,14 +447,17 @@ th{
             <input
                 type="file"
                 id="paymentProof"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp"
                 required
             >
 
             <small>
                 JPG, PNG or WEBP image upload karein.
+                Maximum 5 MB.
             </small>
 
+
+            <!-- SUBMIT -->
 
             <button
                 type="submit"
@@ -296,18 +466,22 @@ th{
                 Submit Deposit
             </button>
 
+
             <div id="message"></div>
+
 
         </form>
 
     </div>
 
 
-    <!-- HISTORY -->
+    <!-- DEPOSIT HISTORY -->
 
     <div class="card">
 
-        <h2>📜 My Deposit History</h2>
+        <h2>
+            📜 My Deposit History
+        </h2>
 
         <div class="table-box">
 
@@ -318,22 +492,34 @@ th{
                     <tr>
 
                         <th>ID</th>
+
                         <th>Amount</th>
+
                         <th>UTR</th>
+
                         <th>Commission</th>
+
                         <th>Status</th>
+
                         <th>Date</th>
 
                     </tr>
 
                 </thead>
 
+
                 <tbody id="depositTable">
 
                     <tr>
-                        <td colspan="6" class="no-data">
+
+                        <td
+                            colspan="6"
+                            class="no-data"
+                        >
                             Loading...
+
                         </td>
+
                     </tr>
 
                 </tbody>
@@ -348,6 +534,8 @@ th{
 </div>
 
 
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="js/app.js"></script>
@@ -355,53 +543,90 @@ th{
 
 <script>
 
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
 let currentUser = null;
 
 
-/* ================================
+/* =====================================================
    COMMISSION RATE
-================================ */
+===================================================== */
 
 function getCommissionRate(amount){
 
-    if(amount >= 20000){
+    const value =
+        Number(amount || 0);
+
+
+    /*
+       ₹100 - ₹9,999 = 6%
+       ₹10,000 - ₹19,999 = 8%
+       ₹20,000+ = 10%
+    */
+
+    if(value >= 20000){
+
         return 0.10;
+
     }
 
-    if(amount >= 10000){
+
+    if(value >= 10000){
+
         return 0.08;
+
     }
+
 
     return 0.06;
+
 }
 
+
+/* =====================================================
+   COMMISSION PREVIEW
+===================================================== */
 
 function updateCommissionPreview(){
 
     const amount =
-        Number(document.getElementById("amount").value || 0);
+        Number(
+            document
+                .getElementById("amount")
+                .value || 0
+        );
+
 
     const rate =
         getCommissionRate(amount);
 
+
     const commission =
         amount * rate;
 
-    document.getElementById("commissionRate")
+
+    document
+        .getElementById("commissionRate")
         .innerText =
         (rate * 100) + "%";
 
 
     if(amount >= 100){
 
-        document.getElementById("commissionPreview")
+        document
+            .getElementById("commissionPreview")
             .innerText =
             "Approval ke baad estimated commission: ₹"
             + commission.toFixed(2);
 
-    }else{
+    }
+    else{
 
-        document.getElementById("commissionPreview")
+        document
+            .getElementById("commissionPreview")
             .innerText =
             "Enter amount to calculate";
 
@@ -410,9 +635,199 @@ function updateCommissionPreview(){
 }
 
 
-/* ================================
+/* =====================================================
+   LOAD PAYMENT SETTINGS
+===================================================== */
+
+async function loadPaymentSettings(){
+
+    const qr =
+        document.getElementById("paymentQR");
+
+    const upi =
+        document.getElementById("paymentUPI");
+
+    const upiContainer =
+        document.getElementById("upiContainer");
+
+    const loading =
+        document.getElementById("paymentLoading");
+
+    const note =
+        document.getElementById("paymentNote");
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("payment_settings")
+            .select(
+                "upi_id, qr_url"
+            )
+            .eq("id",1)
+            .maybeSingle();
+
+
+        if(error){
+
+            console.error(
+                "Payment settings error:",
+                error
+            );
+
+
+            loading.innerText =
+                "Payment details load nahi ho paaye.";
+
+            loading.className =
+                "payment-error";
+
+            return;
+
+        }
+
+
+        if(!data){
+
+            loading.innerText =
+                "Payment details admin se configure karein.";
+
+            loading.className =
+                "payment-error";
+
+            return;
+
+        }
+
+
+        loading.style.display =
+            "none";
+
+
+        /* UPI */
+
+        if(data.upi_id){
+
+            upi.innerText =
+                data.upi_id;
+
+            upiContainer.style.display =
+                "block";
+
+        }
+
+
+        /* QR */
+
+        if(data.qr_url){
+
+            qr.src =
+                data.qr_url;
+
+            qr.style.display =
+                "block";
+
+
+            qr.onerror =
+                function(){
+
+                    console.error(
+                        "QR image failed to load."
+                    );
+
+                    qr.style.display =
+                        "none";
+
+                };
+
+        }
+
+
+        note.innerText =
+            "Payment karne ke baad UTR aur payment proof submit karein.";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+
+        loading.innerText =
+            "Payment details load nahi ho paaye.";
+
+        loading.className =
+            "payment-error";
+
+    }
+
+}
+
+
+/* =====================================================
+   COPY UPI
+===================================================== */
+
+async function copyUPI(){
+
+    const upi =
+        document
+            .getElementById("paymentUPI")
+            .innerText
+            .trim();
+
+
+    const button =
+        document
+            .getElementById("copyUPIButton");
+
+
+    if(!upi || upi === "-"){
+
+        return;
+
+    }
+
+
+    try{
+
+        await navigator
+            .clipboard
+            .writeText(upi);
+
+
+        button.innerText =
+            "✅ Copied";
+
+
+        setTimeout(
+            function(){
+
+                button.innerText =
+                    "📋 Copy UPI ID";
+
+            },
+            2000
+        );
+
+    }
+    catch(error){
+
+        alert(
+            "UPI ID: " + upi
+        );
+
+    }
+
+}
+
+
+/* =====================================================
    LOAD CUSTOMER
-================================ */
+===================================================== */
 
 async function loadCustomer(){
 
@@ -437,19 +852,20 @@ async function loadCustomer(){
         }
 
 
-        currentUser = user;
+        currentUser =
+            user;
 
 
         /*
-         * Customer information is taken
-         * from auth metadata when available.
+         * Customer name
          */
 
         const metadata =
             user.user_metadata || {};
 
 
-        document.getElementById("customerName")
+        document
+            .getElementById("customerName")
             .innerText =
             metadata.name ||
             metadata.full_name ||
@@ -457,16 +873,19 @@ async function loadCustomer(){
 
 
         /*
-         * UID:
-         * If registration stored UID in metadata,
-         * show it here.
+         * Customer UID
          */
 
-        document.getElementById("customerUID")
+        document
+            .getElementById("customerUID")
             .innerText =
             metadata.uid ||
             user.id;
 
+
+        /*
+         * Load history
+         */
 
         await loadDeposits();
 
@@ -474,6 +893,7 @@ async function loadCustomer(){
     catch(error){
 
         console.error(error);
+
 
         showMessage(
             "Unable to load account.",
@@ -485,9 +905,9 @@ async function loadCustomer(){
 }
 
 
-/* ================================
+/* =====================================================
    SUBMIT DEPOSIT
-================================ */
+===================================================== */
 
 async function submitDeposit(event){
 
@@ -495,27 +915,29 @@ async function submitDeposit(event){
 
 
     const button =
-        document.getElementById("submitButton");
-
-    const message =
-        document.getElementById("message");
+        document
+            .getElementById("submitButton");
 
 
     const amount =
         Number(
-            document.getElementById("amount").value
+            document
+                .getElementById("amount")
+                .value
         );
 
 
     const utr =
-        document.getElementById("utr").value.trim();
+        document
+            .getElementById("utr")
+            .value
+            .trim();
 
 
     const proofFile =
-        document.getElementById("paymentProof").files[0];
-
-
-    message.innerText = "";
+        document
+            .getElementById("paymentProof")
+            .files[0];
 
 
     if(!currentUser){
@@ -530,7 +952,12 @@ async function submitDeposit(event){
     }
 
 
-    if(!Number.isFinite(amount) || amount < 100){
+    /* AMOUNT */
+
+    if(
+        !Number.isFinite(amount) ||
+        amount < 100
+    ){
 
         showMessage(
             "Minimum deposit is ₹100.",
@@ -541,6 +968,8 @@ async function submitDeposit(event){
 
     }
 
+
+    /* UTR */
 
     if(!utr){
 
@@ -554,6 +983,8 @@ async function submitDeposit(event){
     }
 
 
+    /* PAYMENT PROOF */
+
     if(!proofFile){
 
         showMessage(
@@ -566,7 +997,12 @@ async function submitDeposit(event){
     }
 
 
-    if(proofFile.size > 5 * 1024 * 1024){
+    /* FILE SIZE */
+
+    if(
+        proofFile.size >
+        5 * 1024 * 1024
+    ){
 
         showMessage(
             "Payment proof must be below 5 MB.",
@@ -578,17 +1014,20 @@ async function submitDeposit(event){
     }
 
 
-    button.disabled = true;
+    button.disabled =
+        true;
 
-    button.innerText = "Submitting...";
+
+    button.innerText =
+        "Submitting...";
 
 
     try{
 
 
-        /* ================================
-           CHECK DUPLICATE UTR
-        ================================= */
+        /* =================================================
+           DUPLICATE UTR CHECK
+        ================================================= */
 
         const {
             data:existingUTR,
@@ -597,13 +1036,16 @@ async function submitDeposit(event){
         await supabaseClient
             .from("customer_deposits")
             .select("id")
-            .eq("utr", utr)
+            .eq("utr",utr)
             .maybeSingle();
 
 
         if(utrError){
 
-            console.error(utrError);
+            console.error(
+                "UTR check error:",
+                utrError
+            );
 
             throw utrError;
 
@@ -622,11 +1064,11 @@ async function submitDeposit(event){
         }
 
 
-        /* ================================
+        /* =================================================
            UPLOAD PAYMENT PROOF
-        ================================= */
+        ================================================= */
 
-        const fileExtension =
+        const extension =
             proofFile.name
                 .split(".")
                 .pop()
@@ -640,7 +1082,7 @@ async function submitDeposit(event){
             + "-"
             + crypto.randomUUID()
             + "."
-            + fileExtension;
+            + extension;
 
 
         const {
@@ -661,12 +1103,19 @@ async function submitDeposit(event){
 
         if(uploadError){
 
-            console.error(uploadError);
+            console.error(
+                "Upload error:",
+                uploadError
+            );
 
             throw uploadError;
 
         }
 
+
+        /* =================================================
+           PUBLIC URL
+        ================================================= */
 
         const {
             data:publicURL
@@ -674,16 +1123,18 @@ async function submitDeposit(event){
         supabaseClient
             .storage
             .from("payment-proofs")
-            .getPublicUrl(fileName);
+            .getPublicUrl(
+                fileName
+            );
 
 
         const proofURL =
             publicURL.publicUrl;
 
 
-        /* ================================
+        /* =================================================
            CREATE DEPOSIT
-        ================================= */
+        ================================================= */
 
         const {
             error:insertError
@@ -712,21 +1163,28 @@ async function submitDeposit(event){
 
         if(insertError){
 
-            console.error(insertError);
+            console.error(
+                "Deposit insert error:",
+                insertError
+            );
+
 
             /*
-             * If database insert fails,
-             * remove uploaded proof.
+             * Remove uploaded file
+             * if database insert fails.
              */
 
             await supabaseClient
                 .storage
                 .from("payment-proofs")
-                .remove([fileName]);
+                .remove([
+                    fileName
+                ]);
 
 
             if(
-                insertError.code === "23505"
+                insertError.code ===
+                "23505"
             ){
 
                 showMessage(
@@ -738,10 +1196,13 @@ async function submitDeposit(event){
 
             }
 
+
             throw insertError;
 
         }
 
+
+        /* SUCCESS */
 
         showMessage(
             "✅ Deposit submitted successfully. Admin approval pending.",
@@ -749,7 +1210,8 @@ async function submitDeposit(event){
         );
 
 
-        document.getElementById("depositForm")
+        document
+            .getElementById("depositForm")
             .reset();
 
 
@@ -758,21 +1220,26 @@ async function submitDeposit(event){
 
         await loadDeposits();
 
-
     }
     catch(error){
 
         console.error(error);
 
+
         showMessage(
-            "Deposit failed: " + error.message,
+            "Deposit failed: "
+            + (
+                error.message ||
+                "Unknown error"
+            ),
             "red"
         );
 
     }
     finally{
 
-        button.disabled = false;
+        button.disabled =
+            false;
 
         button.innerText =
             "Submit Deposit";
@@ -782,14 +1249,16 @@ async function submitDeposit(event){
 }
 
 
-/* ================================
+/* =====================================================
    LOAD MY DEPOSITS
-================================ */
+===================================================== */
 
 async function loadDeposits(){
 
     if(!currentUser){
+
         return;
+
     }
 
 
@@ -806,6 +1275,7 @@ async function loadDeposits(){
                 class="no-data"
             >
                 Loading deposits...
+
             </td>
 
         </tr>
@@ -843,7 +1313,10 @@ async function loadDeposits(){
 
         if(error){
 
-            console.error(error);
+            console.error(
+                "Load deposits error:",
+                error
+            );
 
             throw error;
 
@@ -879,7 +1352,8 @@ async function loadDeposits(){
 
             const status =
                 String(
-                    deposit.status || "pending"
+                    deposit.status ||
+                    "pending"
                 );
 
 
@@ -977,6 +1451,7 @@ async function loadDeposits(){
 
         console.error(error);
 
+
         table.innerHTML = `
 
             <tr>
@@ -997,17 +1472,19 @@ async function loadDeposits(){
 }
 
 
-/* ================================
+/* =====================================================
    MESSAGE
-================================ */
+===================================================== */
 
 function showMessage(text,color){
 
     const message =
         document.getElementById("message");
 
+
     message.innerText =
         text;
+
 
     message.style.color =
         color;
@@ -1015,9 +1492,9 @@ function showMessage(text,color){
 }
 
 
-/* ================================
+/* =====================================================
    SAFE HTML
-================================ */
+===================================================== */
 
 function escapeHTML(value){
 
@@ -1031,19 +1508,31 @@ function escapeHTML(value){
 }
 
 
-/* ================================
+/* =====================================================
    START
-================================ */
+===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
     function(){
 
-        document.getElementById("amount")
+        document
+            .getElementById("amount")
             .addEventListener(
                 "input",
                 updateCommissionPreview
             );
+
+
+        document
+            .getElementById("depositForm")
+            .addEventListener(
+                "submit",
+                submitDeposit
+            );
+
+
+        loadPaymentSettings();
 
 
         loadCustomer();
@@ -1051,8 +1540,9 @@ document.addEventListener(
     }
 );
 
+
 </script>
 
 </body>
 
-            </html>
+</html>
