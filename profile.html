@@ -2,12 +2,18 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Sathi Pay - My Profile</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -110,6 +116,13 @@
             color: green;
         }
 
+        .error {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
         .back-btn {
             display: block;
             text-align: center;
@@ -121,200 +134,433 @@
             font-weight: bold;
             margin-top: 20px;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <div class="header">
 
-        <h2>Sathi Pay - Profile</h2>
+<header class="header">
 
-        <a href="deshboard.html">
-            Dashboard
-        </a>
+    <h2>Sathi Pay - Profile</h2>
 
-    </div>
+    <a href="deshboard.html">
+        Dashboard
+    </a>
 
-
-    <div class="container">
-
-        <div class="card">
-
-            <div class="profile-icon">
-                👤
-            </div>
+</header>
 
 
-            <div class="profile-title">
 
-                <h2>My Profile</h2>
-
-                <p>Sathi Pay Agent Account</p>
-
-            </div>
+<main class="container">
 
 
-            <!-- UID -->
-
-            <div class="info">
-
-                <div class="label">
-                    UID Number
-                </div>
-
-                <div class="value uid" id="profileUID">
-                    Loading...
-                </div>
-
-            </div>
+    <div class="card">
 
 
-            <!-- NAME -->
-
-            <div class="info">
-
-                <div class="label">
-                    Name
-                </div>
-
-                <div class="value" id="profileName">
-                    Loading...
-                </div>
-
-            </div>
+        <div class="profile-icon">
+            👤
+        </div>
 
 
-            <!-- MOBILE -->
 
-            <div class="info">
+        <div class="profile-title">
 
-                <div class="label">
-                    Mobile Number
-                </div>
+            <h2>My Profile</h2>
 
-                <div class="value" id="profileMobile">
-                    Loading...
-                </div>
-
-            </div>
-
-
-            <!-- STATUS -->
-
-            <div class="info">
-
-                <div class="label">
-                    Account Status
-                </div>
-
-                <div class="value status" id="profileStatus">
-                    Active
-                </div>
-
-            </div>
-
-
-            <!-- ACCOUNT TYPE -->
-
-            <div class="info">
-
-                <div class="label">
-                    Account Type
-                </div>
-
-                <div class="value">
-                    Agent
-                </div>
-
-            </div>
-
-
-            <a class="back-btn" href="deshboard.html">
-                ← Back to Dashboard
-            </a>
+            <p>Sathi Pay Customer Account</p>
 
         </div>
 
+
+
+        <!-- UID -->
+
+        <div class="info">
+
+            <div class="label">
+                UID Number
+            </div>
+
+            <div
+                class="value uid"
+                id="profileUID"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+
+        <!-- NAME -->
+
+        <div class="info">
+
+            <div class="label">
+                Name
+            </div>
+
+            <div
+                class="value"
+                id="profileName"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+
+        <!-- MOBILE -->
+
+        <div class="info">
+
+            <div class="label">
+                Mobile Number
+            </div>
+
+            <div
+                class="value"
+                id="profileMobile"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+
+        <!-- EMAIL -->
+
+        <div class="info">
+
+            <div class="label">
+                Email Address
+            </div>
+
+            <div
+                class="value"
+                id="profileEmail"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <div class="info">
+
+            <div class="label">
+                Account Status
+            </div>
+
+            <div
+                class="value status"
+                id="profileStatus"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+
+        <!-- ACCOUNT TYPE -->
+
+        <div class="info">
+
+            <div class="label">
+                Account Type
+            </div>
+
+            <div class="value">
+                Customer
+            </div>
+
+        </div>
+
+
+
+        <!-- UPI -->
+
+        <div class="info">
+
+            <div class="label">
+                UPI ID
+            </div>
+
+            <div
+                class="value"
+                id="profileUPI"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+
+        <a
+            class="back-btn"
+            href="deshboard.html"
+        >
+            ← Back to Dashboard
+        </a>
+
+
+        <div
+            id="profileError"
+            class="error"
+        ></div>
+
+
     </div>
 
 
-    <script>
-
-        /*
-         * Profile information
-         * registration/login ke time localStorage
-         * se read hogi.
-         */
-
-        const uid =
-            localStorage.getItem("agentUID");
-
-        const name =
-            localStorage.getItem("agentName");
-
-        const mobile =
-            localStorage.getItem("agentMobile");
-
-        const status =
-            localStorage.getItem("agentStatus");
+</main>
 
 
-        // UID
 
-        if (uid) {
+<!-- SUPABASE -->
 
-            document.getElementById("profileUID").innerText =
-                uid;
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        } else {
-
-            document.getElementById("profileUID").innerText =
-                "UID not available";
-
-        }
+<script src="js/app.js?v=6"></script>
 
 
-        // NAME
 
-        if (name) {
-
-            document.getElementById("profileName").innerText =
-                name;
-
-        } else {
-
-            document.getElementById("profileName").innerText =
-                "Not available";
-
-        }
+<script>
 
 
-        // MOBILE
+async function loadCustomerProfile() {
 
-        if (mobile) {
+    const errorBox =
+        document.getElementById("profileError");
 
-            document.getElementById("profileMobile").innerText =
-                mobile;
 
-        } else {
+    try {
 
-            document.getElementById("profileMobile").innerText =
-                "Not available";
+
+        /* ================================
+           GET CURRENT LOGGED-IN USER
+        ================================= */
+
+        const {
+            data: authData,
+            error: authError
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (authError) {
+
+            console.error(
+                "Auth Error:",
+                authError
+            );
+
+            errorBox.innerText =
+                "Please login again.";
+
+            return;
 
         }
 
 
-        // STATUS
+        const user =
+            authData?.user;
 
-        if (status) {
 
-            document.getElementById("profileStatus").innerText =
-                status;
+        if (!user || !user.id) {
+
+            errorBox.innerText =
+                "Customer login session not found.";
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "customer-login.html";
+
+            }, 1000);
+
+            return;
 
         }
 
-    </script>
+
+
+        /* ================================
+           LOAD CURRENT CUSTOMER
+        ================================= */
+
+        const {
+            data: customer,
+            error: customerError
+        } =
+            await supabaseClient
+
+                .from("customers")
+
+                .select(`
+                    id,
+                    uid,
+                    name,
+                    mobile,
+                    invitation_code,
+                    wallet_balance,
+                    bonus_balance,
+                    deposit_balance,
+                    commission_balance,
+                    referral_balance,
+                    withdrawal_balance,
+                    sell_on,
+                    upi_id,
+                    qr_code_url,
+                    status
+                `)
+
+                .eq(
+                    "id",
+                    user.id
+                )
+
+                .maybeSingle();
+
+
+
+        if (customerError) {
+
+            console.error(
+                "Customer Profile Error:",
+                customerError
+            );
+
+            errorBox.innerText =
+                "Unable to load customer profile.";
+
+            return;
+
+        }
+
+
+
+        if (!customer) {
+
+            errorBox.innerText =
+                "Customer profile not found.";
+
+            return;
+
+        }
+
+
+
+        /* ================================
+           DISPLAY CURRENT CUSTOMER DATA
+        ================================= */
+
+        document.getElementById(
+            "profileUID"
+        ).innerText =
+            customer.uid || "Not available";
+
+
+        document.getElementById(
+            "profileName"
+        ).innerText =
+            customer.name || "Not available";
+
+
+        document.getElementById(
+            "profileMobile"
+        ).innerText =
+            customer.mobile || "Not available";
+
+
+        document.getElementById(
+            "profileEmail"
+        ).innerText =
+            user.email || "Not available";
+
+
+        document.getElementById(
+            "profileStatus"
+        ).innerText =
+            customer.status || "Active";
+
+
+        document.getElementById(
+            "profileUPI"
+        ).innerText =
+            customer.upi_id || "Not added";
+
+
+        /* ================================
+           UPDATE CUSTOMER LOCAL STORAGE
+        ================================= */
+
+        localStorage.setItem(
+            "sathiPayCustomerId",
+            customer.id
+        );
+
+
+        localStorage.setItem(
+            "sathiPayUID",
+            customer.uid || ""
+        );
+
+
+        localStorage.setItem(
+            "sathiPayCustomerName",
+            customer.name || ""
+        );
+
+
+        localStorage.setItem(
+            "sathiPayCustomerMobile",
+            customer.mobile || ""
+        );
+
+
+        localStorage.setItem(
+            "sathiPayInvitationCode",
+            customer.invitation_code || ""
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Profile Exception:",
+            error
+        );
+
+        errorBox.innerText =
+            "Something went wrong while loading profile.";
+
+    }
+
+}
+
+
+
+/* LOAD PROFILE */
+
+loadCustomerProfile();
+
+
+</script>
+
 
 </body>
 
