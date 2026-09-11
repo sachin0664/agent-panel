@@ -40,6 +40,8 @@
     <h2>Customer Login</h2>
 
 
+    <!-- LOGIN FORM -->
+
     <form id="customerLoginForm">
 
         <label>
@@ -78,14 +80,30 @@
     </form>
 
 
+    <!-- FORGOT PASSWORD -->
+
+    <p style="margin-top:15px;">
+
+        <a
+            href="#"
+            id="forgotPasswordLink"
+        >
+            Forgot Password?
+        </a>
+
+    </p>
+
+
     <p id="customerLoginMessage"></p>
 
 
     <p>
         Don't have an account?
+
         <a href="customer-register.html">
             Register here
         </a>
+
     </p>
 
 
@@ -103,6 +121,10 @@
 <script>
 
 
+/* =====================================
+   LOGIN ELEMENTS
+===================================== */
+
 const loginForm =
     document.getElementById("customerLoginForm");
 
@@ -115,6 +137,14 @@ const loginButton =
     document.getElementById("loginButton");
 
 
+const forgotPasswordLink =
+    document.getElementById("forgotPasswordLink");
+
+
+
+/* =====================================
+   CUSTOMER LOGIN
+===================================== */
 
 loginForm.addEventListener(
     "submit",
@@ -390,8 +420,6 @@ loginForm.addEventListener(
                 "Success";
 
 
-            /* FINAL CUSTOMER DASHBOARD */
-
             setTimeout(function() {
 
                 window.location.href =
@@ -434,6 +462,157 @@ loginForm.addEventListener(
                     "Login";
 
             }
+
+        }
+
+    }
+);
+
+
+
+/* =====================================
+   FORGOT PASSWORD
+===================================== */
+
+forgotPasswordLink.addEventListener(
+    "click",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("customerEmail")
+                .value
+                .trim()
+                .toLowerCase();
+
+
+
+        if (!email) {
+
+            message.innerText =
+                "Please enter your email address first.";
+
+            message.style.color =
+                "red";
+
+            document
+                .getElementById("customerEmail")
+                .focus();
+
+            return;
+
+        }
+
+
+
+        forgotPasswordLink.style.pointerEvents =
+            "none";
+
+        forgotPasswordLink.innerText =
+            "Sending reset link...";
+
+
+        message.innerText =
+            "Sending password reset link...";
+
+        message.style.color =
+            "#2563eb";
+
+
+
+        try {
+
+
+            /*
+             * GitHub Pages URL:
+             * https://sachin0664.github.io/agent-panel/
+             *
+             * This automatically creates:
+             * https://sachin0664.github.io/agent-panel/reset-password.html
+             */
+
+            const resetUrl =
+                window.location.origin +
+                window.location.pathname
+                    .replace(
+                        "customer-login.html",
+                        ""
+                    ) +
+                "reset-password.html";
+
+
+
+            const {
+                error
+            } =
+                await supabaseClient.auth
+                    .resetPasswordForEmail(
+                        email,
+                        {
+                            redirectTo: resetUrl
+                        }
+                    );
+
+
+
+            if (error) {
+
+                console.error(
+                    "Password Reset Error:",
+                    error
+                );
+
+
+                message.innerText =
+                    "Unable to send reset link: " +
+                    error.message;
+
+                message.style.color =
+                    "red";
+
+                return;
+
+            }
+
+
+
+            message.innerText =
+                "✅ Password reset link sent. Please check your email.";
+
+            message.style.color =
+                "green";
+
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "Forgot Password Error:",
+                error
+            );
+
+
+            message.innerText =
+                "Something went wrong. Please try again.";
+
+            message.style.color =
+                "red";
+
+        }
+
+
+        finally {
+
+            forgotPasswordLink.style.pointerEvents =
+                "auto";
+
+            forgotPasswordLink.innerText =
+                "Forgot Password?";
 
         }
 
