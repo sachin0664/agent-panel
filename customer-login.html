@@ -19,7 +19,9 @@
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -30,6 +32,7 @@
     </a>
 
 </header>
+
 
 
 <main class="container">
@@ -47,6 +50,7 @@
             type="email"
             id="customerEmail"
             placeholder="Enter your email"
+            autocomplete="email"
             required
         >
 
@@ -59,11 +63,15 @@
             type="password"
             id="customerPassword"
             placeholder="Enter your password"
+            autocomplete="current-password"
             required
         >
 
 
-        <button type="submit">
+        <button
+            type="submit"
+            id="loginButton"
+        >
             Login
         </button>
 
@@ -80,23 +88,32 @@
         </a>
     </p>
 
+
 </main>
+
 
 
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="js/app.js?v=5"></script>
+<script src="js/app.js?v=6"></script>
 
 
 <script>
 
+
 const loginForm =
     document.getElementById("customerLoginForm");
 
+
 const message =
     document.getElementById("customerLoginMessage");
+
+
+const loginButton =
+    document.getElementById("loginButton");
+
 
 
 loginForm.addEventListener(
@@ -106,27 +123,60 @@ loginForm.addEventListener(
         event.preventDefault();
 
 
+        message.innerText = "";
+        message.style.color = "";
+
+
+
         const email =
-            document.getElementById(
-                "customerEmail"
-            ).value.trim();
+            document
+                .getElementById("customerEmail")
+                .value
+                .trim()
+                .toLowerCase();
 
 
         const password =
-            document.getElementById(
-                "customerPassword"
-            ).value;
+            document
+                .getElementById("customerPassword")
+                .value;
+
+
+
+        if (!email || !password) {
+
+            message.innerText =
+                "Please enter email and password.";
+
+            message.style.color =
+                "red";
+
+            return;
+
+        }
+
+
+
+        loginButton.disabled = true;
+
+        loginButton.innerText =
+            "Logging in...";
 
 
         message.innerText =
-            "Logging in...";
+            "Checking login...";
+
+        message.style.color =
+            "#2563eb";
+
 
 
         try {
 
-            /* ==============================
+
+            /* =====================================
                SUPABASE AUTH LOGIN
-            ============================== */
+            ===================================== */
 
             const {
                 data,
@@ -141,37 +191,88 @@ loginForm.addEventListener(
                 });
 
 
+
             if (error) {
 
-                console.error(error);
+                console.error(
+                    "Supabase Login Error:",
+                    error
+                );
 
-                message.innerText =
-                    "Login failed: " +
-                    error.message;
+
+                if (
+                    error.message &&
+                    error.message
+                        .toLowerCase()
+                        .includes("invalid login credentials")
+                ) {
+
+                    message.innerText =
+                        "Invalid email or password.";
+
+                }
+
+                else if (
+                    error.message &&
+                    error.message
+                        .toLowerCase()
+                        .includes("email not confirmed")
+                ) {
+
+                    message.innerText =
+                        "Email verification is required.";
+
+                }
+
+                else {
+
+                    message.innerText =
+                        "Login failed: " +
+                        error.message;
+
+                }
+
+
+                message.style.color =
+                    "red";
+
 
                 return;
+
             }
 
 
-            if (!data.user) {
+
+            if (
+                !data ||
+                !data.user ||
+                !data.user.id
+            ) {
 
                 message.innerText =
-                    "Login failed.";
+                    "Login failed. Customer account not found.";
+
+                message.style.color =
+                    "red";
 
                 return;
+
             }
 
 
-            /* ==============================
+
+            /* =====================================
                LOAD CUSTOMER PROFILE
-            ============================== */
+            ===================================== */
 
             const {
                 data: customer,
                 error: customerError
             } =
                 await supabaseClient
+
                     .from("customers")
+
                     .select(`
                         id,
                         uid,
@@ -189,25 +290,37 @@ loginForm.addEventListener(
                         qr_code_url,
                         status
                     `)
+
                     .eq(
                         "id",
                         data.user.id
                     )
+
                     .maybeSingle();
+
 
 
             if (customerError) {
 
                 console.error(
-                    "Customer profile error:",
+                    "Customer Profile Error:",
                     customerError
                 );
+
 
                 message.innerText =
                     "Login successful, but customer profile could not be loaded.";
 
+                message.style.color =
+                    "red";
+
+
+                await supabaseClient.auth.signOut();
+
                 return;
+
             }
+
 
 
             if (!customer) {
@@ -215,13 +328,21 @@ loginForm.addEventListener(
                 message.innerText =
                     "Customer profile not found.";
 
+                message.style.color =
+                    "red";
+
+
+                await supabaseClient.auth.signOut();
+
                 return;
+
             }
 
 
-            /* ==============================
-               SAVE CUSTOMER SESSION INFO
-            ============================== */
+
+            /* =====================================
+               SAVE CUSTOMER SESSION DATA
+            ===================================== */
 
             localStorage.setItem(
                 "sathiPayCustomerId",
@@ -231,13 +352,7 @@ loginForm.addEventListener(
 
             localStorage.setItem(
                 "sathiPayUID",
-                customer.uid
-            );
-
-
-            localStorage.setItem(
-                "sathiPayInvitationCode",
-                customer.invitation_code || ""
+                customer.uid || ""
             );
 
 
@@ -253,39 +368,82 @@ loginForm.addEventListener(
             );
 
 
-            /* ==============================
+            localStorage.setItem(
+                "sathiPayInvitationCode",
+                customer.invitation_code || ""
+            );
+
+
+
+            /* =====================================
                LOGIN SUCCESS
-            ============================== */
+            ===================================== */
 
             message.innerText =
-                "Login successful!";
+                "✅ Login successful!";
 
+            message.style.color =
+                "green";
+
+
+            loginButton.innerText =
+                "Success";
+
+
+            /* FINAL CUSTOMER DASHBOARD */
 
             setTimeout(function() {
 
                 window.location.href =
-                    "deshboard.html";
+                    "dashboard.html";
 
-            }, 700);
+            }, 500);
+
 
         }
 
 
         catch (error) {
 
-            console.error(error);
+            console.error(
+                "Login Exception:",
+                error
+            );
+
 
             message.innerText =
-                "Login failed: " +
-                error.message;
+                "Login failed. Please try again.";
+
+            message.style.color =
+                "red";
+
+        }
+
+
+        finally {
+
+            loginButton.disabled =
+                false;
+
+            if (
+                loginButton.innerText !==
+                "Success"
+            ) {
+
+                loginButton.innerText =
+                    "Login";
+
+            }
 
         }
 
     }
 );
 
+
 </script>
+
 
 </body>
 
-</html>
+    </html>
