@@ -3,268 +3,246 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Sathi Pay - Deposit</title>
+    <title>Sathi Pay - Deposit</title>
 
-<style>
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 
-*{
-    box-sizing:border-box;
-}
+    <style>
 
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f4f7fb;
-    color:#1f2937;
-}
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
 
-.header{
-    background:linear-gradient(135deg,#075985,#0891b2);
-    color:white;
-    padding:18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+        header {
+            background: #111827;
+            color: white;
+            padding: 16px 20px;
+        }
 
-.header h2{
-    margin:0;
-    font-size:20px;
-}
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
 
-.header a{
-    color:white;
-    text-decoration:none;
-    font-weight:bold;
-}
+        header a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
 
-.container{
-    max-width:700px;
-    margin:auto;
-    padding:18px;
-}
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 0 15px 40px;
+        }
 
-.card{
-    background:white;
-    padding:20px;
-    border-radius:16px;
-    margin-bottom:18px;
-    box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
 
-.card h2{
-    margin-top:0;
-}
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
 
-.info{
-    background:#eff6ff;
-    padding:14px;
-    border-radius:12px;
-    margin-bottom:18px;
-}
+        .account-box {
+            background: #f3f4f6;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 15px;
+        }
 
-.info div{
-    margin:6px 0;
-}
+        .account-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 7px 0;
+            border-bottom: 1px solid #ddd;
+        }
 
-.uid{
-    font-weight:bold;
-    color:#2563eb;
-}
+        .account-row:last-child {
+            border-bottom: none;
+        }
 
-label{
-    display:block;
-    margin-top:14px;
-    margin-bottom:6px;
-    font-weight:bold;
-}
+        .label {
+            color: #666;
+            font-size: 14px;
+        }
 
-input{
-    width:100%;
-    padding:13px;
-    border:1px solid #d1d5db;
-    border-radius:10px;
-    font-size:16px;
-}
+        .value {
+            font-weight: bold;
+            text-align: right;
+            word-break: break-all;
+        }
 
-input[type="file"]{
-    background:#f9fafb;
-}
+        .payment-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 18px;
+        }
 
-.commission-box{
-    margin-top:15px;
-    padding:14px;
-    background:#f0fdf4;
-    border:1px solid #bbf7d0;
-    border-radius:12px;
-}
+        .payment-box h3 {
+            margin-top: 0;
+        }
 
-.commission-rate{
-    font-size:22px;
-    font-weight:bold;
-    color:#15803d;
-    margin:5px 0;
-}
+        #qrImage {
+            max-width: 220px;
+            width: 100%;
+            border-radius: 10px;
+            margin: 10px auto;
+        }
 
-button{
-    width:100%;
-    margin-top:20px;
-    padding:14px;
-    border:0;
-    border-radius:10px;
-    background:#16a34a;
-    color:white;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-}
+        .upi-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
 
-button:disabled{
-    opacity:.6;
-    cursor:not-allowed;
-}
+        .upi-text {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            word-break: break-all;
+        }
 
-#message{
-    margin-top:15px;
-    text-align:center;
-    font-weight:bold;
-}
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-.table-box{
-    overflow-x:auto;
-}
+        .copy-btn {
+            background: #374151;
+            color: white;
+        }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:650px;
-}
+        .submit-btn {
+            width: 100%;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            margin-top: 8px;
+        }
 
-th,td{
-    padding:12px;
-    border-bottom:1px solid #e5e7eb;
-    text-align:left;
-}
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            margin-top: 7px;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
 
-th{
-    background:#f1f5f9;
-}
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
 
-.pending{
-    color:#b45309;
-    font-weight:bold;
-}
+        .commission-box {
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+            padding: 12px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+        }
 
-.approved{
-    color:#15803d;
-    font-weight:bold;
-}
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
 
-.rejected{
-    color:#dc2626;
-    font-weight:bold;
-}
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
 
-.no-data{
-    text-align:center;
-    color:#6b7280;
-}
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-.payment-box{
-    background:linear-gradient(135deg,#ecfeff,#eff6ff);
-    border:1px solid #bae6fd;
-    border-radius:16px;
-    padding:18px;
-    text-align:center;
-    margin-bottom:18px;
-}
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
 
-.payment-box h3{
-    margin:0 0 12px;
-    color:#075985;
-}
+        .table-wrap {
+            overflow-x: auto;
+        }
 
-#paymentQR{
-    width:230px;
-    max-width:100%;
-    border-radius:14px;
-    border:1px solid #d1d5db;
-    padding:8px;
-    background:white;
-    display:none;
-    margin:12px auto;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
 
-.upi-box{
-    background:white;
-    border-radius:10px;
-    padding:12px;
-    margin-top:10px;
-    word-break:break-all;
-}
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            font-size: 14px;
+        }
 
-.upi-label{
-    font-size:13px;
-    color:#64748b;
-    margin-bottom:5px;
-}
+        th {
+            background: #f3f4f6;
+        }
 
-.upi-value{
-    font-size:17px;
-    font-weight:bold;
-    color:#075985;
-}
+        .status {
+            font-weight: bold;
+        }
 
-.payment-note{
-    font-size:13px;
-    color:#64748b;
-    margin-top:10px;
-    line-height:1.5;
-}
+        .status.pending {
+            color: #d97706;
+        }
 
-.loading-payment{
-    color:#64748b;
-    padding:10px;
-}
+        .status.approved {
+            color: #16a34a;
+        }
 
-.payment-error{
-    color:#dc2626;
-    font-weight:bold;
-}
+        .status.failed {
+            color: #dc2626;
+        }
 
-.copy-btn{
-    width:auto;
-    margin:8px 0 0;
-    padding:8px 14px;
-    font-size:13px;
-    background:#2563eb;
-}
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 15px;
+        }
 
-.copy-btn:disabled{
-    opacity:.6;
-}
-
-@media(max-width:600px){
-
-    .container{
-        padding:12px;
-    }
-
-    .card{
-        padding:16px;
-    }
-
-    .header h2{
-        font-size:18px;
-    }
-
-}
-
-</style>
+    </style>
 
 </head>
 
@@ -272,202 +250,191 @@ th{
 <body>
 
 
-<!-- HEADER -->
+<header>
 
-<div class="header">
+    <h1>Sathi Pay</h1>
 
-    <h2>💰 Sathi Pay Deposit</h2>
+    <div style="margin-top:6px;">
+        <a href="customer-dashboard.html">
+            ← Back to Dashboard
+        </a>
+    </div>
 
-    <a href="dashboard.html">
-        Dashboard
-    </a>
-
-</div>
+</header>
 
 
 <div class="container">
 
 
-    <!-- CUSTOMER INFORMATION -->
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- ACCOUNT DETAILS -->
 
     <div class="card">
 
-        <h2>👤 My Account</h2>
+        <h2>My Account</h2>
 
-        <div class="info">
+        <div class="account-box">
 
-            <div>
-                <b>Name:</b>
-                <span id="customerName">
-                    Loading...
+            <div class="account-row">
+
+                <span class="label">
+                    Name
                 </span>
-            </div>
 
-            <div>
-                <b>UID:</b>
                 <span
-                    id="customerUID"
-                    class="uid"
+                    class="value"
+                    id="customerName"
                 >
                     Loading...
                 </span>
+
+            </div>
+
+
+            <div class="account-row">
+
+                <span class="label">
+                    Sathi Pay UID
+                </span>
+
+                <span
+                    class="value"
+                    id="customerUID"
+                >
+                    Loading...
+                </span>
+
             </div>
 
         </div>
 
+    </div>
 
-        <!-- PAYMENT DETAILS -->
+
+    <!-- PAYMENT DETAILS -->
+
+    <div class="card">
+
+        <h2>Make Deposit</h2>
+
 
         <div class="payment-box">
 
-            <h3>
-                💳 Make Payment
-            </h3>
+            <h3>Payment Details</h3>
+
+            <p>
+                Pay the amount using the UPI ID or QR code below.
+            </p>
 
 
-            <div
-                id="paymentLoading"
-                class="loading-payment"
-            >
-                Loading payment details...
+            <div id="qrSection">
+
+                <img
+                    id="qrImage"
+                    src=""
+                    alt="Payment QR"
+                    style="display:none;"
+                >
+
             </div>
 
 
-            <img
-                id="paymentQR"
-                src=""
-                alt="Sathi Pay Payment QR"
-            >
-
-
-            <div
-                id="upiContainer"
-                class="upi-box"
-                style="display:none;"
-            >
-
-                <div class="upi-label">
-                    UPI ID
-                </div>
+            <div class="upi-box">
 
                 <div
-                    id="paymentUPI"
-                    class="upi-value"
+                    id="upiID"
+                    class="upi-text"
                 >
-                    -
+                    Loading UPI ID...
                 </div>
 
                 <button
                     type="button"
                     class="copy-btn"
-                    id="copyUPIButton"
-                    onclick="copyUPI()"
+                    id="copyUPI"
                 >
-                    📋 Copy UPI ID
+                    Copy UPI
                 </button>
 
-            </div>
-
-
-            <div
-                id="paymentNote"
-                class="payment-note"
-            >
-                Payment karne ke baad UTR aur payment proof submit karein.
             </div>
 
         </div>
 
 
-        <!-- DEPOSIT FORM -->
-
         <form id="depositForm">
 
 
-            <!-- AMOUNT -->
-
-            <label>
-                Deposit Amount (₹)
+            <label for="amount">
+                Deposit Amount
             </label>
 
             <input
                 type="number"
                 id="amount"
-                min="100"
-                step="0.01"
                 placeholder="Enter amount"
+                min="100"
+                step="1"
                 required
             >
 
 
-            <!-- COMMISSION -->
-
             <div class="commission-box">
 
                 <div>
-                    Applicable Deposit Commission
+                    Commission Rate:
+                    <strong id="commissionRate">
+                        6%
+                    </strong>
                 </div>
 
-                <div
-                    id="commissionRate"
-                    class="commission-rate"
-                >
-                    6%
-                </div>
-
-                <div id="commissionPreview">
-                    Enter amount to calculate
+                <div style="margin-top:6px;">
+                    Estimated Commission:
+                    <strong id="commissionAmount">
+                        ₹0.00
+                    </strong>
                 </div>
 
             </div>
 
 
-            <!-- UTR -->
-
-            <label>
+            <label for="utr">
                 UTR / Transaction ID
             </label>
 
             <input
                 type="text"
                 id="utr"
-                maxlength="100"
-                placeholder="Enter UTR number"
-                autocomplete="off"
+                placeholder="Enter UTR / Transaction ID"
                 required
             >
 
 
-            <!-- PAYMENT PROOF -->
-
-            <label>
-                Payment Proof
+            <label for="paymentProof">
+                Payment Screenshot
             </label>
 
             <input
                 type="file"
                 id="paymentProof"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/*"
                 required
             >
 
-            <small>
-                JPG, PNG or WEBP image upload karein.
-                Maximum 5 MB.
-            </small>
-
-
-            <!-- SUBMIT -->
 
             <button
                 type="submit"
+                class="submit-btn"
                 id="submitButton"
             >
                 Submit Deposit
             </button>
-
-
-            <div id="message"></div>
 
 
         </form>
@@ -479,13 +446,19 @@ th{
 
     <div class="card">
 
-        <h2>
-            📜 My Deposit History
-        </h2>
+        <h2>Deposit History</h2>
 
-        <div class="table-box">
+        <div
+            id="historyLoading"
+            class="loading"
+        >
+            Loading deposit history...
+        </div>
 
-            <table>
+
+        <div class="table-wrap">
+
+            <table id="depositTable">
 
                 <thead>
 
@@ -508,19 +481,7 @@ th{
                 </thead>
 
 
-                <tbody id="depositTable">
-
-                    <tr>
-
-                        <td
-                            colspan="6"
-                            class="no-data"
-                        >
-                            Loading...
-
-                        </td>
-
-                    </tr>
+                <tbody id="depositHistory">
 
                 </tbody>
 
@@ -534,8 +495,6 @@ th{
 </div>
 
 
-<!-- SUPABASE -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="js/app.js"></script>
@@ -543,306 +502,124 @@ th{
 
 <script>
 
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
 let currentUser = null;
 
+let currentCustomer = null;
 
-/* =====================================================
-   COMMISSION RATE
-===================================================== */
-
-function getCommissionRate(amount){
-
-    const value =
-        Number(amount || 0);
+let paymentUPI = "";
 
 
-    /*
-       ₹100 - ₹9,999 = 6%
-       ₹10,000 - ₹19,999 = 8%
-       ₹20,000+ = 10%
-    */
+/* MESSAGE */
 
-    if(value >= 20000){
+function showMessage(text, type = "info") {
 
+    const message =
+        document.getElementById("message");
+
+    message.innerText = text;
+
+    message.className =
+        "message " + type;
+
+    message.style.display = "block";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* ESCAPE HTML */
+
+function escapeHTML(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* COMMISSION RATE */
+
+function getCommissionRate(amount) {
+
+    amount = Number(amount);
+
+    if (!amount || amount < 100) {
+        return 0;
+    }
+
+    if (amount >= 20000) {
         return 0.10;
-
     }
 
-
-    if(value >= 10000){
-
+    if (amount >= 10000) {
         return 0.08;
-
     }
-
 
     return 0.06;
 
 }
 
 
-/* =====================================================
-   COMMISSION PREVIEW
-===================================================== */
+/* UPDATE COMMISSION */
 
-function updateCommissionPreview(){
+function updateCommission() {
 
     const amount =
         Number(
-            document
-                .getElementById("amount")
-                .value || 0
+            document.getElementById("amount").value
         );
-
 
     const rate =
         getCommissionRate(amount);
 
-
     const commission =
         amount * rate;
 
+    document.getElementById(
+        "commissionRate"
+    ).innerText =
+        (rate * 100).toFixed(0) + "%";
 
-    document
-        .getElementById("commissionRate")
-        .innerText =
-        (rate * 100) + "%";
-
-
-    if(amount >= 100){
-
-        document
-            .getElementById("commissionPreview")
-            .innerText =
-            "Approval ke baad estimated commission: ₹"
-            + commission.toFixed(2);
-
-    }
-    else{
-
-        document
-            .getElementById("commissionPreview")
-            .innerText =
-            "Enter amount to calculate";
-
-    }
+    document.getElementById(
+        "commissionAmount"
+    ).innerText =
+        "₹" + commission.toFixed(2);
 
 }
 
 
-/* =====================================================
-   LOAD PAYMENT SETTINGS
-===================================================== */
+/* LOAD CUSTOMER */
 
-async function loadPaymentSettings(){
+async function loadCustomer() {
 
-    const qr =
-        document.getElementById("paymentQR");
-
-    const upi =
-        document.getElementById("paymentUPI");
-
-    const upiContainer =
-        document.getElementById("upiContainer");
-
-    const loading =
-        document.getElementById("paymentLoading");
-
-    const note =
-        document.getElementById("paymentNote");
-
-
-    try{
+    try {
 
         const {
-            data,
-            error
-        } =
-        await supabaseClient
-            .from("payment_settings")
-            .select(
-                "upi_id, qr_url"
-            )
-            .eq("id",1)
-            .maybeSingle();
-
-
-        if(error){
-
-            console.error(
-                "Payment settings error:",
-                error
-            );
-
-
-            loading.innerText =
-                "Payment details load nahi ho paaye.";
-
-            loading.className =
-                "payment-error";
-
-            return;
-
-        }
-
-
-        if(!data){
-
-            loading.innerText =
-                "Payment details admin se configure karein.";
-
-            loading.className =
-                "payment-error";
-
-            return;
-
-        }
-
-
-        loading.style.display =
-            "none";
-
-
-        /* UPI */
-
-        if(data.upi_id){
-
-            upi.innerText =
-                data.upi_id;
-
-            upiContainer.style.display =
-                "block";
-
-        }
-
-
-        /* QR */
-
-        if(data.qr_url){
-
-            qr.src =
-                data.qr_url;
-
-            qr.style.display =
-                "block";
-
-
-            qr.onerror =
-                function(){
-
-                    console.error(
-                        "QR image failed to load."
-                    );
-
-                    qr.style.display =
-                        "none";
-
-                };
-
-        }
-
-
-        note.innerText =
-            "Payment karne ke baad UTR aur payment proof submit karein.";
-
-    }
-    catch(error){
-
-        console.error(error);
-
-
-        loading.innerText =
-            "Payment details load nahi ho paaye.";
-
-        loading.className =
-            "payment-error";
-
-    }
-
-}
-
-
-/* =====================================================
-   COPY UPI
-===================================================== */
-
-async function copyUPI(){
-
-    const upi =
-        document
-            .getElementById("paymentUPI")
-            .innerText
-            .trim();
-
-
-    const button =
-        document
-            .getElementById("copyUPIButton");
-
-
-    if(!upi || upi === "-"){
-
-        return;
-
-    }
-
-
-    try{
-
-        await navigator
-            .clipboard
-            .writeText(upi);
-
-
-        button.innerText =
-            "✅ Copied";
-
-
-        setTimeout(
-            function(){
-
-                button.innerText =
-                    "📋 Copy UPI ID";
-
-            },
-            2000
-        );
-
-    }
-    catch(error){
-
-        alert(
-            "UPI ID: " + upi
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   LOAD CUSTOMER
-===================================================== */
-
-async function loadCustomer(){
-
-    try{
-
-        const {
-            data:{
-                user
-            },
-            error
+            data: authData,
+            error: authError
         } =
         await supabaseClient.auth.getUser();
 
 
-        if(error || !user){
+        if (
+            authError ||
+            !authData.user
+        ) {
 
             window.location.href =
                 "customer-login.html";
@@ -853,210 +630,37 @@ async function loadCustomer(){
 
 
         currentUser =
-            user;
+            authData.user;
 
-
-        /*
-         * Customer name
-         */
-
-        const metadata =
-            user.user_metadata || {};
-
-
-        document
-            .getElementById("customerName")
-            .innerText =
-            metadata.name ||
-            metadata.full_name ||
-            "Customer";
-
-
-        /*
-         * Customer UID
-         */
-
-        document
-            .getElementById("customerUID")
-            .innerText =
-            metadata.uid ||
-            user.id;
-
-
-        /*
-         * Load history
-         */
-
-        await loadDeposits();
-
-    }
-    catch(error){
-
-        console.error(error);
-
-
-        showMessage(
-            "Unable to load account.",
-            "red"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   SUBMIT DEPOSIT
-===================================================== */
-
-async function submitDeposit(event){
-
-    event.preventDefault();
-
-
-    const button =
-        document
-            .getElementById("submitButton");
-
-
-    const amount =
-        Number(
-            document
-                .getElementById("amount")
-                .value
-        );
-
-
-    const utr =
-        document
-            .getElementById("utr")
-            .value
-            .trim();
-
-
-    const proofFile =
-        document
-            .getElementById("paymentProof")
-            .files[0];
-
-
-    if(!currentUser){
-
-        showMessage(
-            "Please login first.",
-            "red"
-        );
-
-        return;
-
-    }
-
-
-    /* AMOUNT */
-
-    if(
-        !Number.isFinite(amount) ||
-        amount < 100
-    ){
-
-        showMessage(
-            "Minimum deposit is ₹100.",
-            "red"
-        );
-
-        return;
-
-    }
-
-
-    /* UTR */
-
-    if(!utr){
-
-        showMessage(
-            "Please enter UTR.",
-            "red"
-        );
-
-        return;
-
-    }
-
-
-    /* PAYMENT PROOF */
-
-    if(!proofFile){
-
-        showMessage(
-            "Please upload payment proof.",
-            "red"
-        );
-
-        return;
-
-    }
-
-
-    /* FILE SIZE */
-
-    if(
-        proofFile.size >
-        5 * 1024 * 1024
-    ){
-
-        showMessage(
-            "Payment proof must be below 5 MB.",
-            "red"
-        );
-
-        return;
-
-    }
-
-
-    button.disabled =
-        true;
-
-
-    button.innerText =
-        "Submitting...";
-
-
-    try{
-
-
-        /* =================================================
-           DUPLICATE UTR CHECK
-        ================================================= */
 
         const {
-            data:existingUTR,
-            error:utrError
+            data: customer,
+            error: customerError
         } =
         await supabaseClient
-            .from("customer_deposits")
-            .select("id")
-            .eq("utr",utr)
+
+            .from("customers")
+
+            .select("id,name,uid")
+
+            .eq(
+                "id",
+                currentUser.id
+            )
+
             .maybeSingle();
 
 
-        if(utrError){
+        if (customerError) {
 
             console.error(
-                "UTR check error:",
-                utrError
+                "Customer error:",
+                customerError
             );
 
-            throw utrError;
-
-        }
-
-
-        if(existingUTR){
-
             showMessage(
-                "This UTR has already been used.",
-                "red"
+                "Customer details load nahi ho paaye.",
+                "error"
             );
 
             return;
@@ -1064,280 +668,281 @@ async function submitDeposit(event){
         }
 
 
-        /* =================================================
-           UPLOAD PAYMENT PROOF
-        ================================================= */
+        if (!customer) {
 
-        const extension =
-            proofFile.name
-                .split(".")
-                .pop()
-                .toLowerCase();
-
-
-        const fileName =
-            currentUser.id
-            + "/"
-            + Date.now()
-            + "-"
-            + crypto.randomUUID()
-            + "."
-            + extension;
-
-
-        const {
-            error:uploadError
-        } =
-        await supabaseClient
-            .storage
-            .from("payment-proofs")
-            .upload(
-                fileName,
-                proofFile,
-                {
-                    cacheControl:"3600",
-                    upsert:false
-                }
+            showMessage(
+                "Customer profile nahi mila.",
+                "error"
             );
 
-
-        if(uploadError){
-
-            console.error(
-                "Upload error:",
-                uploadError
-            );
-
-            throw uploadError;
+            return;
 
         }
 
 
-        /* =================================================
-           PUBLIC URL
-        ================================================= */
-
-        const {
-            data:publicURL
-        } =
-        supabaseClient
-            .storage
-            .from("payment-proofs")
-            .getPublicUrl(
-                fileName
-            );
+        currentCustomer =
+            customer;
 
 
-        const proofURL =
-            publicURL.publicUrl;
+        document.getElementById(
+            "customerName"
+        ).innerText =
+            customer.name || "Customer";
 
 
-        /* =================================================
-           CREATE DEPOSIT
-        ================================================= */
-
-        const {
-            error:insertError
-        } =
-        await supabaseClient
-            .from("customer_deposits")
-            .insert({
-
-                customer_id:
-                    currentUser.id,
-
-                amount:
-                    amount,
-
-                utr:
-                    utr,
-
-                payment_proof:
-                    proofURL,
-
-                status:
-                    "pending"
-
-            });
-
-
-        if(insertError){
-
-            console.error(
-                "Deposit insert error:",
-                insertError
-            );
-
-
-            /*
-             * Remove uploaded file
-             * if database insert fails.
-             */
-
-            await supabaseClient
-                .storage
-                .from("payment-proofs")
-                .remove([
-                    fileName
-                ]);
-
-
-            if(
-                insertError.code ===
-                "23505"
-            ){
-
-                showMessage(
-                    "This UTR has already been used.",
-                    "red"
-                );
-
-                return;
-
-            }
-
-
-            throw insertError;
-
-        }
-
-
-        /* SUCCESS */
-
-        showMessage(
-            "✅ Deposit submitted successfully. Admin approval pending.",
-            "green"
-        );
-
-
-        document
-            .getElementById("depositForm")
-            .reset();
-
-
-        updateCommissionPreview();
+        document.getElementById(
+            "customerUID"
+        ).innerText =
+            customer.uid || "UID not found";
 
 
         await loadDeposits();
 
     }
-    catch(error){
+
+    catch (error) {
 
         console.error(error);
 
-
         showMessage(
-            "Deposit failed: "
-            + (
-                error.message ||
-                "Unknown error"
-            ),
-            "red"
+            "Customer load karte waqt error aaya.",
+            "error"
         );
 
     }
-    finally{
 
-        button.disabled =
-            false;
+}
+   /* LOAD PAYMENT SETTINGS */
 
-        button.innerText =
-            "Submit Deposit";
+async function loadPaymentSettings() {
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("payment_settings")
+
+            .select("upi_id,qr_url")
+
+            .eq("id", 1)
+
+            .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                "Payment settings error:",
+                error
+            );
+
+            document.getElementById(
+                "upiID"
+            ).innerText =
+                "UPI details unavailable";
+
+            return;
+
+        }
+
+
+        if (!data) {
+
+            document.getElementById(
+                "upiID"
+            ).innerText =
+                "UPI details not configured";
+
+            return;
+
+        }
+
+
+        paymentUPI =
+            data.upi_id || "";
+
+
+        document.getElementById(
+            "upiID"
+        ).innerText =
+            data.upi_id ||
+            "UPI ID not configured";
+
+
+        const qrImage =
+            document.getElementById(
+                "qrImage"
+            );
+
+
+        if (data.qr_url) {
+
+            qrImage.src =
+                data.qr_url;
+
+            qrImage.style.display =
+                "block";
+
+        } else {
+
+            qrImage.style.display =
+                "none";
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "upiID"
+        ).innerText =
+            "UPI details unavailable";
 
     }
 
 }
 
 
-/* =====================================================
-   LOAD MY DEPOSITS
-===================================================== */
+/* COPY UPI */
 
-async function loadDeposits(){
+document.getElementById(
+    "copyUPI"
+).addEventListener(
+    "click",
+    async function() {
 
-    if(!currentUser){
+        if (!paymentUPI) {
+
+            showMessage(
+                "UPI ID available nahi hai.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            await navigator.clipboard
+                .writeText(paymentUPI);
+
+
+            showMessage(
+                "UPI ID copied successfully.",
+                "success"
+            );
+
+        }
+
+        catch (error) {
+
+            showMessage(
+                "UPI copy nahi ho payi.",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+/* LOAD DEPOSITS */
+
+async function loadDeposits() {
+
+    const loading =
+        document.getElementById(
+            "historyLoading"
+        );
+
+    const tbody =
+        document.getElementById(
+            "depositHistory"
+        );
+
+
+    loading.style.display =
+        "block";
+
+    tbody.innerHTML = "";
+
+
+    if (!currentUser) {
+
+        loading.innerText =
+            "Customer not logged in.";
 
         return;
 
     }
 
 
-    const table =
-        document.getElementById("depositTable");
-
-
-    table.innerHTML = `
-
-        <tr>
-
-            <td
-                colspan="6"
-                class="no-data"
-            >
-                Loading deposits...
-
-            </td>
-
-        </tr>
-
-    `;
-
-
-    try{
+    try {
 
         const {
             data,
             error
-        } =
-        await supabaseClient
+        } = await supabaseClient
+
             .from("customer_deposits")
-            .select(`
-                id,
-                amount,
-                utr,
-                commission,
-                status,
-                created_at
-            `)
+
+            .select("*")
+
             .eq(
                 "customer_id",
                 currentUser.id
             )
+
             .order(
-                "id",
+                "created_at",
                 {
-                    ascending:false
+                    ascending: false
                 }
             );
 
 
-        if(error){
+        if (error) {
 
             console.error(
-                "Load deposits error:",
+                "Deposit history error:",
                 error
             );
 
-            throw error;
+            loading.innerText =
+                "Deposit history load nahi ho paayi.";
+
+            return;
 
         }
 
 
-        if(!data || data.length === 0){
+        loading.style.display =
+            "none";
 
-            table.innerHTML = `
 
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            tbody.innerHTML = `
                 <tr>
-
                     <td
                         colspan="6"
-                        class="no-data"
+                        style="text-align:center;"
                     >
                         No deposits found
                     </td>
-
                 </tr>
-
             `;
 
             return;
@@ -1345,79 +950,89 @@ async function loadDeposits(){
         }
 
 
-        table.innerHTML = "";
+        data.forEach(
+            deposit => {
+
+                let status =
+                    String(
+                        deposit.status ||
+                        "pending"
+                    ).toLowerCase();
 
 
-        data.forEach(function(deposit){
+                let statusText =
+                    "Pending";
 
-            const status =
-                String(
-                    deposit.status ||
-                    "pending"
-                );
+                let statusClass =
+                    "pending";
 
 
-            let statusClass =
-                "pending";
+                if (
+                    status === "approved" ||
+                    status === "success" ||
+                    status === "successful"
+                ) {
+
+                    statusText =
+                        "Approved";
+
+                    statusClass =
+                        "approved";
+
+                }
+
+                else if (
+                    status === "failed" ||
+                    status === "rejected"
+                ) {
+
+                    statusText =
+                        "Rejected";
+
+                    statusClass =
+                        "failed";
+
+                }
 
 
-            const lowerStatus =
-                status.toLowerCase();
+                const amount =
+                    Number(
+                        deposit.amount || 0
+                    );
 
 
-            if(
-                lowerStatus === "approved" ||
-                lowerStatus === "success" ||
-                lowerStatus === "successful"
-            ){
-
-                statusClass =
-                    "approved";
-
-            }
+                const commission =
+                    Number(
+                        deposit.commission || 0
+                    );
 
 
-            if(
-                lowerStatus === "rejected" ||
-                lowerStatus === "failed"
-            ){
-
-                statusClass =
-                    "rejected";
-
-            }
-
-
-            const amount =
-                Number(
-                    deposit.amount || 0
-                ).toFixed(2);
+                const date =
+                    deposit.created_at
+                        ? new Date(
+                            deposit.created_at
+                        ).toLocaleString(
+                            "en-IN"
+                        )
+                        : "-";
 
 
-            const commission =
-                Number(
-                    deposit.commission || 0
-                ).toFixed(2);
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
 
 
-            const date =
-                deposit.created_at
-                    ? new Date(
-                        deposit.created_at
-                    ).toLocaleString()
-                    : "-";
-
-
-            table.innerHTML += `
-
-                <tr>
+                row.innerHTML = `
 
                     <td>
-                        ${deposit.id}
+                        ${escapeHTML(
+                            deposit.id
+                        )}
                     </td>
 
                     <td>
-                        ₹${amount}
+                        ₹${amount.toFixed(2)}
                     </td>
 
                     <td>
@@ -1427,122 +1042,386 @@ async function loadDeposits(){
                     </td>
 
                     <td>
-                        ₹${commission}
-                    </td>
-
-                    <td
-                        class="${statusClass}"
-                    >
-                        ${escapeHTML(status)}
+                        ₹${commission.toFixed(2)}
                     </td>
 
                     <td>
-                        ${date}
+                        <span
+                            class="status ${statusClass}"
+                        >
+                            ${statusText}
+                        </span>
                     </td>
 
-                </tr>
+                    <td>
+                        ${escapeHTML(date)}
+                    </td>
 
-            `;
+                `;
 
-        });
+
+                tbody.appendChild(
+                    row
+                );
+
+            }
+        );
 
     }
-    catch(error){
+
+    catch (error) {
 
         console.error(error);
 
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="6"
-                    class="no-data"
-                >
-                    Error loading deposits
-                </td>
-
-            </tr>
-
-        `;
+        loading.innerText =
+            "Deposit history load nahi ho paayi.";
 
     }
 
 }
 
 
-/* =====================================================
-   MESSAGE
-===================================================== */
+/* SUBMIT DEPOSIT */
 
-function showMessage(text,color){
+document.getElementById(
+    "depositForm"
+).addEventListener(
+    "submit",
+    async function(event) {
 
-    const message =
-        document.getElementById("message");
-
-
-    message.innerText =
-        text;
+        event.preventDefault();
 
 
-    message.style.color =
-        color;
+        if (!currentUser) {
 
-}
+            showMessage(
+                "Please login first.",
+                "error"
+            );
 
+            return;
 
-/* =====================================================
-   SAFE HTML
-===================================================== */
-
-function escapeHTML(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
+        }
 
 
-/* =====================================================
-   START
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        document
-            .getElementById("amount")
-            .addEventListener(
-                "input",
-                updateCommissionPreview
+        const amount =
+            Number(
+                document.getElementById(
+                    "amount"
+                ).value
             );
 
 
-        document
-            .getElementById("depositForm")
-            .addEventListener(
-                "submit",
-                submitDeposit
+        const utr =
+            document.getElementById(
+                "utr"
+            ).value.trim();
+
+
+        const file =
+            document.getElementById(
+                "paymentProof"
+            ).files[0];
+
+
+        if (
+            !amount ||
+            amount < 100
+        ) {
+
+            showMessage(
+                "Minimum deposit ₹100 hai.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (!utr) {
+
+            showMessage(
+                "UTR / Transaction ID enter karein.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (!file) {
+
+            showMessage(
+                "Payment screenshot upload karein.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const submitButton =
+            document.getElementById(
+                "submitButton"
             );
 
 
-        loadPaymentSettings();
+        submitButton.disabled =
+            true;
+
+        submitButton.innerText =
+            "Submitting...";
 
 
-        loadCustomer();
+        try {
+
+
+            /* DUPLICATE UTR CHECK */
+
+            const {
+                data: existingDeposit,
+                error: duplicateError
+            } =
+            await supabaseClient
+
+                .from(
+                    "customer_deposits"
+                )
+
+                .select("id")
+
+                .eq(
+                    "utr",
+                    utr
+                )
+
+                .maybeSingle();
+
+
+            if (
+                duplicateError &&
+                duplicateError.code !==
+                    "PGRST116"
+            ) {
+
+                console.error(
+                    duplicateError
+                );
+
+            }
+
+
+            if (existingDeposit) {
+
+                showMessage(
+                    "Ye UTR pehle hi use ho chuka hai.",
+                    "error"
+                );
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.innerText =
+                    "Submit Deposit";
+
+                return;
+
+            }
+
+
+            /* UPLOAD PAYMENT PROOF */
+
+            const fileExtension =
+                file.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+
+            const fileName =
+                currentUser.id +
+                "/" +
+                Date.now() +
+                "_" +
+                Math.random()
+                    .toString(36)
+                    .substring(2) +
+                "." +
+                fileExtension;
+
+
+            const {
+                error: uploadError
+            } =
+            await supabaseClient.storage
+
+                .from(
+                    "payment-proofs"
+                )
+
+                .upload(
+                    fileName,
+                    file,
+                    {
+                        cacheControl:
+                            "3600",
+
+                        upsert:
+                            false
+                    }
+                );
+
+
+            if (uploadError) {
+
+                console.error(
+                    "Upload error:",
+                    uploadError
+                );
+
+                throw new Error(
+                    "Payment screenshot upload failed."
+                );
+
+            }
+
+
+            /* GET PUBLIC URL */
+
+            const {
+                data:
+                    publicURLData
+            } =
+            supabaseClient.storage
+
+                .from(
+                    "payment-proofs"
+                )
+
+                .getPublicUrl(
+                    fileName
+                );
+
+
+            const proofURL =
+                publicURLData.publicUrl;
+
+
+            /* INSERT DEPOSIT */
+
+            const {
+                error: insertError
+            } =
+            await supabaseClient
+
+                .from(
+                    "customer_deposits"
+                )
+
+                .insert({
+
+                    customer_id:
+                        currentUser.id,
+
+                    amount:
+                        amount,
+
+                    utr:
+                        utr,
+
+                    payment_proof:
+                        proofURL,
+
+                    status:
+                        "pending"
+
+                });
+
+
+            if (insertError) {
+
+                console.error(
+                    "Insert error:",
+                    insertError
+                );
+
+                throw new Error(
+                    insertError.message
+                );
+
+            }
+
+
+            /* SUCCESS */
+
+            showMessage(
+                "Deposit successfully submitted. Admin approval ke baad balance/commission update hoga.",
+                "success"
+            );
+
+
+            document.getElementById(
+                "depositForm"
+            ).reset();
+
+
+            updateCommission();
+
+
+            await loadDeposits();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                error.message ||
+                "Deposit submit nahi ho paaya.",
+                "error"
+            );
+
+        }
+
+
+        submitButton.disabled =
+            false;
+
+        submitButton.innerText =
+            "Submit Deposit";
 
     }
 );
 
 
+/* PAGE START */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function() {
+
+        document.getElementById(
+            "amount"
+        ).addEventListener(
+            "input",
+            updateCommission
+        );
+
+
+        await loadPaymentSettings();
+
+        await loadCustomer();
+
+    }
+);
+
 </script>
+
 
 </body>
 
-</html>
+</html> 
