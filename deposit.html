@@ -1956,61 +1956,63 @@ body{
 
 
 
-    // ==============================
-    // SUBMIT DEPOSIT
-    // ==============================
+// ==============================
+// SUBMIT DEPOSIT
+// ==============================
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-            const submitButton =
-                document.getElementById(
-                    "submitButton"
-                );
-
-
-            if (!submitButton) {
-                return;
-            }
+        const submitButton =
+            document.getElementById(
+                "submitButton"
+            );
 
 
-            submitButton.addEventListener(
-                "click",
-                async function () {
-
-                    const amountInput =
-                        document.getElementById(
-                            "amount"
-                        );
+        if (!submitButton) {
+            return;
+        }
 
 
-                    const utrInput =
-                        document.getElementById(
-                            "utr"
-                        );
+        submitButton.addEventListener(
+            "click",
+            async function () {
+
+                const amountInput =
+                    document.getElementById(
+                        "amount"
+                    );
 
 
-                    const proofInput =
-                        document.getElementById(
-                            "paymentProof"
-                        );
+                const utrInput =
+                    document.getElementById(
+                        "utr"
+                    );
 
 
-                    const amount =
+                const proofInput =
+                    document.getElementById(
+                        "paymentProof"
+                    );
+
+
+                const amount =
                     Number(
                         amountInput.value
                     );
 
+
                 const utr =
                     utrInput.value.trim();
+
 
                 const file =
                     proofInput.files[0];
 
 
                 // ==========================
-                // AMOUNT CHECK
+                // AMOUNT VALIDATION
                 // ==========================
 
                 if (
@@ -2030,7 +2032,7 @@ body{
 
 
                 // ==========================
-                // UTR CHECK
+                // UTR VALIDATION
                 // ==========================
 
                 if (!utr) {
@@ -2047,7 +2049,7 @@ body{
 
 
                 // ==========================
-                // SCREENSHOT CHECK
+                // SCREENSHOT VALIDATION
                 // ==========================
 
                 if (!file) {
@@ -2064,11 +2066,13 @@ body{
 
 
                 // ==========================
-                // IMAGE TYPE CHECK
+                // IMAGE VALIDATION
                 // ==========================
 
                 if (
-                    !file.type.startsWith("image/")
+                    !file.type.startsWith(
+                        "image/"
+                    )
                 ) {
 
                     showMessage(
@@ -2081,7 +2085,8 @@ body{
 
 
                 // ==========================
-                // FILE SIZE CHECK
+                // FILE SIZE
+                // Maximum 5 MB
                 // ==========================
 
                 if (
@@ -2115,7 +2120,9 @@ body{
 
                 try {
 
-                    submitButton.disabled = true;
+                    submitButton.disabled =
+                        true;
+
 
                     submitButton.textContent =
                         "⏳ Processing...";
@@ -2128,7 +2135,7 @@ body{
 
 
                     // ==========================
-                    // DUPLICATE UTR CHECK
+                    // CHECK DUPLICATE UTR
                     // ==========================
 
                     const {
@@ -2136,14 +2143,21 @@ body{
                         error: utrError
                     } =
                         await supabaseClient
-                            .from("customer_deposits")
+                            .from(
+                                "customer_deposits"
+                            )
                             .select("id")
-                            .eq("utr", utr)
+                            .eq(
+                                "utr",
+                                utr
+                            )
                             .limit(1);
 
 
                     if (utrError) {
+
                         throw utrError;
+
                     }
 
 
@@ -2155,11 +2169,12 @@ body{
                         throw new Error(
                             "This UTR has already been used."
                         );
+
                     }
 
 
                     // ==========================
-                    // UPLOAD SCREENSHOT
+                    // UPLOAD PAYMENT PROOF
                     // ==========================
 
                     showMessage(
@@ -2169,7 +2184,8 @@ body{
 
 
                     const originalName =
-                        file.name || "proof";
+                        file.name ||
+                        "payment-proof";
 
 
                     const extension =
@@ -2200,7 +2216,9 @@ body{
                     } =
                         await supabaseClient
                             .storage
-                            .from("payment-proofs")
+                            .from(
+                                "payment-proofs"
+                            )
                             .upload(
                                 fileName,
                                 file,
@@ -2215,12 +2233,14 @@ body{
 
 
                     if (uploadError) {
+
                         throw uploadError;
+
                     }
 
 
                     // ==========================
-                    // GET SCREENSHOT URL
+                    // GET PUBLIC PROOF URL
                     // ==========================
 
                     const {
@@ -2228,14 +2248,28 @@ body{
                     } =
                         supabaseClient
                             .storage
-                            .from("payment-proofs")
+                            .from(
+                                "payment-proofs"
+                            )
                             .getPublicUrl(
                                 fileName
                             );
 
 
                     const proofURL =
-                        publicURLData.publicUrl;
+                        publicURLData &&
+                        publicURLData.publicUrl
+                            ? publicURLData.publicUrl
+                            : null;
+
+
+                    if (!proofURL) {
+
+                        throw new Error(
+                            "Unable to create payment proof URL."
+                        );
+
+                    }
 
 
                     // ==========================
@@ -2252,7 +2286,9 @@ body{
                         error: insertError
                     } =
                         await supabaseClient
-                            .from("customer_deposits")
+                            .from(
+                                "customer_deposits"
+                            )
                             .insert({
 
                                 customer_id:
@@ -2274,7 +2310,9 @@ body{
 
 
                     if (insertError) {
+
                         throw insertError;
+
                     }
 
 
@@ -2288,15 +2326,24 @@ body{
                     );
 
 
-                    amountInput.value = "";
+                    // Clear form
 
-                    utrInput.value = "";
+                    amountInput.value =
+                        "";
 
-                    proofInput.value = "";
+                    utrInput.value =
+                        "";
 
+                    proofInput.value =
+                        "";
+
+
+                    // Reset commission
 
                     updateCommission();
 
+
+                    // Reload history
 
                     await loadDeposits();
 
@@ -2325,7 +2372,8 @@ body{
 
 
                     showMessage(
-                        "❌ " + errorMessage,
+                        "❌ " +
+                        errorMessage,
                         "error"
                     );
 
@@ -2335,49 +2383,52 @@ body{
                     submitButton.disabled =
                         false;
 
+
                     submitButton.textContent =
                         "🚀 Submit Deposit";
 
                 }
 
             }
-
         );
 
+    }
+);
 
 
-    // ==============================
-    // PAGE START
-    // ==============================
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        async function () {
+// ==============================
+// PAGE START
+// ==============================
 
-            try {
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
 
-                await loadCustomer();
+        try {
 
-                await loadPaymentSettings();
+            await loadCustomer();
 
-                await loadDeposits();
+            await loadPaymentSettings();
 
-                updateCommission();
+            await loadDeposits();
 
-            } catch (error) {
+            updateCommission();
 
-                console.error(
-                    "Page initialization error:",
-                    error
-                );
+        } catch (error) {
 
-            }
+            console.error(
+                "Page initialization error:",
+                error
+            );
 
         }
-    );
+
+    }
+);
 
 </script>
 
 </body>
 
-</html>
+</html>          
