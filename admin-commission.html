@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Sathi Pay - Commission Management</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+.header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:24px 16px;
+    text-align:center;
+    border-radius:0 0 24px 24px;
+}
+
+.header h1{
+    margin:0;
+    font-size:24px;
+}
+
+.header p{
+    margin:7px 0 0;
+    opacity:.9;
+}
+
+.container{
+    width:100%;
+    max-width:950px;
+    margin:auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 4px 16px rgba(0,0,0,.07);
+}
+
+.card h2{
+    margin:0 0 15px;
+    font-size:19px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.stat{
+    background:white;
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.statTitle{
+    font-size:13px;
+    color:#64748b;
+}
+
+.statValue{
+    font-size:21px;
+    font-weight:bold;
+    margin-top:7px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #d8dee9;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+    margin-bottom:10px;
+}
+
+button{
+    border:0;
+    border-radius:11px;
+    padding:12px 15px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.blue{
+    background:#2563eb;
+    color:white;
+}
+
+.gray{
+    background:#64748b;
+    color:white;
+}
+
+.full{
+    width:100%;
+}
+
+.item{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    padding:15px;
+    margin-top:10px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.row:last-child{
+    border-bottom:0;
+}
+
+.label{
+    font-weight:bold;
+}
+
+.value{
+    text-align:right;
+    word-break:break-word;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.approved{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.pending{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.rejected{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.rules{
+    background:linear-gradient(135deg,#eff6ff,#f5f3ff);
+    border-radius:15px;
+    padding:16px;
+}
+
+.rate{
+    display:flex;
+    justify-content:space-between;
+    padding:11px 0;
+    border-bottom:1px solid #ddd;
+}
+
+.rate:last-child{
+    border-bottom:0;
+}
+
+.small{
+    font-size:13px;
+    color:#64748b;
+}
+
+.empty{
+    text-align:center;
+    padding:20px;
+    color:#64748b;
+}
+
+.status{
+    padding:12px;
+    border-radius:11px;
+    margin-top:10px;
+    background:#eef2ff;
+}
+
+.error{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+@media(max-width:600px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .row{
+        flex-direction:column;
+    }
+
+    .value{
+        text-align:left;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+
+    <h1>💵 Commission Management</h1>
+
+    <p>Sathi Pay Admin</p>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =========================
+     STATS
+========================= -->
+
+<div class="stats">
+
+    <div class="stat">
+
+        <div class="statTitle">
+            💰 Deposit Commission
+        </div>
+
+        <div
+            id="depositCommissionTotal"
+            class="statValue"
+        >
+            ₹0.00
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="statTitle">
+            👥 Referral Commission
+        </div>
+
+        <div
+            id="referralCommissionTotal"
+            class="statValue"
+        >
+            ₹0.00
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="statTitle">
+            💵 Total Commission
+        </div>
+
+        <div
+            id="totalCommission"
+            class="statValue"
+        >
+            ₹0.00
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="statTitle">
+            📊 Referral Records
+        </div>
+
+        <div
+            id="referralCount"
+            class="statValue"
+        >
+            0
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     COMMISSION RULES
+========================= -->
+
+<div class="card">
+
+    <h2>📊 Deposit Commission Rules</h2>
+
+    <div class="rules">
+
+        <div class="rate">
+
+            <span>
+                ₹1 – ₹9,999
+            </span>
+
+            <b>
+                6%
+            </b>
+
+        </div>
+
+
+        <div class="rate">
+
+            <span>
+                ₹10,000 – ₹19,999
+            </span>
+
+            <b>
+                8%
+            </b>
+
+        </div>
+
+
+        <div class="rate">
+
+            <span>
+                ₹20,000+
+            </span>
+
+            <b>
+                10%
+            </b>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     REFERRAL RULES
+========================= -->
+
+<div class="card">
+
+    <h2>👥 Referral Rules</h2>
+
+    <div class="rules">
+
+        <div class="rate">
+
+            <span>
+                Level A
+            </span>
+
+            <b>
+                1%
+            </b>
+
+        </div>
+
+
+        <div class="rate">
+
+            <span>
+                Level B
+            </span>
+
+            <b>
+                0.5%
+            </b>
+
+        </div>
+
+
+        <div class="rate">
+
+            <span>
+                Level C
+            </span>
+
+            <b>
+                0.2%
+            </b>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     CUSTOMER SEARCH
+========================= -->
+
+<div class="card">
+
+    <h2>🔎 Customer Commission Search</h2>
+
+    <input
+        id="customerUid"
+        type="text"
+        placeholder="Enter Customer UID"
+        autocomplete="off"
+    >
+
+    <button
+        class="blue full"
+        onclick="searchCustomerCommission()"
+    >
+        🔍 Search Commission
+    </button>
+
+    <div id="searchStatus"></div>
+
+    <div id="customerCommission"></div>
+
+</div>
+
+
+<!-- =========================
+     DEPOSIT COMMISSION
+========================= -->
+
+<div class="card">
+
+    <h2>💰 Deposit Commission History</h2>
+
+    <button
+        class="blue full"
+        onclick="loadDepositCommissions()"
+    >
+        🔄 Refresh Deposit Commission
+    </button>
+
+    <div id="depositCommissionList"></div>
+
+</div>
+
+
+<!-- =========================
+     REFERRAL COMMISSION
+========================= -->
+
+<div class="card">
+
+    <h2>👥 Referral Commission History</h2>
+
+    <button
+        class="blue full"
+        onclick="loadReferralCommissions()"
+    >
+        🔄 Refresh Referral Commission
+    </button>
+
+    <div id="referralCommissionList"></div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://lozluohksmjxbxixkbmq.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function money(value){
+
+    return "₹" +
+        Number(value || 0).toFixed(2);
+
+}
+
+
+function badge(status){
+
+    const s =
+        String(status || "pending")
+        .toLowerCase();
+
+    let cls = "pending";
+
+    if(s === "approved"){
+        cls = "approved";
+    }
+
+    if(s === "rejected"){
+        cls = "rejected";
+    }
+
+    return `
+        <span class="badge ${cls}">
+            ${status || "Pending"}
+        </span>
+    `;
+
+}
+
+
+/* =====================================================
+   LOAD DEPOSIT COMMISSIONS
+===================================================== */
+
+async function loadDepositCommissions(){
+
+    const box =
+        document.getElementById(
+            "depositCommissionList"
+        );
+
+    box.innerHTML =
+        "<p>Loading...</p>";
+
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("customer_deposits")
+        .select(
+            "id,customer_id,amount,commission,status,created_at"
+        )
+        .eq("status","approved")
+        .order(
+            "id",
+            {
+                ascending:false
+            }
+        );
+
+
+    if(error){
+
+        box.innerHTML = `
+            <div class="status error">
+                ${error.message}
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    let total = 0;
+
+
+    (data || []).forEach(d => {
+
+        total +=
+            Number(d.commission || 0);
+
+    });
+
+
+    document.getElementById(
+        "depositCommissionTotal"
+    ).textContent =
+        money(total);
+
+
+    if(!data || !data.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                No approved deposit commissions.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+    data.map(d => `
+
+        <div class="item">
+
+            <b>
+                💰 Deposit #${d.id}
+            </b>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Customer ID
+                </span>
+
+                <span class="value">
+                    ${d.customer_id || "-"}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Deposit Amount
+                </span>
+
+                <span class="value">
+                    ${money(d.amount)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Commission
+                </span>
+
+                <span class="value">
+                    ${money(d.commission)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Status
+                </span>
+
+                <span class="value">
+                    ${badge(d.status)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Date
+                </span>
+
+                <span class="value">
+                    ${
+                        d.created_at
+                        ? new Date(
+                            d.created_at
+                        ).toLocaleString("en-IN")
+                        : "-"
+                    }
+                </span>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =====================================================
+   LOAD REFERRAL COMMISSIONS
+===================================================== */
+
+async function loadReferralCommissions(){
+
+    const box =
+        document.getElementById(
+            "referralCommissionList"
+        );
+
+    box.innerHTML =
+        "<p>Loading...</p>";
+
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("customer_referral_commissions")
+        .select(
+            "id,customer_id,source_customer_id,deposit_id,level,percentage,transaction_amount,commission_amount,status,created_at"
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+
+    if(error){
+
+        box.innerHTML = `
+            <div class="status error">
+                ${error.message}
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    let total = 0;
+
+
+    (data || []).forEach(r => {
+
+        if(
+            String(r.status)
+            .toLowerCase()
+            === "approved"
+        ){
+
+            total +=
+                Number(
+                    r.commission_amount || 0
+                );
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "referralCommissionTotal"
+    ).textContent =
+        money(total);
+
+
+    document.getElementById(
+        "referralCount"
+    ).textContent =
+        (data || []).length;
+
+
+    if(!data || !data.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                No referral commissions found.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+    data.map(r => `
+
+        <div class="item">
+
+            <b>
+                👥 ${r.level || "Level"}
+            </b>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Beneficiary Customer
+                </span>
+
+                <span class="value">
+                    ${r.customer_id || "-"}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Source Customer
+                </span>
+
+                <span class="value">
+                    ${r.source_customer_id || "-"}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Deposit ID
+                </span>
+
+                <span class="value">
+                    ${r.deposit_id || "-"}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Rate
+                </span>
+
+                <span class="value">
+                    ${Number(r.percentage || 0)}%
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Transaction
+                </span>
+
+                <span class="value">
+                    ${money(r.transaction_amount)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Commission
+                </span>
+
+                <span class="value">
+                    ${money(r.commission_amount)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Status
+                </span>
+
+                <span class="value">
+                    ${badge(r.status)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Date
+                </span>
+
+                <span class="value">
+                    ${
+                        r.created_at
+                        ? new Date(
+                            r.created_at
+                        ).toLocaleString("en-IN")
+                        : "-"
+                    }
+                </span>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =====================================================
+   SEARCH CUSTOMER COMMISSION
+===================================================== */
+
+async function searchCustomerCommission(){
+
+    const uid =
+        document
+        .getElementById("customerUid")
+        .value
+        .trim()
+        .toUpperCase();
+
+
+    const status =
+        document.getElementById(
+            "searchStatus"
+        );
+
+
+    const box =
+        document.getElementById(
+            "customerCommission"
+        );
+
+
+    box.innerHTML = "";
+
+
+    if(!uid){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Please enter Customer UID.";
+
+        return;
+
+    }
+
+
+    status.className =
+        "status";
+
+    status.textContent =
+        "Searching...";
+
+
+    const {
+        data:customer,
+        error:customerError
+    } =
+    await supabaseClient
+        .from("customers")
+        .select(
+            "id,name,uid,commission_balance,referral_balance,bonus_balance"
+        )
+        .eq("uid",uid)
+        .maybeSingle();
+
+
+    if(customerError){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            customerError.message;
+
+        return;
+
+    }
+
+
+    if(!customer){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Customer not found.";
+
+        return;
+
+    }
+
+
+    const {
+        data:deposits
+    } =
+    await supabaseClient
+        .from("customer_deposits")
+        .select(
+            "id,amount,commission,status,created_at"
+        )
+        .eq(
+            "customer_id",
+            customer.id
+        )
+        .eq(
+            "status",
+            "approved"
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+
+    const {
+        data:referrals
+    } =
+    await supabaseClient
+        .from("customer_referral_commissions")
+        .select(
+            "id,level,percentage,transaction_amount,commission_amount,status,created_at"
+        )
+        .eq(
+            "customer_id",
+            customer.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+
+    let depositTotal = 0;
+
+    let referralTotal = 0;
+
+
+    (deposits || []).forEach(d => {
+
+        depositTotal +=
+            Number(d.commission || 0);
+
+    });
+
+
+    (referrals || []).forEach(r => {
+
+        if(
+            String(r.status)
+            .toLowerCase()
+            === "approved"
+        ){
+
+            referralTotal +=
+                Number(
+                    r.commission_amount || 0
+                );
+
+        }
+
+    });
+
+
+    box.innerHTML = `
+
+        <div class="item">
+
+            <h3>
+                👤 ${customer.name || "-"}
+            </h3>
+
+
+            <div class="row">
+
+                <span class="label">
+                    UID
+                </span>
+
+                <span class="value">
+                    ${customer.uid || "-"}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Commission Balance
+                </span>
+
+                <span class="value">
+                    ${money(customer.commission_balance)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Deposit Commission
+                </span>
+
+                <span class="value">
+                    ${money(depositTotal)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Referral Commission
+                </span>
+
+                <span class="value">
+                    ${money(referralTotal)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Referral Balance
+                </span>
+
+                <span class="value">
+                    ${money(customer.referral_balance)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    ₹99 Bonus
+                </span>
+
+                <span class="value">
+                    ${money(customer.bonus_balance)}
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    status.className =
+        "status";
+
+    status.textContent =
+        "✅ Commission data loaded.";
+
+}
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadDepositCommissions();
+
+        loadReferralCommissions();
+
+    }
+);
+
+
+</script>
+
+</body>
+  </html>
