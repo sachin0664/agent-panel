@@ -83,6 +83,11 @@ button{
     cursor:pointer;
 }
 
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
 .blue{
     background:#2563eb;
     color:white;
@@ -243,6 +248,24 @@ button{
     gap:10px;
 }
 
+.paymentPreview{
+    width:100%;
+    max-width:260px;
+    display:block;
+    margin:15px auto;
+    border-radius:15px;
+    border:1px solid #e2e8f0;
+    padding:8px;
+    background:white;
+}
+
+.previewText{
+    text-align:center;
+    font-size:13px;
+    color:#64748b;
+    word-break:break-all;
+}
+
 @media(max-width:600px){
 
     .stats{
@@ -354,6 +377,91 @@ button{
 
 
 <!-- =========================
+     PAYMENT SETTINGS
+========================= -->
+
+<div class="card">
+
+    <h2>🏦 Payment Settings</h2>
+
+    <div class="item">
+
+        <div class="row">
+
+            <span class="label">
+                Current UPI ID
+            </span>
+
+            <span
+                id="currentUpi"
+                class="value"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="row">
+
+            <span class="label">
+                QR Code URL
+            </span>
+
+            <span
+                id="currentQr"
+                class="value"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <h3>✏️ Update Payment Details</h3>
+
+
+    <input
+        id="paymentUpi"
+        type="text"
+        placeholder="Enter UPI ID"
+        autocomplete="off"
+    >
+
+
+    <input
+        id="paymentQr"
+        type="url"
+        placeholder="Enter QR Code image URL"
+        autocomplete="off"
+    >
+
+
+    <button
+        id="savePaymentBtn"
+        class="green full"
+        onclick="savePaymentSettings()"
+    >
+        💾 Save Payment Settings
+    </button>
+
+
+    <div
+        id="paymentStatus"
+        class="status"
+    >
+        Payment settings ready.
+    </div>
+
+
+    <div id="qrPreviewBox"></div>
+
+</div>
+
+
+<!-- =========================
      CUSTOMER SEARCH
 ========================= -->
 
@@ -368,6 +476,7 @@ button{
         autocomplete="off"
     >
 
+
     <div class="customerSearchButtons">
 
         <button
@@ -376,6 +485,7 @@ button{
         >
             🔍 Search
         </button>
+
 
         <button
             class="gray"
@@ -415,6 +525,7 @@ button{
         🔄 Refresh Deposit Requests
     </button>
 
+
     <div id="depositList"></div>
 
 </div>
@@ -435,6 +546,7 @@ button{
         👥 View All Customers
     </button>
 
+
     <div id="customerList"></div>
 
 </div>
@@ -451,25 +563,52 @@ button{
     <div class="commissionBox">
 
         <div class="rate">
-            <span>₹1 – ₹9,999</span>
-            <b>6%</b>
+
+            <span>
+                ₹1 – ₹9,999
+            </span>
+
+            <b>
+                6%
+            </b>
+
         </div>
 
-        <div class="rate">
-            <span>₹10,000 – ₹19,999</span>
-            <b>8%</b>
-        </div>
 
         <div class="rate">
-            <span>₹20,000+</span>
-            <b>10%</b>
+
+            <span>
+                ₹10,000 – ₹19,999
+            </span>
+
+            <b>
+                8%
+            </b>
+
         </div>
+
+
+        <div class="rate">
+
+            <span>
+                ₹20,000+
+            </span>
+
+            <b>
+                10%
+            </b>
+
+        </div>
+
 
         <br>
 
+
         <div class="small">
+
             Commission is automatically calculated
             on each approved customer deposit.
+
         </div>
 
     </div>
@@ -485,9 +624,12 @@ button{
 
     <h2>👥 Referral Commission</h2>
 
+
     <div class="item">
 
-        <b>Level A</b>
+        <b>
+            Level A
+        </b>
 
         <span style="float:right">
             1%
@@ -498,7 +640,9 @@ button{
 
     <div class="item">
 
-        <b>Level B</b>
+        <b>
+            Level B
+        </b>
 
         <span style="float:right">
             0.5%
@@ -509,7 +653,9 @@ button{
 
     <div class="item">
 
-        <b>Level C</b>
+        <b>
+            Level C
+        </b>
 
         <span style="float:right">
             0.2%
@@ -533,8 +679,10 @@ button{
 const SUPABASE_URL =
 "https://lozluohksmjxbxixkbmq.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
 
 const supabaseClient =
 supabase.createClient(
@@ -560,13 +708,20 @@ function commissionRate(amount){
     const n =
         Number(amount || 0);
 
+
     if(n >= 20000){
+
         return 0.10;
+
     }
 
+
     if(n >= 10000){
+
         return 0.08;
+
     }
+
 
     return 0.06;
 
@@ -587,7 +742,9 @@ function statusBadge(status){
         String(status || "pending")
         .toLowerCase();
 
+
     let cls = "pending";
+
 
     if(
         s === "approved" ||
@@ -599,6 +756,7 @@ function statusBadge(status){
 
     }
 
+
     if(
         s === "rejected" ||
         s === "failed"
@@ -608,11 +766,266 @@ function statusBadge(status){
 
     }
 
+
     return `
         <span class="badge ${cls}">
             ${status || "Pending"}
         </span>
     `;
+
+}
+
+
+/* =====================================================
+   PAYMENT SETTINGS
+===================================================== */
+
+async function loadPaymentSettings(){
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("payment_settings")
+        .select("id,upi_id,qr_url,updated_at")
+        .eq("id",1)
+        .maybeSingle();
+
+
+    if(error){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            error.message;
+
+        return;
+
+    }
+
+
+    if(!data){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Payment settings record not found.";
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "currentUpi"
+    ).textContent =
+        data.upi_id || "-";
+
+
+    document.getElementById(
+        "currentQr"
+    ).textContent =
+        data.qr_url || "-";
+
+
+    document.getElementById(
+        "paymentUpi"
+    ).value =
+        data.upi_id || "";
+
+
+    document.getElementById(
+        "paymentQr"
+    ).value =
+        data.qr_url || "";
+
+
+    showQrPreview(
+        data.qr_url
+    );
+
+
+    status.className =
+        "status success";
+
+    status.textContent =
+        "✅ Current payment settings loaded.";
+
+}
+
+
+/* =====================================================
+   QR PREVIEW
+===================================================== */
+
+function showQrPreview(url){
+
+    const box =
+        document.getElementById(
+            "qrPreviewBox"
+        );
+
+
+    if(!url){
+
+        box.innerHTML = "";
+
+        return;
+
+    }
+
+
+    box.innerHTML = `
+
+        <div class="item">
+
+            <h3>
+                📷 QR Preview
+            </h3>
+
+            <img
+                src="${url}"
+                class="paymentPreview"
+                alt="Payment QR"
+                onerror="this.style.display='none'"
+            >
+
+            <div class="previewText">
+                ${url}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   SAVE PAYMENT SETTINGS
+===================================================== */
+
+async function savePaymentSettings(){
+
+    const upi =
+        document
+        .getElementById("paymentUpi")
+        .value
+        .trim();
+
+
+    const qr =
+        document
+        .getElementById("paymentQr")
+        .value
+        .trim();
+
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
+
+    const button =
+        document.getElementById(
+            "savePaymentBtn"
+        );
+
+
+    if(!upi){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Please enter UPI ID.";
+
+        return;
+
+    }
+
+
+    if(!qr){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Please enter QR Code URL.";
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Saving...";
+
+
+    const {
+        error
+    } =
+    await supabaseClient
+        .from("payment_settings")
+        .update({
+            upi_id:upi,
+            qr_url:qr,
+            updated_at:new Date().toISOString()
+        })
+        .eq("id",1);
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "💾 Save Payment Settings";
+
+
+    if(error){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ " + error.message;
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "currentUpi"
+    ).textContent =
+        upi;
+
+
+    document.getElementById(
+        "currentQr"
+    ).textContent =
+        qr;
+
+
+    showQrPreview(qr);
+
+
+    status.className =
+        "status success";
+
+    status.textContent =
+        "✅ Payment settings updated successfully.";
 
 }
 
@@ -629,10 +1042,12 @@ async function searchCustomer(){
         .value
         .trim();
 
+
     const status =
         document.getElementById(
             "searchStatus"
         );
+
 
     const box =
         document.getElementById(
@@ -670,8 +1085,6 @@ async function searchCustomer(){
     let result;
 
 
-    /* UID SEARCH */
-
     if(
         upperSearch.startsWith("SP") ||
         upperSearch.startsWith("SAT")
@@ -687,11 +1100,9 @@ async function searchCustomer(){
     }
 
 
-    /* MOBILE / NAME SEARCH */
-
     else{
 
-        const response =
+        result =
         await supabaseClient
             .from("customers")
             .select("*")
@@ -701,13 +1112,12 @@ async function searchCustomer(){
             .limit(1)
             .maybeSingle();
 
-        result = response;
-
     }
 
 
     const customer =
         result.data;
+
 
     const error =
         result.error;
@@ -766,14 +1176,18 @@ function renderCustomer(customer){
     const wallet =
         Number(customer.wallet_balance || 0);
 
+
     const bonus =
         Number(customer.bonus_balance || 0);
+
 
     const depositBalance =
         Number(customer.deposit_balance || 0);
 
+
     const commission =
         Number(customer.commission_balance || 0);
+
 
     const referral =
         Number(customer.referral_balance || 0);
@@ -947,7 +1361,6 @@ function renderCustomer(customer){
 
             </div>
 
-
         </div>
 
     `;
@@ -956,7 +1369,7 @@ function renderCustomer(customer){
 
 
 /* =====================================================
-   CLEAR SEARCH
+   CLEAR CUSTOMER SEARCH
 ===================================================== */
 
 function clearCustomerSearch(){
@@ -965,17 +1378,21 @@ function clearCustomerSearch(){
         "customerSearch"
     ).value = "";
 
+
     document.getElementById(
         "customerDetails"
     ).innerHTML = "";
+
 
     const status =
         document.getElementById(
             "searchStatus"
         );
 
+
     status.className =
         "status";
+
 
     status.textContent =
         "Ready to search.";
@@ -989,8 +1406,6 @@ function clearCustomerSearch(){
 
 async function loadAdminTotals(){
 
-
-    /* TOTAL CUSTOMERS */
 
     const {
         count:customerCount
@@ -1009,8 +1424,6 @@ async function loadAdminTotals(){
         customerCount || 0;
 
 
-    /* DEPOSITS */
-
     const {
         data:deposits
     } =
@@ -1020,7 +1433,9 @@ async function loadAdminTotals(){
 
 
     let totalDeposit = 0;
+
     let totalCommission = 0;
+
     let pendingCount = 0;
 
 
@@ -1037,7 +1452,8 @@ async function loadAdminTotals(){
             === "approved"
         ){
 
-            totalDeposit += amount;
+            totalDeposit +=
+                amount;
 
 
             if(
@@ -1046,13 +1462,18 @@ async function loadAdminTotals(){
             ){
 
                 totalCommission +=
-                    Number(d.commission || 0);
+                    Number(
+                        d.commission || 0
+                    );
 
             }
+
             else{
 
                 totalCommission +=
-                    commissionAmount(amount);
+                    commissionAmount(
+                        amount
+                    );
 
             }
 
@@ -1351,7 +1772,9 @@ async function updateDeposit(
 
 
     if(!confirmed){
+
         return;
+
     }
 
 
@@ -1615,6 +2038,8 @@ document.addEventListener(
     async function(){
 
         await loadAdminTotals();
+
+        await loadPaymentSettings();
 
     }
 );
