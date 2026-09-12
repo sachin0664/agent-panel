@@ -5,1800 +5,1627 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Sathi Pay - Deposit</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="js/app.js"></script>
+<script src="js/app.js?v=6"></script>
+
 <script src="customer-guard.js"></script>
+
 <style>
 
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:linear-gradient(
-        135deg,
-        #eef7ff,
-        #f8fbff,
-        #ecfff7
-    );
-    color:#172554;
-    min-height:100vh;
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #eef7ff, #f8fbff, #ecfff7);
+    color: #172554;
+    min-height: 100vh;
 }
 
-/* HEADER */
-
-.header{
-    background:linear-gradient(
-        135deg,
-        #0637c9,
-        #087cf0,
-        #00bfa6
-    );
-    color:white;
-    padding:22px 18px 28px;
-    border-radius:0 0 30px 30px;
-    box-shadow:0 8px 25px rgba(20,70,180,.25);
+.top-header {
+    background: linear-gradient(135deg, #0637c9, #087cf0, #00bfa6);
+    color: white;
+    padding: 20px 18px 24px;
+    border-radius: 0 0 28px 28px;
+    box-shadow: 0 8px 25px rgba(20,70,180,.22);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
 }
 
-.logo-row{
-    display:flex;
-    align-items:center;
-    gap:12px;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
 }
 
-.logo{
-    width:48px;
-    height:48px;
-    border-radius:16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(
-        135deg,
-        #00f0b5,
-        #00a8ff
-    );
-    font-size:28px;
-    font-weight:900;
+.brand-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #00f0b5, #00a8ff);
+    color: white;
+    font-size: 17px;
+    font-weight: 900;
 }
 
-.logo-text{
-    font-size:26px;
-    font-weight:800;
+.brand-name {
+    font-size: 24px;
+    font-weight: 900;
 }
 
-.logo-text span{
-    color:#00f0b5;
+.brand-subtitle {
+    font-size: 11px;
+    opacity: .88;
+    margin-top: 3px;
 }
 
-.tagline{
-    font-size:12px;
-    opacity:.9;
-    margin-top:3px;
+.secure-badge {
+    padding: 8px 11px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    font-size: 11px;
+    font-weight: 800;
 }
 
-.back-btn{
-    display:inline-flex;
-    align-items:center;
-    margin-top:18px;
-    padding:10px 15px;
-    border-radius:30px;
-    color:white;
-    text-decoration:none;
-    background:rgba(255,255,255,.16);
-    border:1px solid rgba(255,255,255,.3);
-    font-size:14px;
-    font-weight:700;
+.container {
+    width: 94%;
+    max-width: 620px;
+    margin: 18px auto 40px;
 }
 
-/* MAIN */
-
-.container{
-    width:94%;
-    max-width:620px;
-    margin:18px auto 40px;
-}
-
-/* MESSAGE */
-
-.message{
-    display:none;
-    padding:13px 15px;
-    border-radius:14px;
-    margin-bottom:15px;
-    font-size:14px;
-    font-weight:600;
-}
-
-.message.success{
-    display:block;
-    background:#dcfce7;
-    color:#166534;
-    border:1px solid #86efac;
-}
-
-.message.error{
-    display:block;
-    background:#fee2e2;
-    color:#991b1b;
-    border:1px solid #fca5a5;
-}
-
-/* CARD */
-
-.card{
-    background:rgba(255,255,255,.96);
-    border-radius:24px;
-    padding:20px;
-    margin-bottom:16px;
+.card {
+    background: rgba(255,255,255,.97);
+    border-radius: 22px;
+    padding: 20px;
+    margin-bottom: 16px;
     box-shadow:
         0 10px 30px rgba(31,70,120,.10),
-        0 2px 8px rgba(31,70,120,.06);
+        0 2px 8px rgba(31,70,120,.05);
 }
 
-/* ACCOUNT */
-
-.account-card{
-    position:relative;
-    overflow:hidden;
+.section-title {
+    font-size: 17px;
+    font-weight: 900;
+    margin-bottom: 15px;
 }
 
-.account-card:after{
-    content:"";
-    position:absolute;
-    width:130px;
-    height:130px;
-    border-radius:50%;
-    background:#e0f2fe;
-    right:-60px;
-    top:-60px;
+.account-card {
+    position: relative;
+    overflow: hidden;
 }
 
-.section-title{
-    font-size:17px;
-    font-weight:800;
-    margin-bottom:15px;
+.account-card::after {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #e0f2fe;
+    right: -55px;
+    top: -55px;
 }
 
-.customer-name{
-    font-size:23px;
-    font-weight:800;
+.customer-name {
+    font-size: 23px;
+    font-weight: 900;
 }
 
-.uid{
-    margin-top:7px;
-    font-size:13px;
-    color:#64748b;
+.uid {
+    margin-top: 7px;
+    font-size: 13px;
+    color: #64748b;
 }
 
-.uid strong{
-    color:#315bdc;
-    letter-spacing:.4px;
+.uid strong {
+    color: #315bdc;
+    letter-spacing: .4px;
 }
 
-.status{
-    position:absolute;
-    right:18px;
-    top:20px;
-    z-index:2;
-    padding:7px 12px;
-    border-radius:20px;
-    background:#dcfce7;
-    color:#15803d;
-    font-size:12px;
-    font-weight:800;
+.status {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    z-index: 2;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 11px;
+    font-weight: 900;
 }
 
-/* PAYMENT */
-
-.payment-card{
-    background:linear-gradient(
-        135deg,
-        #ecfdf5,
-        #f0fdfa,
-        #e0f2fe
-    );
-    border:1px solid #a7f3d0;
+.payment-card {
+    background: linear-gradient(135deg, #ecfdf5, #f0fdfa, #e0f2fe);
+    border: 1px solid #a7f3d0;
 }
 
-.payment-title{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    color:#065f46;
+.payment-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #065f46;
 }
 
-.title-icon{
-    width:38px;
-    height:38px;
-    border-radius:13px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(
-        135deg,
-        #10b981,
-        #06b6d4
-    );
-    color:white;
-    font-size:20px;
+.title-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    color: white;
+    font-size: 20px;
 }
 
-/* QR */
-
-.qr-box{
-    text-align:center;
-    margin-top:12px;
+.qr-box {
+    text-align: center;
+    margin-top: 12px;
 }
 
-.qr-frame{
-    width:220px;
-    height:220px;
-    margin:0 auto 14px;
-    padding:12px;
-    background:white;
-    border-radius:22px;
-    border:3px solid #34d399;
-    box-shadow:0 8px 25px rgba(16,185,129,.18);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.qr-frame {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 14px;
+    padding: 12px;
+    background: white;
+    border-radius: 22px;
+    border: 3px solid #34d399;
+    box-shadow: 0 8px 25px rgba(16,185,129,.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#qrImage{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
-    border-radius:8px;
+#qrImage {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
 }
 
-.qr-empty{
-    color:#64748b;
-    font-size:13px;
-    line-height:1.5;
-    padding:20px;
+.qr-empty {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 20px;
 }
 
-.qr-note{
-    font-size:12px;
-    color:#64748b;
-    margin-bottom:13px;
+.qr-note {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 13px;
 }
 
-.button-row{
-    display:flex;
-    gap:9px;
-    justify-content:center;
-    flex-wrap:wrap;
+.button-row {
+    display: flex;
+    gap: 9px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .copy-btn,
-.download-btn{
-    border:none;
-    border-radius:13px;
-    padding:11px 17px;
-    font-size:13px;
-    font-weight:800;
-    cursor:pointer;
+.download-btn {
+    border: none;
+    border-radius: 13px;
+    padding: 11px 17px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
 }
 
-.copy-btn{
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #4f46e5
-    );
-    color:white;
+.copy-btn {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
 }
 
-.download-btn{
-    background:linear-gradient(
-        135deg,
-        #059669,
-        #10b981
-    );
-    color:white;
+.download-btn {
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: white;
 }
 
-.download-btn:disabled{
-    opacity:.45;
-    cursor:not-allowed;
+.download-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
 }
 
-.upi-label{
-    text-align:center;
-    margin-top:17px;
-    margin-bottom:7px;
-    font-size:12px;
-    color:#64748b;
-    font-weight:700;
+.upi-label {
+    text-align: center;
+    margin-top: 17px;
+    margin-bottom: 7px;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 700;
 }
 
-.upi-text{
-    background:linear-gradient(
-        135deg,
-        #eff6ff,
-        #eef2ff
-    );
-    border:1px solid #bfdbfe;
-    border-radius:14px;
-    padding:13px;
-    text-align:center;
-    color:#1d4ed8;
-    font-weight:800;
-    word-break:break-all;
+.upi-text {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    border: 1px solid #bfdbfe;
+    border-radius: 14px;
+    padding: 13px;
+    text-align: center;
+    color: #1d4ed8;
+    font-weight: 800;
+    word-break: break-all;
 }
 
-.form-section{
-            margin-top:20px;
-        }
+.form-section {
+    margin-top: 18px;
+}
 
-        .form-label{
-            display:block;
-            margin-bottom:8px;
-            font-size:14px;
-            font-weight:800;
-            color:#334155;
-        }
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #334155;
+}
 
-        .input-wrap{
-            position:relative;
-            margin-bottom:16px;
-        }
+.input-wrap {
+    position: relative;
+    margin-bottom: 16px;
+}
 
-        .input-icon{
-            position:absolute;
-            left:14px;
-            top:50%;
-            transform:translateY(-50%);
-            font-size:18px;
-            z-index:2;
-        }
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    z-index: 2;
+}
 
-        .form-input{
-            width:100%;
-            box-sizing:border-box;
-            border:1px solid #cbd5e1;
-            border-radius:14px;
-            padding:14px 14px 14px 45px;
-            font-size:15px;
-            outline:none;
-            background:#fff;
-            color:#0f172a;
-            transition:.2s;
-        }
+.form-input {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 14px 14px 14px 45px;
+    font-size: 15px;
+    outline: none;
+    background: white;
+    color: #0f172a;
+}
 
-        .form-input:focus{
-            border-color:#2563eb;
-            box-shadow:0 0 0 3px rgba(37,99,235,.10);
-        }
+.form-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
 
-        .commission-box{
-            margin:10px 0 18px;
-            padding:16px;
-            border-radius:16px;
-            background:linear-gradient(
-                135deg,
-                #f0fdf4,
-                #ecfdf5
-            );
-            border:1px solid #bbf7d0;
-        }
+.commission-box {
+    margin: 10px 0 18px;
+    padding: 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 1px solid #bbf7d0;
+}
 
-        .commission-row{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:12px;
-            margin:7px 0;
-            font-size:14px;
-            color:#475569;
-        }
+.commission-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 7px 0;
+    font-size: 14px;
+    color: #475569;
+}
 
-        .commission-row strong{
-            color:#166534;
-            font-size:15px;
-        }
+.commission-row strong {
+    color: #166534;
+    font-size: 15px;
+}
 
-        .commission-total{
-            margin-top:10px;
-            padding-top:10px;
-            border-top:1px dashed #86efac;
-        }
+.commission-total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #86efac;
+}
 
-        .commission-total strong{
-            font-size:20px;
-            color:#15803d;
-        }
+.commission-total strong {
+    font-size: 20px;
+    color: #15803d;
+}
 
-        .proof-box{
-            border:2px dashed #cbd5e1;
-            border-radius:16px;
-            padding:18px;
-            text-align:center;
-            background:#f8fafc;
-            margin-bottom:18px;
-        }
+.proof-box {
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    background: #f8fafc;
+    margin-bottom: 18px;
+}
 
-        .proof-icon{
-            font-size:32px;
-            margin-bottom:7px;
-        }
+.proof-icon {
+    font-size: 32px;
+    margin-bottom: 7px;
+}
 
-        .proof-text{
-            color:#64748b;
-            font-size:13px;
-            margin-bottom:12px;
-        }
+.proof-text {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
 
-        .file-input{
-            width:100%;
-            font-size:13px;
-            color:#475569;
-        }
+.file-input {
+    width: 100%;
+    font-size: 13px;
+    color: #475569;
+}
 
-        .submit-btn{
-            width:100%;
-            border:none;
-            border-radius:15px;
-            padding:15px;
-            font-size:16px;
-            font-weight:900;
-            color:white;
-            cursor:pointer;
-            background:linear-gradient(
-                135deg,
-                #2563eb,
-                #7c3aed
-            );
-            box-shadow:0 8px 20px rgba(37,99,235,.25);
-            transition:.2s;
-        }
+.submit-btn {
+    width: 100%;
+    border: none;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 900;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    box-shadow: 0 8px 20px rgba(37,99,235,.25);
+}
 
-        .submit-btn:hover{
-            transform:translateY(-1px);
-            box-shadow:0 10px 24px rgba(37,99,235,.30);
-        }
+.submit-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
 
-        .submit-btn:disabled{
-            opacity:.6;
-            cursor:not-allowed;
-            transform:none;
-        }
+.message {
+    display: none;
+    margin-top: 15px;
+    padding: 13px 15px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+}
 
-        .message{
-            display:none;
-            margin:15px 0 0;
-            padding:13px 15px;
-            border-radius:12px;
-            font-size:14px;
-            font-weight:700;
-            line-height:1.4;
-        }
+.message.success {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
 
-        .message.success{
-            display:block;
-            background:#dcfce7;
-            color:#166534;
-            border:1px solid #86efac;
-        }
+.message.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
 
-        .message.error{
-            display:block;
-            background:#fee2e2;
-            color:#991b1b;
-            border:1px solid #fca5a5;
-        }
+.message.info {
+    display: block;
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
 
-        .message.info{
-            display:block;
-            background:#dbeafe;
-            color:#1e40af;
-            border:1px solid #93c5fd;
-        }
+.history-card {
+    margin-top: 20px;
+}
 
-        .history-card{
-            margin-top:20px;
-        }
+.history-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-        .history-title{
-            display:flex;
-            align-items:center;
-            gap:10px;
-            margin-bottom:15px;
-        }
+.history-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: white;
+    font-size: 19px;
+}
 
-        .history-icon{
-            width:38px;
-            height:38px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            border-radius:12px;
-            background:linear-gradient(
-                135deg,
-                #f59e0b,
-                #ef4444
-            );
-            color:#fff;
-            font-size:19px;
-        }
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    margin-top: 15px;
+}
 
-        .table-wrap{
-            width:100%;
-            overflow-x:auto;
-            border-radius:14px;
-            border:1px solid #e2e8f0;
-        }
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 620px;
+}
 
-        .history-table{
-            width:100%;
-            border-collapse:collapse;
-            min-width:620px;
-            background:#fff;
-        }
+.history-table th {
+    padding: 13px 12px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 12px;
+    text-align: left;
+    font-weight: 900;
+}
 
-        .history-table th{
-            padding:13px 12px;
-            background:#f8fafc;
-            color:#475569;
-            font-size:12px;
-            text-align:left;
-            font-weight:900;
-            white-space:nowrap;
-        }
+.history-table td {
+    padding: 13px 12px;
+    border-top: 1px solid #eef2f7;
+    color: #334155;
+    font-size: 13px;
+    white-space: nowrap;
+}
 
-        .history-table td{
-            padding:13px 12px;
-            border-top:1px solid #eef2f7;
-            color:#334155;
-            font-size:13px;
-            white-space:nowrap;
-        }
+.status-badge {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 900;
+}
 
-        .status-badge{
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            padding:6px 10px;
-            border-radius:999px;
-            font-size:11px;
-            font-weight:900;
-        }
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
 
-        .status-pending{
-            background:#fef3c7;
-            color:#92400e;
-        }
+.status-approved {
+    background: #dcfce7;
+    color: #166534;
+}
 
-        .status-approved{
-            background:#dcfce7;
-            color:#166534;
-        }
+.status-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
 
-        .status-rejected{
-            background:#fee2e2;
-            color:#991b1b;
-        }
+.empty-history,
+.loading {
+    text-align: center;
+    padding: 25px 15px;
+    color: #64748b;
+    font-size: 14px;
+}
 
-        .empty-history{
-            text-align:center;
-            padding:28px 15px;
-            color:#64748b;
-            font-size:14px;
-        }
+.footer-note {
+    text-align: center;
+    padding: 10px 10px 30px;
+    color: #94a3b8;
+    font-size: 12px;
+}
 
-        .loading{
-            text-align:center;
-            padding:20px;
-            color:#64748b;
-            font-size:14px;
-        }
+@media (max-width: 600px) {
 
-        .footer-note{
-            text-align:center;
-            padding:20px 10px 30px;
-            color:#94a3b8;
-            font-size:12px;
-        }
+    .top-header {
+        padding: 18px 15px 22px;
+    }
 
-        @media(max-width:600px){
+    .brand-name {
+        font-size: 21px;
+    }
 
-            .container{
-                padding:12px;
-            }
+    .secure-badge {
+        font-size: 10px;
+    }
 
-            .top-header{
-                padding:18px 15px;
-            }
+    .container {
+        padding: 12px 0;
+    }
 
-            .brand{
-                font-size:21px;
-            }
+    .card {
+        padding: 17px;
+        border-radius: 18px;
+    }
 
-            .card{
-                padding:17px;
-                border-radius:18px;
-            }
+    .qr-frame {
+        width: 210px;
+        height: 210px;
+    }
 
-            .section-title{
-                font-size:17px;
-            }
+    .button-row {
+        flex-direction: column;
+    }
 
-            .customer-name{
-                font-size:23px;
-            }
+    .copy-btn,
+    .download-btn {
+        width: 100%;
+    }
 
-            .qr-frame{
-                width:210px;
-                height:210px;
-            }
+}
 
-            .qr-frame img{
-                width:190px;
-                height:190px;
-            }
-
-            .button-row{
-                flex-direction:column;
-            }
-
-            .copy-btn,
-            .download-btn{
-                width:100%;
-            }
-
-            .commission-row{
-                font-size:13px;
-            }
-        }
-
-    </style>
+</style>
 
 </head>
 
+
 <body>
 
-    <header class="top-header">
 
-        <div class="brand">
-            <div class="brand-logo">SP</div>
+<header class="top-header">
 
-            <div>
-                <div>Sathi Pay</div>
-                <div class="brand-subtitle">
-                    Secure Payment Portal
-                </div>
-            </div>
+    <div class="brand">
+
+        <div class="brand-logo">
+            SP
         </div>
 
-        <div class="secure-badge">
-            🔒 Secure
+        <div>
+
+            <div class="brand-name">
+                Sathi Pay
+            </div>
+
+            <div class="brand-subtitle">
+                Secure Payment Portal
+            </div>
+
         </div>
 
-    </header>
-
-
-    <main class="container">
-
-
-        <!-- ACCOUNT CARD -->
-
-        <section class="card account-card">
-
-            <div class="status">
-                ● Active
-            </div>
-
-            <div class="section-title">
-                👤 Your Account
-            </div>
-
-            <div
-                class="customer-name"
-                id="customerName"
-            >
-                Loading...
-            </div>
-
-            <div class="uid">
-                UID:
-                <strong id="customerUID">
-                    Loading...
-                </strong>
-            </div>
-
-        </section>
-
-
-
-        <!-- PAYMENT CARD -->
-
-        <section class="card payment-card">
-
-            <div class="section-title payment-title">
-
-                <div class="title-icon">
-                    ₹
-                </div>
-
-                <div>
-                    Make Payment
-                </div>
-
-            </div>
-
-
-            <div class="qr-box">
-
-                <div class="qr-frame">
-
-                    <img
-                        id="qrImage"
-                        src=""
-                        alt="Payment QR"
-                        style="display:none;"
-                    >
-
-                    <div
-                        id="qrEmpty"
-                        class="qr-empty"
-                    >
-                        QR code will appear here after admin
-                        configures the payment QR.
-                    </div>
-
-                </div>
-
-
-                <div class="qr-note">
-                    Scan the QR code using your UPI app
-                </div>
-
-
-                <div class="button-row">
-
-                    <button
-                        type="button"
-                        class="download-btn"
-                        id="downloadQR"
-                        disabled
-                    >
-                        📥 Download QR
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="upi-label">
-                UPI ID
-            </div>
-
-
-            <div
-                id="upiID"
-                class="upi-text"
-            >
-                Loading UPI ID...
-            </div>
-
-
-            <div
-                class="button-row"
-                style="margin-top:10px;"
-            >
-
-                <button
-                    type="button"
-                    class="copy-btn"
-                    id="copyUPI"
-                >
-                    📋 Copy UPI
-                </button>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- DEPOSIT FORM -->
-
-        <section class="card">
-
-            <div class="section-title">
-
-                <div class="title-icon amount-icon">
-                    💰
-                </div>
-
-                <div>
-                    Deposit Amount
-                </div>
-
-            </div>
-
-
-            <div class="form-section">
-
-
-                <label
-                    class="form-label"
-                    for="amount"
-                >
-                    Enter Deposit Amount
-                </label>
-
-
-                <div class="input-wrap">
-
-                    <div class="input-icon">
-                        ₹
-                    </div>
-
-                    <input
-                        type="number"
-                        id="amount"
-                        class="form-input"
-                        min="100"
-                        step="1"
-                        placeholder="Minimum ₹100"
-                    >
-
-                </div>
-
-
-
-                <!-- COMMISSION PREVIEW -->
-
-                <div class="commission-box">
-
-                    <div class="commission-row">
-
-                        <span>
-                            Commission Rate
-                        </span>
-
-                        <strong id="commissionRate">
-                            6%
-                        </strong>
-
-                    </div>
-
-
-                    <div class="commission-row">
-
-                        <span>
-                            Deposit Amount
-                        </span>
-
-                        <strong id="commissionBase">
-                            ₹0.00
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        class="commission-row commission-total"
-                    >
-
-                        <span>
-                            Estimated Commission
-                        </span>
-
-                        <strong id="commissionAmount">
-                            ₹0.00
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- UTR -->
-
-                <label
-                    class="form-label"
-                    for="utr"
-                >
-                    UTR / Transaction ID
-                </label>
-
-
-                <div class="input-wrap">
-
-                    <div class="input-icon">
-                        🔢
-                    </div>
-
-                    <input
-                        type="text"
-                        id="utr"
-                        class="form-input"
-                        placeholder="Enter your UTR number"
-                        autocomplete="off"
-                    >
-
-                </div>
-
-
-
-                <!-- PAYMENT PROOF -->
-
-                <label class="form-label">
-                    Payment Screenshot
-                </label>
-
-
-                <div class="proof-box">
-
-                    <div class="proof-icon">
-                        📸
-                    </div>
-
-                    <div class="proof-text">
-                        Upload the screenshot of your
-                        successful payment
-                    </div>
-
-                    <input
-                        type="file"
-                        id="paymentProof"
-                        class="file-input"
-                        accept="image/*"
-                    >
-
-                </div>
-
-
-
-                <!-- SUBMIT -->
-
-                <button
-                    type="button"
-                    id="submitButton"
-                    class="submit-btn"
-                >
-                    🚀 Submit Deposit
-                </button>
-
-
-                <div
-                    id="message"
-                    class="message"
-                ></div>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- DEPOSIT HISTORY -->
-
-        <section class="card history-card">
-
-            <div class="history-title">
-
-                <div class="history-icon">
-                    📊
-                </div>
-
-                <div class="section-title">
-                    Deposit History
-                </div>
-
-            </div>
-
-
-            <div
-                id="depositHistory"
-                class="table-wrap"
-            >
-
-                <div class="loading">
-                    Loading deposit history...
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <div class="footer-note">
-        Sathi Pay • Secure & Reliable Payments
     </div>
-           <script>
 
-    let currentUser = null;
-    let currentCustomer = null;
-    let paymentQRUrl = "";
-    let paymentUPI = "";
+    <div class="secure-badge">
+        🔒 Secure
+    </div>
+
+</header>
 
 
-    // ==============================
-    // MESSAGE
-    // ==============================
+<main class="container">
 
-    function showMessage(text, type = "info") {
 
-        const message = document.getElementById("message");
+<!-- ACCOUNT -->
 
-        message.className = "message " + type;
-        message.textContent = text;
-        message.style.display = "block";
+<section class="card account-card">
 
-        if (type === "success") {
+    <div
+        class="status"
+        id="customerStatus"
+    >
+        ● Active
+    </div>
 
-            setTimeout(() => {
-                message.style.display = "none";
-            }, 5000);
+    <div class="section-title">
+        👤 Your Account
+    </div>
 
-        }
+    <div
+        class="customer-name"
+        id="customerName"
+    >
+        Loading...
+    </div>
+
+    <div class="uid">
+        UID:
+        <strong id="customerUID">
+            Loading...
+        </strong>
+    </div>
+
+</section>
+
+
+
+<!-- PAYMENT -->
+
+<section class="card payment-card">
+
+    <div class="section-title payment-title">
+
+        <div class="title-icon">
+            ₹
+        </div>
+
+        <div>
+            Make Payment
+        </div>
+
+    </div>
+
+
+    <div class="qr-box">
+
+        <div class="qr-frame">
+
+            <img
+                id="qrImage"
+                src=""
+                alt="Sathi Pay Payment QR"
+                style="display:none;"
+            >
+
+            <div
+                id="qrEmpty"
+                class="qr-empty"
+            >
+                QR code will appear here after admin
+                configures the payment QR.
+            </div>
+
+        </div>
+
+
+        <div class="qr-note">
+            Scan this QR using your UPI app
+        </div>
+
+
+        <div class="button-row">
+
+            <button
+                type="button"
+                class="download-btn"
+                id="downloadQR"
+                disabled
+            >
+                📥 Download QR
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="upi-label">
+        UPI ID
+    </div>
+
+
+    <div
+        id="upiID"
+        class="upi-text"
+    >
+        Loading UPI ID...
+    </div>
+
+
+    <div
+        class="button-row"
+        style="margin-top:10px;"
+    >
+
+        <button
+            type="button"
+            class="copy-btn"
+            id="copyUPI"
+        >
+            📋 Copy UPI
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- DEPOSIT FORM -->
+
+<section class="card">
+
+    <div class="section-title payment-title">
+
+        <div class="title-icon">
+            ₹
+        </div>
+
+        <div>
+            Deposit Amount
+        </div>
+
+    </div>
+
+
+    <div class="form-section">
+
+
+        <label
+            class="form-label"
+            for="amount"
+        >
+            Enter Deposit Amount
+        </label>
+
+
+        <div class="input-wrap">
+
+            <div class="input-icon">
+                ₹
+            </div>
+
+            <input
+                type="number"
+                id="amount"
+                class="form-input"
+                min="100"
+                step="1"
+                placeholder="Minimum ₹100"
+                inputmode="numeric"
+            >
+
+        </div>
+
+
+        <div class="commission-box">
+
+            <div class="commission-row">
+
+                <span>
+                    Commission Rate
+                </span>
+
+                <strong id="commissionRate">
+                    6%
+                </strong>
+
+            </div>
+
+
+            <div class="commission-row">
+
+                <span>
+                    Deposit Amount
+                </span>
+
+                <strong id="commissionBase">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <div class="commission-row commission-total">
+
+                <span>
+                    Estimated Commission
+                </span>
+
+                <strong id="commissionAmount">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <label
+            class="form-label"
+            for="utr"
+        >
+            UTR / Transaction ID
+        </label>
+
+
+        <div class="input-wrap">
+
+            <div class="input-icon">
+                🔢
+            </div>
+
+            <input
+                type="text"
+                id="utr"
+                class="form-input"
+                placeholder="Enter your UTR number"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <label class="form-label">
+            Payment Screenshot
+        </label>
+
+
+        <div class="proof-box">
+
+            <div class="proof-icon">
+                📸
+            </div>
+
+            <div class="proof-text">
+                Upload screenshot of your successful payment
+            </div>
+
+            <input
+                type="file"
+                id="paymentProof"
+                class="file-input"
+                accept="image/*"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            id="submitButton"
+            class="submit-btn"
+        >
+            🚀 Submit Deposit
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- HISTORY -->
+
+<section class="card history-card">
+
+    <div class="history-title">
+
+        <div class="history-icon">
+            📊
+        </div>
+
+        <div class="section-title">
+            Deposit History
+        </div>
+
+    </div>
+
+
+    <div
+        id="depositHistory"
+        class="table-wrap"
+    >
+
+        <div class="loading">
+            Loading deposit history...
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<div class="footer-note">
+    Sathi Pay • Secure & Reliable Payments
+</div>
+
+
+<script>
+
+let currentCustomer = null;
+
+let paymentQRUrl = "";
+
+let paymentUPI = "";
+
+
+// ========================================
+// CUSTOMER ID
+// ========================================
+
+function getCustomerId() {
+
+    return localStorage.getItem(
+        "sathiPayCustomerId"
+    );
+
+}
+
+
+// ========================================
+// MESSAGE
+// ========================================
+
+function showMessage(text, type) {
+
+    const message =
+        document.getElementById("message");
+
+    message.className =
+        "message " + (type || "info");
+
+    message.textContent =
+        text;
+
+    message.style.display =
+        "block";
+
+}
+
+
+// ========================================
+// HTML ESCAPE
+// ========================================
+
+function escapeHTML(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+// ========================================
+// COMMISSION
+// ========================================
+
+function getCommissionRate(amount) {
+
+    amount =
+        Number(amount) || 0;
+
+
+    if (amount >= 20000) {
+
+        return 0.10;
 
     }
 
 
-    // ==============================
-    // HTML ESCAPE
-    // ==============================
+    if (amount >= 10000) {
 
-    function escapeHTML(value) {
-
-        if (value === null || value === undefined) {
-            return "";
-        }
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+        return 0.08;
 
     }
 
 
-    // ==============================
-    // BACK TO DASHBOARD
-    // ==============================
+    return 0.06;
 
-    document.addEventListener("DOMContentLoaded", function () {
+}
 
-        const backDashboard =
-            document.getElementById("backDashboard");
 
-        if (!backDashboard) {
-            return;
+function updateCommission() {
+
+    const amount =
+        Number(
+            document.getElementById(
+                "amount"
+            ).value
+        ) || 0;
+
+
+    const rate =
+        getCommissionRate(
+            amount
+        );
+
+
+    const commission =
+        amount * rate;
+
+
+    document.getElementById(
+        "commissionRate"
+    ).textContent =
+        Math.round(rate * 100) + "%";
+
+
+    document.getElementById(
+        "commissionBase"
+    ).textContent =
+        "₹" + amount.toFixed(2);
+
+
+    document.getElementById(
+        "commissionAmount"
+    ).textContent =
+        "₹" + commission.toFixed(2);
+
+}
+
+
+// ========================================
+// LOAD CUSTOMER
+// ========================================
+
+async function loadCustomer() {
+
+    const customerId =
+        getCustomerId();
+
+
+    if (!customerId) {
+
+        window.location.href =
+            "customer-login.html";
+
+        return false;
+
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("customers")
+
+            .select(`
+                id,
+                name,
+                uid,
+                status
+            `)
+
+            .eq(
+                "id",
+                customerId
+            )
+
+            .maybeSingle();
+
+
+        if (error) {
+
+            throw error;
+
         }
 
-        backDashboard.addEventListener("click", function (event) {
 
-            event.preventDefault();
+        if (!data) {
 
-            if (
-                document.referrer &&
-                document.referrer.includes(window.location.host)
-            ) {
+            localStorage.removeItem(
+                "sathiPayCustomerId"
+            );
 
-                window.history.back();
+            window.location.href =
+                "customer-login.html";
+
+            return false;
+
+        }
+
+
+        currentCustomer =
+            data;
+
+
+        document.getElementById(
+            "customerName"
+        ).textContent =
+            data.name || "Customer";
+
+
+        document.getElementById(
+            "customerUID"
+        ).textContent =
+            data.uid || "Not Assigned";
+
+
+        const status =
+            String(
+                data.status || "active"
+            ).toLowerCase();
+
+
+        const statusElement =
+            document.getElementById(
+                "customerStatus"
+            );
+
+
+        if (
+            status === "active" ||
+            status === "approved"
+        ) {
+
+            statusElement.textContent =
+                "● Active";
+
+        } else {
+
+            statusElement.textContent =
+                "● " +
+                (data.status || "Active");
+
+            statusElement.style.background =
+                "#fef3c7";
+
+            statusElement.style.color =
+                "#b45309";
+
+        }
+
+
+        localStorage.setItem(
+            "sathiPayUID",
+            data.uid || ""
+        );
+
+
+        localStorage.setItem(
+            "sathiPayCustomerName",
+            data.name || ""
+        );
+
+
+        return true;
+
+
+    } catch (error) {
+
+        console.error(
+            "Customer loading error:",
+            error
+        );
+
+
+        showMessage(
+            "Unable to load customer details.",
+            "error"
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+// ========================================
+// PAYMENT SETTINGS
+// ========================================
+
+async function loadPaymentSettings() {
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("payment_settings")
+
+            .select(`
+                id,
+                upi_id,
+                qr_url
+            `)
+
+            .eq(
+                "id",
+                1
+            )
+
+            .maybeSingle();
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        paymentUPI =
+            data?.upi_id || "";
+
+
+        paymentQRUrl =
+            data?.qr_url || "";
+
+
+        const upiElement =
+            document.getElementById(
+                "upiID"
+            );
+
+
+        const qrImage =
+            document.getElementById(
+                "qrImage"
+            );
+
+
+        const qrEmpty =
+            document.getElementById(
+                "qrEmpty"
+            );
+
+
+        const downloadButton =
+            document.getElementById(
+                "downloadQR"
+            );
+
+
+        if (paymentUPI) {
+
+            upiElement.textContent =
+                paymentUPI;
+
+        } else {
+
+            upiElement.textContent =
+                "UPI ID not configured";
+
+        }
+
+
+        if (paymentQRUrl) {
+
+            qrImage.src =
+                paymentQRUrl;
+
+            qrImage.style.display =
+                "block";
+
+            qrEmpty.style.display =
+                "none";
+
+            downloadButton.disabled =
+                false;
+
+        } else {
+
+            qrImage.style.display =
+                "none";
+
+            qrEmpty.style.display =
+                "block";
+
+            downloadButton.disabled =
+                true;
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Payment settings error:",
+            error
+        );
+
+
+        document.getElementById(
+            "upiID"
+        ).textContent =
+            "Payment details unavailable";
+
+
+        showMessage(
+            "Payment details could not be loaded.",
+            "error"
+        );
+
+    }
+
+}
+
+
+// ========================================
+// COPY UPI
+// ========================================
+
+document
+    .getElementById("copyUPI")
+    .addEventListener(
+        "click",
+        async function () {
+
+            if (!paymentUPI) {
+
+                showMessage(
+                    "UPI ID is not available.",
+                    "error"
+                );
+
                 return;
 
             }
 
 
-            const candidates = [
+            try {
 
-                "customer-dashboard.html",
-                "dashboard.html",
-                "customer-deshboard.html",
-                "deshboard.html"
+                await navigator.clipboard.writeText(
+                    paymentUPI
+                );
 
-            ];
 
+                this.textContent =
+                    "✅ UPI Copied";
 
-            async function findDashboard() {
 
-                for (const file of candidates) {
+                showMessage(
+                    "UPI ID copied successfully.",
+                    "success"
+                );
 
-                    try {
 
-                        const response = await fetch(
-                            file,
-                            {
-                                method: "HEAD",
-                                cache: "no-store"
-                            }
-                        );
+                setTimeout(() => {
 
-                        if (response.ok) {
+                    this.textContent =
+                        "📋 Copy UPI";
 
-                            window.location.href = file;
-                            return;
+                }, 2000);
 
-                        }
 
-                    } catch (error) {
+            } catch (error) {
 
-                        // Try next filename
-
-                    }
-
-                }
-
-
-                window.history.back();
-
-            }
-
-
-            findDashboard();
-
-        });
-
-    });
-
-
-
-    // ==============================
-    // COMMISSION RATE
-    // ==============================
-
-    function getCommissionRate(amount) {
-
-        amount = Number(amount) || 0;
-
-
-        if (amount >= 20000) {
-
-            return 0.10;
-
-        }
-
-
-        if (amount >= 10000) {
-
-            return 0.08;
-
-        }
-
-
-        return 0.06;
-
-    }
-
-
-
-    // ==============================
-    // COMMISSION UPDATE
-    // ==============================
-
-    function updateCommission() {
-
-        const amountInput =
-            document.getElementById("amount");
-
-        const rateElement =
-            document.getElementById("commissionRate");
-
-        const baseElement =
-            document.getElementById("commissionBase");
-
-        const commissionElement =
-            document.getElementById("commissionAmount");
-
-
-        const amount =
-            Number(amountInput.value) || 0;
-
-
-        const rate =
-            getCommissionRate(amount);
-
-
-        const commission =
-            amount * rate;
-
-
-        rateElement.textContent =
-            Math.round(rate * 100) + "%";
-
-
-        baseElement.textContent =
-            "₹" + amount.toFixed(2);
-
-
-        commissionElement.textContent =
-            "₹" + commission.toFixed(2);
-
-    }
-
-
-
-    // ==============================
-    // LOAD CUSTOMER
-    // ==============================
-
-    async function loadCustomer() {
-
-        try {
-
-            const {
-                data: authData,
-                error: authError
-            } = await supabaseClient.auth.getUser();
-
-
-            if (authError) {
-                throw authError;
-            }
-
-
-            if (!authData || !authData.user) {
-
-                window.location.href =
-                    "customer-login.html";
-
-                return;
-
-            }
-
-
-            currentUser =
-                authData.user;
-
-
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .from("customers")
-                .select(
-                    "id,name,uid"
-                )
-                .eq(
-                    "id",
-                    currentUser.id
-                )
-                .maybeSingle();
-
-
-            if (error) {
-                throw error;
-            }
-
-
-            if (!data) {
-
-                throw new Error(
-                    "Customer profile not found."
+                showMessage(
+                    "Please copy the UPI ID manually.",
+                    "error"
                 );
 
             }
 
-
-            currentCustomer =
-                data;
-
-
-            document.getElementById(
-                "customerName"
-            ).textContent =
-                data.name || "Customer";
-
-
-            document.getElementById(
-                "customerUID"
-            ).textContent =
-                data.uid || "Not Assigned";
-
-
-        } catch (error) {
-
-            console.error(
-                "Customer loading error:",
-                error
-            );
-
-
-            document.getElementById(
-                "customerName"
-            ).textContent =
-                "Unable to load";
-
-
-            document.getElementById(
-                "customerUID"
-            ).textContent =
-                "Not available";
-
-
-            showMessage(
-                "Unable to load customer details.",
-                "error"
-            );
-
         }
-
-    }
-
+    );
 
 
-    // ==============================
-    // LOAD PAYMENT SETTINGS
-    // ==============================
+// ========================================
+// DOWNLOAD QR
+// ========================================
 
-    async function loadPaymentSettings() {
+document
+    .getElementById("downloadQR")
+    .addEventListener(
+        "click",
+        async function () {
 
-        try {
+            if (!paymentQRUrl) {
 
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .from("payment_settings")
-                .select(
-                    "id,upi_id,qr_url"
-                )
-                .eq(
-                    "id",
-                    1
-                )
-                .maybeSingle();
+                showMessage(
+                    "QR code is not available.",
+                    "error"
+                );
 
-
-            if (error) {
-                throw error;
-            }
-
-
-            const upiElement =
-                document.getElementById("upiID");
-
-
-            const qrImage =
-                document.getElementById("qrImage");
-
-
-            const qrEmpty =
-                document.getElementById("qrEmpty");
-
-
-            const downloadQR =
-                document.getElementById("downloadQR");
-
-
-            paymentUPI =
-                data?.upi_id || "";
-
-
-            paymentQRUrl =
-                data?.qr_url || "";
-
-
-            // UPI
-
-            if (paymentUPI) {
-
-                upiElement.textContent =
-                    paymentUPI;
-
-            } else {
-
-                upiElement.textContent =
-                    "UPI ID not configured";
+                return;
 
             }
 
 
-            // QR
-
-            if (paymentQRUrl) {
-
-                qrImage.src =
-                    paymentQRUrl;
-
-                qrImage.style.display =
-                    "block";
+            const button =
+                this;
 
 
-                qrEmpty.style.display =
-                    "none";
+            try {
 
-
-                downloadQR.disabled =
-                    false;
-
-            } else {
-
-                qrImage.src = "";
-
-                qrImage.style.display =
-                    "none";
-
-
-                qrEmpty.style.display =
-                    "flex";
-
-
-                downloadQR.disabled =
+                button.disabled =
                     true;
 
-            }
+                button.textContent =
+                    "⏳ Preparing QR...";
 
 
-        } catch (error) {
-
-            console.error(
-                "Payment settings error:",
-                error
-            );
+                const response =
+                    await fetch(
+                        paymentQRUrl
+                    );
 
 
-            document.getElementById(
-                "upiID"
-            ).textContent =
-                "Payment details unavailable";
+                if (!response.ok) {
 
-
-            showMessage(
-                "Payment details could not be loaded.",
-                "error"
-            );
-
-        }
-
-    }
-
-
-
-    // ==============================
-    // COPY UPI
-    // ==============================
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            const copyButton =
-                document.getElementById("copyUPI");
-
-
-            if (!copyButton) {
-                return;
-            }
-
-
-            copyButton.addEventListener(
-                "click",
-                async function () {
-
-                    if (!paymentUPI) {
-
-                        showMessage(
-                            "UPI ID is not available.",
-                            "error"
-                        );
-
-                        return;
-
-                    }
-
-
-                    try {
-
-                        await navigator.clipboard.writeText(
-                            paymentUPI
-                        );
-
-
-                        copyButton.textContent =
-                            "✅ UPI Copied";
-
-
-                        showMessage(
-                            "UPI ID copied successfully.",
-                            "success"
-                        );
-
-
-                        setTimeout(() => {
-
-                            copyButton.textContent =
-                                "📋 Copy UPI";
-
-                        }, 2000);
-
-
-                    } catch (error) {
-
-                        showMessage(
-                            "Unable to copy UPI ID. Please copy it manually.",
-                            "error"
-                        );
-
-                    }
+                    throw new Error(
+                        "QR download failed"
+                    );
 
                 }
-            );
-
-        }
-    );
 
 
-
-    // ==============================
-    // DOWNLOAD QR
-    // ==============================
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            const downloadButton =
-                document.getElementById("downloadQR");
+                const blob =
+                    await response.blob();
 
 
-            if (!downloadButton) {
-                return;
+                const blobURL =
+                    URL.createObjectURL(
+                        blob
+                    );
+
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                link.href =
+                    blobURL;
+
+                link.download =
+                    "sathi-pay-upi-qr.png";
+
+
+                document.body.appendChild(
+                    link
+                );
+
+
+                link.click();
+
+                link.remove();
+
+
+                URL.revokeObjectURL(
+                    blobURL
+                );
+
+
+                showMessage(
+                    "QR download started.",
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                window.open(
+                    paymentQRUrl,
+                    "_blank"
+                );
+
+
+                showMessage(
+                    "QR opened. You can save it from there.",
+                    "info"
+                );
+
+            } finally {
+
+                button.disabled =
+                    !paymentQRUrl;
+
+                button.textContent =
+                    "📥 Download QR";
+
             }
 
-
-            downloadButton.addEventListener(
-                "click",
-                async function () {
-
-                    if (!paymentQRUrl) {
-
-                        showMessage(
-                            "QR code is not available.",
-                            "error"
-                        );
-
-                        return;
-
-                    }
-
-
-                    const originalText =
-                        downloadButton.textContent;
-
-
-                    try {
-
-                        downloadButton.disabled =
-                            true;
-
-
-                        downloadButton.textContent =
-                            "⏳ Preparing QR...";
-
-
-                        const response =
-                            await fetch(
-                                paymentQRUrl,
-                                {
-                                    mode: "cors"
-                                }
-                            );
-
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                "QR download failed"
-                            );
-
-                        }
-
-
-                        const blob =
-                            await response.blob();
-
-
-                        const blobURL =
-                            URL.createObjectURL(
-                                blob
-                            );
-
-
-                        const link =
-                            document.createElement("a");
-
-
-                        link.href =
-                            blobURL;
-
-
-                        link.download =
-                            "sathi-pay-upi-qr.png";
-
-
-                        document.body.appendChild(
-                            link
-                        );
-
-
-                        link.click();
-
-
-                        link.remove();
-
-
-                        URL.revokeObjectURL(
-                            blobURL
-                        );
-
-
-                        showMessage(
-                            "QR code download started.",
-                            "success"
-                        );
-
-
-                    } catch (error) {
-
-                        console.error(
-                            "QR download error:",
-                            error
-                        );
-
-
-                        // Fallback:
-                        // Open QR image directly
-
-                        window.open(
-                            paymentQRUrl,
-                            "_blank"
-                        );
-
-
-                        showMessage(
-                            "QR opened in a new tab. You can save it from there.",
-                            "info"
-                        );
-
-                    } finally {
-
-                        downloadButton.disabled =
-                            !paymentQRUrl;
-
-
-                        downloadButton.textContent =
-                            originalText;
-
-                    }
-
-                }
-            );
-
         }
     );
 
 
+// ========================================
+// AMOUNT
+// ========================================
 
-    // ==============================
-    // AMOUNT INPUT
-    // ==============================
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            const amountInput =
-                document.getElementById("amount");
-
-
-            if (!amountInput) {
-                return;
-            }
-
-
-            amountInput.addEventListener(
-                "input",
-                updateCommission
-            );
-
-
-            updateCommission();
-
-        }
+document
+    .getElementById("amount")
+    .addEventListener(
+        "input",
+        updateCommission
     );
 
 
+// ========================================
+// DEPOSIT HISTORY
+// ========================================
 
-    // ==============================
-    // LOAD DEPOSIT HISTORY
-    // ==============================
+async function loadDeposits() {
 
-    async function loadDeposits() {
+    const history =
+        document.getElementById(
+            "depositHistory"
+        );
 
-        const history =
-            document.getElementById(
-                "depositHistory"
-            );
 
+    const customerId =
+        getCustomerId();
+
+
+    if (!customerId) {
 
         history.innerHTML = `
-            <div class="loading">
-                Loading deposit history...
+            <div class="empty-history">
+                Please login again.
             </div>
         `;
 
+        return;
 
-        try {
-
-            if (!currentUser) {
-
-                throw new Error(
-                    "User not logged in."
-                );
-
-            }
+    }
 
 
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .from("customer_deposits")
-                .select(
-                    "id,amount,utr,status,created_at"
-                )
-                .eq(
-                    "customer_id",
-                    currentUser.id
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
+    history.innerHTML = `
+        <div class="loading">
+            Loading deposit history...
+        </div>
+    `;
 
 
-            if (error) {
-                throw error;
-            }
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("customer_deposits")
+
+            .select(`
+                id,
+                amount,
+                utr,
+                status,
+                created_at
+            `)
+
+            .eq(
+                "customer_id",
+                customerId
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
 
 
-            if (!data || data.length === 0) {
+        if (error) {
 
-                history.innerHTML = `
-                    <div class="empty-history">
-                        📭 No deposits found yet.
-                    </div>
-                `;
+            throw error;
 
-                return;
-
-            }
+        }
 
 
-            let rows = "";
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            history.innerHTML = `
+                <div class="empty-history">
+                    📭 No deposits found yet.
+                </div>
+            `;
+
+            return;
+
+        }
 
 
-            data.forEach(function (deposit) {
+        let rows = "";
+
+
+        data.forEach(
+            function (deposit) {
 
                 const status =
                     String(
-                        deposit.status || "pending"
+                        deposit.status ||
+                        "pending"
                     ).toLowerCase();
 
 
@@ -1846,21 +1673,24 @@ body{
                         ).toLocaleString(
                             "en-IN",
                             {
-                                day:"2-digit",
-                                month:"short",
-                                year:"numeric",
-                                hour:"2-digit",
-                                minute:"2-digit"
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
                             }
                         )
                         : "-";
 
 
                 rows += `
+
                     <tr>
 
                         <td>
-                            #${escapeHTML(deposit.id)}
+                            #${escapeHTML(
+                                deposit.id
+                            )}
                         </td>
 
                         <td>
@@ -1876,11 +1706,13 @@ body{
                         </td>
 
                         <td>
+
                             <span
                                 class="status-badge ${statusClass}"
                             >
                                 ${statusText}
                             </span>
+
                         </td>
 
                         <td>
@@ -1888,547 +1720,539 @@ body{
                         </td>
 
                     </tr>
+
                 `;
-
-            });
-
-
-            history.innerHTML = `
-
-                <table class="history-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                ID
-                            </th>
-
-                            <th>
-                                Amount
-                            </th>
-
-                            <th>
-                                UTR
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Date
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        ${rows}
-
-                    </tbody>
-
-                </table>
-
-            `;
-
-
-        } catch (error) {
-
-            console.error(
-                "Deposit history error:",
-                error
-            );
-
-
-            history.innerHTML = `
-                <div class="empty-history">
-                    ❌ Unable to load deposit history.
-                </div>
-            `;
-
-        }
-
-    }
-
-
-
-// ==============================
-// SUBMIT DEPOSIT
-// ==============================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const submitButton =
-            document.getElementById(
-                "submitButton"
-            );
-
-
-        if (!submitButton) {
-            return;
-        }
-
-
-        submitButton.addEventListener(
-            "click",
-            async function () {
-
-                const amountInput =
-                    document.getElementById(
-                        "amount"
-                    );
-
-
-                const utrInput =
-                    document.getElementById(
-                        "utr"
-                    );
-
-
-                const proofInput =
-                    document.getElementById(
-                        "paymentProof"
-                    );
-
-
-                const amount =
-                    Number(
-                        amountInput.value
-                    );
-
-
-                const utr =
-                    utrInput.value.trim();
-
-
-                const file =
-                    proofInput.files[0];
-
-
-                // ==========================
-                // AMOUNT VALIDATION
-                // ==========================
-
-                if (
-                    !amount ||
-                    amount < 100
-                ) {
-
-                    showMessage(
-                        "Minimum deposit amount is ₹100.",
-                        "error"
-                    );
-
-                    amountInput.focus();
-
-                    return;
-                }
-
-
-                // ==========================
-                // UTR VALIDATION
-                // ==========================
-
-                if (!utr) {
-
-                    showMessage(
-                        "Please enter your UTR / Transaction ID.",
-                        "error"
-                    );
-
-                    utrInput.focus();
-
-                    return;
-                }
-
-
-                // ==========================
-                // SCREENSHOT VALIDATION
-                // ==========================
-
-                if (!file) {
-
-                    showMessage(
-                        "Please upload your payment screenshot.",
-                        "error"
-                    );
-
-                    proofInput.focus();
-
-                    return;
-                }
-
-
-                // ==========================
-                // IMAGE VALIDATION
-                // ==========================
-
-                if (
-                    !file.type.startsWith(
-                        "image/"
-                    )
-                ) {
-
-                    showMessage(
-                        "Please upload an image file only.",
-                        "error"
-                    );
-
-                    return;
-                }
-
-
-                // ==========================
-                // FILE SIZE
-                // Maximum 5 MB
-                // ==========================
-
-                if (
-                    file.size >
-                    5 * 1024 * 1024
-                ) {
-
-                    showMessage(
-                        "Payment screenshot must be less than 5 MB.",
-                        "error"
-                    );
-
-                    return;
-                }
-
-
-                // ==========================
-                // LOGIN CHECK
-                // ==========================
-
-                if (!currentUser) {
-
-                    showMessage(
-                        "Please login again.",
-                        "error"
-                    );
-
-                    return;
-                }
-
-
-                try {
-
-                    submitButton.disabled =
-                        true;
-
-
-                    submitButton.textContent =
-                        "⏳ Processing...";
-
-
-                    showMessage(
-                        "Checking your payment details...",
-                        "info"
-                    );
-
-
-                    // ==========================
-                    // CHECK DUPLICATE UTR
-                    // ==========================
-
-                    const {
-                        data: existingUTR,
-                        error: utrError
-                    } =
-                        await supabaseClient
-                            .from(
-                                "customer_deposits"
-                            )
-                            .select("id")
-                            .eq(
-                                "utr",
-                                utr
-                            )
-                            .limit(1);
-
-
-                    if (utrError) {
-
-                        throw utrError;
-
-                    }
-
-
-                    if (
-                        existingUTR &&
-                        existingUTR.length > 0
-                    ) {
-
-                        throw new Error(
-                            "This UTR has already been used."
-                        );
-
-                    }
-
-
-                    // ==========================
-                    // UPLOAD PAYMENT PROOF
-                    // ==========================
-
-                    showMessage(
-                        "Uploading payment screenshot...",
-                        "info"
-                    );
-
-
-                    const originalName =
-                        file.name ||
-                        "payment-proof";
-
-
-                    const extension =
-                        originalName
-                            .split(".")
-                            .pop()
-                            .toLowerCase();
-
-
-                    const safeExtension =
-                        extension || "jpg";
-
-
-                    const fileName =
-                        currentUser.id +
-                        "/" +
-                        Date.now() +
-                        "_" +
-                        Math.random()
-                            .toString(36)
-                            .substring(2) +
-                        "." +
-                        safeExtension;
-
-
-                    const {
-                        error: uploadError
-                    } =
-                        await supabaseClient
-                            .storage
-                            .from(
-                                "payment-proofs"
-                            )
-                            .upload(
-                                fileName,
-                                file,
-                                {
-                                    cacheControl:
-                                        "3600",
-
-                                    upsert:
-                                        false
-                                }
-                            );
-
-
-                    if (uploadError) {
-
-                        throw uploadError;
-
-                    }
-
-
-                    // ==========================
-                    // GET PUBLIC PROOF URL
-                    // ==========================
-
-                    const {
-                        data: publicURLData
-                    } =
-                        supabaseClient
-                            .storage
-                            .from(
-                                "payment-proofs"
-                            )
-                            .getPublicUrl(
-                                fileName
-                            );
-
-
-                    const proofURL =
-                        publicURLData &&
-                        publicURLData.publicUrl
-                            ? publicURLData.publicUrl
-                            : null;
-
-
-                    if (!proofURL) {
-
-                        throw new Error(
-                            "Unable to create payment proof URL."
-                        );
-
-                    }
-
-
-                    // ==========================
-                    // SAVE DEPOSIT
-                    // ==========================
-
-                    showMessage(
-                        "Submitting your deposit...",
-                        "info"
-                    );
-
-
-                    const {
-                        error: insertError
-                    } =
-                        await supabaseClient
-                            .from(
-                                "customer_deposits"
-                            )
-                            .insert({
-
-                                customer_id:
-                                    currentUser.id,
-
-                                amount:
-                                    amount,
-
-                                utr:
-                                    utr,
-
-                                payment_proof:
-                                    proofURL,
-
-                                status:
-                                    "pending"
-
-                            });
-
-
-                    if (insertError) {
-
-                        throw insertError;
-
-                    }
-
-
-                    // ==========================
-                    // SUCCESS
-                    // ==========================
-
-                    showMessage(
-                        "✅ Deposit submitted successfully. It is now pending admin approval.",
-                        "success"
-                    );
-
-
-                    // Clear form
-
-                    amountInput.value =
-                        "";
-
-                    utrInput.value =
-                        "";
-
-                    proofInput.value =
-                        "";
-
-
-                    // Reset commission
-
-                    updateCommission();
-
-
-                    // Reload history
-
-                    await loadDeposits();
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Deposit submission error:",
-                        error
-                    );
-
-
-                    let errorMessage =
-                        "Deposit submission failed. Please try again.";
-
-
-                    if (
-                        error &&
-                        error.message
-                    ) {
-
-                        errorMessage =
-                            error.message;
-
-                    }
-
-
-                    showMessage(
-                        "❌ " +
-                        errorMessage,
-                        "error"
-                    );
-
-
-                } finally {
-
-                    submitButton.disabled =
-                        false;
-
-
-                    submitButton.textContent =
-                        "🚀 Submit Deposit";
-
-                }
 
             }
         );
 
+
+        history.innerHTML = `
+
+            <table class="history-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Amount</th>
+
+                        <th>UTR</th>
+
+                        <th>Status</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${rows}
+
+                </tbody>
+
+            </table>
+
+        `;
+
+
+    } catch (error) {
+
+        console.error(
+            "Deposit history error:",
+            error
+        );
+
+
+        history.innerHTML = `
+            <div class="empty-history">
+                ❌ Unable to load deposit history.
+            </div>
+        `;
+
     }
-);
+
+}
 
 
+// ========================================
+// SUBMIT DEPOSIT
+// ========================================
 
-// ==============================
-// PAGE START
-// ==============================
+document
+    .getElementById("submitButton")
+    .addEventListener(
+        "click",
+        async function () {
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async function () {
+            const button =
+                this;
 
-        try {
 
-            await loadCustomer();
+            const customerId =
+                getCustomerId();
 
-            await loadPaymentSettings();
 
-            await loadDeposits();
+            const amountInput =
+                document.getElementById(
+                    "amount"
+                );
 
-            updateCommission();
 
-        } catch (error) {
+            const utrInput =
+                document.getElementById(
+                    "utr"
+                );
 
-            console.error(
-                "Page initialization error:",
-                error
-            );
+
+            const proofInput =
+                document.getElementById(
+                    "paymentProof"
+                );
+
+
+            const amount =
+                Number(
+                    amountInput.value
+                );
+
+
+            const utr =
+                utrInput.value.trim();
+
+
+            const file =
+                proofInput.files[0];
+
+
+            // -------------------------
+            // LOGIN
+            // -------------------------
+
+            if (!customerId) {
+
+                window.location.href =
+                    "customer-login.html";
+
+                return;
+
+            }
+
+
+            // -------------------------
+            // AMOUNT
+            // -------------------------
+
+            if (
+                !amount ||
+                amount < 100
+            ) {
+
+                showMessage(
+                    "Minimum deposit amount is ₹100.",
+                    "error"
+                );
+
+                amountInput.focus();
+
+                return;
+
+            }
+
+
+            if (
+                !Number.isFinite(amount)
+            ) {
+
+                showMessage(
+                    "Please enter a valid amount.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            // -------------------------
+            // UTR
+            // -------------------------
+
+            if (!utr) {
+
+                showMessage(
+                    "Please enter your UTR / Transaction ID.",
+                    "error"
+                );
+
+                utrInput.focus();
+
+                return;
+
+            }
+
+
+            if (utr.length < 4) {
+
+                showMessage(
+                    "Please enter a valid UTR number.",
+                    "error"
+                );
+
+                utrInput.focus();
+
+                return;
+
+            }
+
+
+            // -------------------------
+            // SCREENSHOT
+            // -------------------------
+
+            if (!file) {
+
+                showMessage(
+                    "Please upload your payment screenshot.",
+                    "error"
+                );
+
+                proofInput.focus();
+
+                return;
+
+            }
+
+
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                showMessage(
+                    "Please upload an image file only.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                file.size >
+                5 * 1024 * 1024
+            ) {
+
+                showMessage(
+                    "Payment screenshot must be less than 5 MB.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "⏳ Processing...";
+
+
+                // -------------------------
+                // DUPLICATE UTR
+                // -------------------------
+
+                showMessage(
+                    "Checking UTR...",
+                    "info"
+                );
+
+
+                const {
+                    data: existingUTR,
+                    error: utrError
+                } =
+                    await supabaseClient
+
+                        .from(
+                            "customer_deposits"
+                        )
+
+                        .select("id")
+
+                        .eq(
+                            "utr",
+                            utr
+                        )
+
+                        .limit(1);
+
+
+                if (utrError) {
+
+                    throw utrError;
+
+                }
+
+
+                if (
+                    existingUTR &&
+                    existingUTR.length > 0
+                ) {
+
+                    throw new Error(
+                        "This UTR has already been used."
+                    );
+
+                }
+
+
+                // -------------------------
+                // UPLOAD PROOF
+                // -------------------------
+
+                showMessage(
+                    "Uploading payment screenshot...",
+                    "info"
+                );
+
+
+                const extension =
+                    (
+                        file.name
+                            .split(".")
+                            .pop() ||
+                        "jpg"
+                    ).toLowerCase();
+
+
+                const safeExtension =
+                    extension
+                        .replace(
+                            /[^a-z0-9]/g,
+                            ""
+                        ) ||
+                    "jpg";
+
+
+                const fileName =
+                    customerId +
+                    "/" +
+                    Date.now() +
+                    "_" +
+                    Math.random()
+                        .toString(36)
+                        .substring(2, 10) +
+                    "." +
+                    safeExtension;
+
+
+                const {
+                    error: uploadError
+                } =
+                    await supabaseClient
+
+                        .storage
+
+                        .from(
+                            "payment-proofs"
+                        )
+
+                        .upload(
+                            fileName,
+                            file,
+                            {
+                                cacheControl:
+                                    "3600",
+
+                                upsert:
+                                    false
+                            }
+                        );
+
+
+                if (uploadError) {
+
+                    throw uploadError;
+
+                }
+
+
+                const {
+                    data: publicURLData
+                } =
+                    supabaseClient
+
+                        .storage
+
+                        .from(
+                            "payment-proofs"
+                        )
+
+                        .getPublicUrl(
+                            fileName
+                        );
+
+
+                const proofURL =
+                    publicURLData?.publicUrl ||
+                    "";
+
+
+                if (!proofURL) {
+
+                    throw new Error(
+                        "Unable to create payment proof URL."
+                    );
+
+                }
+
+
+                // -------------------------
+                // SAVE DEPOSIT
+                // -------------------------
+
+                showMessage(
+                    "Submitting deposit...",
+                    "info"
+                );
+
+
+                const {
+                    error: insertError
+                } =
+                    await supabaseClient
+
+                        .from(
+                            "customer_deposits"
+                        )
+
+                        .insert({
+
+                            customer_id:
+                                customerId,
+
+                            amount:
+                                amount,
+
+                            utr:
+                                utr,
+
+                            payment_proof:
+                                proofURL,
+
+                            status:
+                                "pending"
+
+                        });
+
+
+                if (insertError) {
+
+                    throw insertError;
+
+                }
+
+
+                // -------------------------
+                // SUCCESS
+                // -------------------------
+
+                showMessage(
+                    "✅ Deposit submitted successfully. It is pending admin approval.",
+                    "success"
+                );
+
+
+                amountInput.value =
+                    "";
+
+                utrInput.value =
+                    "";
+
+                proofInput.value =
+                    "";
+
+
+                updateCommission();
+
+
+                await loadDeposits();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Deposit submission error:",
+                    error
+                );
+
+
+                showMessage(
+                    "❌ " +
+                    (
+                        error?.message ||
+                        "Deposit submission failed. Please try again."
+                    ),
+                    "error"
+                );
+
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "🚀 Submit Deposit";
+
+            }
 
         }
+    );
+
+
+// ========================================
+// PAGE INIT
+// ========================================
+
+async function initDepositPage() {
+
+    updateCommission();
+
+
+    const customerLoaded =
+        await loadCustomer();
+
+
+    if (!customerLoaded) {
+
+        return;
 
     }
-);
+
+
+    await loadPaymentSettings();
+
+    await loadDeposits();
+
+}
+
+
+initDepositPage();
 
 </script>
 
 </body>
 
-</html>          
+            </html>
