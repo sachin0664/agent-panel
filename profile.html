@@ -3,149 +3,251 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>Sathi Pay - My Profile</title>
+<title>Sathi Pay - My Profile</title>
+
 <script src="customer-guard.js"></script>
-    <style>
 
-        * {
-            box-sizing: border-box;
-        }
+<style>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #202938;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .header {
-            background: #202938;
-            color: white;
-            padding: 18px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef4ff, #f7faff);
+    color: #172033;
+}
 
-        .header h2 {
-            margin: 0;
-            font-size: 22px;
-        }
+.header {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(37,99,235,.20);
+}
 
-        .header a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+.header h2 {
+    margin: 0;
+    font-size: 21px;
+}
 
-        .container {
-            max-width: 700px;
-            margin: auto;
-            padding: 20px;
-        }
+.header a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px 16px 35px;
+}
 
-        .profile-icon {
-            width: 80px;
-            height: 80px;
-            background: #202938;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 35px;
-            margin: 0 auto 15px;
-        }
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 25px rgba(30,64,175,.10);
+}
 
-        .profile-title {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+.profile-top {
+    text-align: center;
+    padding-bottom: 10px;
+}
 
-        .profile-title h2 {
-            margin: 5px 0;
-        }
+.profile-icon {
+    width: 82px;
+    height: 82px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 14px;
+    box-shadow: 0 8px 20px rgba(79,70,229,.25);
+}
 
-        .profile-title p {
-            color: #777;
-            margin: 0;
-        }
+.profile-title h2 {
+    margin: 5px 0;
+    font-size: 24px;
+}
 
-        .info {
-            border-bottom: 1px solid #eee;
-            padding: 14px 0;
-        }
+.profile-title p {
+    color: #718096;
+    margin: 0;
+    font-size: 14px;
+}
 
-        .info:last-child {
-            border-bottom: none;
-        }
+.info-card {
+    margin-top: 18px;
+}
 
-        .label {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
+.info {
+    border-bottom: 1px solid #edf0f5;
+    padding: 15px 2px;
+}
 
-        .value {
-            font-weight: bold;
-            font-size: 16px;
-            word-break: break-all;
-        }
+.info:last-child {
+    border-bottom: none;
+}
 
-        .uid {
-            color: #1565c0;
-            font-size: 18px;
-        }
+.label {
+    color: #718096;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
 
-        .status {
-            color: green;
-        }
+.value {
+    font-weight: bold;
+    font-size: 16px;
+    word-break: break-word;
+}
 
-        .error {
-            color: red;
-            text-align: center;
-            font-weight: bold;
-            margin-top: 15px;
-        }
+.uid {
+    color: #2563eb;
+    font-size: 18px;
+}
 
-        .back-btn {
-            display: block;
-            text-align: center;
-            background: #202938;
-            color: white;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: 9px;
-            font-weight: bold;
-            margin-top: 20px;
-        }
+.status {
+    display: inline-block;
+    color: #15803d;
+    background: #dcfce7;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
 
-    </style>
+.account-badge {
+    display: inline-block;
+    color: #6d28d9;
+    background: #ede9fe;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.action-btn {
+    text-decoration: none;
+    text-align: center;
+    padding: 13px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.deposit-btn {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.wallet-btn {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.earnings-btn {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.support-btn {
+    background: #f3e8ff;
+    color: #7e22ce;
+}
+
+.back-btn {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-top: 18px;
+}
+
+.logout-btn {
+    display: block;
+    text-align: center;
+    background: #fee2e2;
+    color: #dc2626;
+    text-decoration: none;
+    padding: 13px;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+.error {
+    color: #dc2626;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.loading {
+    text-align: center;
+    color: #64748b;
+    padding: 15px;
+}
+
+@media (max-width: 480px) {
+
+    .header {
+        padding: 16px;
+    }
+
+    .header h2 {
+        font-size: 18px;
+    }
+
+    .container {
+        padding: 15px 12px 30px;
+    }
+
+    .card {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .profile-title h2 {
+        font-size: 22px;
+    }
+
+}
+
+</style>
 
 </head>
 
-
 <body>
-
 
 <header class="header">
 
-    <h2>Sathi Pay - Profile</h2>
+    <h2>Sathi Pay</h2>
 
     <a href="deshboard.html">
         Dashboard
@@ -154,30 +256,34 @@
 </header>
 
 
-
 <main class="container">
 
 
-    <div class="card">
+<div class="card">
 
+    <div class="profile-top">
 
         <div class="profile-icon">
             👤
         </div>
 
-
-
         <div class="profile-title">
 
-            <h2>My Profile</h2>
+            <h2 id="profileName">
+                Loading...
+            </h2>
 
-            <p>Sathi Pay Customer Account</p>
+            <p>
+                Sathi Pay Customer Account
+            </p>
 
         </div>
 
+    </div>
 
 
-        <!-- UID -->
+    <div class="info-card">
+
 
         <div class="info">
 
@@ -195,27 +301,21 @@
         </div>
 
 
-
-        <!-- NAME -->
-
         <div class="info">
 
             <div class="label">
-                Name
+                Full Name
             </div>
 
             <div
                 class="value"
-                id="profileName"
+                id="profileFullName"
             >
                 Loading...
             </div>
 
         </div>
 
-
-
-        <!-- MOBILE -->
 
         <div class="info">
 
@@ -233,9 +333,6 @@
         </div>
 
 
-
-        <!-- EMAIL -->
-
         <div class="info">
 
             <div class="label">
@@ -252,9 +349,6 @@
         </div>
 
 
-
-        <!-- STATUS -->
-
         <div class="info">
 
             <div class="label">
@@ -262,7 +356,7 @@
             </div>
 
             <div
-                class="value status"
+                class="value"
                 id="profileStatus"
             >
                 Loading...
@@ -271,9 +365,6 @@
         </div>
 
 
-
-        <!-- ACCOUNT TYPE -->
-
         <div class="info">
 
             <div class="label">
@@ -281,14 +372,45 @@
             </div>
 
             <div class="value">
-                Customer
+                <span class="account-badge">
+                    Customer
+                </span>
             </div>
 
         </div>
 
 
+        <div class="info">
 
-        <!-- UPI -->
+            <div class="label">
+                Referral Code
+            </div>
+
+            <div
+                class="value"
+                id="profileReferral"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+        <div class="info">
+
+            <div class="label">
+                Sell Status
+            </div>
+
+            <div
+                class="value"
+                id="profileSell"
+            >
+                Loading...
+            </div>
+
+        </div>
+
 
         <div class="info">
 
@@ -300,90 +422,168 @@
                 class="value"
                 id="profileUPI"
             >
-                Loading...
+                Not added
             </div>
 
         </div>
 
 
+    </div>
+
+</div>
+
+
+
+<div class="card">
+
+    <div class="label">
+        Quick Actions
+    </div>
+
+    <div class="action-grid">
 
         <a
-            class="back-btn"
-            href="deshboard.html"
+            class="action-btn deposit-btn"
+            href="deposit.html"
         >
-            ← Back to Dashboard
+            💳 Deposit
         </a>
 
+        <a
+            class="action-btn wallet-btn"
+            href="wallet.html"
+        >
+            💰 Wallet
+        </a>
 
-        <div
-            id="profileError"
-            class="error"
-        ></div>
+        <a
+            class="action-btn earnings-btn"
+            href="commission.html"
+        >
+            📈 Earnings
+        </a>
 
+        <a
+            class="action-btn support-btn"
+            href="support.html"
+        >
+            🎧 Support
+        </a>
 
     </div>
+
+</div>
+
+
+
+<a
+    class="back-btn"
+    href="deshboard.html"
+>
+    ← Back to Dashboard
+</a>
+
+
+<a
+    class="logout-btn"
+    href="customer-login.html"
+    onclick="logoutCustomer(); return false;"
+>
+    🔒 Secure Logout
+</a>
+
+
+<div
+    id="profileError"
+    class="error"
+></div>
 
 
 </main>
 
 
 
-<!-- SUPABASE -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
 <script src="js/app.js?v=6"></script>
 
 
-
 <script>
-
 
 async function loadCustomerProfile() {
 
     const errorBox =
         document.getElementById("profileError");
 
-
     try {
 
-
-        /* ================================
-           GET CURRENT LOGGED-IN USER
-        ================================= */
-
-        const {
-            data: authData,
-            error: authError
-        } =
-            await supabaseClient.auth.getUser();
+        const customerId =
+            localStorage.getItem("sathiPayCustomerId");
 
 
-        if (authError) {
+        if (!customerId) {
 
-            console.error(
-                "Auth Error:",
-                authError
-            );
-
-            errorBox.innerText =
-                "Please login again.";
+            window.location.href =
+                "customer-login.html";
 
             return;
 
         }
 
 
-        const user =
-            authData?.user;
+        const {
+            data: customer,
+            error
+        } = await supabaseClient
+
+            .from("customers")
+
+            .select(`
+                id,
+                uid,
+                name,
+                mobile,
+                invitation_code,
+                sell_on,
+                upi_id,
+                status
+            `)
+
+            .eq(
+                "id",
+                customerId
+            )
+
+            .maybeSingle();
 
 
-        if (!user || !user.id) {
+        if (error) {
+
+            console.error(
+                "Profile Error:",
+                error
+            );
 
             errorBox.innerText =
-                "Customer login session not found.";
+                "Unable to load customer profile.";
 
-            setTimeout(function() {
+            return;
+
+        }
+
+
+        if (!customer) {
+
+            errorBox.innerText =
+                "Customer profile not found.";
+
+            localStorage.removeItem(
+                "sathiPayCustomerId"
+            );
+
+            setTimeout(function () {
 
                 window.location.href =
                     "customer-login.html";
@@ -395,76 +595,17 @@ async function loadCustomerProfile() {
         }
 
 
-
-        /* ================================
-           LOAD CURRENT CUSTOMER
-        ================================= */
-
-        const {
-            data: customer,
-            error: customerError
-        } =
-            await supabaseClient
-
-                .from("customers")
-
-                .select(`
-                    id,
-                    uid,
-                    name,
-                    mobile,
-                    invitation_code,
-                    wallet_balance,
-                    bonus_balance,
-                    deposit_balance,
-                    commission_balance,
-                    referral_balance,
-                    withdrawal_balance,
-                    sell_on,
-                    upi_id,
-                    qr_code_url,
-                    status
-                `)
-
-                .eq(
-                    "id",
-                    user.id
-                )
-
-                .maybeSingle();
+        document.getElementById(
+            "profileName"
+        ).innerText =
+            customer.name || "Customer";
 
 
+        document.getElementById(
+            "profileFullName"
+        ).innerText =
+            customer.name || "Not available";
 
-        if (customerError) {
-
-            console.error(
-                "Customer Profile Error:",
-                customerError
-            );
-
-            errorBox.innerText =
-                "Unable to load customer profile.";
-
-            return;
-
-        }
-
-
-
-        if (!customer) {
-
-            errorBox.innerText =
-                "Customer profile not found.";
-
-            return;
-
-        }
-
-
-
-        /* ================================
-           DISPLAY CURRENT CUSTOMER DATA
-        ================================= */
 
         document.getElementById(
             "profileUID"
@@ -473,38 +614,77 @@ async function loadCustomerProfile() {
 
 
         document.getElementById(
-            "profileName"
-        ).innerText =
-            customer.name || "Not available";
-
-
-        document.getElementById(
             "profileMobile"
         ).innerText =
             customer.mobile || "Not available";
 
 
+        const savedEmail =
+            localStorage.getItem(
+                "sathiPayCustomerEmail"
+            );
+
         document.getElementById(
             "profileEmail"
         ).innerText =
-            user.email || "Not available";
+            savedEmail || "Not available";
+
+
+        const status =
+            String(
+                customer.status || "active"
+            ).toLowerCase();
+
+
+        const statusBox =
+            document.getElementById(
+                "profileStatus"
+            );
+
+
+        if (
+            status === "active" ||
+            status === "approved"
+        ) {
+
+            statusBox.innerText =
+                "Active";
+
+        } else {
+
+            statusBox.innerText =
+                customer.status || "Active";
+
+            statusBox.style.color =
+                "#b45309";
+
+            statusBox.style.background =
+                "#fef3c7";
+
+        }
 
 
         document.getElementById(
-            "profileStatus"
+            "profileReferral"
         ).innerText =
-            customer.status || "Active";
+            customer.invitation_code ||
+            "Not available";
+
+
+        document.getElementById(
+            "profileSell"
+        ).innerText =
+            customer.sell_on
+                ? "ON"
+                : "OFF";
 
 
         document.getElementById(
             "profileUPI"
         ).innerText =
-            customer.upi_id || "Not added";
+            customer.upi_id ||
+            "Not added";
 
-
-        /* ================================
-           UPDATE CUSTOMER LOCAL STORAGE
-        ================================= */
 
         localStorage.setItem(
             "sathiPayCustomerId",
@@ -553,15 +733,52 @@ async function loadCustomerProfile() {
 }
 
 
+function logoutCustomer() {
 
-/* LOAD PROFILE */
+    if (window.sathiPayLogout) {
+
+        window.sathiPayLogout();
+
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        "sathiPayCustomerId"
+    );
+
+    localStorage.removeItem(
+        "sathiPayUID"
+    );
+
+    localStorage.removeItem(
+        "sathiPayInvitationCode"
+    );
+
+    localStorage.removeItem(
+        "sathiPayCustomerName"
+    );
+
+    localStorage.removeItem(
+        "sathiPayCustomerMobile"
+    );
+
+    localStorage.removeItem(
+        "sathiPayCustomerEmail"
+    );
+
+
+    window.location.href =
+        "customer-login.html";
+
+}
+
 
 loadCustomerProfile();
 
-
 </script>
-
 
 </body>
 
-</html>
+    </html>
