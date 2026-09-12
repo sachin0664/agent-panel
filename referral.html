@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Sathi Pay - Referral</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="customer-guard.js"></script>
+
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -34,7 +38,12 @@ a{
 
 .sidebar{
     width:245px;
-    background:linear-gradient(180deg,#0d6efd,#1558d6 55%,#2636c9);
+    background:linear-gradient(
+        180deg,
+        #0d6efd,
+        #1558d6 55%,
+        #2636c9
+    );
     color:white;
     padding:25px 16px;
     position:fixed;
@@ -68,7 +77,6 @@ a{
     display:flex;
     align-items:center;
     gap:12px;
-    transition:.2s;
 }
 
 .nav a:hover,
@@ -125,7 +133,12 @@ a{
     border-radius:25px;
     padding:27px;
     color:white;
-    background:linear-gradient(135deg,#0866ff,#6739e8 55%,#9b35d8);
+    background:linear-gradient(
+        135deg,
+        #0866ff,
+        #6739e8 55%,
+        #9b35d8
+    );
     box-shadow:0 15px 35px rgba(61,75,220,.25);
     margin-bottom:22px;
     position:relative;
@@ -153,12 +166,12 @@ a{
 .hero p{
     opacity:.9;
     line-height:1.5;
-    max-width:620px;
+    max-width:650px;
     position:relative;
     z-index:2;
 }
 
-/* CARDS */
+/* STATS */
 
 .grid{
     display:grid;
@@ -183,18 +196,6 @@ a{
     align-items:center;
     font-size:22px;
     margin-bottom:15px;
-    background:#edf4ff;
-}
-
-.card h3{
-    font-size:14px;
-    color:#77829c;
-    margin-bottom:7px;
-}
-
-.big{
-    font-size:25px;
-    font-weight:800;
 }
 
 .blue{
@@ -207,6 +208,17 @@ a{
 
 .purple{
     background:#f3edff;
+}
+
+.card h3{
+    font-size:14px;
+    color:#77829c;
+    margin-bottom:7px;
+}
+
+.big{
+    font-size:25px;
+    font-weight:800;
 }
 
 /* REFERRAL CODE */
@@ -225,21 +237,35 @@ a{
     margin-bottom:15px;
 }
 
-.code-row{
+.code-row,
+.link-box{
     display:flex;
     gap:10px;
 }
 
-.code-box{
+.link-box{
+    margin-top:12px;
+}
+
+.code-box,
+.link-input{
     flex:1;
     background:#f5f7fc;
     border:1px solid #e6eaf3;
     border-radius:13px;
     padding:14px;
+}
+
+.code-box{
     font-weight:800;
     color:#2448c8;
     overflow:hidden;
     text-overflow:ellipsis;
+}
+
+.link-input{
+    font-size:13px;
+    color:#68738b;
 }
 
 .copy-btn{
@@ -250,24 +276,6 @@ a{
     padding:0 19px;
     font-weight:700;
     cursor:pointer;
-}
-
-/* LINK */
-
-.link-box{
-    margin-top:12px;
-    display:flex;
-    gap:10px;
-}
-
-.link-input{
-    flex:1;
-    border:1px solid #e5e9f2;
-    border-radius:12px;
-    padding:13px;
-    font-size:13px;
-    color:#68738b;
-    background:#fafbfe;
 }
 
 /* LEVELS */
@@ -328,9 +336,6 @@ a{
 }
 
 .history-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
     margin-bottom:16px;
 }
 
@@ -346,6 +351,7 @@ a{
 table{
     width:100%;
     border-collapse:collapse;
+    min-width:650px;
 }
 
 th{
@@ -367,16 +373,16 @@ td{
     color:#0b9b62;
 }
 
-.empty{
-    text-align:center;
-    color:#8a94a8;
-    padding:28px 10px;
+.status{
+    color:#15803d;
+    font-weight:700;
 }
 
+.empty,
 .loading{
     text-align:center;
-    padding:30px;
-    color:#6d7890;
+    padding:28px 10px;
+    color:#8a94a8;
 }
 
 /* MOBILE NAV */
@@ -466,243 +472,312 @@ td{
     .mobile-nav span{
         font-size:20px;
     }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+<!-- SIDEBAR -->
 
-        <div class="logo">
-            Sathi <span>Pay</span>
+<aside class="sidebar">
+
+    <div class="logo">
+        Sathi <span>Pay</span>
+    </div>
+
+    <nav class="nav">
+
+        <a href="deshboard.html">
+            <span class="nav-icon">🏠</span>
+            Dashboard
+        </a>
+
+        <a href="deposit.html">
+            <span class="nav-icon">💳</span>
+            Deposit
+        </a>
+
+        <a href="commission.html">
+            <span class="nav-icon">💰</span>
+            Earnings
+        </a>
+
+        <a href="referral.html" class="active">
+            <span class="nav-icon">👥</span>
+            Referral
+        </a>
+
+        <a href="wallet.html">
+            <span class="nav-icon">💼</span>
+            Wallet
+        </a>
+
+        <a href="profile.html">
+            <span class="nav-icon">👤</span>
+            Profile
+        </a>
+
+        <a href="support.html">
+            <span class="nav-icon">🎧</span>
+            Support
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <div class="topbar">
+
+        <div class="top-title">
+
+            <h1>Referral</h1>
+
+            <p>
+                Build your team and earn referral income
+            </p>
+
         </div>
 
-        <nav class="nav">
+        <button
+            class="logout"
+            onclick="logoutCustomer()">
 
-            <a href="deshboard.html">
-                <span class="nav-icon">🏠</span>
-                Dashboard
-            </a>
+            Logout
 
-            <a href="deposit.html">
-                <span class="nav-icon">💳</span>
-                Deposit
-            </a>
+        </button>
 
-            <a href="earnings.html">
-                <span class="nav-icon">💰</span>
-                Earnings
-            </a>
-
-            <a href="referral.html" class="active">
-                <span class="nav-icon">👥</span>
-                Referral
-            </a>
-
-            <a href="profile.html">
-                <span class="nav-icon">👤</span>
-                Profile
-            </a>
-
-        </nav>
-
-    </aside>
+    </div>
 
 
-    <!-- MAIN -->
-    <main class="main">
+    <!-- HERO -->
 
-        <div class="topbar">
+    <section class="hero">
 
-            <div class="top-title">
-                <h1>Referral</h1>
-                <p>Build your team and earn referral income</p>
+        <h2>
+            Refer & Earn 🚀
+        </h2>
+
+        <p>
+            Share your referral code with friends and earn
+            automatic referral income from eligible deposits
+            made through your network.
+        </p>
+
+    </section>
+
+
+    <!-- STATS -->
+
+    <section class="grid">
+
+        <div class="card">
+
+            <div class="stat-icon blue">
+                👥
             </div>
 
-            <button class="logout" onclick="logout()">
-                Logout
+            <h3>
+                Direct Team
+            </h3>
+
+            <div
+                class="big"
+                id="directTeam">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="stat-icon purple">
+                🌐
+            </div>
+
+            <h3>
+                Total Network
+            </h3>
+
+            <div
+                class="big"
+                id="totalTeam">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="stat-icon green">
+                💰
+            </div>
+
+            <h3>
+                Referral Earnings
+            </h3>
+
+            <div class="big">
+                ₹<span id="referralEarnings">
+                    0.00
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REFERRAL CODE -->
+
+    <section class="code-card">
+
+        <div class="code-title">
+            Your Referral Code
+        </div>
+
+        <div class="code-row">
+
+            <div
+                class="code-box"
+                id="referralCode">
+
+                Loading...
+
+            </div>
+
+            <button
+                class="copy-btn"
+                onclick="copyCode()">
+
+                Copy Code
+
             </button>
 
         </div>
 
 
-        <!-- HERO -->
-        <section class="hero">
+        <div class="link-box">
 
-            <h2>Refer & Earn 🚀</h2>
+            <input
+                class="link-input"
+                id="referralLink"
+                readonly
+                value="Loading...">
 
-            <p>
-                Share your referral code with friends and earn income
-                automatically from eligible deposits made by your referral network.
-            </p>
+            <button
+                class="copy-btn"
+                onclick="copyLink()">
 
-        </section>
+                Copy Link
 
+            </button>
 
-        <!-- STATS -->
-        <section class="grid">
-
-            <div class="card">
-
-                <div class="stat-icon blue">👥</div>
-
-                <h3>Direct Team</h3>
-
-                <div class="big" id="directTeam">
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="stat-icon purple">🌐</div>
-
-                <h3>Total Network</h3>
-
-                <div class="big" id="totalTeam">
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="stat-icon green">💰</div>
-
-                <h3>Referral Earnings</h3>
-
-                <div class="big">
-                    ₹<span id="referralEarnings">0.00</span>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- REFERRAL CODE -->
-        <section class="code-card">
-
-            <div class="code-title">
-                Your Referral Code
-            </div>
-
-            <div class="code-row">
-
-                <div class="code-box" id="referralCode">
-                    Loading...
-                </div>
-
-                <button class="copy-btn" onclick="copyCode()">
-                    Copy Code
-                </button>
-
-            </div>
-
-
-            <div class="link-box">
-
-                <input
-                    class="link-input"
-                    id="referralLink"
-                    readonly
-                    value="Loading..."
-                >
-
-                <button class="copy-btn" onclick="copyLink()">
-                    Copy Link
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- LEVELS -->
-        <div class="section-title">
-            Referral Commission
         </div>
 
-        <section class="level-grid">
+    </section>
 
-            <div class="level">
 
-                <div class="level-name">
-                    Level A
-                </div>
+    <!-- LEVELS -->
 
-                <div class="rate">
-                    1%
-                </div>
+    <div class="section-title">
+        Referral Commission
+    </div>
 
-                <div class="level-desc">
-                    Direct referral commission
-                </div>
+    <section class="level-grid">
 
+        <div class="level">
+
+            <div class="level-name">
+                Level A
             </div>
 
-
-            <div class="level">
-
-                <div class="level-name">
-                    Level B
-                </div>
-
-                <div class="rate">
-                    0.5%
-                </div>
-
-                <div class="level-desc">
-                    Second-level referral commission
-                </div>
-
+            <div class="rate">
+                1%
             </div>
 
-
-            <div class="level">
-
-                <div class="level-name">
-                    Level C
-                </div>
-
-                <div class="rate">
-                    0.2%
-                </div>
-
-                <div class="level-desc">
-                    Third-level referral commission
-                </div>
-
+            <div class="level-desc">
+                Direct referral commission
             </div>
 
-        </section>
+        </div>
 
 
-        <!-- HISTORY -->
-        <section class="history">
+        <div class="level">
 
-            <div class="history-head">
-
-                <div class="history-title">
-                    Referral Earnings History
-                </div>
-
+            <div class="level-name">
+                Level B
             </div>
 
-            <div id="historyContent" class="loading">
-                Loading...
+            <div class="rate">
+                0.5%
             </div>
 
-        </section>
+            <div class="level-desc">
+                Second-level referral commission
+            </div>
 
-    </main>
+        </div>
+
+
+        <div class="level">
+
+            <div class="level-name">
+                Level C
+            </div>
+
+            <div class="rate">
+                0.2%
+            </div>
+
+            <div class="level-desc">
+                Third-level referral commission
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section class="history">
+
+        <div class="history-head">
+
+            <div class="history-title">
+                Referral Earnings History
+            </div>
+
+        </div>
+
+        <div
+            id="historyContent"
+            class="loading">
+
+            Loading...
+
+        </div>
+
+    </section>
+
+</main>
 
 </div>
 
@@ -721,14 +796,18 @@ td{
         Deposit
     </a>
 
-    <a href="earnings.html">
+    <a href="commission.html">
         <span>💰</span>
         Earnings
     </a>
 
-    <a href="referral.html" class="active">
+    <a
+        href="referral.html"
+        class="active">
+
         <span>👥</span>
         Referral
+
     </a>
 
     <a href="profile.html">
@@ -759,7 +838,7 @@ let currentCustomer = null;
 
 
 /* =========================
-   AUTH CHECK
+   CUSTOMER ID
 ========================= */
 
 function getCustomerId(){
@@ -777,11 +856,14 @@ function getCustomerId(){
 
 async function loadCustomer(){
 
-    customerId = getCustomerId();
+    customerId =
+        getCustomerId();
 
     if(!customerId){
 
-        window.location.href = "login.html";
+        window.location.href =
+            "login.html";
+
         return;
 
     }
@@ -799,13 +881,22 @@ async function loadCustomer(){
             referral_balance,
             status
         `)
-        .eq("id", customerId)
+        .eq(
+            "id",
+            customerId
+        )
         .single();
 
 
     if(error || !data){
 
-        alert("Unable to load customer data.");
+        console.error(error);
+
+        document.getElementById(
+            "referralCode"
+        ).textContent =
+            "Unable to load";
+
         return;
 
     }
@@ -814,18 +905,26 @@ async function loadCustomer(){
     currentCustomer = data;
 
 
+    /* REFERRAL CODE */
+
     document.getElementById(
         "referralCode"
     ).textContent =
         data.invitation_code || "N/A";
 
 
+    /* REFERRAL LINK */
+
+    const registerFile =
+        "register.html";
+
     const link =
         window.location.origin +
-        window.location.pathname.replace(
-            "referral.html",
-            "register.html"
-        ) +
+        window.location.pathname
+            .replace(
+                "referral.html",
+                registerFile
+            ) +
         "?ref=" +
         encodeURIComponent(
             data.invitation_code || ""
@@ -834,8 +933,11 @@ async function loadCustomer(){
 
     document.getElementById(
         "referralLink"
-    ).value = link;
+    ).value =
+        link;
 
+
+    /* REFERRAL EARNING */
 
     document.getElementById(
         "referralEarnings"
@@ -858,8 +960,10 @@ async function loadCustomer(){
 
 async function loadTeam(){
 
-    if(!currentCustomer ||
-       !currentCustomer.invitation_code){
+    if(
+        !currentCustomer ||
+        !currentCustomer.invitation_code
+    ){
 
         return;
 
@@ -867,12 +971,15 @@ async function loadTeam(){
 
 
     /*
-      Level A
-      Direct customers whose
-      referred_by = my invitation_code
-    */
+     * LEVEL A
+     * Customers who used
+     * my invitation code.
+     */
 
-    const { data: levelA, error } =
+    const {
+        data: levelA,
+        error: levelAError
+    } =
         await supabaseClient
         .from("customers")
         .select(`
@@ -886,9 +993,13 @@ async function loadTeam(){
         );
 
 
-    if(error){
+    if(levelAError){
 
-        console.error(error);
+        console.error(
+            "Level A Error:",
+            levelAError
+        );
+
         return;
 
     }
@@ -899,20 +1010,29 @@ async function loadTeam(){
 
 
     /*
-      Level B
-    */
+     * LEVEL B
+     */
 
     let levelB = [];
 
 
-    for(const customer of direct){
+    for(
+        const customer of direct
+    ){
 
-        if(!customer.invitation_code){
+        if(
+            !customer.invitation_code
+        ){
+
             continue;
+
         }
 
 
-        const { data } =
+        const {
+            data,
+            error
+        } =
             await supabaseClient
             .from("customers")
             .select(`
@@ -926,28 +1046,52 @@ async function loadTeam(){
             );
 
 
+        if(error){
+
+            console.error(
+                "Level B Error:",
+                error
+            );
+
+            continue;
+
+        }
+
+
         if(data){
-            levelB = levelB.concat(data);
+
+            levelB =
+                levelB.concat(data);
+
         }
 
     }
 
 
     /*
-      Level C
-    */
+     * LEVEL C
+     */
 
     let levelC = [];
 
 
-    for(const customer of levelB){
+    for(
+        const customer of levelB
+    ){
 
-        if(!customer.invitation_code){
+        if(
+            !customer.invitation_code
+        ){
+
             continue;
+
         }
 
 
-        const { data } =
+        const {
+            data,
+            error
+        } =
             await supabaseClient
             .from("customers")
             .select(`
@@ -961,24 +1105,45 @@ async function loadTeam(){
             );
 
 
+        if(error){
+
+            console.error(
+                "Level C Error:",
+                error
+            );
+
+            continue;
+
+        }
+
+
         if(data){
-            levelC = levelC.concat(data);
+
+            levelC =
+                levelC.concat(data);
+
         }
 
     }
 
 
     /*
-      Remove duplicate customers
-    */
+     * UNIQUE NETWORK
+     */
 
-    const ids = new Set();
+    const ids =
+        new Set();
+
 
     [...direct, ...levelB, ...levelC]
-    .forEach(c => {
+    .forEach(function(customer){
 
-        if(c.id){
-            ids.add(c.id);
+        if(customer.id){
+
+            ids.add(
+                customer.id
+            );
+
         }
 
     });
@@ -1010,9 +1175,14 @@ async function loadReferralHistory(){
         );
 
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
-        .from("customer_referral_commissions")
+        .from(
+            "customer_referral_commissions"
+        )
         .select(`
             level,
             percentage,
@@ -1049,7 +1219,10 @@ async function loadReferralHistory(){
     }
 
 
-    if(!data || data.length === 0){
+    if(
+        !data ||
+        data.length === 0
+    ){
 
         container.innerHTML = `
             <div class="empty">
@@ -1071,12 +1244,31 @@ async function loadReferralHistory(){
             <thead>
 
                 <tr>
-                    <th>Level</th>
-                    <th>Deposit</th>
-                    <th>Rate</th>
-                    <th>Earned</th>
-                    <th>Status</th>
-                    <th>Date</th>
+
+                    <th>
+                        Level
+                    </th>
+
+                    <th>
+                        Deposit
+                    </th>
+
+                    <th>
+                        Rate
+                    </th>
+
+                    <th>
+                        Earned
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Date
+                    </th>
+
                 </tr>
 
             </thead>
@@ -1085,13 +1277,45 @@ async function loadReferralHistory(){
     `;
 
 
-    data.forEach(item => {
+    data.forEach(function(item){
+
+        const level =
+            String(
+                item.level || ""
+            ).toUpperCase();
+
 
         const date =
-            new Date(
-                item.created_at
-            ).toLocaleDateString(
-                "en-IN"
+            item.created_at
+                ? new Date(
+                    item.created_at
+                ).toLocaleDateString(
+                    "en-IN"
+                )
+                : "-";
+
+
+        const deposit =
+            Number(
+                item.transaction_amount || 0
+            );
+
+
+        const commission =
+            Number(
+                item.commission_amount || 0
+            );
+
+
+        const percentage =
+            Number(
+                item.percentage || 0
+            );
+
+
+        const status =
+            String(
+                item.status || "approved"
             );
 
 
@@ -1100,33 +1324,23 @@ async function loadReferralHistory(){
             <tr>
 
                 <td>
-                    Level ${escapeHtml(
-                        item.level || ""
-                    )}
+                    Level ${escapeHtml(level)}
                 </td>
 
                 <td>
-                    ₹${Number(
-                        item.transaction_amount || 0
-                    ).toFixed(2)}
+                    ₹${deposit.toFixed(2)}
                 </td>
 
                 <td>
-                    ${Number(
-                        item.percentage || 0
-                    )}%
+                    ${percentage}%
                 </td>
 
                 <td class="amount">
-                    +₹${Number(
-                        item.commission_amount || 0
-                    ).toFixed(2)}
+                    +₹${commission.toFixed(2)}
                 </td>
 
-                <td>
-                    ${escapeHtml(
-                        item.status || ""
-                    )}
+                <td class="status">
+                    ${escapeHtml(status)}
                 </td>
 
                 <td>
@@ -1134,6 +1348,7 @@ async function loadReferralHistory(){
                 </td>
 
             </tr>
+
         `;
 
     });
@@ -1146,10 +1361,12 @@ async function loadReferralHistory(){
         </table>
 
         </div>
+
     `;
 
 
-    container.innerHTML = html;
+    container.innerHTML =
+        html;
 
 }
 
@@ -1161,11 +1378,16 @@ async function loadReferralHistory(){
 async function copyCode(){
 
     const code =
-        currentCustomer?.invitation_code || "";
+        currentCustomer &&
+        currentCustomer.invitation_code
+            ? currentCustomer.invitation_code
+            : "";
 
 
     if(!code){
+
         return;
+
     }
 
 
@@ -1175,11 +1397,16 @@ async function copyCode(){
             code
         );
 
-        alert("Referral code copied!");
+        alert(
+            "Referral code copied!"
+        );
 
-    }catch(error){
+    }
+    catch(error){
 
-        alert("Unable to copy referral code.");
+        alert(
+            "Unable to copy referral code."
+        );
 
     }
 
@@ -1192,10 +1419,24 @@ async function copyCode(){
 
 async function copyLink(){
 
-    const link =
+    const input =
         document.getElementById(
             "referralLink"
-        ).value;
+        );
+
+
+    const link =
+        input.value;
+
+
+    if(
+        !link ||
+        link === "Loading..."
+    ){
+
+        return;
+
+    }
 
 
     try{
@@ -1204,11 +1445,22 @@ async function copyLink(){
             link
         );
 
-        alert("Referral link copied!");
+        alert(
+            "Referral link copied!"
+        );
 
-    }catch(error){
+    }
+    catch(error){
 
-        alert("Unable to copy referral link.");
+        input.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        alert(
+            "Referral link copied!"
+        );
 
     }
 
@@ -1216,17 +1468,32 @@ async function copyLink(){
 
 
 /* =========================
-   SECURITY DISPLAY HELPER
+   HTML ESCAPE
 ========================= */
 
 function escapeHtml(value){
 
     return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
@@ -1235,7 +1502,18 @@ function escapeHtml(value){
    LOGOUT
 ========================= */
 
-function logout(){
+function logoutCustomer(){
+
+    if(
+        window.sathiPayLogout
+    ){
+
+        window.sathiPayLogout();
+
+        return;
+
+    }
+
 
     localStorage.removeItem(
         "sathiPayCustomerId"
@@ -1263,7 +1541,7 @@ function logout(){
 loadCustomer();
 
 
-/* Auto refresh */
+/* AUTO REFRESH */
 
 setInterval(
     loadCustomer,
@@ -1273,4 +1551,5 @@ setInterval(
 </script>
 
 </body>
-              </html>
+
+    </html>
