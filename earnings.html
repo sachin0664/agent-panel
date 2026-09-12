@@ -1,2058 +1,790 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sathi Pay - Earnings</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-/* =========================================
-   RESET
-========================================= */
-
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
-    margin:0;
     font-family:Arial,Helvetica,sans-serif;
-    background:#f3f8fd;
-    color:#172b4d;
-    padding-bottom:90px;
+    background:#f4f7fb;
+    color:#172033;
 }
 
-a{
-    text-decoration:none;
-    -webkit-tap-highlight-color:transparent;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-header{
-    background:linear-gradient(
-        135deg,
-        #eef8ff,
-        #ffffff
-    );
-
-    min-height:78px;
-
-    padding:14px 20px;
-
-    border-bottom:1px solid #e2edf7;
-}
-
-.header-row{
-    max-width:1100px;
-    margin:auto;
-
+.app{
+    min-height:100vh;
     display:flex;
-    justify-content:space-between;
-    align-items:center;
 }
 
-.brand{
-    display:flex;
-    align-items:center;
-    gap:11px;
-}
-
-.brand-logo{
-    width:45px;
-    height:45px;
-
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #087ff5,
-            #12d4a0
-        );
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:white;
-    font-size:25px;
-    font-weight:bold;
-
-    box-shadow:
-        0 7px 17px
-        rgba(8,127,245,.20);
-}
-
-.brand-text h1{
-    margin:0;
-
-    font-size:23px;
-
-    color:#073b82;
-}
-
-.brand-text p{
-    margin:3px 0 0;
-
-    font-size:10px;
-
-    color:#718096;
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.header-uid{
-    background:
-        linear-gradient(
-            135deg,
-            #087ff5,
-            #15cda6
-        );
-
-    color:white;
-
-    padding:10px 14px;
-
-    border-radius:12px;
-
-    font-size:11px;
-    font-weight:bold;
-}
-
-.header-profile{
-    width:40px;
-    height:40px;
-
-    border-radius:50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0c63b9,
-            #163f82
-        );
-
-    color:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:19px;
-}
-
-
-/* =========================================
-   SIDEBAR
-========================================= */
-
+/* SIDEBAR */
 .sidebar{
-    position:fixed;
-
-    top:95px;
-    left:18px;
-    bottom:18px;
-
-    width:220px;
-
-    background:white;
-
-    border:1px solid #e4edf6;
-
-    border-radius:22px;
-
-    padding:13px;
-
-    box-shadow:
-        0 8px 28px
-        rgba(31,64,104,.09);
-
-    z-index:90;
-}
-
-.sidebar-profile{
-    background:
-        linear-gradient(
-            135deg,
-            #eef7ff,
-            #f3efff
-        );
-
-    border-radius:17px;
-
-    padding:13px;
-
-    margin-bottom:12px;
-}
-
-.sidebar-avatar{
-    width:44px;
-    height:44px;
-
-    border-radius:50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #087ff5,
-            #6c5ce7
-        );
-
+    width:250px;
+    background:linear-gradient(180deg,#0757d9,#06358e);
     color:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:20px;
-
-    margin-bottom:8px;
+    padding:25px 16px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
 }
 
-.sidebar-name{
-    font-size:14px;
-    font-weight:bold;
+.logo{
+    font-size:25px;
+    font-weight:800;
+    margin-bottom:30px;
+    padding:10px;
 }
 
-.sidebar-uid{
-    margin-top:4px;
-
-    font-size:10px;
-
-    color:#718096;
-
-    word-break:break-all;
-}
-
-.sidebar-status{
-    display:inline-block;
-
-    margin-top:7px;
-
-    padding:4px 8px;
-
-    border-radius:20px;
-
-    background:#dff9ee;
-
-    color:#079669;
-
-    font-size:9px;
-
-    font-weight:bold;
-}
-
-.sidebar-menu{
-    display:flex;
-    flex-direction:column;
-
-    gap:4px;
-}
-
-.sidebar-menu a{
-    display:flex;
-    align-items:center;
-
-    gap:10px;
-
-    min-height:43px;
-
-    padding:7px 10px;
-
-    border-radius:12px;
-
-    color:#526581;
-
-    font-size:12px;
-
+.nav a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:14px 15px;
+    margin:7px 0;
+    border-radius:14px;
     font-weight:600;
 }
 
-.sidebar-menu a:hover{
-    background:#eef6ff;
-    color:#087ff5;
+.nav a:hover,
+.nav a.active{
+    background:rgba(255,255,255,.18);
 }
 
-.sidebar-menu a.active{
-    background:
-        linear-gradient(
-            135deg,
-            #147df5,
-            #18cfa5
-        );
-
-    color:white;
-
-    box-shadow:
-        0 6px 15px
-        rgba(20,125,245,.18);
+/* MAIN */
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    padding:25px;
 }
 
-.sidebar-icon{
-    width:28px;
-    height:28px;
-
-    border-radius:9px;
-
-    background:#edf5ff;
-
+.topbar{
     display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:16px;
-}
-
-.sidebar-menu a.active
-.sidebar-icon{
-    background:
-        rgba(255,255,255,.18);
-}
-
-.sidebar-promo{
-    margin-top:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #126ff3,
-            #16cda5
-        );
-
-    color:white;
-
-    border-radius:15px;
-
-    padding:13px;
-}
-
-.sidebar-promo strong{
-    display:block;
-    font-size:14px;
-}
-
-.sidebar-promo small{
-    display:block;
-
-    margin-top:5px;
-
-    line-height:1.5;
-
-    font-size:10px;
-}
-
-.sidebar-logout{
-    margin-top:10px;
-}
-
-.sidebar-logout a{
-    display:block;
-
-    padding:10px;
-
-    border-radius:11px;
-
-    background:#fff1f3;
-
-    color:#d83a52;
-
-    font-size:12px;
-
-    font-weight:bold;
-}
-
-
-/* =========================================
-   MAIN
-========================================= */
-
-.container{
-    max-width:1030px;
-
-    margin:auto;
-
-    padding:20px;
-}
-
-@media(min-width:901px){
-
-    .container{
-        margin-left:260px;
-        margin-right:20px;
-
-        max-width:none;
-    }
-
-}
-
-
-/* =========================================
-   PAGE HEADER
-========================================= */
-
-.page-header{
-    background:
-        linear-gradient(
-            135deg,
-            #087ff5,
-            #5d36dc,
-            #0acb9d
-        );
-
-    color:white;
-
-    border-radius:21px;
-
-    padding:24px;
-
-    position:relative;
-
-    overflow:hidden;
-
-    box-shadow:
-        0 11px 27px
-        rgba(67,75,210,.17);
-}
-
-.page-header:after{
-    content:"₹";
-
-    position:absolute;
-
-    right:28px;
-    top:-27px;
-
-    font-size:145px;
-
-    font-weight:bold;
-
-    opacity:.08;
-}
-
-.page-header h2{
-    margin:0;
-
-    font-size:27px;
-
-    position:relative;
-
-    z-index:2;
-}
-
-.page-header p{
-    margin:8px 0 0;
-
-    font-size:12px;
-
-    opacity:.91;
-
-    position:relative;
-
-    z-index:2;
-}
-
-
-/* =========================================
-   TOTAL EARNINGS
-========================================= */
-
-.total-card{
-    margin-top:16px;
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:21px;
-
-    border:1px solid #e6eef6;
-
-    box-shadow:
-        0 6px 20px
-        rgba(20,60,100,.07);
-}
-
-.total-top{
-    display:flex;
-
     justify-content:space-between;
-
     align-items:center;
+    margin-bottom:25px;
 }
 
-.total-label{
-    color:#718096;
-
-    font-size:12px;
+.topbar h1{
+    font-size:27px;
 }
 
-.total-title{
-    margin-top:5px;
-
-    font-size:30px;
-
-    font-weight:bold;
-
-    color:#123d78;
+.logout{
+    border:0;
+    background:#fff;
+    padding:11px 17px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
 }
 
-.earning-icon{
-    width:52px;
-    height:52px;
-
-    border-radius:15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #087ff5,
-            #11cda7
-        );
-
+/* HERO */
+.hero{
+    background:linear-gradient(135deg,#0757d9,#09a7e8);
     color:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:25px;
-
-    box-shadow:
-        0 7px 17px
-        rgba(8,127,245,.18);
+    border-radius:25px;
+    padding:28px;
+    margin-bottom:22px;
+    box-shadow:0 12px 30px rgba(0,90,200,.20);
 }
 
+.hero small{
+    opacity:.85;
+}
 
-/* =========================================
-   SUMMARY CARDS
-========================================= */
+.hero h2{
+    font-size:38px;
+    margin-top:8px;
+}
 
-.summary-grid{
+/* CARDS */
+.grid{
     display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:12px;
-
-    margin-top:15px;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:22px;
 }
 
-.summary-card{
+.card{
     background:white;
-
-    border:1px solid #e7eef6;
-
-    border-radius:17px;
-
-    padding:17px;
-
-    min-height:120px;
-
-    box-shadow:
-        0 5px 17px
-        rgba(20,60,100,.06);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 7px 22px rgba(30,50,90,.07);
 }
 
-.summary-icon{
-    width:38px;
-    height:38px;
-
-    border-radius:11px;
-
+.card .icon{
+    width:45px;
+    height:45px;
+    border-radius:14px;
     display:flex;
     align-items:center;
     justify-content:center;
-
-    font-size:19px;
-
-    margin-bottom:10px;
+    background:#eef5ff;
+    font-size:21px;
+    margin-bottom:15px;
 }
 
-.blue-bg{
-    background:#e7f3ff;
+.card h3{
+    font-size:14px;
+    color:#778198;
+    margin-bottom:7px;
 }
 
-.green-bg{
-    background:#e7fff5;
+.amount{
+    font-size:25px;
+    font-weight:800;
 }
 
-.orange-bg{
-    background:#fff4dc;
-}
-
-.summary-label{
-    font-size:10px;
-
-    color:#718096;
-
-    margin-bottom:5px;
-}
-
-.summary-value{
-    font-size:20px;
-
-    font-weight:bold;
-}
-
-.blue{
-    color:#3867d6;
-}
-
-.green{
-    color:#00a878;
-}
-
-.orange{
-    color:#f39c12;
-}
-
-
-/* =========================================
-   COMMISSION RULES
-========================================= */
-
-.section-title{
-    margin:21px 0 10px;
-
-    font-size:18px;
-
-    color:#163e76;
-}
-
-.rules-card{
+/* RULES */
+.section{
     background:white;
+    border-radius:22px;
+    padding:22px;
+    margin-bottom:22px;
+    box-shadow:0 7px 22px rgba(30,50,90,.07);
+}
 
-    border-radius:20px;
+.section h2{
+    margin-bottom:18px;
+    font-size:20px;
+}
 
-    padding:19px;
-
-    border:1px solid #e7eef6;
-
-    box-shadow:
-        0 5px 18px
-        rgba(20,60,100,.06);
+.rules{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
 }
 
 .rule{
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    padding:14px 0;
-
-    border-bottom:1px solid #edf1f5;
-}
-
-.rule:last-child{
-    border-bottom:0;
-}
-
-.rule-left{
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-}
-
-.rule-icon{
-    width:37px;
-    height:37px;
-
-    border-radius:10px;
-
-    background:#edf6ff;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:17px;
-}
-
-.rule-name{
-    font-size:13px;
-
-    font-weight:bold;
-}
-
-.rule-desc{
-    margin-top:3px;
-
-    color:#7a8799;
-
-    font-size:10px;
-}
-
-.rule-rate{
-    font-size:21px;
-
-    font-weight:bold;
-
-    color:#087ff5;
-}
-
-
-/* =========================================
-   REFERRAL COMMISSION
-========================================= */
-
-.referral-card{
-    background:
-        linear-gradient(
-            135deg,
-            #fff5e8,
-            #fff
-        );
-
-    border:1px solid #f5dfc4;
-
-    border-radius:20px;
-
-    padding:19px;
-
-    box-shadow:
-        0 5px 18px
-        rgba(150,100,40,.05);
-}
-
-.referral-heading{
-    display:flex;
-
-    align-items:center;
-
-    gap:11px;
-
-    margin-bottom:13px;
-}
-
-.referral-heading-icon{
-    width:42px;
-    height:42px;
-
-    border-radius:13px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff9f43,
-            #ee5253
-        );
-
-    color:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:20px;
-}
-
-.referral-heading h3{
-    margin:0;
-
-    font-size:16px;
-}
-
-.referral-heading p{
-    margin:3px 0 0;
-
-    color:#7a8799;
-
-    font-size:10px;
-}
-
-.referral-levels{
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:9px;
-}
-
-.level{
-    background:white;
-
-    border:1px solid #f0e4d4;
-
-    border-radius:14px;
-
-    padding:14px;
-
+    padding:18px;
+    border-radius:16px;
+    background:#f6f9ff;
     text-align:center;
 }
 
-.level-name{
-    font-size:12px;
-
-    font-weight:bold;
-}
-
-.level-rate{
-    margin-top:6px;
-
-    font-size:22px;
-
-    font-weight:bold;
-
-    color:#ee5253;
-}
-
-
-/* =========================================
-   EARNING HISTORY
-========================================= */
-
-.history-card{
-    background:white;
-
-    border-radius:20px;
-
-    border:1px solid #e7eef6;
-
-    box-shadow:
-        0 5px 18px
-        rgba(20,60,100,.06);
-
-    overflow:hidden;
-}
-
-.history-header{
-    padding:17px;
-
-    border-bottom:1px solid #edf1f5;
-
-    font-size:16px;
-
-    font-weight:bold;
-}
-
-.history-empty{
-    padding:35px 20px;
-
-    text-align:center;
-
-    color:#7a8799;
-}
-
-.history-empty-icon{
-    width:58px;
-    height:58px;
-
-    margin:0 auto 12px;
-
-    border-radius:50%;
-
-    background:#eef6ff;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:25px;
-}
-
-.history-empty strong{
+.rule strong{
     display:block;
+    font-size:25px;
+    margin-bottom:5px;
+    color:#0757d9;
+}
 
-    color:#3d506b;
+/* TABLE */
+.table-wrap{
+    overflow-x:auto;
+}
 
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:14px 10px;
+    border-bottom:1px solid #edf0f5;
+    text-align:left;
     font-size:14px;
 }
 
-.history-empty span{
-    display:block;
-
-    margin-top:5px;
-
-    font-size:11px;
+th{
+    color:#69748a;
+    background:#fafbfe;
 }
 
-
-/* =========================================
-   MESSAGE
-========================================= */
-
-#message{
-    text-align:center;
-
-    margin:16px 0;
-
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    background:#e8f8ef;
+    color:#16864b;
     font-size:12px;
-
-    color:#718096;
+    font-weight:700;
 }
 
-
-/* =========================================
-   BOTTOM NAV
-========================================= */
-
-.bottom-nav{
-    position:fixed;
-
-    left:12px;
-    right:12px;
-    bottom:10px;
-
-    height:68px;
-
-    background:
-        rgba(255,255,255,.98);
-
-    display:flex;
-
-    justify-content:space-around;
-
-    align-items:center;
-
-    border:1px solid #e5edf7;
-
-    border-radius:22px;
-
-    box-shadow:
-        0 -5px 25px
-        rgba(20,60,100,.12);
-
-    z-index:100;
-}
-
-.bottom-nav a{
-    color:#667085;
-
+.empty{
     text-align:center;
-
-    font-size:10px;
-
-    font-weight:600;
-
-    min-width:48px;
+    padding:30px;
+    color:#8993a7;
 }
 
-.bottom-nav span{
-    display:block;
-
-    font-size:21px;
-
-    margin-bottom:3px;
+/* MOBILE NAV */
+.bottom-nav{
+    display:none;
 }
 
-.bottom-nav .active{
-    color:#087ff5;
-}
-
-.plus{
-    width:53px;
-    height:53px;
-
-    border-radius:50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #087ff5,
-            #11cda7
-        );
-
-    color:white !important;
-
-    display:flex !important;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:28px !important;
-
-    margin-top:-27px;
-
-    border:5px solid #f3f8fd;
-
-    box-shadow:
-        0 7px 18px
-        rgba(8,127,245,.23);
-}
-
-
-/* =========================================
-   DESKTOP
-========================================= */
-
-@media(min-width:901px){
-
-    .bottom-nav{
-        display:none;
-    }
-
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
+/* RESPONSIVE */
 @media(max-width:900px){
-
-    header{
-        padding:12px 15px;
-    }
-
-    .header-uid{
-        display:none;
-    }
-
     .sidebar{
         display:none;
     }
 
-    .container{
-        padding:14px 13px 95px;
+    .main{
+        margin-left:0;
+        width:100%;
+        padding:16px;
+        padding-bottom:90px;
     }
 
-    .page-header{
-        padding:20px;
-
-        border-radius:19px;
+    .topbar h1{
+        font-size:22px;
     }
 
-    .page-header h2{
-        font-size:23px;
-    }
-
-    .page-header p{
-        font-size:11px;
-    }
-
-}
-
-
-/* =========================================
-   SMALL MOBILE
-========================================= */
-
-@media(max-width:520px){
-
-    .summary-grid{
-        grid-template-columns:
-            repeat(2,1fr);
-
-        gap:9px;
-    }
-
-    .summary-card{
-        min-height:112px;
-
-        padding:14px;
-    }
-
-    .summary-value{
-        font-size:18px;
-    }
-
-    .referral-levels{
+    .grid{
         grid-template-columns:1fr;
     }
 
-    .total-title{
-        font-size:27px;
+    .rules{
+        grid-template-columns:1fr;
     }
 
-    .rule-rate{
-        font-size:19px;
+    .hero{
+        padding:23px;
     }
 
-}
-
-
-/* =========================================
-   VERY SMALL
-========================================= */
-
-@media(max-width:360px){
+    .hero h2{
+        font-size:32px;
+    }
 
     .bottom-nav{
-        left:5px;
-        right:5px;
+        position:fixed;
+        display:flex;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        height:65px;
+        background:white;
+        border-radius:20px;
+        box-shadow:0 8px 30px rgba(0,0,0,.15);
+        z-index:99;
+        align-items:center;
+        justify-content:space-around;
     }
 
     .bottom-nav a{
-        min-width:42px;
-        font-size:9px;
+        text-decoration:none;
+        color:#68748a;
+        font-size:11px;
+        text-align:center;
+        font-weight:600;
     }
 
+    .bottom-nav a.active{
+        color:#0757d9;
+    }
+
+    .bottom-nav span{
+        display:block;
+        font-size:21px;
+        margin-bottom:3px;
+    }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
+<div class="app">
 
-<!-- =========================================
-     HEADER
-========================================= -->
-
-<header>
-
-<div class="header-row">
-
-
-    <div class="brand">
-
-        <div class="brand-logo">
-            S
-        </div>
-
-        <div class="brand-text">
-
-            <h1>
-                Sathi Pay
-            </h1>
-
-            <p>
-                Secure • Fast • Reliable
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="header-right">
-
-        <div class="header-uid">
-
-            UID:
-            <span id="headerUID">
-                Loading...
-            </span>
-
-        </div>
-
-
-        <div class="header-profile">
-            👤
-        </div>
-
-    </div>
-
-
-</div>
-
-</header>
-
-
-<!-- =========================================
-     SIDEBAR
-========================================= -->
-
+<!-- SIDEBAR -->
 <aside class="sidebar">
+    <div class="logo">💳 Sathi Pay</div>
 
-
-    <div class="sidebar-profile">
-
-
-        <div class="sidebar-avatar">
-            👤
-        </div>
-
-
-        <div class="sidebar-name"
-             id="sidebarName">
-
-            Loading...
-
-        </div>
-
-
-        <div class="sidebar-uid">
-
-            UID:
-            <span id="sidebarUID">
-                Loading...
-            </span>
-
-        </div>
-
-
-        <div class="sidebar-status">
-            ● Active
-        </div>
-
-
-    </div>
-
-
-    <nav class="sidebar-menu">
-
-
-        <a href="deshboard.html">
-
-            <span class="sidebar-icon">
-                🏠
-            </span>
-
-            Dashboard
-
-        </a>
-
-
-        <a href="deposit.html">
-
-            <span class="sidebar-icon">
-                💰
-            </span>
-
-            Deposit
-
-        </a>
-
-
-        <a href="earnings.html"
-           class="active">
-
-            <span class="sidebar-icon">
-                📊
-            </span>
-
-            Earnings
-
-        </a>
-
-
-        <a href="referral.html">
-
-            <span class="sidebar-icon">
-                👥
-            </span>
-
-            Referral
-
-        </a>
-
-
-        <a href="profile.html">
-
-            <span class="sidebar-icon">
-                👤
-            </span>
-
-            Profile
-
-        </a>
-
-
+    <nav class="nav">
+        <a href="deshboard.html">🏠 Dashboard</a>
+        <a href="deposit.html">💰 Deposit</a>
+        <a href="earnings.html" class="active">📈 Earnings</a>
+        <a href="referral.html">👥 Referral</a>
+        <a href="profile.html">👤 Profile</a>
     </nav>
-
-
-    <div class="sidebar-promo">
-
-        <strong>
-            Grow Your Earnings
-        </strong>
-
-        <small>
-            More approved deposits
-            can generate more commission.
-        </small>
-
-    </div>
-
-
-    <div class="sidebar-logout">
-
-        <a href="customer-login.html"
-           onclick="logoutCustomer()">
-
-            🚪 Logout
-
-        </a>
-
-    </div>
-
-
 </aside>
 
 
-<!-- =========================================
-     MAIN
-========================================= -->
+<!-- MAIN -->
+<main class="main">
 
-<div class="container">
+    <div class="topbar">
+        <h1>My Earnings</h1>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
 
 
-    <!-- PAGE HEADER -->
-
-    <section class="page-header">
-
-        <h2>
-            My Earnings
-        </h2>
-
-        <p>
-            Track your commission and referral income.
-        </p>
-
+    <!-- TOTAL -->
+    <section class="hero">
+        <small>Total Earnings</small>
+        <h2 id="totalEarnings">₹0.00</h2>
     </section>
 
 
-    <!-- TOTAL EARNINGS -->
-
-    <div class="total-card">
-
-
-        <div class="total-top">
-
-
-            <div>
-
-                <div class="total-label">
-                    Total Earnings
-                </div>
-
-
-                <div class="total-title"
-                     id="totalEarnings">
-
-                    ₹0.00
-
-                </div>
-
-            </div>
-
-
-            <div class="earning-icon">
-                📈
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
     <!-- SUMMARY -->
+    <div class="grid">
 
-    <div class="summary-grid">
-
-
-        <div class="summary-card">
-
-            <div class="summary-icon blue-bg">
-                💰
-            </div>
-
-            <div class="summary-label">
-                Deposit Commission
-            </div>
-
-            <div class="summary-value blue"
-                 id="depositCommission">
-
-                ₹0.00
-
-            </div>
-
+        <div class="card">
+            <div class="icon">💰</div>
+            <h3>Deposit Commission</h3>
+            <div class="amount" id="depositCommission">₹0.00</div>
         </div>
 
-
-        <div class="summary-card">
-
-            <div class="summary-icon green-bg">
-                👥
-            </div>
-
-            <div class="summary-label">
-                Referral Income
-            </div>
-
-            <div class="summary-value green"
-                 id="referralIncome">
-
-                ₹0.00
-
-            </div>
-
+        <div class="card">
+            <div class="icon">👥</div>
+            <h3>Referral Income</h3>
+            <div class="amount" id="referralIncome">₹0.00</div>
         </div>
 
-
-        <div class="summary-card">
-
-            <div class="summary-icon orange-bg">
-                💎
-            </div>
-
-            <div class="summary-label">
-                Bonus
-            </div>
-
-            <div class="summary-value orange"
-                 id="bonusIncome">
-
-                ₹0.00
-
-            </div>
-
+        <div class="card">
+            <div class="icon">🎁</div>
+            <h3>Bonus</h3>
+            <div class="amount" id="bonusIncome">₹0.00</div>
         </div>
-
 
     </div>
 
 
-    <!-- COMMISSION RULES -->
+    <!-- DEPOSIT COMMISSION RULES -->
+    <section class="section">
+        <h2>Deposit Commission Rules</h2>
 
-    <h3 class="section-title">
-        Deposit Commission
-    </h3>
+        <div class="rules">
 
-
-    <div class="rules-card">
-
-
-        <div class="rule">
-
-
-            <div class="rule-left">
-
-                <div class="rule-icon">
-                    💵
-                </div>
-
-                <div>
-
-                    <div class="rule-name">
-                        ₹1 – ₹9,999
-                    </div>
-
-                    <div class="rule-desc">
-                        Deposit commission
-                    </div>
-
-                </div>
-
+            <div class="rule">
+                <strong>6%</strong>
+                <span>₹1 – ₹9,999</span>
             </div>
 
-
-            <div class="rule-rate">
-                6%
+            <div class="rule">
+                <strong>8%</strong>
+                <span>₹10,000 – ₹19,999</span>
             </div>
 
+            <div class="rule">
+                <strong>10%</strong>
+                <span>₹20,000+</span>
+            </div>
 
         </div>
+    </section>
 
 
-        <div class="rule">
+    <!-- REFERRAL RULES -->
+    <section class="section">
+        <h2>Referral Commission</h2>
 
+        <div class="rules">
 
-            <div class="rule-left">
-
-                <div class="rule-icon">
-                    💵
-                </div>
-
-                <div>
-
-                    <div class="rule-name">
-                        ₹10,000 – ₹19,999
-                    </div>
-
-                    <div class="rule-desc">
-                        Deposit commission
-                    </div>
-
-                </div>
-
+            <div class="rule">
+                <strong>1%</strong>
+                <span>Level A</span>
             </div>
 
-
-            <div class="rule-rate">
-                8%
+            <div class="rule">
+                <strong>0.5%</strong>
+                <span>Level B</span>
             </div>
 
+            <div class="rule">
+                <strong>0.2%</strong>
+                <span>Level C</span>
+            </div>
 
         </div>
-
-
-        <div class="rule">
-
-
-            <div class="rule-left">
-
-                <div class="rule-icon">
-                    💵
-                </div>
-
-                <div>
-
-                    <div class="rule-name">
-                        ₹20,000+
-                    </div>
-
-                    <div class="rule-desc">
-                        Deposit commission
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="rule-rate">
-                10%
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-    <!-- REFERRAL COMMISSION -->
-
-    <h3 class="section-title">
-        Referral Commission
-    </h3>
-
-
-    <div class="referral-card">
-
-
-        <div class="referral-heading">
-
-
-            <div class="referral-heading-icon">
-                👥
-            </div>
-
-
-            <div>
-
-                <h3>
-                    Referral Levels
-                </h3>
-
-                <p>
-                    Your locked referral commission structure
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="referral-levels">
-
-
-            <div class="level">
-
-                <div class="level-name">
-                    Level A
-                </div>
-
-                <div class="level-rate">
-                    1%
-                </div>
-
-            </div>
-
-
-            <div class="level">
-
-                <div class="level-name">
-                    Level B
-                </div>
-
-                <div class="level-rate">
-                    0.5%
-                </div>
-
-            </div>
-
-
-            <div class="level">
-
-                <div class="level-name">
-                    Level C
-                </div>
-
-                <div class="level-rate">
-                    0.2%
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-    </div>
+    </section>
 
 
     <!-- HISTORY -->
+    <section class="section">
 
-    <h3 class="section-title">
-        Earnings History
-    </h3>
+        <h2>Earnings History</h2>
 
+        <div class="table-wrap">
 
-    <div class="history-card">
+            <table>
 
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Level</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
 
-        <div class="history-header">
-            Recent Earnings
-        </div>
+                <tbody id="earningsHistory">
+                    <tr>
+                        <td colspan="5" class="empty">
+                            Loading earnings...
+                        </td>
+                    </tr>
+                </tbody>
 
-
-        <div class="history-empty">
-
-
-            <div class="history-empty-icon">
-                📊
-            </div>
-
-
-            <strong>
-                Earnings history will appear here
-            </strong>
-
-
-            <span>
-                Approved commission transactions will be shown here.
-            </span>
-
+            </table>
 
         </div>
 
+    </section>
 
-    </div>
-
-
-    <div id="message">
-        Loading earnings...
-    </div>
+</main>
 
 
-</div>
-
-
-<!-- =========================================
-     MOBILE NAV
-========================================= -->
-
-<div class="bottom-nav">
-
+<!-- MOBILE NAV -->
+<nav class="bottom-nav">
 
     <a href="deshboard.html">
-
-        <span>
-            🏠
-        </span>
-
+        <span>🏠</span>
         Home
-
     </a>
 
-
     <a href="deposit.html">
-
-        <span>
-            💰
-        </span>
-
+        <span>💰</span>
         Deposit
-
     </a>
 
-
-    <a href="deposit.html">
-
-        <span class="plus">
-            +
-        </span>
-
+    <a href="earnings.html" class="active">
+        <span>📈</span>
+        Earnings
     </a>
-
 
     <a href="referral.html">
-
-        <span>
-            👥
-        </span>
-
-        Team
-
+        <span>👥</span>
+        Referral
     </a>
-
 
     <a href="profile.html">
-
-        <span>
-            💼
-        </span>
-
-        Assets
-
+        <span>👤</span>
+        Profile
     </a>
 
+</nav>
 
 </div>
-
-
-<!-- =========================================
-     SUPABASE
-========================================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
 
-/* =========================================
-   SUPABASE
-========================================= */
-
 const SUPABASE_URL =
-    "https://lozluohksmjxbxixkbmq.supabase.co";
-
+"https://lozluohksmjxbxixkbmq.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
-
+"sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
-/* =========================================
-   CUSTOMER ID
-========================================= */
-
-function getCustomerId(){
-
-    const id =
-        localStorage.getItem(
-            "sathiPayCustomerId"
-        );
+const customerId =
+localStorage.getItem("sathiPayCustomerId");
 
 
-    if(
-        id &&
-        id.trim() !== ""
-    ){
+function money(value){
 
-        return id.trim();
+    const number = Number(value || 0);
 
-    }
-
-
-    return null;
-
+    return "₹" + number.toLocaleString("en-IN",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
 }
 
-
-/* =========================================
-   MONEY
-========================================= */
-
-function formatMoney(value){
-
-    return "₹" +
-        Number(
-            value || 0
-        ).toLocaleString(
-            "en-IN",
-            {
-                minimumFractionDigits:2,
-                maximumFractionDigits:2
-            }
-        );
-
-}
-
-
-/* =========================================
-   LOAD EARNINGS
-========================================= */
 
 async function loadEarnings(){
 
+    if(!customerId){
 
-    const message =
-        document.getElementById(
-            "message"
-        );
+        window.location.href = "login.html";
+        return;
+    }
 
 
     try{
 
+        /* CUSTOMER */
 
-        const customerId =
-            getCustomerId();
-
-
-        if(!customerId){
-
-            message.innerText =
-                "Please login again.";
-
-            window.location.href =
-                "customer-login.html";
-
-            return;
-
-        }
-
-
-        /* =================================
-           CUSTOMER DATA
-        ================================= */
-
-        const {
-            data:customer,
-            error
-        } =
-            await supabaseClient
+        const {data:customer,error:customerError}
+            = await supabaseClient
             .from("customers")
             .select(`
                 id,
                 name,
                 uid,
-                wallet_balance,
                 bonus_balance,
                 commission_balance,
-                referral_balance,
-                status
+                referral_balance
             `)
-            .eq(
-                "id",
-                customerId
-            )
-            .maybeSingle();
+            .eq("id",customerId)
+            .single();
 
 
-        if(error){
-
-            throw error;
-
+        if(customerError){
+            throw customerError;
         }
 
 
-        if(!customer){
+        /* DEPOSIT COMMISSION */
 
-            message.innerText =
-                "Customer account not found.";
+        const {data:deposits,error:depositError}
+            = await supabaseClient
+            .from("customer_deposits")
+            .select(`
+                id,
+                amount,
+                commission,
+                status,
+                created_at
+            `)
+            .eq("customer_id",customerId)
+            .eq("status","approved")
+            .order("created_at",{ascending:false});
 
-            return;
 
+        if(depositError){
+            throw depositError;
         }
 
 
-        /* =================================
-           NAME
-        ================================= */
+        /* REFERRAL COMMISSIONS */
 
-        document.getElementById(
-            "sidebarName"
-        ).innerText =
-            customer.name ||
-            "Customer";
-
-
-        /* =================================
-           UID
-        ================================= */
-
-        document.getElementById(
-            "sidebarUID"
-        ).innerText =
-            customer.uid ||
-            "Not available";
+        const {data:referrals,error:referralError}
+            = await supabaseClient
+            .from("customer_referral_commissions")
+            .select(`
+                id,
+                level,
+                percentage,
+                transaction_amount,
+                commission_amount,
+                status,
+                created_at
+            `)
+            .eq("customer_id",customerId)
+            .order("created_at",{ascending:false});
 
 
-        document.getElementById(
-            "headerUID"
-        ).innerText =
-            customer.uid ||
-            "Not available";
+        if(referralError){
+            throw referralError;
+        }
 
 
-        /* =================================
-           BALANCES
-        ================================= */
+        /* DEPOSIT TOTAL */
 
-        const commission =
-            Number(
-                customer.commission_balance ||
-                0
-            );
+        let depositTotal = 0;
 
+        (deposits || []).forEach(item => {
 
-        const referral =
-            Number(
-                customer.referral_balance ||
-                0
-            );
+            depositTotal += Number(item.commission || 0);
+
+        });
 
 
-        const bonus =
-            Number(
-                customer.bonus_balance ||
-                0
-            );
+        /* REFERRAL TOTAL */
+
+        let referralTotal = 0;
+
+        (referrals || []).forEach(item => {
+
+            if(item.status === "approved"){
+                referralTotal += Number(
+                    item.commission_amount || 0
+                );
+            }
+
+        });
+
+
+        const bonusTotal =
+            Number(customer.bonus_balance || 0);
 
 
         /*
-           Total earnings is the sum of
-           commission + referral + bonus.
-
-           Wallet is NOT used here because
-           wallet is a balance, not an
-           individual earning transaction.
-        */
+         * Use the actual transaction totals.
+         * This avoids counting the same referral amount twice.
+         */
 
         const total =
-            commission +
-            referral +
-            bonus;
+            depositTotal +
+            referralTotal +
+            bonusTotal;
 
 
-        /* =================================
-           DISPLAY
-        ================================= */
+        document.getElementById("depositCommission")
+            .textContent = money(depositTotal);
 
-        document.getElementById(
-            "totalEarnings"
-        ).innerText =
-            formatMoney(
-                total
-            );
+        document.getElementById("referralIncome")
+            .textContent = money(referralTotal);
 
+        document.getElementById("bonusIncome")
+            .textContent = money(bonusTotal);
 
-        document.getElementById(
-            "depositCommission"
-        ).innerText =
-            formatMoney(
-                commission
-            );
+        document.getElementById("totalEarnings")
+            .textContent = money(total);
 
 
-        document.getElementById(
-            "referralIncome"
-        ).innerText =
-            formatMoney(
-                referral
-            );
+        /* HISTORY */
+
+        const history = [];
 
 
-        document.getElementById(
-            "bonusIncome"
-        ).innerText =
-            formatMoney(
-                bonus
-            );
+        (deposits || []).forEach(item => {
+
+            const commission =
+                Number(item.commission || 0);
+
+            if(commission > 0){
+
+                history.push({
+
+                    date:item.created_at,
+
+                    type:"Deposit Commission",
+
+                    level:"—",
+
+                    amount:commission,
+
+                    status:item.status
+
+                });
+
+            }
+
+        });
 
 
-        message.innerText =
-            "Earnings updated";
+        (referrals || []).forEach(item => {
+
+            const commission =
+                Number(item.commission_amount || 0);
+
+            if(
+                commission > 0 &&
+                item.status === "approved"
+            ){
+
+                history.push({
+
+                    date:item.created_at,
+
+                    type:"Referral Commission",
+
+                    level:"Level " +
+                        (
+                            item.level === 1 ? "A" :
+                            item.level === 2 ? "B" :
+                            item.level === 3 ? "C" :
+                            item.level
+                        ),
+
+                    amount:commission,
+
+                    status:item.status
+
+                });
+
+            }
+
+        });
+
+
+        history.sort(
+            (a,b) =>
+            new Date(b.date) -
+            new Date(a.date)
+        );
+
+
+        const tbody =
+            document.getElementById("earningsHistory");
+
+
+        if(history.length === 0){
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        No earnings available yet.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        tbody.innerHTML =
+            history.map(item => {
+
+                const date =
+                    new Date(item.date)
+                    .toLocaleString("en-IN",{
+                        day:"2-digit",
+                        month:"short",
+                        year:"numeric"
+                    });
+
+
+                return `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${item.type}</td>
+                        <td>${item.level}</td>
+                        <td>
+                            <strong>
+                                ${money(item.amount)}
+                            </strong>
+                        </td>
+                        <td>
+                            <span class="status">
+                                ${item.status}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+
+            }).join("");
 
 
     }catch(error){
 
+        console.error(error);
 
-        console.error(
-            "Earnings error:",
-            error
-        );
-
-
-        message.innerText =
-            "Unable to load earnings.";
-
+        document.getElementById("earningsHistory")
+            .innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Unable to load earnings.
+                    </td>
+                </tr>
+            `;
     }
 
 }
 
 
-/* =========================================
-   LOGOUT
-========================================= */
+/* LOGOUT */
 
-function logoutCustomer(){
+function logout(){
 
-    localStorage.removeItem(
-        "sathiPayCustomerId"
-    );
+    localStorage.removeItem("sathiPayCustomerId");
+    localStorage.removeItem("sathiPayUID");
+    localStorage.removeItem("sathiPayInvitationCode");
 
-
-    localStorage.removeItem(
-        "sathiPayUID"
-    );
-
-
-    localStorage.removeItem(
-        "sathiPayInvitationCode"
-    );
-
+    window.location.href = "login.html";
 }
 
 
-/* =========================================
-   START
-========================================= */
+/* FIRST LOAD */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        loadEarnings();
-
-    }
-);
+loadEarnings();
 
 
-/* =========================================
-   AUTO REFRESH
-========================================= */
+/* AUTO REFRESH */
 
-setInterval(
-    function(){
-
-        loadEarnings();
-
-    },
-    30000
-);
+setInterval(loadEarnings,30000);
 
 </script>
 
-
 </body>
-
-  </html>
+      </html>
