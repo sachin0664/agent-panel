@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sathi Pay - Support</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f7ff;
+    color:#17233d;
+}
+
+header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    padding:18px 20px;
+    box-shadow:0 5px 20px rgba(37,99,235,.25);
+}
+
+.header-inner{
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:800;
+}
+
+.logo span{
+    display:block;
+    font-size:12px;
+    opacity:.85;
+    margin-top:4px;
+}
+
+.back-btn{
+    color:#fff;
+    text-decoration:none;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.35);
+    padding:10px 15px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.container{
+    max-width:1100px;
+    margin:25px auto;
+    padding:0 16px 40px;
+}
+
+.hero{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    border-radius:24px;
+    padding:30px 25px;
+    margin-bottom:20px;
+    box-shadow:0 12px 30px rgba(79,70,229,.2);
+}
+
+.hero-icon{
+    width:58px;
+    height:58px;
+    border-radius:18px;
+    background:rgba(255,255,255,.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:29px;
+    margin-bottom:15px;
+}
+
+.hero h1{
+    font-size:29px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    font-size:14px;
+    opacity:.9;
+    line-height:1.6;
+}
+
+.section-title{
+    font-size:21px;
+    font-weight:800;
+    margin:25px 0 14px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.card{
+    background:#fff;
+    border-radius:20px;
+    padding:21px;
+    border:1px solid #edf0f7;
+    box-shadow:0 8px 25px rgba(31,41,55,.07);
+}
+
+.card-icon{
+    width:50px;
+    height:50px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    margin-bottom:14px;
+    background:#eef2ff;
+}
+
+.card h3{
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.card p{
+    color:#718096;
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:16px;
+}
+
+.btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    text-decoration:none;
+    color:#fff;
+    padding:12px 15px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:800;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+}
+
+.download{
+    background:#eff6ff;
+}
+
+.support{
+    background:#f5f3ff;
+}
+
+.telegram{
+    background:#ecfdf5;
+}
+
+.download .card-icon{
+    background:#dbeafe;
+}
+
+.support .card-icon{
+    background:#ede9fe;
+}
+
+.telegram .card-icon{
+    background:#d1fae5;
+}
+
+.info-box{
+    background:#fff;
+    border-radius:20px;
+    padding:21px;
+    border:1px solid #edf0f7;
+    box-shadow:0 8px 25px rgba(31,41,55,.07);
+}
+
+.info-row{
+    display:flex;
+    align-items:flex-start;
+    gap:13px;
+    padding:14px 0;
+    border-bottom:1px solid #edf0f7;
+}
+
+.info-row:last-child{
+    border-bottom:0;
+}
+
+.info-number{
+    width:32px;
+    height:32px;
+    border-radius:10px;
+    background:#eef2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    font-weight:800;
+    color:#4f46e5;
+    flex-shrink:0;
+}
+
+.info-row h4{
+    font-size:14px;
+    margin-bottom:4px;
+}
+
+.info-row p{
+    color:#718096;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.footer{
+    text-align:center;
+    color:#94a3b8;
+    font-size:12px;
+    margin-top:25px;
+}
+
+@media(max-width:750px){
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        margin:18px auto;
+        padding:0 12px 30px;
+    }
+
+    .hero{
+        padding:25px 20px;
+        border-radius:20px;
+    }
+
+    .hero h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <div class="logo">
+            Sathi Pay
+            <span>Customer Support</span>
+        </div>
+
+        <a href="deshboard.html" class="back-btn">
+            ← Dashboard
+        </a>
+
+    </div>
+</header>
+
+
+<div class="container">
+
+    <section class="hero">
+
+        <div class="hero-icon">
+            🎧
+        </div>
+
+        <h1>How can we help?</h1>
+
+        <p>
+            Welcome to Sathi Pay Support.
+            Choose an option below for app download,
+            customer support or Telegram assistance.
+        </p>
+
+    </section>
+
+
+    <div class="section-title">
+        Quick Help
+    </div>
+
+
+    <div class="cards">
+
+        <!-- APP DOWNLOAD -->
+
+        <div class="card download">
+
+            <div class="card-icon">
+                📱
+            </div>
+
+            <h3>
+                Download App
+            </h3>
+
+            <p>
+                Download the official Sathi Pay
+                application and access your account
+                easily from your mobile device.
+            </p>
+
+            <a
+                href="#"
+                class="btn"
+                onclick="openDownload(event)"
+            >
+                Download App
+            </a>
+
+        </div>
+
+
+        <!-- SUPPORT -->
+
+        <div class="card support">
+
+            <div class="card-icon">
+                🎧
+            </div>
+
+            <h3>
+                Customer Support
+            </h3>
+
+            <p>
+                Need help with your account,
+                deposit or any Sathi Pay service?
+                Contact our support team.
+            </p>
+
+            <a
+                href="#"
+                class="btn"
+                onclick="openSupport(event)"
+            >
+                Contact Support
+            </a>
+
+        </div>
+
+
+        <!-- TELEGRAM -->
+
+        <div class="card telegram">
+
+            <div class="card-icon">
+                ✈️
+            </div>
+
+            <h3>
+                Telegram
+            </h3>
+
+            <p>
+                Join the official Sathi Pay Telegram
+                channel for announcements, updates
+                and support information.
+            </p>
+
+            <a
+                href="#"
+                class="btn"
+                onclick="openTelegram(event)"
+            >
+                Open Telegram
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="section-title">
+        Help Center
+    </div>
+
+
+    <div class="info-box">
+
+        <div class="info-row">
+
+            <div class="info-number">
+                1
+            </div>
+
+            <div>
+                <h4>
+                    Deposit Related Help
+                </h4>
+
+                <p>
+                    If your deposit is pending,
+                    keep your UTR and payment proof
+                    ready when contacting support.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <div class="info-number">
+                2
+            </div>
+
+            <div>
+                <h4>
+                    Account Help
+                </h4>
+
+                <p>
+                    For login, UID, profile or account
+                    related issues, contact customer support
+                    with your registered UID.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <div class="info-number">
+                3
+            </div>
+
+            <div>
+                <h4>
+                    Earnings & Referral
+                </h4>
+
+                <p>
+                    Your commission and referral income
+                    are automatically recorded in your
+                    Sathi Pay account.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <div class="info-number">
+                4
+            </div>
+
+            <div>
+                <h4>
+                    Stay Updated
+                </h4>
+
+                <p>
+                    Follow the official Telegram channel
+                    for important Sathi Pay announcements
+                    and updates.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        © 2026 Sathi Pay · Customer Support
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+    IMPORTANT:
+    Replace the three placeholder links below
+    with your actual official links when available.
+*/
+
+const APP_DOWNLOAD_URL = "#";
+
+const SUPPORT_URL = "#";
+
+const TELEGRAM_URL = "#";
+
+
+function openDownload(event){
+
+    event.preventDefault();
+
+    if(APP_DOWNLOAD_URL === "#"){
+
+        alert(
+            "App download link will be added here."
+        );
+
+        return;
+
+    }
+
+    window.open(
+        APP_DOWNLOAD_URL,
+        "_blank"
+    );
+
+}
+
+
+function openSupport(event){
+
+    event.preventDefault();
+
+    if(SUPPORT_URL === "#"){
+
+        alert(
+            "Customer support link will be added here."
+        );
+
+        return;
+
+    }
+
+    window.open(
+        SUPPORT_URL,
+        "_blank"
+    );
+
+}
+
+
+function openTelegram(event){
+
+    event.preventDefault();
+
+    if(TELEGRAM_URL === "#"){
+
+        alert(
+            "Telegram link will be added here."
+        );
+
+        return;
+
+    }
+
+    window.open(
+        TELEGRAM_URL,
+        "_blank"
+    );
+
+}
+
+</script>
+
+</body>
+          </html>
