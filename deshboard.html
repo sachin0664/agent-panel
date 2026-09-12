@@ -9,59 +9,409 @@
 
 <style>
 
+/* =========================================
+   RESET
+========================================= */
+
 *{
     box-sizing:border-box;
 }
 
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f4f7fb;
-    color:#172033;
-    padding-bottom:85px;
+html{
+    scroll-behavior:smooth;
 }
 
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f3f8fd;
+    color:#172b4d;
+    padding-bottom:90px;
+}
+
+a{
+    -webkit-tap-highlight-color:transparent;
+}
+
+
+/* =========================================
+   TOP HEADER
+========================================= */
+
 header{
-    background:linear-gradient(135deg,#6c5ce7,#00b894);
-    color:white;
-    padding:18px 18px 24px;
-    border-radius:0 0 25px 25px;
+    position:relative;
+    z-index:100;
+    background:linear-gradient(135deg,#eef8ff,#ffffff);
+    min-height:88px;
+    padding:16px 24px;
+    border-bottom:1px solid #e3edf7;
 }
 
 .header-row{
+    max-width:1250px;
+    margin:auto;
     display:flex;
     justify-content:space-between;
     align-items:center;
 }
 
-.logo{
-    font-size:24px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-logo{
+    width:48px;
+    height:48px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#087ff5,#12d4a0);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:28px;
+    font-weight:bold;
+    box-shadow:0 8px 18px rgba(8,127,245,.22);
+}
+
+.brand-text h1{
+    margin:0;
+    font-size:25px;
+    color:#073b82;
+    letter-spacing:.2px;
+}
+
+.brand-text p{
+    margin:3px 0 0;
+    font-size:11px;
+    color:#718096;
+    font-weight:600;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.header-uid{
+    background:linear-gradient(135deg,#087ff5,#15cda6);
+    color:white;
+    padding:11px 17px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:bold;
+    box-shadow:0 7px 18px rgba(8,127,245,.18);
+}
+
+.header-status{
+    margin-left:8px;
+    background:#dff9ee;
+    color:#079669;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+}
+
+.notification{
+    position:relative;
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    box-shadow:0 5px 15px rgba(20,60,100,.10);
+}
+
+.notification-badge{
+    position:absolute;
+    right:-2px;
+    top:-4px;
+    min-width:19px;
+    height:19px;
+    padding:0 5px;
+    border-radius:20px;
+    background:#e63950;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
     font-weight:bold;
 }
 
-.logout{
+.header-profile{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#0c63b9,#163f82);
     color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+
+/* =========================================
+   DESKTOP SIDEBAR
+========================================= */
+
+.sidebar{
+    position:fixed;
+    top:104px;
+    left:18px;
+    bottom:18px;
+    width:225px;
+    background:rgba(255,255,255,.97);
+    border:1px solid #e5edf7;
+    border-radius:23px;
+    padding:15px 12px;
+    box-shadow:0 8px 30px rgba(31,64,104,.10);
+    z-index:90;
+    overflow-y:auto;
+}
+
+.sidebar-profile{
+    background:linear-gradient(135deg,#eef7ff,#f3efff);
+    border-radius:18px;
+    padding:14px;
+    margin-bottom:13px;
+}
+
+.sidebar-avatar{
+    width:47px;
+    height:47px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#087ff5,#6c5ce7);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    margin-bottom:9px;
+}
+
+.sidebar-name{
+    font-size:15px;
+    font-weight:bold;
+    color:#17345f;
+}
+
+.sidebar-uid{
+    font-size:10px;
+    color:#718096;
+    margin-top:4px;
+    word-break:break-all;
+}
+
+.sidebar-status{
+    display:inline-block;
+    margin-top:7px;
+    padding:4px 9px;
+    border-radius:20px;
+    background:#dff9ee;
+    color:#079669;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.sidebar-menu{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.sidebar-menu a{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    min-height:45px;
+    padding:8px 11px;
+    border-radius:13px;
+    text-decoration:none;
+    color:#526581;
+    font-size:13px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.sidebar-menu a:hover{
+    background:#eef6ff;
+    color:#087ff5;
+}
+
+.sidebar-menu a.active{
+    background:linear-gradient(135deg,#147df5,#18cfa5);
+    color:white;
+    box-shadow:0 6px 15px rgba(20,125,245,.20);
+}
+
+.sidebar-icon{
+    width:29px;
+    height:29px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:#edf5ff;
+    font-size:17px;
+    flex-shrink:0;
+}
+
+.sidebar-menu a.active .sidebar-icon{
+    background:rgba(255,255,255,.18);
+}
+
+.sidebar-extra{
+    margin-top:14px;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.sidebar-promo{
+    background:linear-gradient(135deg,#126ff3,#16cda5);
+    color:white;
+    border-radius:16px;
+    padding:14px;
+}
+
+.sidebar-promo strong{
+    display:block;
+    font-size:16px;
+    line-height:1.2;
+}
+
+.sidebar-promo small{
+    display:block;
+    margin-top:7px;
+    line-height:1.5;
+    opacity:.92;
+}
+
+.sidebar-support{
+    background:#f1f8ff;
+    border:1px solid #dcecfb;
+    border-radius:15px;
+    padding:9px 12px;
+}
+
+.sidebar-support a{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:#173f78;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:bold;
+    padding:6px 0;
+}
+
+.sidebar-logout{
+    margin-top:2px;
+}
+
+.sidebar-logout a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    border-radius:12px;
+    background:#fff1f3;
+    color:#d83a52;
     text-decoration:none;
     font-size:13px;
-    background:rgba(255,255,255,.18);
-    padding:8px 12px;
-    border-radius:20px;
+    font-weight:bold;
 }
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
 
 .container{
-    max-width:700px;
-    margin:auto;
-    padding:16px;
+    max-width:1030px;
+    margin:0 auto;
+    padding:22px 20px;
 }
 
-/* PROFILE */
+@media(min-width:901px){
+
+    .container{
+        margin-left:260px;
+        margin-right:20px;
+        max-width:none;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE TOP PROFILE
+========================================= */
+
+.mobile-profile{
+    display:none;
+}
+
+
+/* =========================================
+   DESKTOP PAGE INTRO
+========================================= */
+
+.page-intro{
+    background:linear-gradient(135deg,#087ff5,#11cda7);
+    color:white;
+    border-radius:21px;
+    padding:24px 25px;
+    min-height:125px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(8,127,245,.16);
+}
+
+.page-intro:after{
+    content:"₹";
+    position:absolute;
+    right:35px;
+    top:-20px;
+    font-size:150px;
+    font-weight:bold;
+    opacity:.08;
+}
+
+.page-intro h2{
+    margin:0;
+    font-size:28px;
+    position:relative;
+    z-index:2;
+}
+
+.page-intro p{
+    margin:8px 0 0;
+    font-size:13px;
+    opacity:.92;
+    position:relative;
+    z-index:2;
+}
+
+
+/* =========================================
+   PROFILE CARD
+========================================= */
 
 .profile-card{
     background:white;
-    margin-top:-35px;
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 6px 22px rgba(0,0,0,.10);
+    margin-top:15px;
+    border-radius:19px;
+    padding:17px 20px;
+    box-shadow:0 6px 22px rgba(20,60,100,.08);
+    border:1px solid #e9f0f7;
 }
 
 .profile-top{
@@ -70,19 +420,37 @@ header{
     align-items:center;
 }
 
+.profile-left{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.profile-avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#087ff5,#6c5ce7);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:22px;
+}
+
 .profile-name{
-    font-size:21px;
+    font-size:19px;
     font-weight:bold;
 }
 
 .uid{
-    margin-top:6px;
-    color:#6b7280;
-    font-size:13px;
+    margin-top:5px;
+    color:#718096;
+    font-size:12px;
 }
 
 .uid b{
-    color:#6c5ce7;
+    color:#3867d6;
 }
 
 .status{
@@ -90,70 +458,136 @@ header{
     color:#00a878;
     padding:7px 11px;
     border-radius:20px;
-    font-size:12px;
+    font-size:11px;
     font-weight:bold;
 }
 
-/* WALLET */
+
+/* =========================================
+   WALLET
+========================================= */
 
 .wallet{
     margin-top:16px;
-    background:linear-gradient(135deg,#6c5ce7,#4834d4);
+    background:linear-gradient(135deg,#087ff5 0%,#5d36dc 55%,#0acb9d 100%);
     color:white;
-    padding:22px;
-    border-radius:20px;
+    padding:23px;
+    border-radius:21px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 12px 28px rgba(67,75,210,.18);
+}
+
+.wallet:before{
+    content:"";
+    position:absolute;
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    right:-65px;
+    top:-80px;
+    background:rgba(255,255,255,.12);
+}
+
+.wallet:after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    right:70px;
+    bottom:-65px;
+    background:rgba(255,255,255,.08);
 }
 
 .wallet-title{
-    font-size:13px;
-    opacity:.85;
+    font-size:12px;
+    opacity:.86;
+    position:relative;
+    z-index:2;
 }
 
 .wallet-amount{
-    font-size:32px;
+    font-size:34px;
     font-weight:bold;
-    margin:7px 0 15px;
+    margin:6px 0 17px;
+    position:relative;
+    z-index:2;
 }
 
 .wallet-row{
     display:flex;
     justify-content:space-between;
-    font-size:13px;
+    font-size:12px;
+    position:relative;
+    z-index:2;
 }
 
 .wallet-row span{
-    opacity:.8;
+    opacity:.78;
 }
 
-/* CARDS */
+.wallet-divider{
+    height:1px;
+    background:rgba(255,255,255,.18);
+    margin:9px 0;
+}
+
+
+/* =========================================
+   BALANCE CARDS
+========================================= */
 
 .cards{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+    grid-template-columns:repeat(3,1fr);
+    gap:13px;
     margin-top:16px;
 }
 
 .card{
     background:white;
     padding:17px;
-    border-radius:17px;
-    box-shadow:0 4px 15px rgba(0,0,0,.07);
+    min-height:125px;
+    border-radius:18px;
+    box-shadow:0 5px 17px rgba(20,60,100,.07);
+    border:1px solid #e8f0f7;
+    position:relative;
+    overflow:hidden;
+}
+
+.card-icon{
+    width:39px;
+    height:39px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    margin-bottom:11px;
+}
+
+.card-icon.blue-bg{
+    background:#e7f3ff;
+}
+
+.card-icon.orange-bg{
+    background:#fff4dc;
+}
+
+.card-icon.purple-bg{
+    background:#f0e8ff;
 }
 
 .card-title{
-    color:#777;
-    font-size:12px;
-    margin-bottom:8px;
+    color:#65748b;
+    font-size:11px;
+    margin-bottom:7px;
 }
 
 .card-value{
-    font-size:20px;
+    font-size:21px;
     font-weight:bold;
-}
-
-.green{
-    color:#00a878;
 }
 
 .orange{
@@ -168,40 +602,153 @@ header{
     color:#6c5ce7;
 }
 
-/* COMMISSION */
+
+/* =========================================
+   SECTION
+========================================= */
+
+.section-title{
+    margin:21px 0 10px;
+    font-size:18px;
+    color:#163e76;
+}
+
+
+/* =========================================
+   COMMISSION
+========================================= */
 
 .commission-box{
     background:white;
     margin-top:16px;
-    padding:18px;
-    border-radius:18px;
-    box-shadow:0 4px 15px rgba(0,0,0,.07);
+    padding:19px;
+    border-radius:20px;
+    box-shadow:0 5px 18px rgba(20,60,100,.07);
+    border:1px solid #e8f0f7;
 }
 
-.commission-box h3{
-    margin:0 0 12px;
+.commission-heading{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    margin-bottom:15px;
+}
+
+.commission-icon{
+    width:43px;
+    height:43px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#08b995,#087ff5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:21px;
+}
+
+.commission-heading h3{
+    margin:0;
+    font-size:17px;
+}
+
+.commission-heading p{
+    margin:3px 0 0;
+    font-size:11px;
+    color:#7a8799;
+}
+
+.rate-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
 }
 
 .rate{
+    padding:15px 10px;
+    border-radius:14px;
+    text-align:center;
+    border:1px solid #e5edf6;
+}
+
+.rate:nth-child(1){
+    background:#eafff7;
+}
+
+.rate:nth-child(2){
+    background:#eef8ff;
+}
+
+.rate:nth-child(3){
+    background:#f4edff;
+}
+
+.rate-range{
+    font-size:13px;
+    font-weight:bold;
+}
+
+.rate-percent{
+    margin-top:6px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.rate:nth-child(1) .rate-percent{
+    color:#08a77e;
+}
+
+.rate:nth-child(2) .rate-percent{
+    color:#087ff5;
+}
+
+.rate:nth-child(3) .rate-percent{
+    color:#6c35d8;
+}
+
+.rate-label{
+    font-size:10px;
+    color:#748197;
+}
+
+
+/* =========================================
+   REFERRAL RATES
+========================================= */
+
+.referral-rates{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+    margin-top:10px;
+}
+
+.ref-rate{
+    padding:12px;
+    border-radius:12px;
+    background:#f7faff;
+    border:1px solid #e6eef7;
     display:flex;
     justify-content:space-between;
-    padding:9px 0;
-    border-bottom:1px solid #eee;
-    font-size:14px;
+    align-items:center;
+    font-size:12px;
 }
 
-.rate:last-child{
-    border-bottom:0;
+.ref-rate b{
+    color:#087ff5;
 }
 
-/* SELL */
+
+/* =========================================
+   SELL
+========================================= */
 
 .sell-box{
     margin-top:16px;
     background:white;
-    padding:18px;
-    border-radius:18px;
-    box-shadow:0 4px 15px rgba(0,0,0,.07);
+    padding:19px;
+    border-radius:20px;
+    box-shadow:0 5px 18px rgba(20,60,100,.07);
+    border:1px solid #e8f0f7;
 }
 
 .sell-header{
@@ -210,9 +757,32 @@ header{
     align-items:center;
 }
 
+.sell-title-wrap{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.sell-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:#e7fff5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
 .sell-title{
-    font-size:18px;
+    font-size:17px;
     font-weight:bold;
+}
+
+.sell-subtitle{
+    color:#7a8799;
+    font-size:11px;
+    margin-top:3px;
 }
 
 .switch{
@@ -244,6 +814,7 @@ header{
     background:white;
     border-radius:50%;
     transition:.3s;
+    box-shadow:0 2px 5px rgba(0,0,0,.15);
 }
 
 input:checked + .slider{
@@ -256,7 +827,7 @@ input:checked + .slider:before{
 
 .sell-status{
     margin-top:12px;
-    font-size:13px;
+    font-size:12px;
     font-weight:bold;
 }
 
@@ -268,77 +839,125 @@ input:checked + .slider:before{
     color:#dc2626;
 }
 
-/* QUICK ACTIONS */
 
-.section-title{
-    margin:22px 0 10px;
-    font-size:18px;
-}
+/* =========================================
+   QUICK ACTIONS
+========================================= */
 
 .actions{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:10px;
+    gap:11px;
 }
 
 .action{
     background:white;
     padding:16px 8px;
-    border-radius:16px;
+    min-height:95px;
+    border-radius:17px;
     text-align:center;
     text-decoration:none;
     color:#172033;
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
-    font-size:13px;
+    box-shadow:0 4px 15px rgba(20,60,100,.06);
+    border:1px solid #e7eef6;
+    font-size:12px;
     font-weight:bold;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:.2s;
+}
+
+.action:hover{
+    transform:translateY(-2px);
+    box-shadow:0 7px 20px rgba(20,60,100,.10);
 }
 
 .action-icon{
-    font-size:25px;
-    display:block;
-    margin-bottom:7px;
+    width:43px;
+    height:43px;
+    border-radius:13px;
+    background:#edf6ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    margin-bottom:8px;
 }
 
-/* REFERRAL */
+
+/* =========================================
+   REFERRAL BOX
+========================================= */
 
 .referral-box{
     margin-top:16px;
     background:linear-gradient(135deg,#ff9f43,#ee5253);
     color:white;
-    padding:18px;
-    border-radius:18px;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 9px 22px rgba(238,82,83,.13);
+}
+
+.referral-title{
+    font-size:17px;
+    font-weight:bold;
+}
+
+.referral-subtitle{
+    margin-top:4px;
+    font-size:11px;
+    opacity:.9;
 }
 
 .referral-code{
     background:rgba(255,255,255,.18);
     padding:12px;
-    border-radius:10px;
-    margin-top:10px;
+    border-radius:11px;
+    margin-top:13px;
     font-weight:bold;
     letter-spacing:1px;
     word-break:break-all;
 }
 
 .referral-link{
-    margin-top:8px;
-    font-size:12px;
+    margin-top:9px;
+    font-size:11px;
     opacity:.9;
     word-break:break-all;
 }
 
-/* BOTTOM NAV */
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+#message{
+    text-align:center;
+    margin:15px 0 10px;
+    font-size:12px;
+    color:#718096;
+}
+
+
+/* =========================================
+   BOTTOM NAV
+========================================= */
 
 .bottom-nav{
     position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
+    left:12px;
+    right:12px;
+    bottom:10px;
     height:70px;
-    background:white;
+    background:rgba(255,255,255,.97);
     display:flex;
     justify-content:space-around;
     align-items:center;
-    box-shadow:0 -4px 18px rgba(0,0,0,.10);
+    box-shadow:0 -5px 25px rgba(20,60,100,.13);
+    border:1px solid #e5edf7;
+    border-radius:23px;
     z-index:100;
 }
 
@@ -346,53 +965,237 @@ input:checked + .slider:before{
     text-decoration:none;
     color:#667085;
     text-align:center;
-    font-size:11px;
+    font-size:10px;
+    font-weight:600;
+    min-width:48px;
 }
 
 .bottom-nav span{
     display:block;
-    font-size:22px;
+    font-size:21px;
     margin-bottom:3px;
 }
 
 .bottom-nav .active{
-    color:#6c5ce7;
+    color:#087ff5;
     font-weight:bold;
 }
 
 .plus{
-    width:52px;
-    height:52px;
+    width:55px;
+    height:55px;
     border-radius:50%;
-    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    background:linear-gradient(135deg,#087ff5,#11cda7);
     color:white !important;
-    display:flex;
+    display:flex !important;
     align-items:center;
     justify-content:center;
-    font-size:27px !important;
-    margin-top:-25px;
-    border:5px solid #f4f7fb;
+    font-size:29px !important;
+    margin-top:-28px;
+    border:5px solid #f3f8fd;
+    box-shadow:0 7px 18px rgba(8,127,245,.25);
 }
 
-/* MESSAGE */
 
-#message{
-    text-align:center;
-    margin-top:15px;
-    font-size:13px;
-    color:#666;
+/* =========================================
+   DESKTOP BOTTOM NAV HIDDEN
+========================================= */
+
+@media(min-width:901px){
+
+    .bottom-nav{
+        display:none;
+    }
+
 }
 
-@media(max-width:500px){
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:900px){
+
+    header{
+        min-height:75px;
+        padding:13px 15px;
+    }
+
+    .brand-logo{
+        width:42px;
+        height:42px;
+        font-size:24px;
+        border-radius:13px;
+    }
+
+    .brand-text h1{
+        font-size:21px;
+    }
+
+    .brand-text p{
+        font-size:9px;
+    }
+
+    .header-right{
+        gap:7px;
+    }
+
+    .header-uid{
+        display:none;
+    }
+
+    .notification{
+        width:38px;
+        height:38px;
+        font-size:19px;
+    }
+
+    .header-profile{
+        width:39px;
+        height:39px;
+        font-size:19px;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .container{
+        margin:auto;
+        padding:14px 13px 95px;
+        max-width:700px;
+    }
+
+    .page-intro{
+        min-height:110px;
+        padding:20px;
+        border-radius:19px;
+    }
+
+    .page-intro h2{
+        font-size:23px;
+    }
+
+    .page-intro p{
+        font-size:11px;
+    }
+
+    .profile-card{
+        margin-top:12px;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media(max-width:520px){
 
     .cards{
         grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .card{
+        min-height:118px;
+        padding:14px;
+    }
+
+    .card-value{
+        font-size:18px;
+    }
+
+    .card-icon{
+        width:36px;
+        height:36px;
+        font-size:18px;
+    }
+
+    .rate-grid{
+        grid-template-columns:1fr;
+    }
+
+    .referral-rates{
+        grid-template-columns:1fr;
     }
 
     .actions{
-        grid-template-columns:1fr 1fr 1fr;
+        grid-template-columns:repeat(3,1fr);
+        gap:8px;
     }
 
+    .action{
+        min-height:88px;
+        padding:12px 5px;
+        font-size:10px;
+    }
+
+    .action-icon{
+        width:38px;
+        height:38px;
+        font-size:19px;
+    }
+
+    .wallet-amount{
+        font-size:29px;
+    }
+
+    .profile-name{
+        font-size:17px;
+    }
+
+    .status{
+        font-size:10px;
+        padding:6px 9px;
+    }
+
+}
+
+
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
+
+@media(max-width:360px){
+
+    .bottom-nav{
+        left:5px;
+        right:5px;
+    }
+
+    .bottom-nav a{
+        min-width:42px;
+        font-size:9px;
+    }
+
+    .plus{
+        width:50px;
+        height:50px;
+        font-size:25px !important;
+    }
+
+}
+
+
+/* =========================================
+   LOADING STATE
+========================================= */
+
+.loading{
+    opacity:.55;
+}
+
+
+/* =========================================
+   BUTTON FOCUS
+========================================= */
+
+a:focus-visible,
+input:focus-visible{
+    outline:3px solid rgba(8,127,245,.25);
+    outline-offset:2px;
 }
 
 </style>
@@ -401,26 +1204,252 @@ input:checked + .slider:before{
 
 <body>
 
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
 <header>
 
     <div class="header-row">
 
-        <div class="logo">
-            Sathi Pay
+        <div class="brand">
+
+            <div class="brand-logo">
+                S
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    Sathi Pay
+                </h1>
+
+                <p>
+                    Secure • Fast • Reliable
+                </p>
+
+            </div>
+
         </div>
 
-        <a class="logout"
-           href="customer-login.html"
-           onclick="logoutCustomer()">
-            Logout
-        </a>
+
+        <div class="header-right">
+
+            <div class="header-uid">
+
+                UID:
+                <span id="headerCustomerUID">
+                    Loading...
+                </span>
+
+                <span class="header-status">
+                    ● Active
+                </span>
+
+            </div>
+
+
+            <div class="notification">
+
+                🔔
+
+                <span class="notification-badge">
+                    3
+                </span>
+
+            </div>
+
+
+            <div class="header-profile">
+                👤
+            </div>
+
+        </div>
 
     </div>
 
 </header>
 
 
+<!-- =========================================
+     DESKTOP SIDEBAR
+========================================= -->
+
+<aside class="sidebar">
+
+
+    <div class="sidebar-profile">
+
+        <div class="sidebar-avatar">
+            👤
+        </div>
+
+
+        <div class="sidebar-name"
+             id="sidebarCustomerName">
+            Loading...
+        </div>
+
+
+        <div class="sidebar-uid">
+
+            UID:
+            <span id="sidebarCustomerUID">
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="sidebar-status">
+            ● Active
+        </div>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+
+        <a href="deshboard.html"
+           class="active">
+
+            <span class="sidebar-icon">
+                🏠
+            </span>
+
+            Dashboard
+
+        </a>
+
+
+        <a href="deposit.html">
+
+            <span class="sidebar-icon">
+                💰
+            </span>
+
+            Deposit
+
+        </a>
+
+
+        <a href="commission.html">
+
+            <span class="sidebar-icon">
+                📊
+            </span>
+
+            Earnings
+
+        </a>
+
+
+        <a href="referral.html">
+
+            <span class="sidebar-icon">
+                👥
+            </span>
+
+            Referral
+
+        </a>
+
+
+        <a href="#wallet-section">
+
+            <span class="sidebar-icon">
+                💼
+            </span>
+
+            Wallet
+
+        </a>
+
+
+        <a href="profile.html">
+
+            <span class="sidebar-icon">
+                👤
+            </span>
+
+            Profile
+
+        </a>
+
+
+    </nav>
+
+
+    <div class="sidebar-extra">
+
+
+        <div class="sidebar-promo">
+
+            <strong>
+                Grow Your Earnings
+            </strong>
+
+            <small>
+                More Deposits<br>
+                More Commission
+            </small>
+
+        </div>
+
+
+        <div class="sidebar-support">
+
+            <a href="#">
+                🎧 Support
+            </a>
+
+
+            <a href="#">
+                ✈️ Telegram
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-logout">
+
+            <a href="customer-login.html"
+               onclick="logoutCustomer()">
+
+                🚪 Logout
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================
+     MAIN CONTENT
+========================================= -->
+
 <div class="container">
+
+
+    <!-- PAGE INTRO -->
+
+    <section class="page-intro">
+
+        <h2>
+            Welcome to Sathi Pay
+        </h2>
+
+        <p>
+            Manage your deposits, earnings, referrals and wallet from one place.
+        </p>
+
+    </section>
 
 
     <!-- PROFILE -->
@@ -429,26 +1458,45 @@ input:checked + .slider:before{
 
         <div class="profile-top">
 
-            <div>
 
-                <div class="profile-name"
-                     id="customerName">
-                    Loading...
+            <div class="profile-left">
+
+                <div class="profile-avatar">
+                    👤
                 </div>
 
-                <div class="uid">
-                    UID:
-                    <b id="customerUID">
+
+                <div>
+
+                    <div class="profile-name"
+                         id="customerName">
+
                         Loading...
-                    </b>
+
+                    </div>
+
+
+                    <div class="uid">
+
+                        UID:
+                        <b id="customerUID">
+                            Loading...
+                        </b>
+
+                    </div>
+
                 </div>
 
             </div>
+
 
             <div class="status"
                  id="accountStatus">
+
                 Active
+
             </div>
+
 
         </div>
 
@@ -457,16 +1505,22 @@ input:checked + .slider:before{
 
     <!-- WALLET -->
 
-    <div class="wallet">
+    <div class="wallet"
+         id="wallet-section">
+
 
         <div class="wallet-title">
             Available Wallet Balance
         </div>
 
+
         <div class="wallet-amount"
              id="walletBalance">
+
             ₹0.00
+
         </div>
+
 
         <div class="wallet-row">
 
@@ -480,6 +1534,10 @@ input:checked + .slider:before{
 
         </div>
 
+
+        <div class="wallet-divider"></div>
+
+
         <div class="wallet-row">
 
             <span>
@@ -492,6 +1550,7 @@ input:checked + .slider:before{
 
         </div>
 
+
     </div>
 
 
@@ -499,7 +1558,12 @@ input:checked + .slider:before{
 
     <div class="cards">
 
+
         <div class="card">
+
+            <div class="card-icon blue-bg">
+                💰
+            </div>
 
             <div class="card-title">
                 Deposit Balance
@@ -507,13 +1571,19 @@ input:checked + .slider:before{
 
             <div class="card-value blue"
                  id="depositBalance">
+
                 ₹0.00
+
             </div>
 
         </div>
 
 
         <div class="card">
+
+            <div class="card-icon orange-bg">
+                👥
+            </div>
 
             <div class="card-title">
                 Referral Income
@@ -521,7 +1591,9 @@ input:checked + .slider:before{
 
             <div class="card-value orange"
                  id="referralBalance">
+
                 ₹0.00
+
             </div>
 
         </div>
@@ -529,99 +1601,154 @@ input:checked + .slider:before{
 
         <div class="card">
 
+            <div class="card-icon purple-bg">
+                📈
+            </div>
+
             <div class="card-title">
                 Today's Earnings
             </div>
 
             <div class="card-value purple"
                  id="todayEarnings">
+
                 ₹0.00
+
             </div>
 
         </div>
 
+
     </div>
 
 
-    <!-- COMMISSION -->
+    <!-- COMMISSION RULES -->
 
     <div class="commission-box">
 
-        <h3>
-            💰 Commission & Income
-        </h3>
 
-        <div class="rate">
+        <div class="commission-heading">
 
-            <span>
-                ₹1 – ₹9,999
-            </span>
+            <div class="commission-icon">
+                💰
+            </div>
 
-            <b>
-                6%
-            </b>
+            <div>
 
-        </div>
+                <h3>
+                    Deposit Commission Rules
+                </h3>
 
-        <div class="rate">
+                <p>
+                    Commission is calculated only on approved deposits.
+                </p>
 
-            <span>
-                ₹10,000 – ₹19,999
-            </span>
-
-            <b>
-                8%
-            </b>
+            </div>
 
         </div>
 
-        <div class="rate">
 
-            <span>
-                ₹20,000+
-            </span>
+        <div class="rate-grid">
 
-            <b>
-                10%
-            </b>
+
+            <div class="rate">
+
+                <div class="rate-range">
+                    ₹1 – ₹9,999
+                </div>
+
+                <div class="rate-percent">
+                    6%
+                </div>
+
+                <div class="rate-label">
+                    Commission
+                </div>
+
+            </div>
+
+
+            <div class="rate">
+
+                <div class="rate-range">
+                    ₹10,000 – ₹19,999
+                </div>
+
+                <div class="rate-percent">
+                    8%
+                </div>
+
+                <div class="rate-label">
+                    Commission
+                </div>
+
+            </div>
+
+
+            <div class="rate">
+
+                <div class="rate-range">
+                    ₹20,000+
+                </div>
+
+                <div class="rate-percent">
+                    10%
+                </div>
+
+                <div class="rate-label">
+                    Commission
+                </div>
+
+            </div>
+
 
         </div>
 
-        <div class="rate">
 
-            <span>
-                Referral Level A
-            </span>
+        <div class="referral-rates">
 
-            <b>
-                1%
-            </b>
+
+            <div class="ref-rate">
+
+                <span>
+                    Referral Level A
+                </span>
+
+                <b>
+                    1%
+                </b>
+
+            </div>
+
+
+            <div class="ref-rate">
+
+                <span>
+                    Referral Level B
+                </span>
+
+                <b>
+                    0.5%
+                </b>
+
+            </div>
+
+
+            <div class="ref-rate">
+
+                <span>
+                    Referral Level C
+                </span>
+
+                <b>
+                    0.2%
+                </b>
+
+            </div>
+
 
         </div>
 
-        <div class="rate">
-
-            <span>
-                Referral Level B
-            </span>
-
-            <b>
-                0.5%
-            </b>
-
-        </div>
-
-        <div class="rate">
-
-            <span>
-                Referral Level C
-            </span>
-
-            <b>
-                0.2%
-            </b>
-
-        </div>
 
     </div>
 
@@ -630,11 +1757,30 @@ input:checked + .slider:before{
 
     <div class="sell-box">
 
+
         <div class="sell-header">
 
-            <div class="sell-title">
-                Selling
+
+            <div class="sell-title-wrap">
+
+                <div class="sell-icon">
+                    🛍️
+                </div>
+
+                <div>
+
+                    <div class="sell-title">
+                        Sell Control
+                    </div>
+
+                    <div class="sell-subtitle">
+                        Control your selling activity
+                    </div>
+
+                </div>
+
             </div>
+
 
             <label class="switch">
 
@@ -647,7 +1793,9 @@ input:checked + .slider:before{
 
             </label>
 
+
         </div>
+
 
         <div id="sellStatus"
              class="sell-status sell-closed">
@@ -655,6 +1803,7 @@ input:checked + .slider:before{
             ● Closed - Selling OFF
 
         </div>
+
 
     </div>
 
@@ -665,7 +1814,9 @@ input:checked + .slider:before{
         Quick Actions
     </h3>
 
+
     <div class="actions">
+
 
         <a class="action"
            href="deposit.html">
@@ -738,6 +1889,7 @@ input:checked + .slider:before{
 
         </a>
 
+
     </div>
 
 
@@ -745,19 +1897,32 @@ input:checked + .slider:before{
 
     <div class="referral-box">
 
-        <b>
+
+        <div class="referral-title">
             🔗 Invite & Earn
-        </b>
+        </div>
+
+
+        <div class="referral-subtitle">
+            Share your referral code and grow your team.
+        </div>
+
 
         <div class="referral-code"
              id="invitationCode">
+
             Loading...
+
         </div>
+
 
         <div class="referral-link"
              id="referralLink">
+
             Loading referral link...
+
         </div>
+
 
     </div>
 
@@ -766,17 +1931,24 @@ input:checked + .slider:before{
         Loading dashboard...
     </div>
 
+
 </div>
 
 
-<!-- BOTTOM NAV -->
+<!-- =========================================
+     MOBILE BOTTOM NAV
+========================================= -->
 
 <div class="bottom-nav">
+
 
     <a href="deshboard.html"
        class="active">
 
-        <span>⌂</span>
+        <span>
+            🏠
+        </span>
+
         Home
 
     </a>
@@ -784,7 +1956,10 @@ input:checked + .slider:before{
 
     <a href="deposit.html">
 
-        <span>💰</span>
+        <span>
+            💰
+        </span>
+
         Deposit
 
     </a>
@@ -792,14 +1967,19 @@ input:checked + .slider:before{
 
     <a href="deposit.html">
 
-        <span class="plus">+</span>
+        <span class="plus">
+            +
+        </span>
 
     </a>
 
 
     <a href="referral.html">
 
-        <span>👥</span>
+        <span>
+            👥
+        </span>
+
         Team
 
     </a>
@@ -807,20 +1987,30 @@ input:checked + .slider:before{
 
     <a href="profile.html">
 
-        <span>💼</span>
+        <span>
+            💼
+        </span>
+
         Assets
 
     </a>
 
+
 </div>
 
 
-<!-- SUPABASE -->
+<!-- =========================================
+     SUPABASE
+========================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
+
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
 
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -835,9 +2025,9 @@ const supabaseClient =
     );
 
 
-/* =====================================
+/* =========================================
    CUSTOMER ID
-===================================== */
+========================================= */
 
 function getCustomerId(){
 
@@ -854,14 +2044,34 @@ function getCustomerId(){
 }
 
 
-/* =====================================
+/* =========================================
+   MONEY FORMAT
+========================================= */
+
+function formatMoney(value){
+
+    return "₹" +
+        Number(value || 0)
+        .toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+/* =========================================
    LOAD CUSTOMER
-===================================== */
+========================================= */
 
 async function loadDashboard(){
 
     const message =
         document.getElementById("message");
+
 
     try{
 
@@ -903,7 +2113,10 @@ async function loadDashboard(){
                 sell_on,
                 status
             `)
-            .eq("id", customerId)
+            .eq(
+                "id",
+                customerId
+            )
             .maybeSingle();
 
 
@@ -921,27 +2134,62 @@ async function loadDashboard(){
         }
 
 
-        /* NAME */
+        /* =================================
+           NAME
+        ================================= */
+
+        const customerName =
+            customer.name ||
+            "Customer";
+
 
         document.getElementById(
             "customerName"
         ).innerText =
-            customer.name || "Customer";
+            customerName;
 
 
-        /* UID */
+        document.getElementById(
+            "sidebarCustomerName"
+        ).innerText =
+            customerName;
+
+
+        /* =================================
+           UID
+        ================================= */
+
+        const customerUID =
+            customer.uid ||
+            "Not available";
+
 
         document.getElementById(
             "customerUID"
         ).innerText =
-            customer.uid || "Not available";
+            customerUID;
 
 
-        /* STATUS */
+        document.getElementById(
+            "sidebarCustomerUID"
+        ).innerText =
+            customerUID;
+
+
+        document.getElementById(
+            "headerCustomerUID"
+        ).innerText =
+            customerUID;
+
+
+        /* =================================
+           STATUS
+        ================================= */
 
         const accountStatus =
             String(
-                customer.status || "Active"
+                customer.status ||
+                "Active"
             ).toLowerCase();
 
 
@@ -953,71 +2201,73 @@ async function loadDashboard(){
             : customer.status;
 
 
-        /* WALLET */
+        /* =================================
+           WALLET
+        ================================= */
 
         document.getElementById(
             "walletBalance"
         ).innerText =
-            "₹" +
-            Number(
-                customer.wallet_balance || 0
-            ).toFixed(2);
+            formatMoney(
+                customer.wallet_balance
+            );
 
 
-        /* BONUS */
+        /* =================================
+           BONUS
+        ================================= */
 
         document.getElementById(
             "bonusBalance"
         ).innerText =
-            "₹" +
-            Number(
-                customer.bonus_balance || 0
-            ).toFixed(2);
+            formatMoney(
+                customer.bonus_balance
+            );
 
 
-        /* DEPOSIT */
+        /* =================================
+           DEPOSIT
+        ================================= */
 
         document.getElementById(
             "depositBalance"
         ).innerText =
-            "₹" +
-            Number(
-                customer.deposit_balance || 0
-            ).toFixed(2);
+            formatMoney(
+                customer.deposit_balance
+            );
 
 
-        /* COMMISSION */
+        /* =================================
+           COMMISSION
+        ================================= */
 
         document.getElementById(
             "commissionBalance"
         ).innerText =
-            "₹" +
-            Number(
-                customer.commission_balance || 0
-            ).toFixed(2);
+            formatMoney(
+                customer.commission_balance
+            );
 
 
-        /* REFERRAL */
+        /* =================================
+           REFERRAL
+        ================================= */
 
         document.getElementById(
             "referralBalance"
         ).innerText =
-            "₹" +
-            Number(
-                customer.referral_balance || 0
-            ).toFixed(2);
+            formatMoney(
+                customer.referral_balance
+            );
 
 
-        /* SELL STATUS */
+        /* =================================
+           SELL STATUS
+        ================================= */
 
         const sellToggle =
             document.getElementById(
                 "sellToggle"
-            );
-
-        const sellStatus =
-            document.getElementById(
-                "sellStatus"
             );
 
 
@@ -1030,10 +2280,13 @@ async function loadDashboard(){
         );
 
 
-        /* INVITATION CODE */
+        /* =================================
+           INVITATION CODE
+        ================================= */
 
         const invitationCode =
-            customer.invitation_code || "";
+            customer.invitation_code ||
+            "";
 
 
         document.getElementById(
@@ -1043,7 +2296,9 @@ async function loadDashboard(){
             "Not available";
 
 
-        /* REFERRAL LINK */
+        /* =================================
+           REFERRAL LINK
+        ================================= */
 
         if(invitationCode){
 
@@ -1053,6 +2308,7 @@ async function loadDashboard(){
                 encodeURIComponent(
                     invitationCode
                 );
+
 
             document.getElementById(
                 "referralLink"
@@ -1069,7 +2325,11 @@ async function loadDashboard(){
         }
 
 
-        /* TODAY'S EARNINGS */
+        /* =================================
+           TODAY'S EARNINGS
+           Temporary display.
+           Actual calculation later.
+        ================================= */
 
         document.getElementById(
             "todayEarnings"
@@ -1088,6 +2348,7 @@ async function loadDashboard(){
             error
         );
 
+
         message.innerText =
             "Dashboard error: " +
             error.message;
@@ -1097,9 +2358,9 @@ async function loadDashboard(){
 }
 
 
-/* =====================================
+/* =========================================
    SELL STATUS TEXT
-===================================== */
+========================================= */
 
 function updateSellText(isOn){
 
@@ -1130,14 +2391,15 @@ function updateSellText(isOn){
 }
 
 
-/* =====================================
+/* =========================================
    CHANGE SELL STATUS
-===================================== */
+========================================= */
 
 async function changeSellStatus(){
 
     const customerId =
         getCustomerId();
+
 
     if(!customerId){
 
@@ -1171,9 +2433,12 @@ async function changeSellStatus(){
             await supabaseClient
             .from("customers")
             .update({
-                sell_on: newStatus
+                sell_on:newStatus
             })
-            .eq("id", customerId);
+            .eq(
+                "id",
+                customerId
+            );
 
 
         if(error){
@@ -1181,9 +2446,11 @@ async function changeSellStatus(){
             toggle.checked =
                 !newStatus;
 
+
             updateSellText(
                 !newStatus
             );
+
 
             throw error;
         }
@@ -1204,6 +2471,7 @@ async function changeSellStatus(){
             error
         );
 
+
         document.getElementById(
             "message"
         ).innerText =
@@ -1214,9 +2482,9 @@ async function changeSellStatus(){
 }
 
 
-/* =====================================
+/* =========================================
    LOGOUT
-===================================== */
+========================================= */
 
 function logoutCustomer(){
 
@@ -1235,9 +2503,9 @@ function logoutCustomer(){
 }
 
 
-/* =====================================
+/* =========================================
    START
-===================================== */
+========================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -1249,9 +2517,9 @@ document.addEventListener(
 );
 
 
-/* =====================================
+/* =========================================
    AUTO REFRESH
-===================================== */
+========================================= */
 
 setInterval(
     function(){
@@ -1265,4 +2533,4 @@ setInterval(
 </script>
 
 </body>
-                </html>
+    </html>
