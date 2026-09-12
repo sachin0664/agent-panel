@@ -7,6 +7,7 @@
 
 <title>Sathi Pay - Dashboard</title>
 <script src="customer-guard.js"></script>
+
 <style>
 
 *{
@@ -1319,7 +1320,9 @@ input:focus-visible{
         </a>
 
 
-        <a href="#wallet-section">
+        <!-- WALLET CONNECTED -->
+
+        <a href="wallet.html">
 
             <span class="sidebar-icon">
                 💼
@@ -1359,24 +1362,28 @@ input:focus-visible{
         </div>
 
 
+        <!-- SUPPORT CONNECTED -->
+
         <div class="sidebar-support">
 
-            <a href="#">
+            <a href="support.html">
                 🎧 Support
             </a>
 
-            <a href="#">
+            <a href="support.html">
                 ✈️ Telegram
             </a>
 
         </div>
 
 
+        <!-- SECURE LOGOUT -->
+
         <div class="sidebar-logout">
 
             <a
                 href="customer-login.html"
-                onclick="logoutCustomer()">
+                onclick="logoutCustomer(); return false;">
 
                 🚪 Logout
 
@@ -1844,9 +1851,11 @@ input:focus-visible{
         </a>
 
 
+        <!-- SUPPORT CONNECTED -->
+
         <a
             class="action"
-            href="#">
+            href="support.html">
 
             <span class="action-icon">
                 🎧
@@ -1950,7 +1959,7 @@ input:focus-visible{
     </a>
 
 
-    <a href="profile.html">
+    <a href="wallet.html">
 
         <span>
             💼
@@ -2359,7 +2368,7 @@ async function loadDashboard(){
 
         /* =================================
            WALLET
-           
+
            Wallet is synced in database
            from the four balance fields.
         ================================= */
@@ -2613,15 +2622,15 @@ async function changeSellStatus(){
         const {
             error
         } =
-            await supabaseClient
-            .from("customers")
-            .update({
-                sell_on:newStatus
-            })
-            .eq(
-                "id",
-                customerId
-            );
+        await supabaseClient
+        .from("customers")
+        .update({
+            sell_on:newStatus
+        })
+        .eq(
+            "id",
+            customerId
+        );
 
 
         if(error){
@@ -2672,6 +2681,17 @@ async function changeSellStatus(){
 
 function logoutCustomer(){
 
+    if(window.sathiPayLogout){
+
+        window.sathiPayLogout();
+
+        return;
+
+    }
+
+
+    /* Fallback */
+
     localStorage.removeItem(
         "sathiPayCustomerId"
     );
@@ -2683,6 +2703,10 @@ function logoutCustomer(){
     localStorage.removeItem(
         "sathiPayInvitationCode"
     );
+
+
+    window.location.href =
+        "customer-login.html";
 
 }
 
@@ -2717,4 +2741,4 @@ setInterval(
 </script>
 
 </body>
-   </html>
+    </html>
