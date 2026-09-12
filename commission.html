@@ -3,53 +3,176 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Sathi Pay - Earnings</title>
 
-    <title>Sathi Pay - Commission</title>
+    <script src="customer-guard.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        .commission-rule {
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            font-family: Arial, sans-serif;
+            color: #172033;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,0.18);
+            padding: 10px 16px;
+            border-radius: 12px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            color: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 30px rgba(37,99,235,0.20);
+        }
+
+        .hero small {
+            opacity: .85;
+        }
+
+        .hero h2 {
+            margin: 8px 0;
+            font-size: 32px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(15,23,42,0.07);
+        }
+
+        .card .icon {
+            font-size: 28px;
+        }
+
+        .card h3 {
+            margin: 10px 0 5px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .card strong {
+            font-size: 23px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .rules {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .rule {
+            padding: 18px;
+            border-radius: 16px;
             background: #f1f5f9;
-            padding: 18px;
-            border-radius: 10px;
-            margin: 20px 0;
         }
 
-        .rate {
-            font-size: 24px;
-            font-weight: bold;
+        .rule strong {
+            display: block;
+            font-size: 25px;
             color: #16a34a;
+            margin-top: 5px;
         }
 
-        .referral-rule {
-            background: #fff7ed;
+        .referral-rules {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .ref-card {
             padding: 18px;
-            border-radius: 10px;
-            margin: 20px 0;
+            border-radius: 16px;
+            background: #fff7ed;
+        }
+
+        .ref-card strong {
+            display: block;
+            font-size: 24px;
+            color: #ea580c;
+            margin-top: 5px;
+        }
+
+        .table-box {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            min-width: 650px;
         }
 
         th,
         td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
             text-align: left;
         }
 
         th {
-            background: #e5e7eb;
+            background: #f8fafc;
+            color: #475569;
         }
 
-        .success {
+        .approved {
             color: #15803d;
             font-weight: bold;
         }
@@ -58,147 +181,250 @@
             font-weight: bold;
         }
 
-        .container {
-            padding: 20px;
-            max-width: 900px;
-            margin: auto;
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
         }
 
-        @media (max-width: 600px) {
-            table {
-                min-width: 600px;
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            background: #f1f5f9;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .action {
+            text-decoration: none;
+            text-align: center;
+            padding: 14px;
+            border-radius: 14px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .cards,
+            .rules,
+            .referral-rules {
+                grid-template-columns: 1fr;
             }
 
-            .table-box {
-                overflow-x: auto;
+            .actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                padding: 14px;
+            }
+
+            .hero h2 {
+                font-size: 27px;
             }
         }
     </style>
-
 </head>
 
 <body>
 
 <header>
-    <h1>Sathi Pay - Commission</h1>
+    <h1>💰 Sathi Pay Earnings</h1>
 
     <a href="deshboard.html">
         Dashboard
     </a>
 </header>
 
-
 <main class="container">
 
-    <h2>
-        📊 Commission Details
-    </h2>
+    <div class="hero">
+        <small>My Total Commission Earnings</small>
+        <h2 id="totalEarnings">₹0.00</h2>
+        <div id="customerInfo">Loading customer...</div>
+    </div>
 
+    <div class="cards">
 
-    <!-- DEPOSIT COMMISSION -->
-
-    <div class="commission-rule">
-
-        <h3>
-            💰 Deposit Commission
-        </h3>
-
-        <p>
-            Approved deposit par commission:
-        </p>
-
-        <div class="rate">
-            10%
+        <div class="card">
+            <div class="icon">💰</div>
+            <h3>Deposit Commission</h3>
+            <strong id="depositCommission">₹0.00</strong>
         </div>
 
-        <p>
-            Example: ₹1,000 approved deposit =
-            <strong>₹100 commission</strong>
-        </p>
+        <div class="card">
+            <div class="icon">👥</div>
+            <h3>Referral Income</h3>
+            <strong id="referralCommission">₹0.00</strong>
+        </div>
+
+        <div class="card">
+            <div class="icon">🎁</div>
+            <h3>Bonus</h3>
+            <strong id="bonusBalance">₹0.00</strong>
+        </div>
 
     </div>
 
 
-    <!-- REFERRAL COMMISSION -->
+    <div class="section">
 
-    <div class="referral-rule">
+        <h2>📊 Deposit Commission Rules</h2>
 
-        <h3>
-            🔗 Referral Team Commission
-        </h3>
+        <div class="rules">
 
-        <p>
-            Level A → <strong>1%</strong>
-        </p>
+            <div class="rule">
+                ₹1 – ₹9,999
+                <strong>6%</strong>
+            </div>
 
-        <p>
-            Level B → <strong>0.5%</strong>
-        </p>
+            <div class="rule">
+                ₹10,000 – ₹19,999
+                <strong>8%</strong>
+            </div>
 
-        <p>
-            Level C → <strong>0.2%</strong>
-        </p>
+            <div class="rule">
+                ₹20,000+
+                <strong>10%</strong>
+            </div>
 
-    </div>
-
-
-    <!-- COMMISSION TABLE -->
-
-    <div class="table-box">
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Agent</th>
-                    <th>Approved Deposit</th>
-                    <th>Commission (10%)</th>
-                </tr>
-
-            </thead>
-
-
-            <tbody id="commissionTable">
-
-                <tr>
-                    <td colspan="3">
-                        Loading commission...
-                    </td>
-                </tr>
-
-            </tbody>
-
-
-            <tfoot>
-
-                <tr>
-
-                    <th>
-                        Total
-                    </th>
-
-                    <th id="totalDeposit">
-                        ₹0.00
-                    </th>
-
-                    <th id="totalCommission">
-                        ₹0.00
-                    </th>
-
-                </tr>
-
-            </tfoot>
-
-        </table>
+        </div>
 
     </div>
 
 
-    <p id="commissionMessage"
-       style="margin-top:15px;">
-    </p>
+    <div class="section">
 
+        <h2>🔗 Referral Commission</h2>
+
+        <div class="referral-rules">
+
+            <div class="ref-card">
+                Level A
+                <strong>1%</strong>
+                Direct Referral
+            </div>
+
+            <div class="ref-card">
+                Level B
+                <strong>0.5%</strong>
+                Second Level
+            </div>
+
+            <div class="ref-card">
+                Level C
+                <strong>0.2%</strong>
+                Third Level
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="section">
+
+        <h2>💳 My Approved Deposits</h2>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Deposit</th>
+                        <th>Rate</th>
+                        <th>Commission</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="depositTable">
+                    <tr>
+                        <td colspan="5" class="empty">
+                            Loading...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="section">
+
+        <h2>👥 Referral Earnings</h2>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Level</th>
+                        <th>Deposit Amount</th>
+                        <th>Commission</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="referralTable">
+                    <tr>
+                        <td colspan="5" class="empty">
+                            Loading...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div id="message" class="message">
+        Loading earnings...
+    </div>
+
+
+    <div class="section">
+
+        <h2>⚡ Quick Actions</h2>
+
+        <div class="actions">
+
+            <a class="action" href="deposit.html">
+                💳 Deposit
+            </a>
+
+            <a class="action" href="referral.html">
+                👥 Referral
+            </a>
+
+            <a class="action" href="wallet.html">
+                💰 Wallet
+            </a>
+
+            <a class="action" href="transactions.html">
+                📜 Transactions
+            </a>
+
+        </div>
+
+    </div>
 
 </main>
 
@@ -210,252 +436,368 @@
 
 <script>
 
-    /*
-       Sathi Pay Deposit Commission
-       10%
-    */
+async function loadEarnings() {
 
-    const DEPOSIT_COMMISSION_RATE = 0.10;
+    const customerId =
+        localStorage.getItem("sathiPayCustomerId");
 
+    if (!customerId) {
+        return;
+    }
 
-    async function loadCommission() {
+    try {
 
-        const table =
-            document.getElementById(
-                "commissionTable"
-            );
+        /*
+         * CUSTOMER DATA
+         */
 
-        const message =
-            document.getElementById(
-                "commissionMessage"
-            );
-
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="3">
-                    Loading commission...
-                </td>
-            </tr>
-        `;
-
-
-        try {
-
-            const {
-                data,
-                error
-            } = await supabaseClient
-
-                .from("deposits")
-
+        const customerResult =
+            await supabaseClient
+                .from("customers")
                 .select(`
+                    id,
+                    name,
+                    uid,
+                    wallet_balance,
+                    bonus_balance,
+                    commission_balance,
+                    referral_balance
+                `)
+                .eq("id", customerId)
+                .single();
+
+        if (customerResult.error) {
+            throw customerResult.error;
+        }
+
+        const customer =
+            customerResult.data;
+
+
+        const depositCommission =
+            Number(customer.commission_balance || 0);
+
+        const referralCommission =
+            Number(customer.referral_balance || 0);
+
+        const bonus =
+            Number(customer.bonus_balance || 0);
+
+
+        document.getElementById("depositCommission")
+            .innerText =
+            "₹" + depositCommission.toFixed(2);
+
+        document.getElementById("referralCommission")
+            .innerText =
+            "₹" + referralCommission.toFixed(2);
+
+        document.getElementById("bonusBalance")
+            .innerText =
+            "₹" + bonus.toFixed(2);
+
+
+        document.getElementById("totalEarnings")
+            .innerText =
+            "₹" +
+            (depositCommission + referralCommission)
+                .toFixed(2);
+
+
+        document.getElementById("customerInfo")
+            .innerText =
+            customer.name +
+            " • UID: " +
+            customer.uid;
+
+
+        /*
+         * APPROVED CUSTOMER DEPOSITS
+         */
+
+        const depositResult =
+            await supabaseClient
+                .from("customer_deposits")
+                .select(`
+                    id,
                     amount,
                     status,
-                    agent_id,
-                    agents (
-                        name
-                    )
-                `);
-
-
-            if (error) {
-
-                console.error(error);
-
-                table.innerHTML = `
-                    <tr>
-                        <td colspan="3">
-                            Error loading commission.
-                        </td>
-                    </tr>
-                `;
-
-                message.innerText =
-                    "Error: " + error.message;
-
-                message.style.color = "red";
-
-                return;
-            }
-
-
-            /*
-               Only APPROVED deposits
-               will receive commission.
-            */
-
-            const approvedDeposits =
-                (data || []).filter(function(deposit) {
-
-                    return String(
-                        deposit.status || ""
-                    ).toLowerCase() === "approved";
-
+                    commission,
+                    created_at
+                `)
+                .eq("customer_id", customerId)
+                .eq("status", "approved")
+                .order("created_at", {
+                    ascending: false
                 });
 
 
-            if (approvedDeposits.length === 0) {
+        if (depositResult.error) {
+            throw depositResult.error;
+        }
 
-                table.innerHTML = `
+
+        const deposits =
+            depositResult.data || [];
+
+        const depositTable =
+            document.getElementById("depositTable");
+
+
+        if (deposits.length === 0) {
+
+            depositTable.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Abhi koi approved deposit nahi hai.
+                    </td>
+                </tr>
+            `;
+
+        } else {
+
+            depositTable.innerHTML = "";
+
+            deposits.forEach(function(deposit) {
+
+                const amount =
+                    Number(deposit.amount || 0);
+
+                let commission =
+                    Number(deposit.commission || 0);
+
+                let rate = 0;
+
+                if (amount >= 20000) {
+                    rate = 10;
+                } else if (amount >= 10000) {
+                    rate = 8;
+                } else {
+                    rate = 6;
+                }
+
+                /*
+                 * Agar database commission available nahi hai,
+                 * to display calculation use karein.
+                 */
+
+                if (!commission) {
+                    commission =
+                        amount * (rate / 100);
+                }
+
+
+                depositTable.innerHTML += `
                     <tr>
-                        <td colspan="3">
-                            No approved deposits found.
+                        <td>
+                            ${formatDate(deposit.created_at)}
+                        </td>
+
+                        <td class="amount">
+                            ₹${amount.toFixed(2)}
+                        </td>
+
+                        <td>
+                            ${rate}%
+                        </td>
+
+                        <td class="approved">
+                            ₹${commission.toFixed(2)}
+                        </td>
+
+                        <td class="approved">
+                            Approved
                         </td>
                     </tr>
                 `;
 
-                document.getElementById(
-                    "totalDeposit"
-                ).innerText = "₹0.00";
-
-                document.getElementById(
-                    "totalCommission"
-                ).innerText = "₹0.00";
-
-                message.innerText =
-                    "Abhi koi approved deposit nahi hai.";
-
-                message.style.color = "#b45309";
-
-                return;
-            }
-
-
-            const agentTotals = {};
-
-
-            approvedDeposits.forEach(
-                function(deposit) {
-
-                    const agentName =
-                        deposit.agents &&
-                        deposit.agents.name
-                            ? deposit.agents.name
-                            : "Unknown Agent";
-
-
-                    const amount =
-                        Number(
-                            deposit.amount
-                        ) || 0;
-
-
-                    if (!agentTotals[agentName]) {
-
-                        agentTotals[agentName] =
-                            0;
-
-                    }
-
-
-                    agentTotals[agentName] +=
-                        amount;
-
-                }
-            );
-
-
-            table.innerHTML = "";
-
-
-            let totalDeposit = 0;
-
-
-            Object.keys(agentTotals).forEach(
-                function(agentName) {
-
-                    const depositAmount =
-                        agentTotals[agentName];
-
-
-                    const commission =
-                        depositAmount *
-                        DEPOSIT_COMMISSION_RATE;
-
-
-                    totalDeposit +=
-                        depositAmount;
-
-
-                    table.innerHTML += `
-
-                        <tr>
-
-                            <td>
-                                ${agentName}
-                            </td>
-
-                            <td class="amount">
-                                ₹${depositAmount.toFixed(2)}
-                            </td>
-
-                            <td class="success">
-                                ₹${commission.toFixed(2)}
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            );
-
-
-            const totalCommission =
-                totalDeposit *
-                DEPOSIT_COMMISSION_RATE;
-
-
-            document.getElementById(
-                "totalDeposit"
-            ).innerText =
-                "₹" +
-                totalDeposit.toFixed(2);
-
-
-            document.getElementById(
-                "totalCommission"
-            ).innerText =
-                "₹" +
-                totalCommission.toFixed(2);
-
-
-            message.innerText =
-                "✅ Commission calculated on approved deposits at 10%.";
-
-            message.style.color =
-                "#15803d";
+            });
 
         }
 
-        catch (error) {
 
-            console.error(error);
+        /*
+         * REFERRAL COMMISSION
+         */
 
-            message.innerText =
-                "Something went wrong: " +
-                error.message;
+        const referralResult =
+            await supabaseClient
+                .from("customer_referral_commissions")
+                .select(`
+                    id,
+                    level,
+                    percentage,
+                    transaction_amount,
+                    commission_amount,
+                    status,
+                    created_at
+                `)
+                .eq("customer_id", customerId)
+                .order("created_at", {
+                    ascending: false
+                });
 
-            message.style.color =
-                "red";
+
+        if (referralResult.error) {
+            throw referralResult.error;
+        }
+
+
+        const referrals =
+            referralResult.data || [];
+
+        const referralTable =
+            document.getElementById("referralTable");
+
+
+        if (referrals.length === 0) {
+
+            referralTable.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Abhi koi referral earning nahi hai.
+                    </td>
+                </tr>
+            `;
+
+        } else {
+
+            referralTable.innerHTML = "";
+
+            referrals.forEach(function(item) {
+
+                const level =
+                    String(item.level || "")
+                        .toUpperCase();
+
+                const amount =
+                    Number(
+                        item.transaction_amount || 0
+                    );
+
+                const commission =
+                    Number(
+                        item.commission_amount || 0
+                    );
+
+                const percentage =
+                    Number(item.percentage || 0);
+
+
+                referralTable.innerHTML += `
+                    <tr>
+                        <td>
+                            ${formatDate(item.created_at)}
+                        </td>
+
+                        <td>
+                            Level ${level}
+                        </td>
+
+                        <td class="amount">
+                            ₹${amount.toFixed(2)}
+                        </td>
+
+                        <td class="approved">
+                            ₹${commission.toFixed(2)}
+                            <br>
+                            <small>${percentage}%</small>
+                        </td>
+
+                        <td class="approved">
+                            ${item.status || "approved"}
+                        </td>
+                    </tr>
+                `;
+
+            });
 
         }
+
+
+        document.getElementById("message")
+            .innerText =
+            "✅ Earnings data successfully loaded.";
+
+
+        document.getElementById("message")
+            .style.color =
+            "#15803d";
+
+
+    } catch (error) {
+
+        console.error(
+            "Earnings Error:",
+            error
+        );
+
+        document.getElementById("message")
+            .innerText =
+            "Earnings load error: " +
+            error.message;
+
+        document.getElementById("message")
+            .style.color =
+            "#dc2626";
 
     }
 
+}
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        function() {
 
-            loadCommission();
+/*
+ * DATE FORMAT
+ */
 
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+        return "-";
+    }
+
+    const date =
+        new Date(dateValue);
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
         }
     );
+
+}
+
+
+/*
+ * LOAD
+ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadEarnings();
+
+    }
+);
+
+
+/*
+ * AUTO REFRESH
+ */
+
+setInterval(
+    loadEarnings,
+    30000
+);
 
 </script>
 
 </body>
 
-</html>
+    </html>
