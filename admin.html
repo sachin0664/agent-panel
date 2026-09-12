@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
@@ -9,6 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -40,7 +42,7 @@ body{
 
 .container{
     width:100%;
-    max-width:900px;
+    max-width:950px;
     margin:auto;
     padding:15px;
 }
@@ -66,6 +68,10 @@ input{
     font-size:16px;
     margin-bottom:10px;
     outline:none;
+}
+
+input:focus{
+    border-color:#2563eb;
 }
 
 button{
@@ -225,11 +231,20 @@ button{
     color:#64748b;
 }
 
-.hidden{
-    display:none;
+.empty{
+    text-align:center;
+    padding:20px;
+    color:#64748b;
+}
+
+.customerSearchButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
 @media(max-width:600px){
+
     .stats{
         grid-template-columns:1fr 1fr;
     }
@@ -241,76 +256,153 @@ button{
     .value{
         text-align:left;
     }
+
+    .customerSearchButtons{
+        grid-template-columns:1fr;
+    }
+
 }
+
 </style>
 </head>
 
 <body>
 
+
 <div class="header">
+
     <h1>🛡️ Sathi Pay Admin</h1>
+
     <p>Customer Management Dashboard</p>
+
 </div>
+
 
 <div class="container">
 
-<!-- DASHBOARD STATS -->
+
+<!-- =========================
+     ADMIN STATS
+========================= -->
 
 <div class="stats">
 
     <div class="stat">
-        <div class="statTitle">👥 Total Customers</div>
-        <div id="totalCustomers" class="statValue">0</div>
+
+        <div class="statTitle">
+            👥 Total Customers
+        </div>
+
+        <div
+            id="totalCustomers"
+            class="statValue"
+        >
+            0
+        </div>
+
     </div>
 
-    <div class="stat">
-        <div class="statTitle">💰 Total Deposit</div>
-        <div id="totalDeposits" class="statValue">₹0.00</div>
-    </div>
 
     <div class="stat">
-        <div class="statTitle">💸 Total Withdrawal</div>
-        <div id="totalWithdrawals" class="statValue">₹0.00</div>
+
+        <div class="statTitle">
+            💰 Total Deposits
+        </div>
+
+        <div
+            id="totalDeposits"
+            class="statValue"
+        >
+            ₹0.00
+        </div>
+
     </div>
 
+
     <div class="stat">
-        <div class="statTitle">💵 Total Commission</div>
-        <div id="totalCommission" class="statValue">₹0.00</div>
+
+        <div class="statTitle">
+            ⏳ Pending Deposits
+        </div>
+
+        <div
+            id="pendingDeposits"
+            class="statValue"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="statTitle">
+            💵 Total Commission
+        </div>
+
+        <div
+            id="totalCommission"
+            class="statValue"
+        >
+            ₹0.00
+        </div>
+
     </div>
 
 </div>
 
 
-<!-- SEARCH CUSTOMER -->
+<!-- =========================
+     CUSTOMER SEARCH
+========================= -->
 
 <div class="card">
 
     <h2>🔎 Search Customer</h2>
 
     <input
-        id="customerUID"
+        id="customerSearch"
         type="text"
-        placeholder="Enter Customer UID"
+        placeholder="UID / Mobile / Name"
         autocomplete="off"
     >
 
-    <button
-        class="blue full"
-        onclick="searchCustomer()"
-    >
-        Search Customer
-    </button>
+    <div class="customerSearchButtons">
 
-    <div id="searchStatus" class="status">
+        <button
+            class="blue"
+            onclick="searchCustomer()"
+        >
+            🔍 Search
+        </button>
+
+        <button
+            class="gray"
+            onclick="clearCustomerSearch()"
+        >
+            ✕ Clear
+        </button>
+
+    </div>
+
+
+    <div
+        id="searchStatus"
+        class="status"
+    >
         Ready to search.
     </div>
+
 
     <div id="customerDetails"></div>
 
 </div>
 
 
-<!-- DEPOSIT REQUESTS -->
+<!-- =========================
+     DEPOSIT REQUESTS
+========================= -->
 
 <div class="card">
 
@@ -320,7 +412,7 @@ button{
         class="blue full"
         onclick="loadDeposits()"
     >
-        View Deposit Requests
+        🔄 Refresh Deposit Requests
     </button>
 
     <div id="depositList"></div>
@@ -328,25 +420,9 @@ button{
 </div>
 
 
-<!-- WITHDRAWAL REQUESTS -->
-
-<div class="card">
-
-    <h2>💸 Withdrawal Requests</h2>
-
-    <button
-        class="blue full"
-        onclick="loadWithdrawals()"
-    >
-        View Withdrawal Requests
-    </button>
-
-    <div id="withdrawalList"></div>
-
-</div>
-
-
-<!-- ALL CUSTOMERS -->
+<!-- =========================
+     ALL CUSTOMERS
+========================= -->
 
 <div class="card">
 
@@ -356,7 +432,7 @@ button{
         class="blue full"
         onclick="loadCustomers()"
     >
-        View All Customers
+        👥 View All Customers
     </button>
 
     <div id="customerList"></div>
@@ -364,7 +440,9 @@ button{
 </div>
 
 
-<!-- COMMISSION -->
+<!-- =========================
+     COMMISSION RULES
+========================= -->
 
 <div class="card">
 
@@ -373,25 +451,25 @@ button{
     <div class="commissionBox">
 
         <div class="rate">
-            <span>Base Commission</span>
+            <span>₹1 – ₹9,999</span>
             <b>6%</b>
         </div>
 
         <div class="rate">
-            <span>Single Deposit ₹10,000+</span>
+            <span>₹10,000 – ₹19,999</span>
             <b>8%</b>
         </div>
 
         <div class="rate">
-            <span>Single Deposit ₹20,000+</span>
+            <span>₹20,000+</span>
             <b>10%</b>
         </div>
 
         <br>
 
         <div class="small">
-            Commission is calculated on each approved
-            single deposit transaction.
+            Commission is automatically calculated
+            on each approved customer deposit.
         </div>
 
     </div>
@@ -399,33 +477,54 @@ button{
 </div>
 
 
-<!-- REFERRAL -->
+<!-- =========================
+     REFERRAL RULES
+========================= -->
 
 <div class="card">
 
     <h2>👥 Referral Commission</h2>
 
     <div class="item">
+
         <b>Level A</b>
-        <span style="float:right">1%</span>
+
+        <span style="float:right">
+            1%
+        </span>
+
     </div>
 
+
     <div class="item">
+
         <b>Level B</b>
-        <span style="float:right">0.5%</span>
+
+        <span style="float:right">
+            0.5%
+        </span>
+
     </div>
 
+
     <div class="item">
+
         <b>Level C</b>
-        <span style="float:right">0.2%</span>
+
+        <span style="float:right">
+            0.2%
+        </span>
+
     </div>
 
 </div>
+
 
 </div>
 
 
 <script>
+
 
 /* =====================================================
    SUPABASE
@@ -456,39 +555,10 @@ function money(value){
 }
 
 
-function statusBadge(status){
-
-    const s =
-        String(status || "pending").toLowerCase();
-
-    let cls = "pending";
-
-    if(
-        s === "approved" ||
-        s === "success" ||
-        s === "successful"
-    ){
-        cls = "approved";
-    }
-
-    if(
-        s === "rejected" ||
-        s === "failed"
-    ){
-        cls = "rejected";
-    }
-
-    return `
-        <span class="badge ${cls}">
-            ${status || "Pending"}
-        </span>
-    `;
-}
-
-
 function commissionRate(amount){
 
-    const n = Number(amount || 0);
+    const n =
+        Number(amount || 0);
 
     if(n >= 20000){
         return 0.10;
@@ -499,6 +569,7 @@ function commissionRate(amount){
     }
 
     return 0.06;
+
 }
 
 
@@ -506,6 +577,43 @@ function commissionAmount(amount){
 
     return Number(amount || 0) *
         commissionRate(amount);
+
+}
+
+
+function statusBadge(status){
+
+    const s =
+        String(status || "pending")
+        .toLowerCase();
+
+    let cls = "pending";
+
+    if(
+        s === "approved" ||
+        s === "success" ||
+        s === "successful"
+    ){
+
+        cls = "approved";
+
+    }
+
+    if(
+        s === "rejected" ||
+        s === "failed"
+    ){
+
+        cls = "rejected";
+
+    }
+
+    return `
+        <span class="badge ${cls}">
+            ${status || "Pending"}
+        </span>
+    `;
+
 }
 
 
@@ -515,44 +623,94 @@ function commissionAmount(amount){
 
 async function searchCustomer(){
 
-    const uid =
+    const search =
         document
-        .getElementById("customerUID")
+        .getElementById("customerSearch")
         .value
-        .trim()
-        .toUpperCase();
+        .trim();
 
     const status =
-        document.getElementById("searchStatus");
+        document.getElementById(
+            "searchStatus"
+        );
 
     const box =
-        document.getElementById("customerDetails");
+        document.getElementById(
+            "customerDetails"
+        );
+
 
     box.innerHTML = "";
 
-    if(!uid){
 
-        status.className = "status error";
+    if(!search){
+
+        status.className =
+            "status error";
+
         status.textContent =
-            "Please enter Customer UID.";
+            "Please enter UID, Mobile or Name.";
 
         return;
+
     }
 
-    status.className = "status";
+
+    status.className =
+        "status";
+
     status.textContent =
         "Searching customer...";
 
 
-    const {
-        data:customer,
-        error
-    } =
-    await supabaseClient
-        .from("customers")
-        .select("*")
-        .eq("uid",uid)
-        .maybeSingle();
+    const upperSearch =
+        search.toUpperCase();
+
+
+    let result;
+
+
+    /* UID SEARCH */
+
+    if(
+        upperSearch.startsWith("SP") ||
+        upperSearch.startsWith("SAT")
+    ){
+
+        result =
+        await supabaseClient
+            .from("customers")
+            .select("*")
+            .eq("uid",upperSearch)
+            .maybeSingle();
+
+    }
+
+
+    /* MOBILE / NAME SEARCH */
+
+    else{
+
+        const response =
+        await supabaseClient
+            .from("customers")
+            .select("*")
+            .or(
+                `mobile.eq.${search},name.ilike.%${search}%`
+            )
+            .limit(1)
+            .maybeSingle();
+
+        result = response;
+
+    }
+
+
+    const customer =
+        result.data;
+
+    const error =
+        result.error;
 
 
     if(error){
@@ -564,6 +722,7 @@ async function searchCustomer(){
             error.message;
 
         return;
+
     }
 
 
@@ -576,7 +735,32 @@ async function searchCustomer(){
             "Customer not found.";
 
         return;
+
     }
+
+
+    renderCustomer(customer);
+
+
+    status.className =
+        "status success";
+
+    status.textContent =
+        "✅ Customer found successfully.";
+
+}
+
+
+/* =====================================================
+   RENDER CUSTOMER
+===================================================== */
+
+function renderCustomer(customer){
+
+    const box =
+        document.getElementById(
+            "customerDetails"
+        );
 
 
     const wallet =
@@ -594,123 +778,208 @@ async function searchCustomer(){
     const referral =
         Number(customer.referral_balance || 0);
 
-    const withdrawalBalance =
-        Number(customer.withdrawal_balance || 0);
-
 
     box.innerHTML = `
 
         <div class="item">
 
-            <h3>👤 Customer Details</h3>
+            <h3>
+                👤 ${customer.name || "-"}
+            </h3>
+
 
             <div class="row">
-                <span class="label">Name</span>
-                <span class="value">
-                    ${customer.name || "-"}
+
+                <span class="label">
+                    UID
                 </span>
-            </div>
 
-            <div class="row">
-                <span class="label">UID</span>
                 <span class="value">
                     ${customer.uid || "-"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Mobile</span>
+
+                <span class="label">
+                    Mobile
+                </span>
+
                 <span class="value">
                     ${customer.mobile || "-"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Invitation Code</span>
+
+                <span class="label">
+                    Invitation Code
+                </span>
+
                 <span class="value">
                     ${customer.invitation_code || "-"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Referred By</span>
+
+                <span class="label">
+                    Referred By
+                </span>
+
                 <span class="value">
                     ${customer.referred_by || "-"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Status</span>
+
+                <span class="label">
+                    Account Status
+                </span>
+
                 <span class="value">
                     ${customer.status || "Active"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Wallet</span>
+
+                <span class="label">
+                    Wallet Balance
+                </span>
+
                 <span class="value">
                     ${money(wallet)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">₹99 Bonus</span>
+
+                <span class="label">
+                    ₹99 Bonus
+                </span>
+
                 <span class="value">
                     ${money(bonus)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Deposit Balance</span>
+
+                <span class="label">
+                    Deposit Balance
+                </span>
+
                 <span class="value">
                     ${money(depositBalance)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Commission Balance</span>
+
+                <span class="label">
+                    Commission Balance
+                </span>
+
                 <span class="value">
                     ${money(commission)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Referral Income</span>
+
+                <span class="label">
+                    Referral Income
+                </span>
+
                 <span class="value">
                     ${money(referral)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Withdrawal Balance</span>
-                <span class="value">
-                    ${money(withdrawalBalance)}
+
+                <span class="label">
+                    Sell Status
                 </span>
-            </div>
 
-            <div class="row">
-                <span class="label">Sell Status</span>
                 <span class="value">
-                    ${customer.sell_on ? "🟢 ON" : "🔴 OFF"}
+                    ${
+                        customer.sell_on
+                        ? "🟢 ON"
+                        : "🔴 OFF"
+                    }
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">UPI ID</span>
+
+                <span class="label">
+                    UPI ID
+                </span>
+
                 <span class="value">
                     ${customer.upi_id || "-"}
                 </span>
+
             </div>
 
+
         </div>
+
     `;
 
+}
+
+
+/* =====================================================
+   CLEAR SEARCH
+===================================================== */
+
+function clearCustomerSearch(){
+
+    document.getElementById(
+        "customerSearch"
+    ).value = "";
+
+    document.getElementById(
+        "customerDetails"
+    ).innerHTML = "";
+
+    const status =
+        document.getElementById(
+            "searchStatus"
+        );
 
     status.className =
-        "status success";
+        "status";
 
     status.textContent =
-        "✅ Customer found successfully.";
+        "Ready to search.";
+
 }
 
 
@@ -720,8 +989,11 @@ async function searchCustomer(){
 
 async function loadAdminTotals(){
 
+
+    /* TOTAL CUSTOMERS */
+
     const {
-        count
+        count:customerCount
     } =
     await supabaseClient
         .from("customers")
@@ -734,25 +1006,30 @@ async function loadAdminTotals(){
     document.getElementById(
         "totalCustomers"
     ).textContent =
-        count || 0;
+        customerCount || 0;
 
+
+    /* DEPOSITS */
 
     const {
         data:deposits
     } =
     await supabaseClient
-        .from("deposits")
-        .select("amount,status");
+        .from("customer_deposits")
+        .select("amount,status,commission");
 
 
     let totalDeposit = 0;
     let totalCommission = 0;
+    let pendingCount = 0;
 
 
     (deposits || []).forEach(d => {
 
-        totalDeposit +=
+
+        const amount =
             Number(d.amount || 0);
+
 
         if(
             String(d.status)
@@ -760,8 +1037,35 @@ async function loadAdminTotals(){
             === "approved"
         ){
 
-            totalCommission +=
-                commissionAmount(d.amount);
+            totalDeposit += amount;
+
+
+            if(
+                d.commission !== null &&
+                d.commission !== undefined
+            ){
+
+                totalCommission +=
+                    Number(d.commission || 0);
+
+            }
+            else{
+
+                totalCommission +=
+                    commissionAmount(amount);
+
+            }
+
+        }
+
+
+        if(
+            String(d.status)
+            .toLowerCase()
+            === "pending"
+        ){
+
+            pendingCount++;
 
         }
 
@@ -780,35 +1084,16 @@ async function loadAdminTotals(){
         money(totalCommission);
 
 
-    const {
-        data:withdrawals
-    } =
-    await supabaseClient
-        .from("withdrawals")
-        .select("amount");
-
-
-    let totalWithdrawal = 0;
-
-
-    (withdrawals || []).forEach(w => {
-
-        totalWithdrawal +=
-            Number(w.amount || 0);
-
-    });
-
-
     document.getElementById(
-        "totalWithdrawals"
+        "pendingDeposits"
     ).textContent =
-        money(totalWithdrawal);
+        pendingCount;
 
 }
 
 
 /* =====================================================
-   DEPOSIT REQUESTS
+   LOAD DEPOSITS
 ===================================================== */
 
 async function loadDeposits(){
@@ -818,8 +1103,9 @@ async function loadDeposits(){
             "depositList"
         );
 
+
     box.innerHTML =
-        "<p>Loading...</p>";
+        "<p>Loading deposits...</p>";
 
 
     const {
@@ -827,7 +1113,7 @@ async function loadDeposits(){
         error
     } =
     await supabaseClient
-        .from("deposits")
+        .from("customer_deposits")
         .select("*")
         .order("id",{
             ascending:false
@@ -837,94 +1123,200 @@ async function loadDeposits(){
     if(error){
 
         box.innerHTML =
-        `<div class="status error">
+        `
+        <div class="status error">
             ${error.message}
-        </div>`;
+        </div>
+        `;
 
         return;
+
     }
 
 
-    if(!data || !data.length){
+    if(
+        !data ||
+        !data.length
+    ){
 
         box.innerHTML =
-            "<p>No deposit requests.</p>";
+        `
+        <div class="empty">
+            No deposit requests found.
+        </div>
+        `;
 
         return;
+
     }
 
 
     box.innerHTML =
     data.map(d => {
 
-        const rate =
-            commissionRate(d.amount) * 100;
 
-        const commission =
-            commissionAmount(d.amount);
+        const rate =
+            commissionRate(
+                d.amount
+            ) * 100;
+
+
+        const calculatedCommission =
+            Number(
+                d.commission ??
+                commissionAmount(d.amount)
+            );
+
 
         return `
 
         <div class="item">
 
-            <b>💰 Deposit #${d.id}</b>
+            <h3>
+                💰 Deposit #${d.id}
+            </h3>
+
 
             <div class="row">
-                <span class="label">Amount</span>
+
+                <span class="label">
+                    Amount
+                </span>
+
                 <span class="value">
                     ${money(d.amount)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Status</span>
+
+                <span class="label">
+                    Status
+                </span>
+
                 <span class="value">
                     ${statusBadge(d.status)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Commission Rate</span>
+
+                <span class="label">
+                    Commission Rate
+                </span>
+
                 <span class="value">
                     ${rate}%
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Commission</span>
-                <span class="value">
-                    ${money(commission)}
+
+                <span class="label">
+                    Commission
                 </span>
+
+                <span class="value">
+                    ${money(calculatedCommission)}
+                </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Customer ID</span>
+
+                <span class="label">
+                    Customer ID
+                </span>
+
                 <span class="value">
                     ${d.customer_id || "-"}
                 </span>
+
             </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    UTR
+                </span>
+
+                <span class="value">
+                    ${d.utr || "-"}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Created
+                </span>
+
+                <span class="value">
+                    ${
+                        d.created_at
+                        ? new Date(
+                            d.created_at
+                        ).toLocaleString("en-IN")
+                        : "-"
+                    }
+                </span>
+
+            </div>
+
 
             <div class="actions">
 
-                <button
-                    class="green"
-                    onclick="updateDeposit(
-                        ${d.id},
-                        'approved'
-                    )"
-                >
-                    ✅ Approve
-                </button>
+                ${
+                    String(d.status)
+                    .toLowerCase()
+                    === "pending"
 
-                <button
-                    class="red"
-                    onclick="updateDeposit(
-                        ${d.id},
-                        'rejected'
-                    )"
-                >
-                    ❌ Reject
-                </button>
+                    ?
+
+                    `
+                    <button
+                        class="green"
+                        onclick="updateDeposit(
+                            ${d.id},
+                            'approved'
+                        )"
+                    >
+                        ✅ Approve
+                    </button>
+
+
+                    <button
+                        class="red"
+                        onclick="updateDeposit(
+                            ${d.id},
+                            'rejected'
+                        )"
+                    >
+                        ❌ Reject
+                    </button>
+                    `
+
+                    :
+
+                    `
+                    <button
+                        class="gray"
+                        disabled
+                    >
+                        ${d.status || "Processed"}
+                    </button>
+                    `
+                }
 
             </div>
 
@@ -933,6 +1325,7 @@ async function loadDeposits(){
         `;
 
     }).join("");
+
 }
 
 
@@ -940,13 +1333,33 @@ async function loadDeposits(){
    UPDATE DEPOSIT
 ===================================================== */
 
-async function updateDeposit(id,status){
+async function updateDeposit(
+    id,
+    status
+){
+
+    const action =
+        status === "approved"
+        ? "approve"
+        : "reject";
+
+
+    const confirmed =
+        confirm(
+            `Are you sure you want to ${action} this deposit?`
+        );
+
+
+    if(!confirmed){
+        return;
+    }
+
 
     const {
         error
     } =
     await supabaseClient
-        .from("deposits")
+        .from("customer_deposits")
         .update({
             status:status
         })
@@ -955,176 +1368,32 @@ async function updateDeposit(id,status){
 
     if(error){
 
-        alert("❌ " + error.message);
+        alert(
+            "❌ " +
+            error.message
+        );
 
         return;
+
     }
 
 
     alert(
-        "Deposit " +
+        "✅ Deposit " +
         status +
         " successfully."
     );
 
 
     await loadDeposits();
-    await loadAdminTotals();
-}
 
-
-/* =====================================================
-   WITHDRAWALS
-===================================================== */
-
-async function loadWithdrawals(){
-
-    const box =
-        document.getElementById(
-            "withdrawalList"
-        );
-
-    box.innerHTML =
-        "<p>Loading...</p>";
-
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("withdrawals")
-        .select("*")
-        .order("id",{
-            ascending:false
-        });
-
-
-    if(error){
-
-        box.innerHTML =
-        `<div class="status error">
-            ${error.message}
-        </div>`;
-
-        return;
-    }
-
-
-    if(!data || !data.length){
-
-        box.innerHTML =
-            "<p>No withdrawal requests.</p>";
-
-        return;
-    }
-
-
-    box.innerHTML =
-    data.map(w => `
-
-        <div class="item">
-
-            <b>💸 Withdrawal #${w.id}</b>
-
-            <div class="row">
-                <span class="label">Amount</span>
-                <span class="value">
-                    ${money(w.amount)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Status</span>
-                <span class="value">
-                    ${statusBadge(w.status)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">UPI ID</span>
-                <span class="value">
-                    ${w.upi_id || "-"}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Customer ID</span>
-                <span class="value">
-                    ${w.customer_id || "-"}
-                </span>
-            </div>
-
-            <div class="actions">
-
-                <button
-                    class="green"
-                    onclick="updateWithdrawal(
-                        ${w.id},
-                        'approved'
-                    )"
-                >
-                    ✅ Approve
-                </button>
-
-                <button
-                    class="red"
-                    onclick="updateWithdrawal(
-                        ${w.id},
-                        'rejected'
-                    )"
-                >
-                    ❌ Reject
-                </button>
-
-            </div>
-
-        </div>
-
-    `).join("");
-}
-
-
-/* =====================================================
-   UPDATE WITHDRAWAL
-===================================================== */
-
-async function updateWithdrawal(id,status){
-
-    const {
-        error
-    } =
-    await supabaseClient
-        .from("withdrawals")
-        .update({
-            status:status
-        })
-        .eq("id",id);
-
-
-    if(error){
-
-        alert("❌ " + error.message);
-
-        return;
-    }
-
-
-    alert(
-        "Withdrawal " +
-        status +
-        " successfully."
-    );
-
-
-    await loadWithdrawals();
     await loadAdminTotals();
 
 }
 
 
 /* =====================================================
-   ALL CUSTOMERS
+   LOAD ALL CUSTOMERS
 ===================================================== */
 
 async function loadCustomers(){
@@ -1133,6 +1402,7 @@ async function loadCustomers(){
         document.getElementById(
             "customerList"
         );
+
 
     box.innerHTML =
         "<p>Loading customers...</p>";
@@ -1144,29 +1414,45 @@ async function loadCustomers(){
     } =
     await supabaseClient
         .from("customers")
-        .select("*")
-        .order("created_at",{
-            ascending:false
-        });
+        .select(
+            "id,name,mobile,uid,invitation_code,referred_by,wallet_balance,bonus_balance,deposit_balance,commission_balance,referral_balance,sell_on,status,created_at"
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
 
 
     if(error){
 
         box.innerHTML =
-        `<div class="status error">
+        `
+        <div class="status error">
             ${error.message}
-        </div>`;
+        </div>
+        `;
 
         return;
+
     }
 
 
-    if(!data || !data.length){
+    if(
+        !data ||
+        !data.length
+    ){
 
         box.innerHTML =
-            "<p>No customers found.</p>";
+        `
+        <div class="empty">
+            No customers found.
+        </div>
+        `;
 
         return;
+
     }
 
 
@@ -1179,39 +1465,138 @@ async function loadCustomers(){
                 👤 ${c.name || "-"}
             </h3>
 
+
             <div class="row">
-                <span class="label">UID</span>
+
+                <span class="label">
+                    UID
+                </span>
+
                 <span class="value">
                     ${c.uid || "-"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Mobile</span>
+
+                <span class="label">
+                    Mobile
+                </span>
+
                 <span class="value">
                     ${c.mobile || "-"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Wallet</span>
+
+                <span class="label">
+                    Invitation Code
+                </span>
+
+                <span class="value">
+                    ${c.invitation_code || "-"}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Wallet
+                </span>
+
                 <span class="value">
                     ${money(c.wallet_balance)}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Status</span>
+
+                <span class="label">
+                    Deposit Balance
+                </span>
+
+                <span class="value">
+                    ${money(c.deposit_balance)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Commission
+                </span>
+
+                <span class="value">
+                    ${money(c.commission_balance)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Referral
+                </span>
+
+                <span class="value">
+                    ${money(c.referral_balance)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Bonus
+                </span>
+
+                <span class="value">
+                    ${money(c.bonus_balance)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Status
+                </span>
+
                 <span class="value">
                     ${c.status || "Active"}
                 </span>
+
             </div>
 
+
             <div class="row">
-                <span class="label">Sell</span>
-                <span class="value">
-                    ${c.sell_on ? "🟢 ON" : "🔴 OFF"}
+
+                <span class="label">
+                    Sell
                 </span>
+
+                <span class="value">
+                    ${
+                        c.sell_on
+                        ? "🟢 ON"
+                        : "🔴 OFF"
+                    }
+                </span>
+
             </div>
 
         </div>
@@ -1227,14 +1612,25 @@ async function loadCustomers(){
 
 document.addEventListener(
     "DOMContentLoaded",
-    function(){
+    async function(){
 
-        loadAdminTotals();
+        await loadAdminTotals();
 
     }
 );
 
+
+/* =====================================================
+   AUTO REFRESH
+===================================================== */
+
+setInterval(
+    loadAdminTotals,
+    30000
+);
+
+
 </script>
 
 </body>
-</html>
+    </html>
