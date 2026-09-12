@@ -9,10 +9,6 @@
 
 <style>
 
-/* =========================================
-   RESET
-========================================= */
-
 *{
     box-sizing:border-box;
 }
@@ -35,7 +31,7 @@ a{
 
 
 /* =========================================
-   TOP HEADER
+   HEADER
 ========================================= */
 
 header{
@@ -158,7 +154,7 @@ header{
 
 
 /* =========================================
-   DESKTOP SIDEBAR
+   SIDEBAR
 ========================================= */
 
 .sidebar{
@@ -331,7 +327,7 @@ header{
 
 
 /* =========================================
-   MAIN CONTAINER
+   MAIN
 ========================================= */
 
 .container{
@@ -352,16 +348,7 @@ header{
 
 
 /* =========================================
-   MOBILE TOP PROFILE
-========================================= */
-
-.mobile-profile{
-    display:none;
-}
-
-
-/* =========================================
-   DESKTOP PAGE INTRO
+   PAGE INTRO
 ========================================= */
 
 .page-intro{
@@ -402,7 +389,7 @@ header{
 
 
 /* =========================================
-   PROFILE CARD
+   PROFILE
 ========================================= */
 
 .profile-card{
@@ -710,11 +697,6 @@ header{
     color:#748197;
 }
 
-
-/* =========================================
-   REFERRAL RATES
-========================================= */
-
 .referral-rates{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -888,7 +870,7 @@ input:checked + .slider:before{
 
 
 /* =========================================
-   REFERRAL BOX
+   REFERRAL
 ========================================= */
 
 .referral-box{
@@ -995,11 +977,6 @@ input:checked + .slider:before{
     border:5px solid #f3f8fd;
     box-shadow:0 7px 18px rgba(8,127,245,.25);
 }
-
-
-/* =========================================
-   DESKTOP BOTTOM NAV HIDDEN
-========================================= */
 
 @media(min-width:901px){
 
@@ -1155,7 +1132,7 @@ input:checked + .slider:before{
 
 
 /* =========================================
-   VERY SMALL MOBILE
+   VERY SMALL
 ========================================= */
 
 @media(max-width:360px){
@@ -1178,19 +1155,9 @@ input:checked + .slider:before{
 
 }
 
-
-/* =========================================
-   LOADING STATE
-========================================= */
-
 .loading{
     opacity:.55;
 }
-
-
-/* =========================================
-   BUTTON FOCUS
-========================================= */
 
 a:focus-visible,
 input:focus-visible{
@@ -1221,9 +1188,7 @@ input:focus-visible{
 
             <div class="brand-text">
 
-                <h1>
-                    Sathi Pay
-                </h1>
+                <h1>Sathi Pay</h1>
 
                 <p>
                     Secure • Fast • Reliable
@@ -1273,11 +1238,10 @@ input:focus-visible{
 
 
 <!-- =========================================
-     DESKTOP SIDEBAR
+     SIDEBAR
 ========================================= -->
 
 <aside class="sidebar">
-
 
     <div class="sidebar-profile">
 
@@ -1285,12 +1249,11 @@ input:focus-visible{
             👤
         </div>
 
-
-        <div class="sidebar-name"
-             id="sidebarCustomerName">
+        <div
+            class="sidebar-name"
+            id="sidebarCustomerName">
             Loading...
         </div>
-
 
         <div class="sidebar-uid">
 
@@ -1301,7 +1264,6 @@ input:focus-visible{
 
         </div>
 
-
         <div class="sidebar-status">
             ● Active
         </div>
@@ -1311,9 +1273,9 @@ input:focus-visible{
 
     <nav class="sidebar-menu">
 
-
-        <a href="deshboard.html"
-           class="active">
+        <a
+            href="deshboard.html"
+            class="active">
 
             <span class="sidebar-icon">
                 🏠
@@ -1378,12 +1340,10 @@ input:focus-visible{
 
         </a>
 
-
     </nav>
 
 
     <div class="sidebar-extra">
-
 
         <div class="sidebar-promo">
 
@@ -1405,7 +1365,6 @@ input:focus-visible{
                 🎧 Support
             </a>
 
-
             <a href="#">
                 ✈️ Telegram
             </a>
@@ -1415,8 +1374,9 @@ input:focus-visible{
 
         <div class="sidebar-logout">
 
-            <a href="customer-login.html"
-               onclick="logoutCustomer()">
+            <a
+                href="customer-login.html"
+                onclick="logoutCustomer()">
 
                 🚪 Logout
 
@@ -1424,14 +1384,13 @@ input:focus-visible{
 
         </div>
 
-
     </div>
 
 </aside>
 
 
 <!-- =========================================
-     MAIN CONTENT
+     MAIN
 ========================================= -->
 
 <div class="container">
@@ -1458,23 +1417,21 @@ input:focus-visible{
 
         <div class="profile-top">
 
-
             <div class="profile-left">
 
                 <div class="profile-avatar">
                     👤
                 </div>
 
-
                 <div>
 
-                    <div class="profile-name"
-                         id="customerName">
+                    <div
+                        class="profile-name"
+                        id="customerName">
 
                         Loading...
 
                     </div>
-
 
                     <div class="uid">
 
@@ -1490,32 +1447,34 @@ input:focus-visible{
             </div>
 
 
-            <div class="status"
-                 id="accountStatus">
+            <div
+                class="status"
+                id="accountStatus">
 
                 Active
 
             </div>
-
 
         </div>
 
     </div>
 
 
-    <!-- WALLET -->
+    <!-- =====================================
+         WALLET
+    ====================================== -->
 
-    <div class="wallet"
-         id="wallet-section">
-
+    <div
+        class="wallet"
+        id="wallet-section">
 
         <div class="wallet-title">
             Available Wallet Balance
         </div>
 
-
-        <div class="wallet-amount"
-             id="walletBalance">
+        <div
+            class="wallet-amount"
+            id="walletBalance">
 
             ₹0.00
 
@@ -1550,11 +1509,12 @@ input:focus-visible{
 
         </div>
 
-
     </div>
 
 
-    <!-- BALANCE CARDS -->
+    <!-- =====================================
+         BALANCE CARDS
+    ====================================== -->
 
     <div class="cards">
 
@@ -1569,8 +1529,9 @@ input:focus-visible{
                 Deposit Balance
             </div>
 
-            <div class="card-value blue"
-                 id="depositBalance">
+            <div
+                class="card-value blue"
+                id="depositBalance">
 
                 ₹0.00
 
@@ -1589,8 +1550,9 @@ input:focus-visible{
                 Referral Income
             </div>
 
-            <div class="card-value orange"
-                 id="referralBalance">
+            <div
+                class="card-value orange"
+                id="referralBalance">
 
                 ₹0.00
 
@@ -1609,8 +1571,9 @@ input:focus-visible{
                 Today's Earnings
             </div>
 
-            <div class="card-value purple"
-                 id="todayEarnings">
+            <div
+                class="card-value purple"
+                id="todayEarnings">
 
                 ₹0.00
 
@@ -1618,14 +1581,14 @@ input:focus-visible{
 
         </div>
 
-
     </div>
 
 
-    <!-- COMMISSION RULES -->
+    <!-- =====================================
+         COMMISSION RULES
+    ====================================== -->
 
     <div class="commission-box">
-
 
         <div class="commission-heading">
 
@@ -1701,7 +1664,6 @@ input:focus-visible{
 
             </div>
 
-
         </div>
 
 
@@ -1746,20 +1708,18 @@ input:focus-visible{
 
             </div>
 
-
         </div>
-
 
     </div>
 
 
-    <!-- SELL -->
+    <!-- =====================================
+         SELL CONTROL
+    ====================================== -->
 
     <div class="sell-box">
 
-
         <div class="sell-header">
-
 
             <div class="sell-title-wrap">
 
@@ -1793,22 +1753,23 @@ input:focus-visible{
 
             </label>
 
-
         </div>
 
 
-        <div id="sellStatus"
-             class="sell-status sell-closed">
+        <div
+            id="sellStatus"
+            class="sell-status sell-closed">
 
             ● Closed - Selling OFF
 
         </div>
 
-
     </div>
 
 
-    <!-- QUICK ACTIONS -->
+    <!-- =====================================
+         QUICK ACTIONS
+    ====================================== -->
 
     <h3 class="section-title">
         Quick Actions
@@ -1818,8 +1779,9 @@ input:focus-visible{
     <div class="actions">
 
 
-        <a class="action"
-           href="deposit.html">
+        <a
+            class="action"
+            href="deposit.html">
 
             <span class="action-icon">
                 💰
@@ -1830,8 +1792,9 @@ input:focus-visible{
         </a>
 
 
-        <a class="action"
-           href="transactions.html">
+        <a
+            class="action"
+            href="transactions.html">
 
             <span class="action-icon">
                 📜
@@ -1842,8 +1805,9 @@ input:focus-visible{
         </a>
 
 
-        <a class="action"
-           href="profile.html">
+        <a
+            class="action"
+            href="profile.html">
 
             <span class="action-icon">
                 👤
@@ -1854,8 +1818,9 @@ input:focus-visible{
         </a>
 
 
-        <a class="action"
-           href="referral.html">
+        <a
+            class="action"
+            href="referral.html">
 
             <span class="action-icon">
                 👥
@@ -1866,8 +1831,9 @@ input:focus-visible{
         </a>
 
 
-        <a class="action"
-           href="commission.html">
+        <a
+            class="action"
+            href="commission.html">
 
             <span class="action-icon">
                 📊
@@ -1878,8 +1844,9 @@ input:focus-visible{
         </a>
 
 
-        <a class="action"
-           href="#">
+        <a
+            class="action"
+            href="#">
 
             <span class="action-icon">
                 🎧
@@ -1889,40 +1856,38 @@ input:focus-visible{
 
         </a>
 
-
     </div>
 
 
-    <!-- REFERRAL -->
+    <!-- =====================================
+         REFERRAL
+    ====================================== -->
 
     <div class="referral-box">
-
 
         <div class="referral-title">
             🔗 Invite & Earn
         </div>
 
-
         <div class="referral-subtitle">
             Share your referral code and grow your team.
         </div>
 
-
-        <div class="referral-code"
-             id="invitationCode">
+        <div
+            class="referral-code"
+            id="invitationCode">
 
             Loading...
 
         </div>
 
-
-        <div class="referral-link"
-             id="referralLink">
+        <div
+            class="referral-link"
+            id="referralLink">
 
             Loading referral link...
 
         </div>
-
 
     </div>
 
@@ -1930,7 +1895,6 @@ input:focus-visible{
     <div id="message">
         Loading dashboard...
     </div>
-
 
 </div>
 
@@ -1942,8 +1906,9 @@ input:focus-visible{
 <div class="bottom-nav">
 
 
-    <a href="deshboard.html"
-       class="active">
+    <a
+        href="deshboard.html"
+        class="active">
 
         <span>
             🏠
@@ -1995,7 +1960,6 @@ input:focus-visible{
 
     </a>
 
-
 </div>
 
 
@@ -2041,6 +2005,7 @@ function getCustomerId(){
     }
 
     return null;
+
 }
 
 
@@ -2064,13 +2029,190 @@ function formatMoney(value){
 
 
 /* =========================================
-   LOAD CUSTOMER
+   TODAY RANGE
+========================================= */
+
+function getTodayRange(){
+
+    const now =
+        new Date();
+
+
+    const start =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+        );
+
+
+    const end =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() + 1
+        );
+
+
+    return {
+        start:start.toISOString(),
+        end:end.toISOString()
+    };
+
+}
+
+
+/* =========================================
+   TODAY EARNINGS
+========================================= */
+
+async function loadTodayEarnings(
+    customerId
+){
+
+    const range =
+        getTodayRange();
+
+
+    let total = 0;
+
+
+    /* =====================================
+       APPROVED DEPOSIT COMMISSION
+    ===================================== */
+
+    const {
+        data: deposits,
+        error: depositError
+    } =
+        await supabaseClient
+        .from(
+            "customer_deposits"
+        )
+        .select(
+            "commission"
+        )
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .eq(
+            "status",
+            "approved"
+        )
+        .gte(
+            "created_at",
+            range.start
+        )
+        .lt(
+            "created_at",
+            range.end
+        );
+
+
+    if(depositError){
+
+        console.error(
+            "Deposit earnings error:",
+            depositError
+        );
+
+    }
+
+
+    if(deposits){
+
+        deposits.forEach(
+            function(row){
+
+                total +=
+                    Number(
+                        row.commission || 0
+                    );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       APPROVED REFERRAL COMMISSION
+    ===================================== */
+
+    const {
+        data: referrals,
+        error: referralError
+    } =
+        await supabaseClient
+        .from(
+            "customer_referral_commissions"
+        )
+        .select(
+            "commission_amount"
+        )
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .eq(
+            "status",
+            "approved"
+        )
+        .gte(
+            "created_at",
+            range.start
+        )
+        .lt(
+            "created_at",
+            range.end
+        );
+
+
+    if(referralError){
+
+        console.error(
+            "Referral earnings error:",
+            referralError
+        );
+
+    }
+
+
+    if(referrals){
+
+        referrals.forEach(
+            function(row){
+
+                total +=
+                    Number(
+                        row.commission_amount || 0
+                    );
+
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "todayEarnings"
+    ).innerText =
+        formatMoney(total);
+
+}
+
+
+/* =========================================
+   LOAD DASHBOARD
 ========================================= */
 
 async function loadDashboard(){
 
     const message =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
 
     try{
@@ -2078,6 +2220,10 @@ async function loadDashboard(){
         const customerId =
             getCustomerId();
 
+
+        /* =================================
+           LOGIN CHECK
+        ================================= */
 
         if(!customerId){
 
@@ -2088,10 +2234,13 @@ async function loadDashboard(){
                 "customer-login.html";
 
             return;
+
         }
 
 
-        /* CUSTOMER PROFILE */
+        /* =================================
+           CUSTOMER DATA
+        ================================= */
 
         const {
             data: customer,
@@ -2121,7 +2270,9 @@ async function loadDashboard(){
 
 
         if(error){
+
             throw error;
+
         }
 
 
@@ -2131,11 +2282,12 @@ async function loadDashboard(){
                 "Customer account not found.";
 
             return;
+
         }
 
 
         /* =================================
-           NAME
+           CUSTOMER NAME
         ================================= */
 
         const customerName =
@@ -2186,31 +2338,66 @@ async function loadDashboard(){
            STATUS
         ================================= */
 
-        const accountStatus =
+        const rawStatus =
             String(
                 customer.status ||
                 "Active"
-            ).toLowerCase();
+            );
+
+
+        const lowerStatus =
+            rawStatus.toLowerCase();
 
 
         document.getElementById(
             "accountStatus"
         ).innerText =
-            accountStatus === "active"
+            lowerStatus === "active"
             ? "Active"
-            : customer.status;
+            : rawStatus;
 
 
         /* =================================
            WALLET
+           
+           Wallet is synced in database
+           from the four balance fields.
         ================================= */
+
+        const wallet =
+            Number(
+                customer.wallet_balance || 0
+            );
+
+
+        const bonus =
+            Number(
+                customer.bonus_balance || 0
+            );
+
+
+        const deposit =
+            Number(
+                customer.deposit_balance || 0
+            );
+
+
+        const commission =
+            Number(
+                customer.commission_balance || 0
+            );
+
+
+        const referral =
+            Number(
+                customer.referral_balance || 0
+            );
+
 
         document.getElementById(
             "walletBalance"
         ).innerText =
-            formatMoney(
-                customer.wallet_balance
-            );
+            formatMoney(wallet);
 
 
         /* =================================
@@ -2220,9 +2407,7 @@ async function loadDashboard(){
         document.getElementById(
             "bonusBalance"
         ).innerText =
-            formatMoney(
-                customer.bonus_balance
-            );
+            formatMoney(bonus);
 
 
         /* =================================
@@ -2232,9 +2417,7 @@ async function loadDashboard(){
         document.getElementById(
             "depositBalance"
         ).innerText =
-            formatMoney(
-                customer.deposit_balance
-            );
+            formatMoney(deposit);
 
 
         /* =================================
@@ -2244,9 +2427,7 @@ async function loadDashboard(){
         document.getElementById(
             "commissionBalance"
         ).innerText =
-            formatMoney(
-                customer.commission_balance
-            );
+            formatMoney(commission);
 
 
         /* =================================
@@ -2256,9 +2437,7 @@ async function loadDashboard(){
         document.getElementById(
             "referralBalance"
         ).innerText =
-            formatMoney(
-                customer.referral_balance
-            );
+            formatMoney(referral);
 
 
         /* =================================
@@ -2271,12 +2450,16 @@ async function loadDashboard(){
             );
 
 
-        sellToggle.checked =
+        const sellOn =
             customer.sell_on === true;
 
 
+        sellToggle.checked =
+            sellOn;
+
+
         updateSellText(
-            customer.sell_on === true
+            sellOn
         );
 
 
@@ -2326,15 +2509,12 @@ async function loadDashboard(){
 
 
         /* =================================
-           TODAY'S EARNINGS
-           Temporary display.
-           Actual calculation later.
+           TODAY EARNINGS
         ================================= */
 
-        document.getElementById(
-            "todayEarnings"
-        ).innerText =
-            "₹0.00";
+        await loadTodayEarnings(
+            customerId
+        );
 
 
         message.innerText =
@@ -2359,10 +2539,12 @@ async function loadDashboard(){
 
 
 /* =========================================
-   SELL STATUS TEXT
+   SELL TEXT
 ========================================= */
 
-function updateSellText(isOn){
+function updateSellText(
+    isOn
+){
 
     const status =
         document.getElementById(
@@ -2407,6 +2589,7 @@ async function changeSellStatus(){
             "customer-login.html";
 
         return;
+
     }
 
 
@@ -2453,6 +2636,7 @@ async function changeSellStatus(){
 
 
             throw error;
+
         }
 
 
@@ -2533,4 +2717,4 @@ setInterval(
 </script>
 
 </body>
-    </html>
+   </html>
