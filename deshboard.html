@@ -516,20 +516,6 @@ input:checked + .slider:before{
         <div class="card">
 
             <div class="card-title">
-                Withdrawal Balance
-            </div>
-
-            <div class="card-value green"
-                 id="withdrawalBalance">
-                ₹0.00
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="card-title">
                 Referral Income
             </div>
 
@@ -568,7 +554,7 @@ input:checked + .slider:before{
         <div class="rate">
 
             <span>
-                Deposit Commission
+                ₹1 – ₹9,999
             </span>
 
             <b>
@@ -580,7 +566,31 @@ input:checked + .slider:before{
         <div class="rate">
 
             <span>
-                Level A
+                ₹10,000 – ₹19,999
+            </span>
+
+            <b>
+                8%
+            </b>
+
+        </div>
+
+        <div class="rate">
+
+            <span>
+                ₹20,000+
+            </span>
+
+            <b>
+                10%
+            </b>
+
+        </div>
+
+        <div class="rate">
+
+            <span>
+                Referral Level A
             </span>
 
             <b>
@@ -592,7 +602,7 @@ input:checked + .slider:before{
         <div class="rate">
 
             <span>
-                Level B
+                Referral Level B
             </span>
 
             <b>
@@ -604,7 +614,7 @@ input:checked + .slider:before{
         <div class="rate">
 
             <span>
-                Level C
+                Referral Level C
             </span>
 
             <b>
@@ -670,18 +680,6 @@ input:checked + .slider:before{
 
 
         <a class="action"
-           href="withdrawal.html">
-
-            <span class="action-icon">
-                💸
-            </span>
-
-            Withdraw
-
-        </a>
-
-
-        <a class="action"
            href="transactions.html">
 
             <span class="action-icon">
@@ -725,6 +723,18 @@ input:checked + .slider:before{
             </span>
 
             Earnings
+
+        </a>
+
+
+        <a class="action"
+           href="#">
+
+            <span class="action-icon">
+                🎧
+            </span>
+
+            Support
 
         </a>
 
@@ -890,7 +900,6 @@ async function loadDashboard(){
                 deposit_balance,
                 commission_balance,
                 referral_balance,
-                withdrawal_balance,
                 sell_on,
                 status
             `)
@@ -999,17 +1008,6 @@ async function loadDashboard(){
             ).toFixed(2);
 
 
-        /* WITHDRAWAL */
-
-        document.getElementById(
-            "withdrawalBalance"
-        ).innerText =
-            "₹" +
-            Number(
-                customer.withdrawal_balance || 0
-            ).toFixed(2);
-
-
         /* SELL STATUS */
 
         const sellToggle =
@@ -1061,8 +1059,17 @@ async function loadDashboard(){
             ).innerText =
                 link;
 
+        }else{
+
+            document.getElementById(
+                "referralLink"
+            ).innerText =
+                "Referral link not available";
+
         }
 
+
+        /* TODAY'S EARNINGS */
 
         document.getElementById(
             "todayEarnings"
@@ -1258,4 +1265,4 @@ setInterval(
 </script>
 
 </body>
-      </html>
+                </html>
