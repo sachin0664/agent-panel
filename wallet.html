@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sathi Pay - Wallet</title>
+
+<script src="customer-guard.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7ff;
+    color:#172033;
+    min-height:100vh;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+    border:0;
+}
+
+.header{
+    background:linear-gradient(135deg,#2563eb,#4f46e5,#7c3aed);
+    color:white;
+    padding:18px 22px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 4px 18px rgba(37,99,235,.20);
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.brand{
+    font-size:23px;
+    font-weight:800;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.uid-badge{
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.25);
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+.logout-btn{
+    background:white;
+    color:#4f46e5;
+    padding:9px 15px;
+    border-radius:20px;
+    font-weight:700;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:25px 18px 100px;
+}
+
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-bottom:18px;
+    color:#4f46e5;
+    font-weight:700;
+}
+
+.page-title{
+    margin-bottom:5px;
+    font-size:28px;
+}
+
+.page-subtitle{
+    color:#697386;
+    margin-bottom:22px;
+}
+
+.wallet-main{
+    background:linear-gradient(135deg,#1d4ed8,#4f46e5,#7c3aed);
+    color:white;
+    border-radius:25px;
+    padding:28px;
+    box-shadow:0 12px 35px rgba(79,70,229,.25);
+    margin-bottom:22px;
+    position:relative;
+    overflow:hidden;
+}
+
+.wallet-main:after{
+    content:"";
+    position:absolute;
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    right:-55px;
+    top:-65px;
+}
+
+.wallet-label{
+    font-size:14px;
+    opacity:.85;
+    margin-bottom:9px;
+}
+
+.wallet-balance{
+    font-size:39px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.wallet-user{
+    font-size:14px;
+    opacity:.9;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 5px 20px rgba(31,41,55,.07);
+    border:1px solid #edf0f7;
+}
+
+.card-icon{
+    width:43px;
+    height:43px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    margin-bottom:13px;
+    background:#eef2ff;
+}
+
+.card-title{
+    color:#737b8c;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+.card-value{
+    font-size:22px;
+    font-weight:800;
+}
+
+.deposit .card-icon{
+    background:#e0f2fe;
+}
+
+.bonus .card-icon{
+    background:#fef3c7;
+}
+
+.commission .card-icon{
+    background:#dcfce7;
+}
+
+.referral .card-icon{
+    background:#f3e8ff;
+}
+
+.section-title{
+    font-size:20px;
+    margin-bottom:14px;
+}
+
+.history-box{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(31,41,55,.07);
+    border:1px solid #edf0f7;
+}
+
+.history-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:17px 19px;
+    border-bottom:1px solid #edf0f5;
+}
+
+.history-item:last-child{
+    border-bottom:0;
+}
+
+.history-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.history-icon{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eef2ff;
+    font-size:19px;
+}
+
+.history-title{
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.history-date{
+    color:#8991a1;
+    font-size:12px;
+}
+
+.amount{
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.amount.positive{
+    color:#16a34a;
+}
+
+.amount.neutral{
+    color:#4f46e5;
+}
+
+.empty{
+    padding:35px 20px;
+    text-align:center;
+    color:#8991a1;
+}
+
+.loading{
+    padding:35px 20px;
+    text-align:center;
+    color:#697386;
+}
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-top:25px;
+}
+
+.action{
+    background:white;
+    padding:17px;
+    border-radius:18px;
+    text-align:center;
+    font-weight:700;
+    box-shadow:0 5px 18px rgba(31,41,55,.06);
+    border:1px solid #edf0f7;
+    transition:.2s;
+}
+
+.action:hover{
+    transform:translateY(-2px);
+}
+
+.action-icon{
+    font-size:24px;
+    margin-bottom:8px;
+}
+
+.bottom-nav{
+    display:none;
+}
+
+.error-box{
+    background:#fff1f2;
+    color:#be123c;
+    padding:14px;
+    border-radius:14px;
+    margin-bottom:18px;
+    display:none;
+}
+
+@media(max-width:850px){
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:600px){
+    .header{
+        padding:15px;
+    }
+
+    .brand{
+        font-size:20px;
+    }
+
+    .uid-badge{
+        display:none;
+    }
+
+    .logout-btn{
+        padding:8px 12px;
+        font-size:12px;
+    }
+
+    .container{
+        padding:20px 14px 90px;
+    }
+
+    .page-title{
+        font-size:24px;
+    }
+
+    .wallet-main{
+        padding:23px;
+        border-radius:21px;
+    }
+
+    .wallet-balance{
+        font-size:32px;
+    }
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+        gap:11px;
+    }
+
+    .card{
+        padding:15px;
+        border-radius:17px;
+    }
+
+    .card-value{
+        font-size:18px;
+    }
+
+    .card-icon{
+        width:38px;
+        height:38px;
+        font-size:18px;
+        border-radius:12px;
+    }
+
+    .quick-actions{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .bottom-nav{
+        display:flex;
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        height:66px;
+        background:white;
+        border-top:1px solid #e5e7eb;
+        z-index:200;
+        justify-content:space-around;
+        align-items:center;
+        box-shadow:0 -5px 20px rgba(0,0,0,.08);
+    }
+
+    .bottom-nav a{
+        text-align:center;
+        font-size:11px;
+        color:#6b7280;
+        font-weight:700;
+    }
+
+    .bottom-icon{
+        font-size:21px;
+        display:block;
+        margin-bottom:3px;
+    }
+
+    .bottom-nav .active{
+        color:#4f46e5;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+
+        <div class="brand">
+            Sathi Pay
+        </div>
+
+        <div class="header-right">
+            <div class="uid-badge" id="headerUid">
+                UID: Loading...
+            </div>
+
+            <button class="logout-btn" onclick="logoutCustomer()">
+                Logout
+            </button>
+        </div>
+
+    </div>
+</header>
+
+
+<main class="container">
+
+    <a href="deshboard.html" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
+    <h1 class="page-title">
+        My Wallet
+    </h1>
+
+    <p class="page-subtitle">
+        View your wallet balance and earnings
+    </p>
+
+    <div id="errorBox" class="error-box"></div>
+
+
+    <!-- MAIN WALLET -->
+
+    <section class="wallet-main">
+
+        <div class="wallet-label">
+            Available Wallet Balance
+        </div>
+
+        <div class="wallet-balance" id="walletBalance">
+            ₹0.00
+        </div>
+
+        <div class="wallet-user" id="walletUser">
+            Loading customer...
+        </div>
+
+    </section>
+
+
+    <!-- BALANCE CARDS -->
+
+    <section class="cards">
+
+        <div class="card deposit">
+            <div class="card-icon">🏦</div>
+
+            <div class="card-title">
+                Deposit Balance
+            </div>
+
+            <div class="card-value" id="depositBalance">
+                ₹0.00
+            </div>
+        </div>
+
+
+        <div class="card bonus">
+            <div class="card-icon">🎁</div>
+
+            <div class="card-title">
+                Bonus Balance
+            </div>
+
+            <div class="card-value" id="bonusBalance">
+                ₹0.00
+            </div>
+        </div>
+
+
+        <div class="card commission">
+            <div class="card-icon">💵</div>
+
+            <div class="card-title">
+                Commission
+            </div>
+
+            <div class="card-value" id="commissionBalance">
+                ₹0.00
+            </div>
+        </div>
+
+
+        <div class="card referral">
+            <div class="card-icon">👥</div>
+
+            <div class="card-title">
+                Referral Income
+            </div>
+
+            <div class="card-value" id="referralBalance">
+                ₹0.00
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- WALLET HISTORY -->
+
+    <h2 class="section-title">
+        Wallet Activity
+    </h2>
+
+    <section class="history-box">
+
+        <div id="historyLoading" class="loading">
+            Loading wallet activity...
+        </div>
+
+        <div id="historyList"></div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <h2 class="section-title" style="margin-top:28px;">
+        Quick Actions
+    </h2>
+
+    <section class="quick-actions">
+
+        <a href="deposit.html" class="action">
+            <div class="action-icon">💳</div>
+            Deposit
+        </a>
+
+        <a href="earnings.html" class="action">
+            <div class="action-icon">📈</div>
+            Earnings
+        </a>
+
+        <a href="referral.html" class="action">
+            <div class="action-icon">👥</div>
+            Referral
+        </a>
+
+        <a href="transactions.html" class="action">
+            <div class="action-icon">📋</div>
+            Transactions
+        </a>
+
+        <a href="profile.html" class="action">
+            <div class="action-icon">👤</div>
+            Profile
+        </a>
+
+        <a href="support.html" class="action">
+            <div class="action-icon">🎧</div>
+            Support
+        </a>
+
+    </section>
+
+</main>
+
+
+<!-- MOBILE NAV -->
+
+<nav class="bottom-nav">
+
+    <a href="deshboard.html">
+        <span class="bottom-icon">🏠</span>
+        Home
+    </a>
+
+    <a href="deposit.html">
+        <span class="bottom-icon">💳</span>
+        Deposit
+    </a>
+
+    <a href="referral.html">
+        <span class="bottom-icon">👥</span>
+        Team
+    </a>
+
+    <a href="wallet.html" class="active">
+        <span class="bottom-icon">💰</span>
+        Wallet
+    </a>
+
+    <a href="profile.html">
+        <span class="bottom-icon">👤</span>
+        Profile
+    </a>
+
+</nav>
+
+
+<script>
+
+const SUPABASE_URL = "https://lozluohksmjxbxixkbmq.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+function money(value){
+
+    const number = Number(value || 0);
+
+    return "₹" + number.toLocaleString("en-IN", {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+}
+
+
+function showError(message){
+
+    const box = document.getElementById("errorBox");
+
+    box.textContent = message;
+    box.style.display = "block";
+}
+
+
+function hideError(){
+
+    document.getElementById("errorBox").style.display = "none";
+}
+
+
+function logoutCustomer(){
+
+    if(window.sathiPayLogout){
+
+        window.sathiPayLogout();
+
+    }else{
+
+        localStorage.removeItem("sathiPayCustomerId");
+        localStorage.removeItem("sathiPayUID");
+        localStorage.removeItem("sathiPayInvitationCode");
+
+        window.location.href = "login.html";
+    }
+}
+
+
+async function loadWallet(){
+
+    hideError();
+
+    const customerId =
+        localStorage.getItem("sathiPayCustomerId");
+
+    if(!customerId){
+
+        window.location.href = "login.html";
+        return;
+    }
+
+
+    try{
+
+        const { data: customer, error } =
+            await db
+            .from("customers")
+            .select(`
+                id,
+                name,
+                uid,
+                wallet_balance,
+                bonus_balance,
+                deposit_balance,
+                commission_balance,
+                referral_balance,
+                status
+            `)
+            .eq("id", customerId)
+            .maybeSingle();
+
+
+        if(error){
+
+            throw error;
+        }
+
+
+        if(!customer){
+
+            localStorage.removeItem("sathiPayCustomerId");
+            localStorage.removeItem("sathiPayUID");
+            localStorage.removeItem("sathiPayInvitationCode");
+
+            window.location.href = "login.html";
+            return;
+        }
+
+
+        // Customer information
+
+        document.getElementById("headerUid").textContent =
+            "UID: " + (customer.uid || "N/A");
+
+        document.getElementById("walletUser").textContent =
+            (customer.name || "Customer") +
+            " • UID: " +
+            (customer.uid || "N/A");
+
+
+        // Wallet balances
+
+        document.getElementById("walletBalance").textContent =
+            money(customer.wallet_balance);
+
+        document.getElementById("depositBalance").textContent =
+            money(customer.deposit_balance);
+
+        document.getElementById("bonusBalance").textContent =
+            money(customer.bonus_balance);
+
+        document.getElementById("commissionBalance").textContent =
+            money(customer.commission_balance);
+
+        document.getElementById("referralBalance").textContent =
+            money(customer.referral_balance);
+
+
+        await loadWalletActivity(customer.id);
+
+    }catch(error){
+
+        console.error(error);
+
+        showError(
+            "Wallet data load nahi ho pa raha. Please refresh and try again."
+        );
+
+        document.getElementById("historyLoading").style.display =
+            "none";
+    }
+}
+
+
+async function loadWalletActivity(customerId){
+
+    const historyLoading =
+        document.getElementById("historyLoading");
+
+    const historyList =
+        document.getElementById("historyList");
+
+    historyLoading.style.display = "block";
+    historyList.innerHTML = "";
+
+
+    try{
+
+        let activities = [];
+
+
+        // Deposit activity
+
+        const { data: deposits, error: depositError } =
+            await db
+            .from("customer_deposits")
+            .select(`
+                id,
+                amount,
+                status,
+                commission,
+                created_at,
+                utr
+            `)
+            .eq("customer_id", customerId)
+            .order("created_at", { ascending:false })
+            .limit(15);
+
+
+        if(depositError){
+
+            console.error("Deposit history:", depositError);
+
+        }else{
+
+            (deposits || []).forEach(item => {
+
+                const amount =
+                    Number(item.amount || 0);
+
+                const commission =
+                    Number(item.commission || 0);
+
+                activities.push({
+
+                    date:item.created_at,
+
+                    title:
+                        item.status === "approved"
+                        ? "Deposit Approved"
+                        : item.status === "rejected"
+                        ? "Deposit Rejected"
+                        : "Deposit Pending",
+
+                    icon:
+                        item.status === "approved"
+                        ? "💰"
+                        : item.status === "rejected"
+                        ? "❌"
+                        : "⏳",
+
+                    amount:
+                        item.status === "approved"
+                        ? amount
+                        : 0,
+
+                    commission:commission,
+
+                    type:"deposit"
+
+                });
+
+            });
+
+        }
+
+
+        // Referral commission activity
+
+        const {
+            data: referrals,
+            error: referralError
+        } = await db
+            .from("customer_referral_commissions")
+            .select(`
+                id,
+                level,
+                percentage,
+                transaction_amount,
+                commission_amount,
+                status,
+                created_at
+            `)
+            .eq("customer_id", customerId)
+            .order("created_at", { ascending:false })
+            .limit(15);
+
+
+        if(referralError){
+
+            console.error(
+                "Referral history:",
+                referralError
+            );
+
+        }else{
+
+            (referrals || []).forEach(item => {
+
+                activities.push({
+
+                    date:item.created_at,
+
+                    title:
+                        "Level " +
+                        (item.level || "A") +
+                        " Referral Income",
+
+                    icon:"👥",
+
+                    amount:
+                        Number(item.commission_amount || 0),
+
+                    commission:0,
+
+                    type:"referral"
+
+                });
+
+            });
+
+        }
+
+
+        // Sort latest first
+
+        activities.sort(function(a,b){
+
+            return new Date(b.date) - new Date(a.date);
+
+        });
+
+
+        historyLoading.style.display = "none";
+
+
+        if(activities.length === 0){
+
+            historyList.innerHTML = `
+                <div class="empty">
+                    No wallet activity yet.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        activities
+        .slice(0,25)
+        .forEach(item => {
+
+            const date =
+                new Date(item.date);
+
+            const dateText =
+                date.toLocaleDateString("en-IN",{
+                    day:"2-digit",
+                    month:"short",
+                    year:"numeric"
+                });
+
+
+            let amountText = "";
+
+            if(item.type === "deposit"){
+
+                if(item.amount > 0){
+
+                    amountText =
+                        "+" + money(item.amount);
+
+                }else{
+
+                    amountText =
+                        "₹0.00";
+                }
+
+            }else{
+
+                amountText =
+                    "+" + money(item.amount);
+            }
+
+
+            historyList.innerHTML += `
+
+                <div class="history-item">
+
+                    <div class="history-left">
+
+                        <div class="history-icon">
+                            ${item.icon}
+                        </div>
+
+                        <div>
+
+                            <div class="history-title">
+                                ${item.title}
+                            </div>
+
+                            <div class="history-date">
+                                ${dateText}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="amount ${
+                        item.type === "deposit"
+                        ? "neutral"
+                        : "positive"
+                    }">
+                        ${amountText}
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+        historyLoading.style.display = "none";
+
+        historyList.innerHTML = `
+            <div class="empty">
+                Wallet activity unavailable.
+            </div>
+        `;
+    }
+}
+
+
+// Start
+
+loadWallet();
+
+
+// Auto refresh every 30 seconds
+
+setInterval(function(){
+
+    loadWallet();
+
+},30000);
+
+</script>
+
+</body>
+      </html>
