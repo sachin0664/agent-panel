@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sathi Pay - Wallet Management</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f7ff;
+    color:#17233d;
+}
+
+header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    padding:18px 20px;
+    box-shadow:0 5px 20px rgba(37,99,235,.25);
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:800;
+}
+
+.logo span{
+    display:block;
+    font-size:12px;
+    opacity:.85;
+    margin-top:4px;
+    font-weight:500;
+}
+
+.back-btn{
+    color:#fff;
+    text-decoration:none;
+    padding:10px 15px;
+    border-radius:12px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.35);
+    font-size:13px;
+    font-weight:700;
+}
+
+.container{
+    max-width:1200px;
+    margin:25px auto;
+    padding:0 16px 40px;
+}
+
+.title{
+    margin-bottom:20px;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:6px;
+}
+
+.title p{
+    color:#718096;
+    font-size:14px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:#fff;
+    padding:20px;
+    border-radius:18px;
+    border:1px solid #edf0f7;
+    box-shadow:0 8px 25px rgba(31,41,55,.07);
+}
+
+.stat-icon{
+    width:43px;
+    height:43px;
+    border-radius:13px;
+    background:#eef2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    margin-bottom:12px;
+}
+
+.stat h3{
+    font-size:13px;
+    color:#718096;
+    margin-bottom:7px;
+}
+
+.stat strong{
+    font-size:23px;
+}
+
+.search-card,
+.wallet-card,
+.history-card{
+    background:#fff;
+    padding:20px;
+    border-radius:20px;
+    border:1px solid #edf0f7;
+    box-shadow:0 8px 25px rgba(31,41,55,.07);
+    margin-bottom:20px;
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.search-row{
+    display:flex;
+    gap:10px;
+}
+
+.search-row input{
+    flex:1;
+    min-width:0;
+    padding:13px 15px;
+    border:1px solid #dce2ef;
+    border-radius:12px;
+    outline:none;
+    font-size:14px;
+}
+
+.search-row input:focus{
+    border-color:#6366f1;
+}
+
+.btn{
+    border:0;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    padding:13px 20px;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.message{
+    display:none;
+    margin-top:12px;
+    padding:12px 14px;
+    border-radius:12px;
+    font-size:13px;
+}
+
+.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+}
+
+.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.customer-box{
+    display:none;
+    margin-top:18px;
+    padding:18px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#eff6ff,#f5f3ff);
+}
+
+.customer-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.info{
+    background:#fff;
+    padding:13px;
+    border-radius:13px;
+}
+
+.info small{
+    display:block;
+    color:#718096;
+    font-size:11px;
+    margin-bottom:5px;
+}
+
+.info strong{
+    font-size:14px;
+    word-break:break-word;
+}
+
+.wallet-card{
+    display:none;
+}
+
+.wallet-main{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    border-radius:20px;
+    padding:24px;
+    margin-bottom:15px;
+    box-shadow:0 12px 30px rgba(79,70,229,.25);
+}
+
+.wallet-label{
+    font-size:13px;
+    opacity:.85;
+    margin-bottom:8px;
+}
+
+.wallet-total{
+    font-size:34px;
+    font-weight:800;
+}
+
+.wallet-sub{
+    margin-top:8px;
+    font-size:12px;
+    opacity:.85;
+}
+
+.balance-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.balance{
+    padding:17px;
+    border-radius:15px;
+    background:#f8faff;
+    border:1px solid #e8edf7;
+}
+
+.balance small{
+    display:block;
+    color:#718096;
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.balance strong{
+    font-size:19px;
+}
+
+.balance.deposit{
+    background:#eff6ff;
+}
+
+.balance.commission{
+    background:#f5f3ff;
+}
+
+.balance.referral{
+    background:#ecfdf5;
+}
+
+.balance.bonus{
+    background:#fff7ed;
+}
+
+.formula{
+    margin-top:15px;
+    padding:13px 15px;
+    border-radius:12px;
+    background:#f8fafc;
+    color:#64748b;
+    font-size:12px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    min-width:850px;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    padding:12px;
+    background:#f6f8fc;
+    color:#64748b;
+    font-size:12px;
+}
+
+td{
+    padding:13px 12px;
+    border-bottom:1px solid #edf0f7;
+    font-size:13px;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.deposit-badge{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.commission-badge{
+    background:#ede9fe;
+    color:#6d28d9;
+}
+
+.referral-badge{
+    background:#d1fae5;
+    color:#047857;
+}
+
+.bonus-badge{
+    background:#ffedd5;
+    color:#c2410c;
+}
+
+.approved{
+    color:#15803d;
+    font-weight:800;
+}
+
+.pending{
+    color:#d97706;
+    font-weight:800;
+}
+
+.rejected{
+    color:#dc2626;
+    font-weight:800;
+}
+
+.empty{
+    text-align:center;
+    padding:28px;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.loading{
+    color:#64748b;
+    font-size:13px;
+}
+
+@media(max-width:950px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .customer-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .balance-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+    header{
+        padding:15px;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+    .container{
+        margin:18px auto;
+        padding:0 12px 30px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    .stat{
+        padding:15px;
+    }
+
+    .stat strong{
+        font-size:19px;
+    }
+
+    .search-row{
+        flex-direction:column;
+    }
+
+    .customer-grid,
+    .balance-grid{
+        grid-template-columns:1fr;
+    }
+
+    .search-card,
+    .wallet-card,
+    .history-card{
+        padding:16px;
+        border-radius:17px;
+    }
+
+    .wallet-total{
+        font-size:29px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <div class="logo">
+            Sathi Pay
+            <span>Admin Wallet Management</span>
+        </div>
+
+        <a href="admin.html" class="back-btn">
+            ← Admin Panel
+        </a>
+
+    </div>
+</header>
+
+
+<div class="container">
+
+    <div class="title">
+        <h1>Customer Wallet</h1>
+        <p>View customer wallet, balance components and earnings history.</p>
+    </div>
+
+
+    <!-- GLOBAL STATS -->
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-icon">💰</div>
+            <h3>Total Wallet Balance</h3>
+            <strong id="totalWallet">₹0.00</strong>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🎁</div>
+            <h3>Total Bonus</h3>
+            <strong id="totalBonus">₹0.00</strong>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">💵</div>
+            <h3>Total Commission</h3>
+            <strong id="totalCommission">₹0.00</strong>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">👥</div>
+            <h3>Total Referral Income</h3>
+            <strong id="totalReferral">₹0.00</strong>
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-card">
+
+        <div class="card-title">
+            🔎 Customer Wallet Search
+        </div>
+
+        <div class="search-row">
+
+            <input
+                type="text"
+                id="uidSearch"
+                placeholder="Enter Customer UID"
+                autocomplete="off"
+            >
+
+            <button class="btn" onclick="searchCustomer()">
+                Search
+            </button>
+
+        </div>
+
+        <div id="searchMessage" class="message"></div>
+
+
+        <div id="customerBox" class="customer-box">
+
+            <div class="customer-grid">
+
+                <div class="info">
+                    <small>Customer Name</small>
+                    <strong id="customerName">-</strong>
+                </div>
+
+                <div class="info">
+                    <small>Customer UID</small>
+                    <strong id="customerUid">-</strong>
+                </div>
+
+                <div class="info">
+                    <small>Mobile</small>
+                    <strong id="customerMobile">-</strong>
+                </div>
+
+                <div class="info">
+                    <small>Status</small>
+                    <strong id="customerStatus">-</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER WALLET -->
+
+    <div class="wallet-card" id="walletCard">
+
+        <div class="card-title">
+            💳 Wallet Overview
+        </div>
+
+
+        <div class="wallet-main">
+
+            <div class="wallet-label">
+                Available Wallet Balance
+            </div>
+
+            <div class="wallet-total" id="walletTotal">
+                ₹0.00
+            </div>
+
+            <div class="wallet-sub">
+                Deposit + Commission + Referral Income + Bonus
+            </div>
+
+        </div>
+
+
+        <div class="balance-grid">
+
+            <div class="balance deposit">
+
+                <small>
+                    Deposit Balance
+                </small>
+
+                <strong id="depositBalance">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <div class="balance commission">
+
+                <small>
+                    Commission Balance
+                </small>
+
+                <strong id="commissionBalance">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <div class="balance referral">
+
+                <small>
+                    Referral Income
+                </small>
+
+                <strong id="referralBalance">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <div class="balance bonus">
+
+                <small>
+                    Bonus Balance
+                </small>
+
+                <strong id="bonusBalance">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="formula">
+            Wallet Balance = Deposit Balance + Commission Balance + Referral Income + Bonus Balance
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="history-card">
+
+        <div class="card-title">
+            📊 Customer Wallet Earnings History
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Type</th>
+                        <th>Reference</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="historyBody">
+
+                    <tr>
+                        <td colspan="6" class="empty">
+                            Search a customer to view wallet history.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://lozluohksmjxbxixkbmq.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+let currentCustomer = null;
+
+
+/* =========================
+   MONEY FORMAT
+========================= */
+
+function money(value){
+
+    return "₹" +
+        Number(value || 0).toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDate(value){
+
+    if(!value) return "-";
+
+    return new Date(value).toLocaleString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+
+}
+
+
+/* =========================
+   LOAD GLOBAL STATS
+========================= */
+
+async function loadGlobalStats(){
+
+    const { data, error } =
+        await supabaseClient
+        .from("customers")
+        .select(`
+            wallet_balance,
+            bonus_balance,
+            commission_balance,
+            referral_balance
+        `);
+
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+
+    let wallet = 0;
+    let bonus = 0;
+    let commission = 0;
+    let referral = 0;
+
+
+    (data || []).forEach(customer => {
+
+        wallet +=
+            Number(customer.wallet_balance || 0);
+
+        bonus +=
+            Number(customer.bonus_balance || 0);
+
+        commission +=
+            Number(customer.commission_balance || 0);
+
+        referral +=
+            Number(customer.referral_balance || 0);
+
+    });
+
+
+    document.getElementById(
+        "totalWallet"
+    ).textContent = money(wallet);
+
+
+    document.getElementById(
+        "totalBonus"
+    ).textContent = money(bonus);
+
+
+    document.getElementById(
+        "totalCommission"
+    ).textContent = money(commission);
+
+
+    document.getElementById(
+        "totalReferral"
+    ).textContent = money(referral);
+
+}
+
+
+/* =========================
+   SEARCH CUSTOMER
+========================= */
+
+async function searchCustomer(){
+
+    const uid =
+        document.getElementById(
+            "uidSearch"
+        ).value.trim();
+
+
+    const message =
+        document.getElementById(
+            "searchMessage"
+        );
+
+    const customerBox =
+        document.getElementById(
+            "customerBox"
+        );
+
+    const walletCard =
+        document.getElementById(
+            "walletCard"
+        );
+
+
+    message.className = "message";
+    message.textContent = "";
+
+    customerBox.style.display = "none";
+    walletCard.style.display = "none";
+
+
+    if(!uid){
+
+        message.textContent =
+            "Please enter Customer UID.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "Searching customer...";
+
+    message.className =
+        "message success";
+
+
+    const { data, error } =
+        await supabaseClient
+        .from("customers")
+        .select(`
+            id,
+            name,
+            mobile,
+            uid,
+            status,
+            wallet_balance,
+            bonus_balance,
+            deposit_balance,
+            commission_balance,
+            referral_balance
+        `)
+        .eq("uid", uid)
+        .maybeSingle();
+
+
+    if(error){
+
+        console.error(error);
+
+        message.textContent =
+            "Unable to search customer.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    if(!data){
+
+        message.textContent =
+            "Customer UID not found.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    currentCustomer = data;
+
+
+    document.getElementById(
+        "customerName"
+    ).textContent =
+        data.name || "-";
+
+
+    document.getElementById(
+        "customerUid"
+    ).textContent =
+        data.uid || "-";
+
+
+    document.getElementById(
+        "customerMobile"
+    ).textContent =
+        data.mobile || "-";
+
+
+    document.getElementById(
+        "customerStatus"
+    ).textContent =
+        String(data.status || "-")
+        .toUpperCase();
+
+
+    customerBox.style.display =
+        "block";
+
+
+    document.getElementById(
+        "walletTotal"
+    ).textContent =
+        money(data.wallet_balance);
+
+
+    document.getElementById(
+        "depositBalance"
+    ).textContent =
+        money(data.deposit_balance);
+
+
+    document.getElementById(
+        "commissionBalance"
+    ).textContent =
+        money(data.commission_balance);
+
+
+    document.getElementById(
+        "referralBalance"
+    ).textContent =
+        money(data.referral_balance);
+
+
+    document.getElementById(
+        "bonusBalance"
+    ).textContent =
+        money(data.bonus_balance);
+
+
+    walletCard.style.display =
+        "block";
+
+
+    message.textContent =
+        "Customer wallet loaded successfully.";
+
+    message.className =
+        "message success";
+
+
+    await loadCustomerHistory(
+        data.id,
+        data
+    );
+
+}
+
+
+/* =========================
+   CUSTOMER HISTORY
+========================= */
+
+async function loadCustomerHistory(
+    customerId,
+    customer
+){
+
+    const body =
+        document.getElementById(
+            "historyBody"
+        );
+
+
+    body.innerHTML = `
+        <tr>
+            <td colspan="6" class="empty">
+                Loading wallet history...
+            </td>
+        </tr>
+    `;
+
+
+    let records = [];
+
+
+    /* =========================
+       DEPOSIT RECORDS
+    ========================= */
+
+    const { data: deposits } =
+        await supabaseClient
+        .from("customer_deposits")
+        .select(`
+            id,
+            amount,
+            commission,
+            status,
+            utr,
+            created_at
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .order(
+            "created_at",
+            { ascending:false }
+        )
+        .limit(150);
+
+
+    (deposits || []).forEach(row => {
+
+        records.push({
+
+            date: row.created_at,
+
+            type: "Deposit",
+
+            badge: "deposit-badge",
+
+            reference:
+                row.utr ||
+                "Deposit #" + row.id,
+
+            amount:
+                Number(row.amount || 0),
+
+            status:
+                row.status || "-"
+
+        });
+
+
+        if(
+            row.commission &&
+            Number(row.commission) > 0
+        ){
+
+            records.push({
+
+                date: row.created_at,
+
+                type: "Commission",
+
+                badge: "commission-badge",
+
+                reference:
+                    "Deposit #" + row.id,
+
+                amount:
+                    Number(row.commission),
+
+                status:
+                    row.status || "-"
+
+            });
+
+        }
+
+    });
+
+
+    /* =========================
+       REFERRAL RECORDS
+    ========================= */
+
+    const { data: referrals } =
+        await supabaseClient
+        .from("customer_referral_commissions")
+        .select(`
+            id,
+            source_customer_id,
+            deposit_id,
+            level,
+            commission_amount,
+            status,
+            created_at
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .order(
+            "created_at",
+            { ascending:false }
+        )
+        .limit(150);
+
+
+    (referrals || []).forEach(row => {
+
+        records.push({
+
+            date: row.created_at,
+
+            type:
+                "Referral L" +
+                (
+                    row.level || "-"
+                ),
+
+            badge: "referral-badge",
+
+            reference:
+                "Deposit #" +
+                (
+                    row.deposit_id || "-"
+                ),
+
+            amount:
+                Number(
+                    row.commission_amount || 0
+                ),
+
+            status:
+                row.status || "-"
+
+        });
+
+    });
+
+
+    /* =========================
+       WELCOME BONUS
+    ========================= */
+
+    if(
+        Number(customer.bonus_balance || 0) > 0 &&
+        customer.bonus_received === true
+    ){
+
+        records.push({
+
+            date: null,
+
+            type:"Welcome Bonus",
+
+            badge:"bonus-badge",
+
+            reference:"₹99 Bonus",
+
+            amount:99,
+
+            status:"approved"
+
+        });
+
+    }
+
+
+    records.sort(
+        (a,b) =>
+            new Date(b.date || 0) -
+            new Date(a.date || 0)
+    );
+
+
+    if(records.length === 0){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty">
+                    No wallet history found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        records.map(row => {
+
+            let statusClass =
+                "approved";
+
+
+            if(
+                String(row.status)
+                .toLowerCase()
+                === "pending"
+            ){
+                statusClass =
+                    "pending";
+            }
+
+
+            if(
+                String(row.status)
+                .toLowerCase()
+                === "rejected"
+            ){
+                statusClass =
+                    "rejected";
+            }
+
+
+            return `
+                <tr>
+
+                    <td>
+                        ${formatDate(row.date)}
+                    </td>
+
+                    <td>
+                        <b>
+                            ${
+                                customer.name ||
+                                "-"
+                            }
+                        </b>
+                        <br>
+                        <small>
+                            ${
+                                customer.uid ||
+                                "-"
+                            }
+                        </small>
+                    </td>
+
+                    <td>
+                        <span class="badge ${row.badge}">
+                            ${
+                                row.type
+                            }
+                        </span>
+                    </td>
+
+                    <td>
+                        ${
+                            row.reference ||
+                            "-"
+                        }
+                    </td>
+
+                    <td>
+                        <b>
+                            ${money(row.amount)}
+                        </b>
+                    </td>
+
+                    <td>
+                        <span class="${statusClass}">
+                            ${
+                                String(
+                                    row.status ||
+                                    "-"
+                                ).toUpperCase()
+                            }
+                        </span>
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+document.getElementById(
+    "uidSearch"
+).addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+            searchCustomer();
+        }
+
+    }
+);
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+loadGlobalStats();
+
+
+/* =========================
+   AUTO REFRESH
+========================= */
+
+setInterval(() => {
+
+    loadGlobalStats();
+
+    if(currentCustomer){
+
+        searchCustomer();
+
+    }
+
+}, 30000);
+
+</script>
+
+</body>
+  </html>
