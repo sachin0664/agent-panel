@@ -1,223 +1,745 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sathi Pay - Referral</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #202938;
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f8ff;
+    color:#17213b;
 }
 
-header {
-    background: #111827;
-    color: white;
-    padding: 18px;
-    font-size: 22px;
-    font-weight: bold;
+a{
+    text-decoration:none;
+    color:inherit;
 }
 
-.container {
-    padding: 20px;
-    max-width: 600px;
-    margin: auto;
+.app{
+    min-height:100vh;
+    display:flex;
 }
 
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+/* SIDEBAR */
+
+.sidebar{
+    width:245px;
+    background:linear-gradient(180deg,#0d6efd,#1558d6 55%,#2636c9);
+    color:white;
+    padding:25px 16px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:20;
 }
 
-h2 {
-    margin-top: 0;
+.logo{
+    font-size:25px;
+    font-weight:800;
+    padding:8px 12px 28px;
 }
 
-.rate {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 10px 0;
+.logo span{
+    opacity:.75;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-top: 10px;
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #2563eb;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
+.nav a{
+    padding:14px 15px;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:.2s;
 }
 
-.summary {
-    text-align: center;
-    font-size: 18px;
+.nav a:hover,
+.nav a.active{
+    background:rgba(255,255,255,.18);
 }
 
-.number {
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: 8px;
+.nav-icon{
+    width:24px;
+    text-align:center;
+    font-size:18px;
 }
 
-.history-item {
-    background: #f8fafc;
-    padding: 14px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    border-left: 4px solid #2563eb;
+/* MAIN */
+
+.main{
+    width:100%;
+    margin-left:245px;
+    padding:25px;
+    padding-bottom:40px;
 }
 
-.message {
-    text-align: center;
-    margin-top: 10px;
-    font-weight: bold;
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
 }
 
+.top-title h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.top-title p{
+    color:#75809a;
+    font-size:14px;
+}
+
+.logout{
+    border:0;
+    background:white;
+    padding:11px 17px;
+    border-radius:12px;
+    font-weight:700;
+    color:#ef4444;
+    box-shadow:0 5px 20px rgba(33,55,100,.08);
+    cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+    border-radius:25px;
+    padding:27px;
+    color:white;
+    background:linear-gradient(135deg,#0866ff,#6739e8 55%,#9b35d8);
+    box-shadow:0 15px 35px rgba(61,75,220,.25);
+    margin-bottom:22px;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero:after{
+    content:"";
+    width:180px;
+    height:180px;
+    position:absolute;
+    right:-50px;
+    top:-65px;
+    border-radius:50%;
+    background:rgba(255,255,255,.12);
+}
+
+.hero h2{
+    font-size:26px;
+    margin-bottom:9px;
+    position:relative;
+    z-index:2;
+}
+
+.hero p{
+    opacity:.9;
+    line-height:1.5;
+    max-width:620px;
+    position:relative;
+    z-index:2;
+}
+
+/* CARDS */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:22px;
+}
+
+.card{
+    background:white;
+    border-radius:21px;
+    padding:22px;
+    box-shadow:0 8px 28px rgba(31,52,100,.08);
+}
+
+.stat-icon{
+    width:45px;
+    height:45px;
+    border-radius:14px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    margin-bottom:15px;
+    background:#edf4ff;
+}
+
+.card h3{
+    font-size:14px;
+    color:#77829c;
+    margin-bottom:7px;
+}
+
+.big{
+    font-size:25px;
+    font-weight:800;
+}
+
+.blue{
+    background:#eaf3ff;
+}
+
+.green{
+    background:#eafaf1;
+}
+
+.purple{
+    background:#f3edff;
+}
+
+/* REFERRAL CODE */
+
+.code-card{
+    background:white;
+    border-radius:21px;
+    padding:22px;
+    box-shadow:0 8px 28px rgba(31,52,100,.08);
+    margin-bottom:22px;
+}
+
+.code-title{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.code-row{
+    display:flex;
+    gap:10px;
+}
+
+.code-box{
+    flex:1;
+    background:#f5f7fc;
+    border:1px solid #e6eaf3;
+    border-radius:13px;
+    padding:14px;
+    font-weight:800;
+    color:#2448c8;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.copy-btn{
+    border:0;
+    background:#0d6efd;
+    color:white;
+    border-radius:13px;
+    padding:0 19px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* LINK */
+
+.link-box{
+    margin-top:12px;
+    display:flex;
+    gap:10px;
+}
+
+.link-input{
+    flex:1;
+    border:1px solid #e5e9f2;
+    border-radius:12px;
+    padding:13px;
+    font-size:13px;
+    color:#68738b;
+    background:#fafbfe;
+}
+
+/* LEVELS */
+
+.section-title{
+    font-size:20px;
+    font-weight:800;
+    margin:5px 0 15px;
+}
+
+.level-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:22px;
+}
+
+.level{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 8px 28px rgba(31,52,100,.08);
+    border-top:4px solid #0d6efd;
+}
+
+.level:nth-child(2){
+    border-top-color:#7c3aed;
+}
+
+.level:nth-child(3){
+    border-top-color:#10b981;
+}
+
+.level-name{
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.rate{
+    font-size:26px;
+    font-weight:900;
+    margin-bottom:5px;
+}
+
+.level-desc{
+    color:#7b8498;
+    font-size:13px;
+}
+
+/* HISTORY */
+
+.history{
+    background:white;
+    border-radius:21px;
+    padding:22px;
+    box-shadow:0 8px 28px rgba(31,52,100,.08);
+}
+
+.history-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.history-title{
+    font-size:19px;
+    font-weight:800;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    font-size:12px;
+    color:#7c879d;
+    padding:12px;
+    background:#f7f9fd;
+}
+
+td{
+    padding:13px 12px;
+    border-bottom:1px solid #edf0f6;
+    font-size:13px;
+}
+
+.amount{
+    font-weight:800;
+    color:#0b9b62;
+}
+
+.empty{
+    text-align:center;
+    color:#8a94a8;
+    padding:28px 10px;
+}
+
+.loading{
+    text-align:center;
+    padding:30px;
+    color:#6d7890;
+}
+
+/* MOBILE NAV */
+
+.mobile-nav{
+    display:none;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+        padding:16px;
+        padding-bottom:90px;
+    }
+
+    .topbar{
+        margin-bottom:18px;
+    }
+
+    .top-title h1{
+        font-size:23px;
+    }
+
+    .logout{
+        padding:9px 13px;
+    }
+
+    .grid,
+    .level-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:22px;
+        border-radius:21px;
+    }
+
+    .hero h2{
+        font-size:23px;
+    }
+
+    .code-row,
+    .link-box{
+        flex-direction:column;
+    }
+
+    .copy-btn{
+        padding:13px;
+    }
+
+    .mobile-nav{
+        position:fixed;
+        display:flex;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        height:66px;
+        background:white;
+        border-radius:20px;
+        box-shadow:0 10px 35px rgba(25,43,85,.18);
+        z-index:50;
+        justify-content:space-around;
+        align-items:center;
+    }
+
+    .mobile-nav a{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:4px;
+        color:#7d879b;
+        font-size:11px;
+        font-weight:700;
+    }
+
+    .mobile-nav a.active{
+        color:#0d6efd;
+    }
+
+    .mobile-nav span{
+        font-size:20px;
+    }
+}
 </style>
-
 </head>
-
 
 <body>
 
-<header>
-    Sathi Pay
-</header>
+<div class="app">
 
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-<div class="container">
-
-
-    <!-- REFERRAL LINK -->
-
-    <div class="card">
-
-        <h2>Referral Link</h2>
-
-        <input
-            type="text"
-            id="referralLink"
-            readonly
-        >
-
-        <button onclick="copyReferral()">
-            Copy Referral Link
-        </button>
-
-        <div
-            id="message"
-            class="message">
+        <div class="logo">
+            Sathi <span>Pay</span>
         </div>
 
-    </div>
+        <nav class="nav">
+
+            <a href="deshboard.html">
+                <span class="nav-icon">🏠</span>
+                Dashboard
+            </a>
+
+            <a href="deposit.html">
+                <span class="nav-icon">💳</span>
+                Deposit
+            </a>
+
+            <a href="earnings.html">
+                <span class="nav-icon">💰</span>
+                Earnings
+            </a>
+
+            <a href="referral.html" class="active">
+                <span class="nav-icon">👥</span>
+                Referral
+            </a>
+
+            <a href="profile.html">
+                <span class="nav-icon">👤</span>
+                Profile
+            </a>
+
+        </nav>
+
+    </aside>
 
 
-    <!-- LEVEL RATES -->
+    <!-- MAIN -->
+    <main class="main">
 
-    <div class="card">
+        <div class="topbar">
 
-        <h2>Referral Commission</h2>
+            <div class="top-title">
+                <h1>Referral</h1>
+                <p>Build your team and earn referral income</p>
+            </div>
 
-        <div class="rate">
-            Level A — 1%
+            <button class="logout" onclick="logout()">
+                Logout
+            </button>
+
         </div>
 
-        <div class="rate">
-            Level B — 0.5%
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <h2>Refer & Earn 🚀</h2>
+
+            <p>
+                Share your referral code with friends and earn income
+                automatically from eligible deposits made by your referral network.
+            </p>
+
+        </section>
+
+
+        <!-- STATS -->
+        <section class="grid">
+
+            <div class="card">
+
+                <div class="stat-icon blue">👥</div>
+
+                <h3>Direct Team</h3>
+
+                <div class="big" id="directTeam">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="stat-icon purple">🌐</div>
+
+                <h3>Total Network</h3>
+
+                <div class="big" id="totalTeam">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="stat-icon green">💰</div>
+
+                <h3>Referral Earnings</h3>
+
+                <div class="big">
+                    ₹<span id="referralEarnings">0.00</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- REFERRAL CODE -->
+        <section class="code-card">
+
+            <div class="code-title">
+                Your Referral Code
+            </div>
+
+            <div class="code-row">
+
+                <div class="code-box" id="referralCode">
+                    Loading...
+                </div>
+
+                <button class="copy-btn" onclick="copyCode()">
+                    Copy Code
+                </button>
+
+            </div>
+
+
+            <div class="link-box">
+
+                <input
+                    class="link-input"
+                    id="referralLink"
+                    readonly
+                    value="Loading..."
+                >
+
+                <button class="copy-btn" onclick="copyLink()">
+                    Copy Link
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- LEVELS -->
+        <div class="section-title">
+            Referral Commission
         </div>
 
-        <div class="rate">
-            Level C — 0.2%
-        </div>
+        <section class="level-grid">
 
-        <p>
-            Approved deposits par referral commission
-            automatically calculate hoga.
-        </p>
+            <div class="level">
 
-    </div>
+                <div class="level-name">
+                    Level A
+                </div>
 
+                <div class="rate">
+                    1%
+                </div>
 
-    <!-- SUMMARY -->
+                <div class="level-desc">
+                    Direct referral commission
+                </div>
 
-    <div class="card summary">
-
-        <h2>📊 Referral Summary</h2>
-
-        <p>Total Referrals</p>
-
-        <div
-            id="totalReferrals"
-            class="number">
-            0
-        </div>
-
-        <br>
-
-        <p>Referral Commission</p>
-
-        <div
-            id="totalCommission"
-            class="number">
-            ₹0.00
-        </div>
-
-    </div>
+            </div>
 
 
-    <!-- HISTORY -->
+            <div class="level">
 
-    <div class="card">
+                <div class="level-name">
+                    Level B
+                </div>
 
-        <h2>👥 Referral History</h2>
+                <div class="rate">
+                    0.5%
+                </div>
 
-        <div id="history">
-            Loading...
-        </div>
+                <div class="level-desc">
+                    Second-level referral commission
+                </div>
 
-    </div>
+            </div>
 
+
+            <div class="level">
+
+                <div class="level-name">
+                    Level C
+                </div>
+
+                <div class="rate">
+                    0.2%
+                </div>
+
+                <div class="level-desc">
+                    Third-level referral commission
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORY -->
+        <section class="history">
+
+            <div class="history-head">
+
+                <div class="history-title">
+                    Referral Earnings History
+                </div>
+
+            </div>
+
+            <div id="historyContent" class="loading">
+                Loading...
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
 
-<!-- SUPABASE -->
+<!-- MOBILE NAV -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<nav class="mobile-nav">
+
+    <a href="deshboard.html">
+        <span>🏠</span>
+        Home
+    </a>
+
+    <a href="deposit.html">
+        <span>💳</span>
+        Deposit
+    </a>
+
+    <a href="earnings.html">
+        <span>💰</span>
+        Earnings
+    </a>
+
+    <a href="referral.html" class="active">
+        <span>👥</span>
+        Referral
+    </a>
+
+    <a href="profile.html">
+        <span>👤</span>
+        Profile
+    </a>
+
+</nav>
 
 
 <script>
-
-/* =========================
-   SUPABASE CONFIG
-========================= */
 
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -226,292 +748,510 @@ const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
 const supabaseClient =
-    window.supabase.createClient(
+    supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
 
 
+let customerId = null;
+let currentCustomer = null;
+
+
 /* =========================
-   REFERRAL LINK
+   AUTH CHECK
 ========================= */
 
-function createReferralLink() {
+function getCustomerId(){
 
-    const baseUrl =
-        window.location.origin +
-        window.location.pathname
-            .replace("referral.html", "");
+    return localStorage.getItem(
+        "sathiPayCustomerId"
+    );
 
-    const referralCode =
-        localStorage.getItem("referralCode") ||
-        "SATHIPAY";
+}
+
+
+/* =========================
+   LOAD CUSTOMER
+========================= */
+
+async function loadCustomer(){
+
+    customerId = getCustomerId();
+
+    if(!customerId){
+
+        window.location.href = "login.html";
+        return;
+
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+        .from("customers")
+        .select(`
+            id,
+            name,
+            uid,
+            invitation_code,
+            referred_by,
+            referral_balance,
+            status
+        `)
+        .eq("id", customerId)
+        .single();
+
+
+    if(error || !data){
+
+        alert("Unable to load customer data.");
+        return;
+
+    }
+
+
+    currentCustomer = data;
+
+
+    document.getElementById(
+        "referralCode"
+    ).textContent =
+        data.invitation_code || "N/A";
+
 
     const link =
-        baseUrl +
-        "register.html?ref=" +
-        referralCode;
+        window.location.origin +
+        window.location.pathname.replace(
+            "referral.html",
+            "register.html"
+        ) +
+        "?ref=" +
+        encodeURIComponent(
+            data.invitation_code || ""
+        );
 
-    document.getElementById("referralLink").value =
-        link;
-}
+
+    document.getElementById(
+        "referralLink"
+    ).value = link;
 
 
-function copyReferral() {
+    document.getElementById(
+        "referralEarnings"
+    ).textContent =
+        Number(
+            data.referral_balance || 0
+        ).toFixed(2);
 
-    const input =
-        document.getElementById("referralLink");
 
-    navigator.clipboard.writeText(input.value)
-        .then(function() {
+    await loadTeam();
 
-            document.getElementById("message").innerText =
-                "Referral link copied successfully!";
-
-        })
-        .catch(function() {
-
-            input.select();
-
-            document.execCommand("copy");
-
-            document.getElementById("message").innerText =
-                "Referral link copied successfully!";
-
-        });
+    await loadReferralHistory();
 
 }
 
 
 /* =========================
-   GET LOGIN UID
+   LOAD TEAM
 ========================= */
 
-function getLoginUID() {
+async function loadTeam(){
 
-    const possibleKeys = [
+    if(!currentCustomer ||
+       !currentCustomer.invitation_code){
 
-        "sathiPayUID",
-        "agentUID",
-        "uid",
-        "UID",
-        "sathi_pay_uid",
-        "userUID",
-        "userUid"
+        return;
 
-    ];
+    }
 
-    for (const key of possibleKeys) {
 
-        const value =
-            localStorage.getItem(key);
+    /*
+      Level A
+      Direct customers whose
+      referred_by = my invitation_code
+    */
 
-        if (
-            value &&
-            value.trim() !== ""
-        ) {
+    const { data: levelA, error } =
+        await supabaseClient
+        .from("customers")
+        .select(`
+            id,
+            invitation_code,
+            referred_by
+        `)
+        .eq(
+            "referred_by",
+            currentCustomer.invitation_code
+        );
 
-            return value.trim();
 
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+
+    const direct =
+        levelA || [];
+
+
+    /*
+      Level B
+    */
+
+    let levelB = [];
+
+
+    for(const customer of direct){
+
+        if(!customer.invitation_code){
+            continue;
+        }
+
+
+        const { data } =
+            await supabaseClient
+            .from("customers")
+            .select(`
+                id,
+                invitation_code,
+                referred_by
+            `)
+            .eq(
+                "referred_by",
+                customer.invitation_code
+            );
+
+
+        if(data){
+            levelB = levelB.concat(data);
         }
 
     }
 
-    return null;
-}
+
+    /*
+      Level C
+    */
+
+    let levelC = [];
 
 
-/* =========================
-   LOAD REFERRAL DATA
-========================= */
+    for(const customer of levelB){
 
-async function loadReferralData() {
-
-    const history =
-        document.getElementById("history");
-
-    const totalReferrals =
-        document.getElementById("totalReferrals");
-
-    const totalCommission =
-        document.getElementById("totalCommission");
+        if(!customer.invitation_code){
+            continue;
+        }
 
 
-    const loginUID =
-        getLoginUID();
-
-
-    if (!loginUID) {
-
-        history.innerText =
-            "Please login again.";
-
-        return;
-    }
-
-
-    /* FIND AGENT BY UID */
-
-    const { data: agents, error: agentError } =
-        await supabaseClient
-        .from("agents")
-        .select("id, uid, name, mobile")
-        .ilike("uid", loginUID);
-
-
-    if (agentError) {
-
-        console.error(agentError);
-
-        history.innerText =
-            "Agent account loading error.";
-
-        return;
-    }
-
-
-    if (!agents || agents.length === 0) {
-
-        history.innerText =
-            "Agent account not found.";
-
-        return;
-    }
-
-
-    const agent =
-        agents[0];
-
-
-    /* LOAD REFERRAL COMMISSIONS */
-
-    const {
-        data: commissions,
-        error: commissionError
-    } =
-        await supabaseClient
-        .from("referral_commissions")
-        .select(`
-            id,
-            agent_id,
-            source_agent_id,
-            level,
-            rate,
-            amount,
-            deposit_id,
-            status,
-            created_at
-        `)
-        .eq("agent_id", agent.id)
-        .order("id", {
-            ascending: false
-        });
-
-
-    if (commissionError) {
-
-        console.error(commissionError);
-
-        history.innerText =
-            "Referral data loading error.";
-
-        return;
-    }
-
-
-    const rows =
-        commissions || [];
-
-
-    /* TOTAL COMMISSION */
-
-    const commission =
-        rows.reduce(
-            function(sum, row) {
-
-                return sum +
-                    Number(row.amount || 0);
-
-            },
-            0
-        );
-
-
-    totalCommission.innerText =
-        "₹" + commission.toFixed(2);
-
-
-    /* TOTAL UNIQUE REFERRALS */
-
-    const referralAgents =
-        new Set();
-
-    rows.forEach(function(row) {
-
-        if (row.source_agent_id) {
-
-            referralAgents.add(
-                row.source_agent_id
+        const { data } =
+            await supabaseClient
+            .from("customers")
+            .select(`
+                id,
+                invitation_code,
+                referred_by
+            `)
+            .eq(
+                "referred_by",
+                customer.invitation_code
             );
 
+
+        if(data){
+            levelC = levelC.concat(data);
+        }
+
+    }
+
+
+    /*
+      Remove duplicate customers
+    */
+
+    const ids = new Set();
+
+    [...direct, ...levelB, ...levelC]
+    .forEach(c => {
+
+        if(c.id){
+            ids.add(c.id);
         }
 
     });
 
 
-    totalReferrals.innerText =
-        referralAgents.size;
+    document.getElementById(
+        "directTeam"
+    ).textContent =
+        direct.length;
 
 
-    /* NO DATA */
+    document.getElementById(
+        "totalTeam"
+    ).textContent =
+        ids.size;
 
-    if (rows.length === 0) {
+}
 
-        history.innerText =
-            "No referral commission found.";
 
+/* =========================
+   REFERRAL HISTORY
+========================= */
+
+async function loadReferralHistory(){
+
+    const container =
+        document.getElementById(
+            "historyContent"
+        );
+
+
+    const { data, error } =
+        await supabaseClient
+        .from("customer_referral_commissions")
+        .select(`
+            level,
+            percentage,
+            transaction_amount,
+            commission_amount,
+            status,
+            created_at
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        )
+        .limit(50);
+
+
+    if(error){
+
+        console.error(error);
+
+        container.innerHTML = `
+            <div class="empty">
+                Referral history could not be loaded.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    if(!data || data.length === 0){
+
+        container.innerHTML = `
+            <div class="empty">
+                No referral earnings yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Level</th>
+                    <th>Deposit</th>
+                    <th>Rate</th>
+                    <th>Earned</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+    `;
+
+
+    data.forEach(item => {
+
+        const date =
+            new Date(
+                item.created_at
+            ).toLocaleDateString(
+                "en-IN"
+            );
+
+
+        html += `
+
+            <tr>
+
+                <td>
+                    Level ${escapeHtml(
+                        item.level || ""
+                    )}
+                </td>
+
+                <td>
+                    ₹${Number(
+                        item.transaction_amount || 0
+                    ).toFixed(2)}
+                </td>
+
+                <td>
+                    ${Number(
+                        item.percentage || 0
+                    )}%
+                </td>
+
+                <td class="amount">
+                    +₹${Number(
+                        item.commission_amount || 0
+                    ).toFixed(2)}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.status || ""
+                    )}
+                </td>
+
+                <td>
+                    ${date}
+                </td>
+
+            </tr>
+        `;
+
+    });
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+        </div>
+    `;
+
+
+    container.innerHTML = html;
+
+}
+
+
+/* =========================
+   COPY CODE
+========================= */
+
+async function copyCode(){
+
+    const code =
+        currentCustomer?.invitation_code || "";
+
+
+    if(!code){
         return;
     }
 
 
-    /* HISTORY */
+    try{
 
-    history.innerHTML =
-        rows.map(function(row) {
+        await navigator.clipboard.writeText(
+            code
+        );
 
-            return `
-                <div class="history-item">
+        alert("Referral code copied!");
 
-                    <b>
-                        Level ${row.level}
-                    </b>
+    }catch(error){
 
-                    <br><br>
+        alert("Unable to copy referral code.");
 
-                    Rate:
-                    ${Number(row.rate || 0).toFixed(2)}%
+    }
 
-                    <br>
+}
 
-                    Commission:
-                    <b>
-                        ₹${Number(row.amount || 0).toFixed(2)}
-                    </b>
 
-                    <br>
+/* =========================
+   COPY LINK
+========================= */
 
-                    Deposit ID:
-                    ${row.deposit_id || "-"}
+async function copyLink(){
 
-                    <br>
+    const link =
+        document.getElementById(
+            "referralLink"
+        ).value;
 
-                    Status:
-                    ${row.status || "-"}
 
-                </div>
-            `;
+    try{
 
-        }).join("");
+        await navigator.clipboard.writeText(
+            link
+        );
+
+        alert("Referral link copied!");
+
+    }catch(error){
+
+        alert("Unable to copy referral link.");
+
+    }
+
+}
+
+
+/* =========================
+   SECURITY DISPLAY HELPER
+========================= */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+    localStorage.removeItem(
+        "sathiPayCustomerId"
+    );
+
+    localStorage.removeItem(
+        "sathiPayUID"
+    );
+
+    localStorage.removeItem(
+        "sathiPayInvitationCode"
+    );
+
+
+    window.location.href =
+        "login.html";
 
 }
 
@@ -520,13 +1260,17 @@ async function loadReferralData() {
    START
 ========================= */
 
-createReferralLink();
+loadCustomer();
 
-loadReferralData();
+
+/* Auto refresh */
+
+setInterval(
+    loadCustomer,
+    30000
+);
 
 </script>
 
-
 </body>
-
-    </html>
+              </html>
