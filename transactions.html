@@ -3,19 +3,265 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>Sathi Pay - Transactions</title>
-    <script src="customer-guard.js"></script>
-    <link
-        rel="stylesheet"
-        href="css/style.css"
-    >
+<title>Sathi Pay - Transactions</title>
+
+<script src="customer-guard.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef4ff, #f8fbff);
+    color: #172033;
+}
+
+.header {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(37,99,235,.18);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 21px;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 18px 14px 35px;
+}
+
+.page-title {
+    margin-bottom: 15px;
+}
+
+.page-title h2 {
+    margin: 0 0 5px;
+    font-size: 23px;
+}
+
+.page-title p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 7px 20px rgba(30,64,175,.08);
+}
+
+.summary-label {
+    color: #64748b;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.summary-value {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.blue {
+    color: #2563eb;
+}
+
+.green {
+    color: #15803d;
+}
+
+.orange {
+    color: #b45309;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 7px 22px rgba(30,64,175,.08);
+    overflow: hidden;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th {
+    background: #f1f5ff;
+    color: #334155;
+    font-size: 13px;
+    text-align: left;
+    padding: 13px 10px;
+}
+
+td {
+    border-bottom: 1px solid #edf0f5;
+    padding: 14px 10px;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.amount {
+    font-weight: bold;
+    color: #172033;
+}
+
+.commission {
+    color: #15803d;
+    font-weight: bold;
+}
+
+.utr {
+    color: #475569;
+    font-family: monospace;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.status-approved {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-default {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.empty {
+    text-align: center;
+    padding: 35px 15px;
+    color: #64748b;
+}
+
+.message {
+    text-align: center;
+    margin-top: 14px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.action-btn {
+    text-decoration: none;
+    text-align: center;
+    padding: 13px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.deposit-btn {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.wallet-btn {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.dashboard-btn {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+@media (max-width: 650px) {
+
+    .header {
+        padding: 16px;
+    }
+
+    .header h1 {
+        font-size: 18px;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 15px 10px 30px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    .actions {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -23,24 +269,89 @@
 <body>
 
 
-    <header>
+<header class="header">
 
-        <h1>Sathi Pay - Transactions</h1>
+    <h1>Sathi Pay</h1>
 
-        <a href="admin.html">
-            Dashboard
-        </a>
+    <a href="deshboard.html">
+        Dashboard
+    </a>
 
-    </header>
+</header>
 
 
+<main class="container">
 
-    <main class="container">
 
-        <h2>
-            Transaction History
-        </h2>
+<div class="page-title">
 
+    <h2>
+        Transaction History
+    </h2>
+
+    <p>
+        Your deposit transactions and commission details
+    </p>
+
+</div>
+
+
+<div class="summary">
+
+
+    <div class="summary-card">
+
+        <div class="summary-label">
+            Total Deposits
+        </div>
+
+        <div
+            class="summary-value blue"
+            id="totalDeposits"
+        >
+            ₹0.00
+        </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <div class="summary-label">
+            Approved Deposits
+        </div>
+
+        <div
+            class="summary-value green"
+            id="approvedDeposits"
+        >
+            ₹0.00
+        </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <div class="summary-label">
+            Total Commission
+        </div>
+
+        <div
+            class="summary-value orange"
+            id="totalCommission"
+        >
+            ₹0.00
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="table-wrap">
 
         <table>
 
@@ -48,15 +359,25 @@
 
                 <tr>
 
-                    <th>ID</th>
+                    <th>
+                        Date
+                    </th>
 
-                    <th>Agent</th>
+                    <th>
+                        UTR
+                    </th>
 
-                    <th>Type</th>
+                    <th>
+                        Amount
+                    </th>
 
-                    <th>Amount</th>
+                    <th>
+                        Commission
+                    </th>
 
-                    <th>Status</th>
+                    <th>
+                        Status
+                    </th>
 
                 </tr>
 
@@ -67,7 +388,7 @@
 
                 <tr>
 
-                    <td colspan="5">
+                    <td colspan="5" class="empty">
                         Loading transactions...
                     </td>
 
@@ -77,285 +398,364 @@
 
         </table>
 
+    </div>
 
-        <p
-            id="transactionMessage"
-            style="margin-top:15px;"
-        ></p>
+</div>
 
 
-    </main>
+<div
+    id="transactionMessage"
+    class="message"
+></div>
 
 
+<div class="actions">
 
-    <!-- SUPABASE -->
+    <a
+        class="action-btn deposit-btn"
+        href="deposit.html"
+    >
+        💳 New Deposit
+    </a>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <a
+        class="action-btn wallet-btn"
+        href="wallet.html"
+    >
+        💰 Wallet
+    </a>
+
+    <a
+        class="action-btn dashboard-btn"
+        href="deshboard.html"
+    >
+        🏠 Dashboard
+    </a>
+
+</div>
 
 
-    <!-- APP JS -->
-
-    <script src="js/app.js"></script>
+</main>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script>
+<script src="js/app.js?v=6"></script>
 
-        async function loadTransactions() {
 
-            const table =
-                document.getElementById(
-                    "transactionTable"
-                );
+<script>
 
-            const message =
-                document.getElementById(
-                    "transactionMessage"
-                );
+async function loadTransactions() {
 
+    const table =
+        document.getElementById(
+            "transactionTable"
+        );
+
+    const message =
+        document.getElementById(
+            "transactionMessage"
+        );
+
+
+    const customerId =
+        localStorage.getItem(
+            "sathiPayCustomerId"
+        );
+
+
+    if (!customerId) {
+
+        window.location.href =
+            "customer-login.html";
+
+        return;
+
+    }
+
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="5" class="empty">
+                Loading transactions...
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+
+        const {
+            data: deposits,
+            error
+        } = await supabaseClient
+
+            .from("customer_deposits")
+
+            .select(`
+                id,
+                amount,
+                status,
+                utr,
+                commission,
+                created_at
+            `)
+
+            .eq(
+                "customer_id",
+                customerId
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Transaction Error:",
+                error
+            );
 
             table.innerHTML = `
                 <tr>
-                    <td colspan="5">
-                        Loading transactions...
+                    <td colspan="5" class="empty">
+                        Unable to load transactions.
                     </td>
                 </tr>
             `;
 
-
-
-            // LOAD DEPOSITS
-
-            const depositResult =
-                await supabaseClient
-                    .from("deposits")
-                    .select(`
-                        id,
-                        amount,
-                        status,
-                        agent_id,
-                        agents (
-                            name
-                        )
-                    `)
-                    .order("id", {
-                        ascending: false
-                    });
-
-
-
-            if (depositResult.error) {
-
-                console.error(
-                    depositResult.error
-                );
-
-                table.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            Error loading deposits.
-                        </td>
-                    </tr>
-                `;
-
-                message.innerText =
-                    "Error: " +
-                    depositResult.error.message;
-
-                return;
-            }
-
-
-
-            // LOAD WITHDRAWALS
-
-            const withdrawalResult =
-                await supabaseClient
-                    .from("withdrawals")
-                    .select(`
-                        id,
-                        amount,
-                        status,
-                        agent_id,
-                        agents (
-                            name
-                        )
-                    `)
-                    .order("id", {
-                        ascending: false
-                    });
-
-
-
-            if (withdrawalResult.error) {
-
-                console.error(
-                    withdrawalResult.error
-                );
-
-                table.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            Error loading withdrawals.
-                        </td>
-                    </tr>
-                `;
-
-                message.innerText =
-                    "Error: " +
-                    withdrawalResult.error.message;
-
-                return;
-            }
-
-
-
-            const deposits =
-                depositResult.data || [];
-
-            const withdrawals =
-                withdrawalResult.data || [];
-
-
-
-            // COMBINE BOTH
-
-            const transactions = [];
-
-
-            deposits.forEach(
-                function (deposit) {
-
-                    transactions.push({
-
-                        id: deposit.id,
-
-                        agent:
-                            deposit.agents &&
-                            deposit.agents.name
-                                ? deposit.agents.name
-                                : "Unknown Agent",
-
-                        type: "Deposit",
-
-                        amount:
-                            Number(deposit.amount) || 0,
-
-                        status:
-                            deposit.status
-
-                    });
-
-                }
-            );
-
-
-            withdrawals.forEach(
-                function (withdrawal) {
-
-                    transactions.push({
-
-                        id: withdrawal.id,
-
-                        agent:
-                            withdrawal.agents &&
-                            withdrawal.agents.name
-                                ? withdrawal.agents.name
-                                : "Unknown Agent",
-
-                        type: "Withdrawal",
-
-                        amount:
-                            Number(withdrawal.amount) || 0,
-
-                        status:
-                            withdrawal.status
-
-                    });
-
-                }
-            );
-
-
-
-            if (transactions.length === 0) {
-
-                table.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            No transactions found.
-                        </td>
-                    </tr>
-                `;
-
-                return;
-            }
-
-
-
-            // SORT BY ID
-
-            transactions.sort(
-                function (a, b) {
-
-                    return b.id - a.id;
-
-                }
-            );
-
-
-
-            table.innerHTML = "";
-
-
-
-            transactions.forEach(
-                function (transaction) {
-
-                    table.innerHTML += `
-
-                        <tr>
-
-                            <td>
-                                ${transaction.id}
-                            </td>
-
-                            <td>
-                                ${transaction.agent}
-                            </td>
-
-                            <td>
-                                ${transaction.type}
-                            </td>
-
-                            <td>
-                                ₹${transaction.amount.toFixed(2)}
-                            </td>
-
-                            <td>
-                                ${transaction.status}
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            );
-
-
             message.innerText =
-                "Transactions loaded successfully.";
+                error.message;
+
+            return;
 
         }
 
 
+        const records =
+            deposits || [];
 
-        // LOAD WHEN PAGE OPENS
 
-        loadTransactions();
+        let totalDeposits = 0;
+        let approvedDeposits = 0;
+        let totalCommission = 0;
 
-    </script>
+
+        records.forEach(
+            function (deposit) {
+
+                const amount =
+                    Number(
+                        deposit.amount
+                    ) || 0;
+
+                const commission =
+                    Number(
+                        deposit.commission
+                    ) || 0;
+
+
+                totalDeposits += amount;
+
+                totalCommission +=
+                    commission;
+
+
+                if (
+                    String(
+                        deposit.status || ""
+                    ).toLowerCase() ===
+                    "approved"
+                ) {
+
+                    approvedDeposits +=
+                        amount;
+
+                }
+
+            }
+        );
+
+
+        document.getElementById(
+            "totalDeposits"
+        ).innerText =
+            "₹" +
+            totalDeposits.toFixed(2);
+
+
+        document.getElementById(
+            "approvedDeposits"
+        ).innerText =
+            "₹" +
+            approvedDeposits.toFixed(2);
+
+
+        document.getElementById(
+            "totalCommission"
+        ).innerText =
+            "₹" +
+            totalCommission.toFixed(2);
+
+
+        if (records.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        No deposit transactions found.
+                    </td>
+                </tr>
+            `;
+
+            message.innerText =
+                "No transactions available.";
+
+            return;
+
+        }
+
+
+        table.innerHTML = "";
+
+
+        records.forEach(
+            function (deposit) {
+
+                const amount =
+                    Number(
+                        deposit.amount
+                    ) || 0;
+
+
+                const commission =
+                    Number(
+                        deposit.commission
+                    ) || 0;
+
+
+                const date =
+                    deposit.created_at
+                        ? new Date(
+                            deposit.created_at
+                        ).toLocaleString(
+                            "en-IN"
+                        )
+                        : "N/A";
+
+
+                const status =
+                    String(
+                        deposit.status ||
+                        "pending"
+                    ).toLowerCase();
+
+
+                let statusClass =
+                    "status-default";
+
+
+                if (
+                    status === "approved"
+                ) {
+
+                    statusClass =
+                        "status-approved";
+
+                }
+                else if (
+                    status === "pending"
+                ) {
+
+                    statusClass =
+                        "status-pending";
+
+                }
+                else if (
+                    status === "rejected"
+                ) {
+
+                    statusClass =
+                        "status-rejected";
+
+                }
+
+
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>
+                            ${date}
+                        </td>
+
+                        <td class="utr">
+                            ${deposit.utr || "N/A"}
+                        </td>
+
+                        <td class="amount">
+                            ₹${amount.toFixed(2)}
+                        </td>
+
+                        <td class="commission">
+                            ₹${commission.toFixed(2)}
+                        </td>
+
+                        <td>
+                            <span
+                                class="status ${statusClass}"
+                            >
+                                ${status}
+                            </span>
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+
+        message.innerText =
+            records.length +
+            " transaction(s) loaded.";
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Transaction Exception:",
+            error
+        );
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    Something went wrong.
+                </td>
+            </tr>
+        `;
+
+        message.innerText =
+            "Unable to load transaction history.";
+
+    }
+
+}
+
+
+loadTransactions();
+
+</script>
 
 
 </body>
