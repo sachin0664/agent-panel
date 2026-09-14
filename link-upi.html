@@ -201,7 +201,8 @@ body{
 .msg{
   font-size:13px;
   margin-top:10px;
-  min-height:18px
+  min-height:18px;
+  word-break:break-word
 }
 
 .bottom-nav{
@@ -473,7 +474,7 @@ body{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 
 
 <script>
@@ -614,7 +615,9 @@ async function loadUPI(){
 
 
     list.innerHTML =
-      '<div class="empty">Unable to load UPI.</div>';
+      '<div class="empty">Load Error: ' +
+      esc(error.message || 'Unknown error') +
+      '</div>';
 
 
     empty.style.display =
@@ -919,7 +922,7 @@ document.getElementById(
 
 
   /* =================================
-     DATABASE ERROR
+     SHOW EXACT DATABASE ERROR
   ================================= */
 
   if(error){
@@ -931,7 +934,14 @@ document.getElementById(
 
 
     msg.textContent =
-      'Unable to save UPI. Please try again.';
+      'Save Error: ' +
+      (
+        error.message ||
+        error.details ||
+        error.hint ||
+        'Unknown error'
+      );
+
 
     return;
   }
@@ -1010,4 +1020,4 @@ loadUPI();
 
 </body>
 
-  </html>
+            </html>
