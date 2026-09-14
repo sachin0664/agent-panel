@@ -7,7 +7,7 @@
 
     // Login ke bina protected page access block
     if (!customerId) {
-        window.location.href = "login.html";
+        window.location.href = "customer-login.html";
         return;
     }
 
