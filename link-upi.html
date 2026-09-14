@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sathi Pay - Link UPI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f6fb;color:#0f172a;padding-bottom:92px}
+.header{padding:22px 18px 12px;text-align:center;background:#f4f6fb}.header h1{margin:0;font-size:28px}.container{max-width:520px;margin:auto;padding:12px 16px 30px}
+.card{position:relative;overflow:hidden;background:linear-gradient(135deg,#1768f5,#315ee8);color:#fff;border-radius:22px;padding:22px 20px;margin-bottom:16px;box-shadow:0 10px 24px rgba(37,99,235,.22)}
+.card:after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;right:-70px;top:-50px;background:rgba(255,255,255,.10)}
+.row{position:relative;z-index:1}.top{display:flex;align-items:center;justify-content:space-between;gap:10px}.upi-title{font-size:31px;font-weight:800}.status{padding:8px 18px;border-radius:20px;background:#16a34a;border:2px solid #fff;font-weight:700}.status.off{background:#ef4444}.upi{font-size:17px;margin-top:6px;word-break:break-all}.meta{margin-top:18px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.13);border-radius:15px;padding:12px;display:flex;justify-content:space-between;gap:8px;font-size:14px}.empty{background:#fff;border-radius:18px;padding:24px;text-align:center;color:#64748b;margin-bottom:16px}.add{display:block;width:100%;border:0;border-radius:15px;padding:16px;background:#07101d;color:#fff;font-size:18px;font-weight:800}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:20;padding:18px;align-items:flex-end}.sheet{background:#fff;border-radius:22px 22px 0 0;padding:22px;width:100%;max-width:520px;margin:auto}.sheet h2{margin:0 0 16px}.field{margin-bottom:13px}.field label{display:block;font-size:13px;color:#64748b;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid #d7dce5;border-radius:12px;font-size:15px}.actions{display:flex;gap:10px}.actions button{flex:1;padding:14px;border:0;border-radius:12px;font-weight:700}.cancel{background:#e5e7eb}.save{background:#2563eb;color:#fff}.msg{font-size:13px;margin-top:10px;min-height:18px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:76px;background:#fff;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-around;z-index:10}.bottom-nav a{text-decoration:none;color:#94a3b8;text-align:center;font-size:12px}.bottom-nav .plus{width:66px;height:66px;border-radius:50%;background:#1768f5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:42px;line-height:1;box-shadow:0 6px 18px rgba(37,99,235,.3);margin-top:-30px}.bottom-nav span{display:block;font-size:24px;margin-bottom:2px}
+</style>
+</head>
+<body>
+<header class="header"><h1>Link UPI</h1></header>
+<main class="container">
+<div id="upiList"></div>
+<div class="empty" id="emptyState" style="display:none">No UPI linked yet.<br>Add your UPI ID below.</div>
+<button class="add" id="addBtn" type="button">Add UPI</button>
+</main>
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h2>Add UPI</h2>
+    <form id="upiForm">
+      <div class="field"><label>Provider</label><select id="provider" required><option value="">Select Provider</option><option>Paytm</option><option>Navi</option><option>PhonePe</option><option>Google Pay</option><option>Other</option></select></div>
+      <div class="field"><label>UPI ID</label><input id="upi" type="text" inputmode="email" autocomplete="off" placeholder="example@upi" maxlength="100" required></div>
+      <div class="field"><label>Payin Minimum (₹)</label><input id="min" type="number" min="1" step="0.01" value="50" required></div>
+      <div class="field"><label>Payin Maximum (₹)</label><input id="max" type="number" min="1" step="0.01" value="1000000" required></div>
+      <div class="actions"><button class="cancel" type="button" id="cancelBtn">Cancel</button><button class="save" type="submit">Save UPI</button></div>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+</div>
+<nav class="bottom-nav">
+<a href="dashboard.html"><span>⌂</span>Home</a>
+<a href="deposit.html"><span>▣</span>Deposit</a>
+<a href="link-upi.html"><span class="plus">+</span></a>
+<a href="referral.html"><span>♕</span>Team</a>
+<a href="wallet.html"><span>◉</span>Assets</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js?v=6"></script>
+<script>
+const customerId=localStorage.getItem('sathiPayCustomerId');
+const list=document.getElementById('upiList'), empty=document.getElementById('emptyState'), modal=document.getElementById('modal'), msg=document.getElementById('msg');
+if(!customerId) location.href='customer-login.html';
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function loadUPI(){
+ const {data,error}=await supabaseClient.from('customers').select('upi_id,upi_provider,upi_enabled,upi_min_amount,upi_max_amount').eq('id',customerId).maybeSingle();
+ if(error){list.innerHTML='<div class="empty">Unable to load UPI.</div>';return;}
+ if(!data?.upi_id){empty.style.display='block';return;}
+ empty.style.display='none'; const enabled=data.upi_enabled!==false;
+ list.innerHTML=`<div class="card"><div class="row"><div class="top"><div class="upi-title">UPI</div><div class="status ${enabled?'':'off'}">${enabled?'Enabled':'Disabled'}</div></div><div class="upi">${esc(data.upi_id)}</div><div class="meta"><span>Limited Range: ₹${Number(data.upi_min_amount||50).toFixed(2)} ~ ₹${Number(data.upi_max_amount||1000000).toFixed(2)}</span><span>${esc(data.upi_provider||'Provider')}</span></div></div></div>`;
+}
+document.getElementById('addBtn').onclick=()=>{msg.textContent='';modal.style.display='flex'};
+document.getElementById('cancelBtn').onclick=()=>modal.style.display='none';
+document.getElementById('upiForm').onsubmit=async e=>{e.preventDefault();msg.style.color='#dc2626';msg.textContent='';const upi=document.getElementById('upi').value.trim().toLowerCase(), provider=document.getElementById('provider').value,min=Number(document.getElementById('min').value),max=Number(document.getElementById('max').value);if(!/^[^\\s@]+@[^\\s@]+$/.test(upi)){msg.textContent='Enter a valid UPI ID.';return}if(!provider){msg.textContent='Select a provider.';return}if(min<=0||max<min){msg.textContent='Check the payin range.';return}const {error}=await supabaseClient.from('customers').update({upi_id:upi,upi_provider:provider,upi_min_amount:min,upi_max_amount:max}).eq('id',customerId);if(error){msg.textContent='Unable to save UPI. Run the latest migration SQL first.';return}msg.style.color='#15803d';msg.textContent='UPI added successfully.';setTimeout(()=>{modal.style.display='none';document.getElementById('upiForm').reset();document.getElementById('min').value=50;document.getElementById('max').value=1000000;loadUPI()},500)};
+loadUPI();
+</script>
+</body>
+  </html>
