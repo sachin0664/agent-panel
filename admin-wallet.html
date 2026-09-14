@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Wallet Management</title>
+<title>Sathi Pay - Admin Wallet Management</title>
 
 <style>
 *{
@@ -27,7 +27,7 @@ header{
 }
 
 .header-inner{
-    max-width:1200px;
+    max-width:1250px;
     margin:auto;
     display:flex;
     align-items:center;
@@ -60,9 +60,9 @@ header{
 }
 
 .container{
-    max-width:1200px;
+    max-width:1250px;
     margin:25px auto;
-    padding:0 16px 40px;
+    padding:0 16px 50px;
 }
 
 .title{
@@ -117,7 +117,8 @@ header{
 }
 
 .search-card,
-.wallet-card,
+.customers-card,
+.details-card,
 .history-card{
     background:#fff;
     padding:20px;
@@ -156,10 +157,32 @@ header{
     border:0;
     background:linear-gradient(135deg,#2563eb,#7c3aed);
     color:#fff;
-    padding:13px 20px;
-    border-radius:12px;
+    padding:12px 18px;
+    border-radius:11px;
     font-weight:700;
     cursor:pointer;
+}
+
+.btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.btn-danger{
+    background:#dc2626;
+}
+
+.btn-success{
+    background:#16a34a;
+}
+
+.btn-warning{
+    background:#d97706;
+}
+
+.btn-small{
+    padding:8px 11px;
+    font-size:11px;
 }
 
 .message{
@@ -182,18 +205,136 @@ header{
     color:#991b1b;
 }
 
-.customer-box{
-    display:none;
-    margin-top:18px;
-    padding:18px;
-    border-radius:16px;
-    background:linear-gradient(135deg,#eff6ff,#f5f3ff);
+.customers-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
 }
 
-.customer-grid{
+.customer-card{
+    background:#f8faff;
+    border:1px solid #e5eaf5;
+    border-radius:17px;
+    padding:16px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.customer-card:hover{
+    transform:translateY(-2px);
+    border-color:#6366f1;
+    box-shadow:0 8px 22px rgba(79,70,229,.12);
+}
+
+.customer-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:13px;
+}
+
+.customer-name{
+    font-weight:800;
+    font-size:15px;
+}
+
+.customer-uid{
+    color:#64748b;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.status{
+    padding:5px 8px;
+    border-radius:9px;
+    font-size:10px;
+    font-weight:800;
+    background:#dcfce7;
+    color:#166534;
+    height:max-content;
+}
+
+.customer-money{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.money-box{
+    background:#fff;
+    padding:10px;
+    border-radius:11px;
+}
+
+.money-box small{
+    display:block;
+    color:#718096;
+    font-size:10px;
+    margin-bottom:4px;
+}
+
+.money-box strong{
+    font-size:14px;
+}
+
+.customer-payment{
+    margin-top:10px;
+    padding:10px;
+    border-radius:11px;
+    background:#fff7ed;
+    color:#9a3412;
+    font-size:11px;
+    font-weight:700;
+}
+
+.loading{
+    color:#64748b;
+    font-size:13px;
+    padding:20px 0;
+    text-align:center;
+}
+
+.empty{
+    text-align:center;
+    padding:28px;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.details-card{
+    display:none;
+}
+
+.customer-header{
+    background:linear-gradient(135deg,#eff6ff,#f5f3ff);
+    border-radius:17px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.customer-header-top{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    align-items:flex-start;
+}
+
+.customer-header h2{
+    font-size:21px;
+    margin-bottom:5px;
+}
+
+.customer-header p{
+    color:#64748b;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.detail-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:12px;
+    gap:11px;
+    margin-top:15px;
 }
 
 .info{
@@ -205,17 +346,13 @@ header{
 .info small{
     display:block;
     color:#718096;
-    font-size:11px;
+    font-size:10px;
     margin-bottom:5px;
 }
 
 .info strong{
     font-size:14px;
     word-break:break-word;
-}
-
-.wallet-card{
-    display:none;
 }
 
 .wallet-main{
@@ -246,13 +383,13 @@ header{
 
 .balance-grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
 }
 
 .balance{
-    padding:17px;
-    border-radius:15px;
+    padding:15px;
+    border-radius:14px;
     background:#f8faff;
     border:1px solid #e8edf7;
 }
@@ -260,37 +397,144 @@ header{
 .balance small{
     display:block;
     color:#718096;
-    font-size:11px;
-    margin-bottom:7px;
+    font-size:10px;
+    margin-bottom:6px;
 }
 
 .balance strong{
-    font-size:19px;
+    font-size:17px;
 }
 
-.balance.deposit{
+.deposit{
     background:#eff6ff;
 }
 
-.balance.commission{
+.commission{
     background:#f5f3ff;
 }
 
-.balance.referral{
+.referral{
     background:#ecfdf5;
 }
 
-.balance.bonus{
+.bonus{
     background:#fff7ed;
 }
 
-.formula{
-    margin-top:15px;
-    padding:13px 15px;
-    border-radius:12px;
+.payment{
+    background:#fef2f2;
+}
+
+.upi-section{
+    margin-top:18px;
+}
+
+.upi-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.upi-card{
     background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:15px;
+    padding:15px;
+}
+
+.upi-head{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    align-items:flex-start;
+    margin-bottom:9px;
+}
+
+.upi-id{
+    font-weight:800;
+    font-size:14px;
+    word-break:break-all;
+}
+
+.upi-provider{
     color:#64748b;
-    font-size:12px;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.upi-enabled{
+    background:#dcfce7;
+    color:#166534;
+    padding:5px 8px;
+    border-radius:9px;
+    font-size:10px;
+    font-weight:800;
+}
+
+.upi-disabled{
+    background:#fee2e2;
+    color:#991b1b;
+    padding:5px 8px;
+    border-radius:9px;
+    font-size:10px;
+    font-weight:800;
+}
+
+.upi-actions{
+    display:flex;
+    gap:7px;
+    margin-top:12px;
+    flex-wrap:wrap;
+}
+
+.withdraw-section{
+    margin-top:18px;
+    padding:18px;
+    background:#f8faff;
+    border:1px solid #e4e9f3;
+    border-radius:16px;
+}
+
+.withdraw-form{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:10px;
+    align-items:end;
+}
+
+.field label{
+    display:block;
+    font-size:11px;
+    color:#64748b;
+    margin-bottom:6px;
+    font-weight:700;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #dce2ef;
+    border-radius:11px;
+    outline:none;
+    background:#fff;
+    font-size:13px;
+}
+
+.field textarea{
+    min-height:75px;
+    resize:vertical;
+}
+
+.withdraw-note{
+    margin-top:10px;
+}
+
+.section-heading{
+    font-size:15px;
+    font-weight:800;
+    margin:20px 0 12px;
 }
 
 .table-wrap{
@@ -299,7 +543,7 @@ header{
 
 table{
     width:100%;
-    min-width:850px;
+    min-width:950px;
     border-collapse:collapse;
 }
 
@@ -308,20 +552,20 @@ th{
     padding:12px;
     background:#f6f8fc;
     color:#64748b;
-    font-size:12px;
+    font-size:11px;
 }
 
 td{
-    padding:13px 12px;
+    padding:12px;
     border-bottom:1px solid #edf0f7;
-    font-size:13px;
+    font-size:12px;
 }
 
 .badge{
     display:inline-block;
     padding:5px 9px;
-    border-radius:10px;
-    font-size:11px;
+    border-radius:9px;
+    font-size:10px;
     font-weight:800;
 }
 
@@ -345,6 +589,21 @@ td{
     color:#c2410c;
 }
 
+.credit-badge{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.debit-badge{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.manual-badge{
+    background:#e0e7ff;
+    color:#3730a3;
+}
+
 .approved{
     color:#15803d;
     font-weight:800;
@@ -360,33 +619,75 @@ td{
     font-weight:800;
 }
 
-.empty{
-    text-align:center;
-    padding:28px;
-    color:#94a3b8;
-    font-size:14px;
+.failed{
+    color:#dc2626;
+    font-weight:800;
 }
 
-.loading{
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.65);
+    z-index:999;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.modal-box{
+    width:100%;
+    max-width:430px;
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-box h3{
+    margin-bottom:8px;
+}
+
+.modal-box p{
     color:#64748b;
-    font-size:13px;
+    font-size:12px;
+    line-height:1.5;
+    margin-bottom:15px;
 }
 
-@media(max-width:950px){
+.modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.modal-actions button{
+    flex:1;
+}
+
+@media(max-width:1050px){
     .stats{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .customer-grid{
+    .customers-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .detail-grid{
         grid-template-columns:repeat(2,1fr);
     }
 
     .balance-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .upi-grid{
         grid-template-columns:repeat(2,1fr);
     }
 }
 
-@media(max-width:650px){
+@media(max-width:700px){
     header{
         padding:15px;
     }
@@ -405,7 +706,7 @@ td{
     }
 
     .stats{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:1fr 1fr;
         gap:10px;
     }
 
@@ -414,23 +715,34 @@ td{
     }
 
     .stat strong{
-        font-size:19px;
+        font-size:18px;
     }
 
     .search-row{
         flex-direction:column;
     }
 
-    .customer-grid,
-    .balance-grid{
+    .customers-grid,
+    .detail-grid,
+    .balance-grid,
+    .upi-grid{
+        grid-template-columns:1fr;
+    }
+
+    .withdraw-form{
         grid-template-columns:1fr;
     }
 
     .search-card,
-    .wallet-card,
+    .customers-card,
+    .details-card,
     .history-card{
         padding:16px;
         border-radius:17px;
+    }
+
+    .customer-header-top{
+        flex-direction:column;
     }
 
     .wallet-total{
@@ -461,8 +773,8 @@ td{
 <div class="container">
 
     <div class="title">
-        <h1>Customer Wallet</h1>
-        <p>View customer wallet, balance components and earnings history.</p>
+        <h1>Customer Wallet Management</h1>
+        <p>All customers, complete wallet history, UPI management and customer payments.</p>
     </div>
 
 
@@ -471,27 +783,27 @@ td{
     <div class="stats">
 
         <div class="stat">
+            <div class="stat-icon">👥</div>
+            <h3>Total Customers</h3>
+            <strong id="totalCustomers">0</strong>
+        </div>
+
+        <div class="stat">
             <div class="stat-icon">💰</div>
             <h3>Total Wallet Balance</h3>
             <strong id="totalWallet">₹0.00</strong>
         </div>
 
         <div class="stat">
-            <div class="stat-icon">🎁</div>
-            <h3>Total Bonus</h3>
-            <strong id="totalBonus">₹0.00</strong>
+            <div class="stat-icon">📥</div>
+            <h3>Total Deposit Balance</h3>
+            <strong id="totalDeposit">₹0.00</strong>
         </div>
 
         <div class="stat">
-            <div class="stat-icon">💵</div>
-            <h3>Total Commission</h3>
-            <strong id="totalCommission">₹0.00</strong>
-        </div>
-
-        <div class="stat">
-            <div class="stat-icon">👥</div>
-            <h3>Total Referral Income</h3>
-            <strong id="totalReferral">₹0.00</strong>
+            <div class="stat-icon">📤</div>
+            <h3>Total Payment Given</h3>
+            <strong id="totalPayments">₹0.00</strong>
         </div>
 
     </div>
@@ -502,7 +814,7 @@ td{
     <div class="search-card">
 
         <div class="card-title">
-            🔎 Customer Wallet Search
+            🔎 Customer UID Search
         </div>
 
         <div class="search-row">
@@ -514,7 +826,7 @@ td{
                 autocomplete="off"
             >
 
-            <button class="btn" onclick="searchCustomer()">
+            <button class="btn" id="searchBtn" onclick="searchCustomer()">
                 Search
             </button>
 
@@ -522,31 +834,21 @@ td{
 
         <div id="searchMessage" class="message"></div>
 
+    </div>
 
-        <div id="customerBox" class="customer-box">
 
-            <div class="customer-grid">
+    <!-- ALL CUSTOMERS -->
 
-                <div class="info">
-                    <small>Customer Name</small>
-                    <strong id="customerName">-</strong>
-                </div>
+    <div class="customers-card">
 
-                <div class="info">
-                    <small>Customer UID</small>
-                    <strong id="customerUid">-</strong>
-                </div>
+        <div class="card-title">
+            👥 All Customers
+        </div>
 
-                <div class="info">
-                    <small>Mobile</small>
-                    <strong id="customerMobile">-</strong>
-                </div>
+        <div id="customersGrid" class="customers-grid">
 
-                <div class="info">
-                    <small>Status</small>
-                    <strong id="customerStatus">-</strong>
-                </div>
-
+            <div class="loading">
+                Loading customers...
             </div>
 
         </div>
@@ -554,9 +856,41 @@ td{
     </div>
 
 
-    <!-- CUSTOMER WALLET -->
+    <!-- CUSTOMER DETAILS -->
 
-    <div class="wallet-card" id="walletCard">
+    <div class="details-card" id="detailsCard">
+
+        <div class="customer-header">
+
+            <div class="customer-header-top">
+
+                <div>
+                    <h2 id="detailName">Customer</h2>
+
+                    <p>
+                        UID:
+                        <b id="detailUid">-</b>
+                        <br>
+
+                        Mobile:
+                        <b id="detailMobile">-</b>
+                        <br>
+
+                        Status:
+                        <b id="detailStatus">-</b>
+                    </p>
+                </div>
+
+                <button
+                    class="btn btn-small"
+                    onclick="closeDetails()">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
 
         <div class="card-title">
             💳 Wallet Overview
@@ -566,10 +900,12 @@ td{
         <div class="wallet-main">
 
             <div class="wallet-label">
-                Available Wallet Balance
+                Current Wallet Balance
             </div>
 
-            <div class="wallet-total" id="walletTotal">
+            <div
+                class="wallet-total"
+                id="detailWallet">
                 ₹0.00
             </div>
 
@@ -583,72 +919,137 @@ td{
         <div class="balance-grid">
 
             <div class="balance deposit">
-
-                <small>
-                    Deposit Balance
-                </small>
-
-                <strong id="depositBalance">
-                    ₹0.00
-                </strong>
-
+                <small>Current Deposit Balance</small>
+                <strong id="detailDeposit">₹0.00</strong>
             </div>
-
 
             <div class="balance commission">
-
-                <small>
-                    Commission Balance
-                </small>
-
-                <strong id="commissionBalance">
-                    ₹0.00
-                </strong>
-
+                <small>Commission Balance</small>
+                <strong id="detailCommission">₹0.00</strong>
             </div>
-
 
             <div class="balance referral">
-
-                <small>
-                    Referral Income
-                </small>
-
-                <strong id="referralBalance">
-                    ₹0.00
-                </strong>
-
+                <small>Referral Income</small>
+                <strong id="detailReferral">₹0.00</strong>
             </div>
-
 
             <div class="balance bonus">
+                <small>Bonus Balance</small>
+                <strong id="detailBonus">₹0.00</strong>
+            </div>
 
-                <small>
-                    Bonus Balance
-                </small>
+            <div class="balance payment">
+                <small>Total Payment Given</small>
+                <strong id="detailPayments">₹0.00</strong>
+            </div>
 
-                <strong id="bonusBalance">
-                    ₹0.00
-                </strong>
+        </div>
+
+
+        <!-- UPI -->
+
+        <div class="upi-section">
+
+            <div class="section-heading">
+                💳 Customer UPI IDs
+            </div>
+
+            <div
+                id="upiGrid"
+                class="upi-grid">
+
+                <div class="empty">
+                    Loading UPI IDs...
+                </div>
 
             </div>
 
         </div>
 
 
-        <div class="formula">
-            Wallet Balance = Deposit Balance + Commission Balance + Referral Income + Bonus Balance
+        <!-- WITHDRAWAL -->
+
+        <div class="withdraw-section">
+
+            <div class="section-heading" style="margin-top:0;">
+                📤 Approve Customer Payment
+            </div>
+
+            <div
+                id="withdrawMessage"
+                class="message">
+            </div>
+
+            <div class="withdraw-form">
+
+                <div class="field">
+
+                    <label>
+                        Amount
+                    </label>
+
+                    <input
+                        type="number"
+                        id="withdrawAmount"
+                        min="1"
+                        step="0.01"
+                        placeholder="₹ Amount">
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Enabled UPI
+                    </label>
+
+                    <select id="withdrawUpi">
+
+                        <option value="">
+                            Select enabled UPI
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    class="btn btn-success"
+                    id="approveBtn"
+                    onclick="approveWithdrawal()">
+
+                    Approve & Debit
+
+                </button>
+
+            </div>
+
+
+            <div class="withdraw-note">
+
+                <div class="field">
+
+                    <label>
+                        Payment Note (optional)
+                    </label>
+
+                    <textarea
+                        id="withdrawNote"
+                        placeholder="Example: Customer payment approved"></textarea>
+
+                </div>
+
+            </div>
+
         </div>
 
-    </div>
 
+        <!-- PAYMENT HISTORY -->
 
-    <!-- HISTORY -->
-
-    <div class="history-card">
-
-        <div class="card-title">
-            📊 Customer Wallet Earnings History
+        <div class="section-heading">
+            📤 Payment / Withdrawal History
         </div>
 
         <div class="table-wrap">
@@ -659,26 +1060,141 @@ td{
 
                     <tr>
                         <th>Date</th>
-                        <th>Customer</th>
-                        <th>Type</th>
-                        <th>Reference</th>
+                        <th>UPI</th>
                         <th>Amount</th>
                         <th>Status</th>
+                        <th>Note</th>
                     </tr>
 
                 </thead>
 
-                <tbody id="historyBody">
+                <tbody id="withdrawalBody">
 
                     <tr>
-                        <td colspan="6" class="empty">
-                            Search a customer to view wallet history.
+                        <td colspan="5" class="empty">
+                            Loading payment history...
                         </td>
                     </tr>
 
                 </tbody>
 
             </table>
+
+        </div>
+
+
+        <!-- COMPLETE LEDGER -->
+
+        <div class="section-heading">
+            📊 Complete Wallet Ledger
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Component</th>
+                        <th>Direction</th>
+                        <th>Amount</th>
+                        <th>Balance After</th>
+                        <th>Reason</th>
+                        <th>Reference</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="ledgerBody">
+
+                    <tr>
+                        <td colspan="7" class="empty">
+                            Loading wallet ledger...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- DEPOSIT HISTORY -->
+
+        <div class="section-heading">
+            📥 Complete Deposit History
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Commission</th>
+                        <th>UTR</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="depositBody">
+
+                    <tr>
+                        <td colspan="5" class="empty">
+                            Loading deposit history...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CONFIRM MODAL -->
+
+<div class="modal" id="confirmModal">
+
+    <div class="modal-box">
+
+        <h3>
+            Confirm Customer Payment
+        </h3>
+
+        <p id="confirmText">
+            Are you sure?
+        </p>
+
+        <div class="modal-actions">
+
+            <button
+                class="btn"
+                onclick="closeConfirm()">
+
+                Cancel
+
+            </button>
+
+            <button
+                class="btn btn-success"
+                id="confirmPaymentBtn"
+                onclick="confirmPayment()">
+
+                Confirm Payment
+
+            </button>
 
         </div>
 
@@ -704,11 +1220,14 @@ const supabaseClient =
     );
 
 
+let customers = [];
+let upis = [];
 let currentCustomer = null;
+let pendingPayment = null;
 
 
 /* =========================
-   MONEY FORMAT
+   MONEY
 ========================= */
 
 function money(value){
@@ -726,14 +1245,18 @@ function money(value){
 
 
 /* =========================
-   DATE FORMAT
+   DATE
 ========================= */
 
 function formatDate(value){
 
     if(!value) return "-";
 
-    return new Date(value).toLocaleString(
+    const d = new Date(value);
+
+    if(isNaN(d.getTime())) return "-";
+
+    return d.toLocaleString(
         "en-IN",
         {
             day:"2-digit",
@@ -748,128 +1271,79 @@ function formatDate(value){
 
 
 /* =========================
-   LOAD GLOBAL STATS
+   ESCAPE HTML
 ========================= */
 
-async function loadGlobalStats(){
+function esc(value){
 
-    const { data, error } =
-        await supabaseClient
-        .from("customers")
-        .select(`
-            wallet_balance,
-            bonus_balance,
-            commission_balance,
-            referral_balance
-        `);
-
-
-    if(error){
-
-        console.error(error);
-        return;
-
-    }
-
-
-    let wallet = 0;
-    let bonus = 0;
-    let commission = 0;
-    let referral = 0;
-
-
-    (data || []).forEach(customer => {
-
-        wallet +=
-            Number(customer.wallet_balance || 0);
-
-        bonus +=
-            Number(customer.bonus_balance || 0);
-
-        commission +=
-            Number(customer.commission_balance || 0);
-
-        referral +=
-            Number(customer.referral_balance || 0);
-
-    });
-
-
-    document.getElementById(
-        "totalWallet"
-    ).textContent = money(wallet);
-
-
-    document.getElementById(
-        "totalBonus"
-    ).textContent = money(bonus);
-
-
-    document.getElementById(
-        "totalCommission"
-    ).textContent = money(commission);
-
-
-    document.getElementById(
-        "totalReferral"
-    ).textContent = money(referral);
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
 
 /* =========================
-   SEARCH CUSTOMER
+   MESSAGE
 ========================= */
 
-async function searchCustomer(){
+function showMessage(
+    elementId,
+    text,
+    type
+){
 
-    const uid =
+    const el =
         document.getElementById(
-            "uidSearch"
-        ).value.trim();
-
-
-    const message =
-        document.getElementById(
-            "searchMessage"
+            elementId
         );
 
-    const customerBox =
-        document.getElementById(
-            "customerBox"
+    el.textContent = text;
+
+    el.className =
+        "message " +
+        (
+            type === "error"
+            ? "error"
+            : "success"
         );
 
-    const walletCard =
+}
+
+
+function hideMessage(elementId){
+
+    const el =
         document.getElementById(
-            "walletCard"
+            elementId
         );
 
+    el.className = "message";
 
-    message.className = "message";
-    message.textContent = "";
+    el.textContent = "";
 
-    customerBox.style.display = "none";
-    walletCard.style.display = "none";
-
-
-    if(!uid){
-
-        message.textContent =
-            "Please enter Customer UID.";
-
-        message.className =
-            "message error";
-
-        return;
-
-    }
+}
 
 
-    message.textContent =
-        "Searching customer...";
+/* =========================
+   LOAD CUSTOMERS
+========================= */
 
-    message.className =
-        "message success";
+async function loadCustomers(){
+
+    const grid =
+        document.getElementById(
+            "customersGrid"
+        );
+
+    grid.innerHTML = `
+        <div class="loading">
+            Loading customers...
+        </div>
+    `;
 
 
     const { data, error } =
@@ -882,12 +1356,1194 @@ async function searchCustomer(){
             uid,
             status,
             wallet_balance,
-            bonus_balance,
             deposit_balance,
             commission_balance,
-            referral_balance
+            referral_balance,
+            bonus_balance
         `)
-        .eq("uid", uid)
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        grid.innerHTML = `
+            <div class="empty">
+                Unable to load customers.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    customers = data || [];
+
+
+    document.getElementById(
+        "totalCustomers"
+    ).textContent =
+        customers.length;
+
+
+    renderCustomers();
+
+    calculateGlobalStats();
+
+}
+
+
+/* =========================
+   LOAD ALL UPIS
+========================= */
+
+async function loadAllUpis(){
+
+    const { data, error } =
+        await supabaseClient
+        .from("customer_upis")
+        .select(`
+            id,
+            customer_id,
+            upi_id,
+            provider,
+            enabled,
+            min_amount,
+            max_amount
+        `)
+        .order(
+            "created_at",
+            {
+                ascending:true
+            }
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        upis = [];
+
+        return;
+
+    }
+
+
+    upis = data || [];
+
+}
+
+
+/* =========================
+   GLOBAL STATS
+========================= */
+
+async function calculateGlobalStats(){
+
+    let wallet = 0;
+    let deposit = 0;
+
+
+    customers.forEach(c => {
+
+        wallet +=
+            Number(
+                c.wallet_balance || 0
+            );
+
+        deposit +=
+            Number(
+                c.deposit_balance || 0
+            );
+
+    });
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("withdrawal_requests")
+        .select("amount")
+        .eq("status","approved");
+
+
+    let payments = 0;
+
+
+    if(!error){
+
+        (data || []).forEach(row => {
+
+            payments +=
+                Number(row.amount || 0);
+
+        });
+
+    }
+
+
+    document.getElementById(
+        "totalWallet"
+    ).textContent =
+        money(wallet);
+
+
+    document.getElementById(
+        "totalDeposit"
+    ).textContent =
+        money(deposit);
+
+
+    document.getElementById(
+        "totalPayments"
+    ).textContent =
+        money(payments);
+
+}
+
+
+/* =========================
+   RENDER CUSTOMER CARDS
+========================= */
+
+function renderCustomers(
+    list = customers
+){
+
+    const grid =
+        document.getElementById(
+            "customersGrid"
+        );
+
+
+    if(!list.length){
+
+        grid.innerHTML = `
+            <div class="empty">
+                No customers found.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    grid.innerHTML =
+        list.map(customer => {
+
+            const customerUpis =
+                upis.filter(
+                    u =>
+                        u.customer_id ===
+                        customer.id
+                );
+
+
+            return `
+                <div
+                    class="customer-card"
+                    onclick="openCustomer('${esc(customer.id)}')">
+
+                    <div class="customer-top">
+
+                        <div>
+
+                            <div class="customer-name">
+                                ${esc(customer.name || "Customer")}
+                            </div>
+
+                            <div class="customer-uid">
+                                UID: ${esc(customer.uid || "-")}
+                            </div>
+
+                        </div>
+
+                        <div class="status">
+                            ${esc(String(customer.status || "ACTIVE").toUpperCase())}
+                        </div>
+
+                    </div>
+
+
+                    <div class="customer-money">
+
+                        <div class="money-box">
+
+                            <small>
+                                Wallet
+                            </small>
+
+                            <strong>
+                                ${money(customer.wallet_balance)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="money-box">
+
+                            <small>
+                                Deposit
+                            </small>
+
+                            <strong>
+                                ${money(customer.deposit_balance)}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="customer-payment">
+
+                        UPI IDs:
+                        ${customerUpis.length}
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+async function searchCustomer(){
+
+    const input =
+        document.getElementById(
+            "uidSearch"
+        );
+
+    const uid =
+        input.value.trim();
+
+
+    hideMessage(
+        "searchMessage"
+    );
+
+
+    if(!uid){
+
+        showMessage(
+            "searchMessage",
+            "Please enter Customer UID.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const found =
+        customers.find(
+            c =>
+                String(c.uid || "")
+                .toLowerCase()
+                === uid.toLowerCase()
+        );
+
+
+    if(found){
+
+        openCustomer(found.id);
+
+        showMessage(
+            "searchMessage",
+            "Customer found.",
+            "success"
+        );
+
+        return;
+
+    }
+
+
+    showMessage(
+        "searchMessage",
+        "Customer UID not found.",
+        "error"
+    );
+
+}
+
+
+/* =========================
+   OPEN CUSTOMER
+========================= */
+
+async function openCustomer(
+    customerId
+){
+
+    const customer =
+        customers.find(
+            c =>
+                String(c.id) ===
+                String(customerId)
+        );
+
+
+    if(!customer){
+
+        showMessage(
+            "searchMessage",
+            "Customer not found.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    currentCustomer = customer;
+
+
+    document.getElementById(
+        "detailsCard"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "detailName"
+    ).textContent =
+        customer.name || "Customer";
+
+
+    document.getElementById(
+        "detailUid"
+    ).textContent =
+        customer.uid || "-";
+
+
+    document.getElementById(
+        "detailMobile"
+    ).textContent =
+        customer.mobile || "-";
+
+
+    document.getElementById(
+        "detailStatus"
+    ).textContent =
+        String(
+            customer.status || "-"
+        ).toUpperCase();
+
+
+    updateCustomerBalances();
+
+
+    renderCustomerUpis();
+
+
+    loadWithdrawalHistory(
+        customer.id
+    );
+
+
+    loadLedger(
+        customer.id
+    );
+
+
+    loadDepositHistory(
+        customer.id
+    );
+
+
+    document.getElementById(
+        "detailsCard"
+    ).scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+
+}
+
+
+/* =========================
+   UPDATE BALANCES
+========================= */
+
+async function updateCustomerBalances(){
+
+    if(!currentCustomer) return;
+
+
+    document.getElementById(
+        "detailWallet"
+    ).textContent =
+        money(
+            currentCustomer.wallet_balance
+        );
+
+
+    document.getElementById(
+        "detailDeposit"
+    ).textContent =
+        money(
+            currentCustomer.deposit_balance
+        );
+
+
+    document.getElementById(
+        "detailCommission"
+    ).textContent =
+        money(
+            currentCustomer.commission_balance
+        );
+
+
+    document.getElementById(
+        "detailReferral"
+    ).textContent =
+        money(
+            currentCustomer.referral_balance
+        );
+
+
+    document.getElementById(
+        "detailBonus"
+    ).textContent =
+        money(
+            currentCustomer.bonus_balance
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("withdrawal_requests")
+        .select("amount")
+        .eq(
+            "customer_id",
+            currentCustomer.id
+        )
+        .eq(
+            "status",
+            "approved"
+        );
+
+
+    let total = 0;
+
+
+    if(!error){
+
+        (data || []).forEach(row => {
+
+            total +=
+                Number(row.amount || 0);
+
+        });
+
+    }
+
+
+    document.getElementById(
+        "detailPayments"
+    ).textContent =
+        money(total);
+
+}
+
+
+/* =========================
+   RENDER UPIS
+========================= */
+
+function renderCustomerUpis(){
+
+    if(!currentCustomer) return;
+
+
+    const grid =
+        document.getElementById(
+            "upiGrid"
+        );
+
+
+    const customerUpis =
+        upis.filter(
+            u =>
+                u.customer_id ===
+                currentCustomer.id
+        );
+
+
+    if(!customerUpis.length){
+
+        grid.innerHTML = `
+            <div class="empty">
+                No UPI ID linked with this customer.
+            </div>
+        `;
+
+        populateWithdrawalUpis();
+
+        return;
+
+    }
+
+
+    grid.innerHTML =
+        customerUpis.map(
+            u => {
+
+                const enabled =
+                    u.enabled === true;
+
+
+                return `
+                    <div class="upi-card">
+
+                        <div class="upi-head">
+
+                            <div>
+
+                                <div class="upi-id">
+                                    ${esc(u.upi_id)}
+                                </div>
+
+                                <div class="upi-provider">
+                                    Provider:
+                                    ${esc(u.provider || "Other")}
+                                </div>
+
+                            </div>
+
+                            <span class="${
+                                enabled
+                                ? "upi-enabled"
+                                : "upi-disabled"
+                            }">
+
+                                ${
+                                    enabled
+                                    ? "ENABLED"
+                                    : "DISABLED"
+                                }
+
+                            </span>
+
+                        </div>
+
+
+                        <div style="font-size:11px;color:#64748b;">
+
+                            Limit:
+                            ${money(u.min_amount)}
+                            -
+                            ${money(u.max_amount)}
+
+                        </div>
+
+
+                        <div class="upi-actions">
+
+                            <button
+                                class="btn btn-small ${
+                                    enabled
+                                    ? "btn-warning"
+                                    : "btn-success"
+                                }"
+                                onclick="toggleUpi(
+                                    '${esc(u.id)}',
+                                    ${!enabled}
+                                ); event.stopPropagation();">
+
+                                ${
+                                    enabled
+                                    ? "Disable"
+                                    : "Enable"
+                                }
+
+                            </button>
+
+
+                            <button
+                                class="btn btn-danger btn-small"
+                                onclick="deleteUpi(
+                                    '${esc(u.id)}'
+                                ); event.stopPropagation();">
+
+                                Delete
+
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }
+        ).join("");
+
+
+    populateWithdrawalUpis();
+
+}
+
+
+/* =========================
+   ENABLE / DISABLE UPI
+========================= */
+
+async function toggleUpi(
+    upiId,
+    enabled
+){
+
+    if(!currentCustomer) return;
+
+
+    const { error } =
+        await supabaseClient
+        .from("customer_upis")
+        .update({
+            enabled:enabled,
+            updated_at:new Date().toISOString()
+        })
+        .eq(
+            "id",
+            upiId
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        showMessage(
+            "withdrawMessage",
+            "Unable to update UPI.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    showMessage(
+        "withdrawMessage",
+        enabled
+        ? "UPI enabled successfully."
+        : "UPI disabled successfully.",
+        "success"
+    );
+
+
+    await loadAllUpis();
+
+    renderCustomerUpis();
+
+}
+
+
+/* =========================
+   DELETE UPI
+========================= */
+
+async function deleteUpi(
+    upiId
+){
+
+    if(!currentCustomer) return;
+
+
+    const selected =
+        upis.find(
+            u =>
+                String(u.id) ===
+                String(upiId)
+        );
+
+
+    if(!selected) return;
+
+
+    const ok =
+        confirm(
+            "Delete this UPI ID?\n\n" +
+            selected.upi_id +
+            "\n\nThis action cannot be undone."
+        );
+
+
+    if(!ok) return;
+
+
+    const { error } =
+        await supabaseClient
+        .from("customer_upis")
+        .delete()
+        .eq(
+            "id",
+            upiId
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        showMessage(
+            "withdrawMessage",
+            "Unable to delete UPI. It may be linked with payment history.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    showMessage(
+        "withdrawMessage",
+        "UPI deleted successfully.",
+        "success"
+    );
+
+
+    await loadAllUpis();
+
+    renderCustomerUpis();
+
+}
+
+
+/* =========================
+   WITHDRAWAL UPI OPTIONS
+========================= */
+
+function populateWithdrawalUpis(){
+
+    const select =
+        document.getElementById(
+            "withdrawUpi"
+        );
+
+
+    select.innerHTML = `
+        <option value="">
+            Select enabled UPI
+        </option>
+    `;
+
+
+    if(!currentCustomer) return;
+
+
+    const enabledUpis =
+        upis.filter(
+            u =>
+                u.customer_id ===
+                currentCustomer.id &&
+                u.enabled === true
+        );
+
+
+    enabledUpis.forEach(u => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value = u.id;
+
+        option.textContent =
+            u.upi_id +
+            " (" +
+            (u.provider || "Other") +
+            ")";
+
+
+        select.appendChild(
+            option
+        );
+
+    });
+
+
+    if(!enabledUpis.length){
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value = "";
+
+        option.textContent =
+            "No enabled UPI available";
+
+        select.appendChild(
+            option
+        );
+
+    }
+
+}
+
+
+/* =========================
+   APPROVE WITHDRAWAL
+========================= */
+
+function approveWithdrawal(){
+
+    if(!currentCustomer){
+
+        showMessage(
+            "withdrawMessage",
+            "Please select a customer first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                "withdrawAmount"
+            ).value
+        );
+
+
+    const upiId =
+        document.getElementById(
+            "withdrawUpi"
+        ).value;
+
+
+    const note =
+        document.getElementById(
+            "withdrawNote"
+        ).value.trim();
+
+
+    if(!amount || amount <= 0){
+
+        showMessage(
+            "withdrawMessage",
+            "Enter a valid payment amount.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(amount >
+        Number(
+            currentCustomer.wallet_balance || 0
+        )
+    ){
+
+        showMessage(
+            "withdrawMessage",
+            "Payment amount is greater than current wallet balance.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(!upiId){
+
+        showMessage(
+            "withdrawMessage",
+            "Select an enabled UPI.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const selectedUpi =
+        upis.find(
+            u =>
+                String(u.id) ===
+                String(upiId)
+        );
+
+
+    if(
+        !selectedUpi ||
+        selectedUpi.enabled !== true
+    ){
+
+        showMessage(
+            "withdrawMessage",
+            "Selected UPI is disabled or unavailable.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        amount <
+        Number(
+            selectedUpi.min_amount || 0
+        )
+    ){
+
+        showMessage(
+            "withdrawMessage",
+            "Amount is below the selected UPI minimum limit.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        amount >
+        Number(
+            selectedUpi.max_amount || 999999999
+        )
+    ){
+
+        showMessage(
+            "withdrawMessage",
+            "Amount exceeds the selected UPI maximum limit.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    pendingPayment = {
+
+        customerId:
+            currentCustomer.id,
+
+        upiId:
+            selectedUpi.id,
+
+        amount:
+            amount,
+
+        note:
+            note,
+
+        customerName:
+            currentCustomer.name,
+
+        customerUid:
+            currentCustomer.uid,
+
+        upi:
+            selectedUpi.upi_id
+
+    };
+
+
+    document.getElementById(
+        "confirmText"
+    ).innerHTML =
+
+        "Customer: <b>" +
+        esc(currentCustomer.name || "Customer") +
+        "</b><br>" +
+
+        "UID: <b>" +
+        esc(currentCustomer.uid || "-") +
+        "</b><br><br>" +
+
+        "Payment: <b>" +
+        money(amount) +
+        "</b><br>" +
+
+        "UPI: <b>" +
+        esc(selectedUpi.upi_id) +
+        "</b><br><br>" +
+
+        "Wallet will be debited immediately after approval.";
+
+
+    document.getElementById(
+        "confirmModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* =========================
+   CONFIRM PAYMENT
+========================= */
+
+async function confirmPayment(){
+
+    if(!pendingPayment) return;
+
+
+    const button =
+        document.getElementById(
+            "confirmPaymentBtn"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Processing...";
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.rpc(
+            "admin_approve_customer_withdrawal",
+            {
+                p_customer_id:
+                    pendingPayment.customerId,
+
+                p_customer_upi_id:
+                    pendingPayment.upiId,
+
+                p_amount:
+                    pendingPayment.amount,
+
+                p_note:
+                    pendingPayment.note || null
+            }
+        );
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Confirm Payment";
+
+
+    if(error){
+
+        console.error(error);
+
+        closeConfirm();
+
+        showMessage(
+            "withdrawMessage",
+            error.message ||
+            "Payment approval failed.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    closeConfirm();
+
+
+    showMessage(
+        "withdrawMessage",
+        "Payment approved successfully. Wallet debited by " +
+        money(pendingPayment.amount) +
+        ".",
+        "success"
+    );
+
+
+    pendingPayment = null;
+
+
+    document.getElementById(
+        "withdrawAmount"
+    ).value = "";
+
+
+    document.getElementById(
+        "withdrawNote"
+    ).value = "";
+
+
+    document.getElementById(
+        "withdrawUpi"
+    ).value = "";
+
+
+    await refreshCustomerData();
+
+}
+
+
+/* =========================
+   REFRESH CUSTOMER
+========================= */
+
+async function refreshCustomerData(){
+
+    if(!currentCustomer) return;
+
+
+    const customerId =
+        currentCustomer.id;
+
+
+    const { data, error } =
+        await supabaseClient
+        .from("customers")
+        .select(`
+            id,
+            name,
+            mobile,
+            uid,
+            status,
+            wallet_balance,
+            deposit_balance,
+            commission_balance,
+            referral_balance,
+            bonus_balance
+        `)
+        .eq(
+            "id",
+            customerId
+        )
         .maybeSingle();
 
 
@@ -895,152 +2551,96 @@ async function searchCustomer(){
 
         console.error(error);
 
-        message.textContent =
-            "Unable to search customer.";
-
-        message.className =
-            "message error";
-
         return;
 
     }
 
 
-    if(!data){
+    if(!data) return;
 
-        message.textContent =
-            "Customer UID not found.";
 
-        message.className =
-            "message error";
+    currentCustomer =
+        data;
 
-        return;
+
+    const index =
+        customers.findIndex(
+            c =>
+                c.id ===
+                data.id
+        );
+
+
+    if(index !== -1){
+
+        customers[index] =
+            data;
 
     }
 
 
-    currentCustomer = data;
+    await loadAllUpis();
 
+    renderCustomers();
 
-    document.getElementById(
-        "customerName"
-    ).textContent =
-        data.name || "-";
+    updateCustomerBalances();
 
+    renderCustomerUpis();
 
-    document.getElementById(
-        "customerUid"
-    ).textContent =
-        data.uid || "-";
-
-
-    document.getElementById(
-        "customerMobile"
-    ).textContent =
-        data.mobile || "-";
-
-
-    document.getElementById(
-        "customerStatus"
-    ).textContent =
-        String(data.status || "-")
-        .toUpperCase();
-
-
-    customerBox.style.display =
-        "block";
-
-
-    document.getElementById(
-        "walletTotal"
-    ).textContent =
-        money(data.wallet_balance);
-
-
-    document.getElementById(
-        "depositBalance"
-    ).textContent =
-        money(data.deposit_balance);
-
-
-    document.getElementById(
-        "commissionBalance"
-    ).textContent =
-        money(data.commission_balance);
-
-
-    document.getElementById(
-        "referralBalance"
-    ).textContent =
-        money(data.referral_balance);
-
-
-    document.getElementById(
-        "bonusBalance"
-    ).textContent =
-        money(data.bonus_balance);
-
-
-    walletCard.style.display =
-        "block";
-
-
-    message.textContent =
-        "Customer wallet loaded successfully.";
-
-    message.className =
-        "message success";
-
-
-    await loadCustomerHistory(
-        data.id,
-        data
+    loadWithdrawalHistory(
+        data.id
     );
+
+    loadLedger(
+        data.id
+    );
+
+    loadDepositHistory(
+        data.id
+    );
+
+    calculateGlobalStats();
 
 }
 
 
 /* =========================
-   CUSTOMER HISTORY
+   WITHDRAWAL HISTORY
 ========================= */
 
-async function loadCustomerHistory(
-    customerId,
-    customer
+async function loadWithdrawalHistory(
+    customerId
 ){
 
     const body =
         document.getElementById(
-            "historyBody"
+            "withdrawalBody"
         );
 
 
     body.innerHTML = `
         <tr>
-            <td colspan="6" class="empty">
-                Loading wallet history...
+            <td colspan="5" class="empty">
+                Loading payment history...
             </td>
         </tr>
     `;
 
 
-    let records = [];
-
-
-    /* =========================
-       DEPOSIT RECORDS
-    ========================= */
-
-    const { data: deposits } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
-        .from("customer_deposits")
+        .from("withdrawal_requests")
         .select(`
             id,
+            customer_upi_id,
             amount,
-            commission,
             status,
-            utr,
-            created_at
+            processed_at,
+            requested_at,
+            note
         `)
         .eq(
             "customer_id",
@@ -1048,164 +2648,36 @@ async function loadCustomerHistory(
         )
         .order(
             "created_at",
-            { ascending:false }
+            {
+                ascending:false
+            }
         )
-        .limit(150);
+        .limit(300);
 
 
-    (deposits || []).forEach(row => {
+    if(error){
 
-        records.push({
+        console.error(error);
 
-            date: row.created_at,
+        body.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    Unable to load payment history.
+                </td>
+            </tr>
+        `;
 
-            type: "Deposit",
-
-            badge: "deposit-badge",
-
-            reference:
-                row.utr ||
-                "Deposit #" + row.id,
-
-            amount:
-                Number(row.amount || 0),
-
-            status:
-                row.status || "-"
-
-        });
-
-
-        if(
-            row.commission &&
-            Number(row.commission) > 0
-        ){
-
-            records.push({
-
-                date: row.created_at,
-
-                type: "Commission",
-
-                badge: "commission-badge",
-
-                reference:
-                    "Deposit #" + row.id,
-
-                amount:
-                    Number(row.commission),
-
-                status:
-                    row.status || "-"
-
-            });
-
-        }
-
-    });
-
-
-    /* =========================
-       REFERRAL RECORDS
-    ========================= */
-
-    const { data: referrals } =
-        await supabaseClient
-        .from("customer_referral_commissions")
-        .select(`
-            id,
-            source_customer_id,
-            deposit_id,
-            level,
-            commission_amount,
-            status,
-            created_at
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .order(
-            "created_at",
-            { ascending:false }
-        )
-        .limit(150);
-
-
-    (referrals || []).forEach(row => {
-
-        records.push({
-
-            date: row.created_at,
-
-            type:
-                "Referral L" +
-                (
-                    row.level || "-"
-                ),
-
-            badge: "referral-badge",
-
-            reference:
-                "Deposit #" +
-                (
-                    row.deposit_id || "-"
-                ),
-
-            amount:
-                Number(
-                    row.commission_amount || 0
-                ),
-
-            status:
-                row.status || "-"
-
-        });
-
-    });
-
-
-    /* =========================
-       WELCOME BONUS
-    ========================= */
-
-    if(
-        Number(customer.bonus_balance || 0) > 0 &&
-        customer.bonus_received === true
-    ){
-
-        records.push({
-
-            date: null,
-
-            type:"Welcome Bonus",
-
-            badge:"bonus-badge",
-
-            reference:"₹99 Bonus",
-
-            amount:99,
-
-            status:"approved"
-
-        });
+        return;
 
     }
 
 
-    records.sort(
-        (a,b) =>
-            new Date(b.date || 0) -
-            new Date(a.date || 0)
-    );
-
-
-    if(records.length === 0){
+    if(!data || !data.length){
 
         body.innerHTML = `
             <tr>
-                <td colspan="6" class="empty">
-                    No wallet history found.
+                <td colspan="5" class="empty">
+                    No payment history found.
                 </td>
             </tr>
         `;
@@ -1216,68 +2688,38 @@ async function loadCustomerHistory(
 
 
     body.innerHTML =
-        records.map(row => {
+        data.map(row => {
 
-            let statusClass =
-                "approved";
-
-
-            if(
-                String(row.status)
-                .toLowerCase()
-                === "pending"
-            ){
-                statusClass =
-                    "pending";
-            }
+            const upi =
+                upis.find(
+                    u =>
+                        String(u.id) ===
+                        String(row.customer_upi_id)
+                );
 
 
-            if(
-                String(row.status)
-                .toLowerCase()
-                === "rejected"
-            ){
-                statusClass =
-                    "rejected";
-            }
+            const status =
+                String(
+                    row.status || "-"
+                ).toLowerCase();
 
 
             return `
                 <tr>
 
                     <td>
-                        ${formatDate(row.date)}
+                        ${formatDate(
+                            row.processed_at ||
+                            row.requested_at
+                        )}
                     </td>
 
                     <td>
-                        <b>
-                            ${
-                                customer.name ||
-                                "-"
-                            }
-                        </b>
-                        <br>
-                        <small>
-                            ${
-                                customer.uid ||
-                                "-"
-                            }
-                        </small>
-                    </td>
-
-                    <td>
-                        <span class="badge ${row.badge}">
-                            ${
-                                row.type
-                            }
-                        </span>
-                    </td>
-
-                    <td>
-                        ${
-                            row.reference ||
-                            "-"
-                        }
+                        ${esc(
+                            upi
+                            ? upi.upi_id
+                            : "-"
+                        )}
                     </td>
 
                     <td>
@@ -1287,13 +2729,327 @@ async function loadCustomerHistory(
                     </td>
 
                     <td>
-                        <span class="${statusClass}">
-                            ${
-                                String(
-                                    row.status ||
-                                    "-"
-                                ).toUpperCase()
-                            }
+                        <span class="${
+                            status === "approved"
+                            ? "approved"
+                            : status === "pending"
+                            ? "pending"
+                            : status === "rejected"
+                            ? "rejected"
+                            : status === "failed"
+                            ? "failed"
+                            : ""
+                        }">
+                            ${esc(status.toUpperCase())}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${esc(row.note || "-")}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   WALLET LEDGER
+========================= */
+
+async function loadLedger(
+    customerId
+){
+
+    const body =
+        document.getElementById(
+            "ledgerBody"
+        );
+
+
+    body.innerHTML = `
+        <tr>
+            <td colspan="7" class="empty">
+                Loading wallet ledger...
+            </td>
+        </tr>
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("wallet_ledger")
+        .select(`
+            id,
+            component,
+            direction,
+            amount,
+            balance_after,
+            reason,
+            reference,
+            created_at
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        )
+        .limit(500);
+
+
+    if(error){
+
+        console.error(error);
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    Unable to load wallet ledger.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    if(!data || !data.length){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    No wallet ledger found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        data.map(row => {
+
+            const component =
+                String(
+                    row.component || "manual"
+                ).toLowerCase();
+
+
+            const direction =
+                String(
+                    row.direction || ""
+                ).toLowerCase();
+
+
+            let badge =
+                "manual-badge";
+
+
+            if(component === "deposit"){
+                badge = "deposit-badge";
+            }
+
+            if(component === "commission"){
+                badge = "commission-badge";
+            }
+
+            if(component === "referral"){
+                badge = "referral-badge";
+            }
+
+            if(component === "bonus"){
+                badge = "bonus-badge";
+            }
+
+
+            return `
+                <tr>
+
+                    <td>
+                        ${formatDate(row.created_at)}
+                    </td>
+
+                    <td>
+                        <span class="badge ${badge}">
+                            ${esc(component.toUpperCase())}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="badge ${
+                            direction === "credit"
+                            ? "credit-badge"
+                            : "debit-badge"
+                        }">
+                            ${esc(direction.toUpperCase())}
+                        </span>
+                    </td>
+
+                    <td>
+                        <b>
+                            ${money(row.amount)}
+                        </b>
+                    </td>
+
+                    <td>
+                        <b>
+                            ${money(row.balance_after)}
+                        </b>
+                    </td>
+
+                    <td>
+                        ${esc(row.reason || "-")}
+                    </td>
+
+                    <td>
+                        ${esc(row.reference || "-")}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   DEPOSIT HISTORY
+========================= */
+
+async function loadDepositHistory(
+    customerId
+){
+
+    const body =
+        document.getElementById(
+            "depositBody"
+        );
+
+
+    body.innerHTML = `
+        <tr>
+            <td colspan="5" class="empty">
+                Loading deposit history...
+            </td>
+        </tr>
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("customer_deposits")
+        .select(`
+            id,
+            amount,
+            commission,
+            utr,
+            status,
+            created_at
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        )
+        .limit(500);
+
+
+    if(error){
+
+        console.error(error);
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    Unable to load deposit history.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    if(!data || !data.length){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    No deposit history found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        data.map(row => {
+
+            const status =
+                String(
+                    row.status || "-"
+                ).toLowerCase();
+
+
+            return `
+                <tr>
+
+                    <td>
+                        ${formatDate(row.created_at)}
+                    </td>
+
+                    <td>
+                        <b>
+                            ${money(row.amount)}
+                        </b>
+                    </td>
+
+                    <td>
+                        ${money(row.commission)}
+                    </td>
+
+                    <td>
+                        ${esc(row.utr || "-")}
+                    </td>
+
+                    <td>
+                        <span class="${
+                            status === "approved"
+                            ? "approved"
+                            : status === "pending"
+                            ? "pending"
+                            : status === "rejected"
+                            ? "rejected"
+                            : ""
+                        }">
+                            ${esc(status.toUpperCase())}
                         </span>
                     </td>
 
@@ -1306,7 +3062,37 @@ async function loadCustomerHistory(
 
 
 /* =========================
-   ENTER KEY
+   CLOSE DETAILS
+========================= */
+
+function closeDetails(){
+
+    document.getElementById(
+        "detailsCard"
+    ).style.display =
+        "none";
+
+    currentCustomer = null;
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function closeConfirm(){
+
+    document.getElementById(
+        "confirmModal"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================
+   ENTER SEARCH
 ========================= */
 
 document.getElementById(
@@ -1316,7 +3102,9 @@ document.getElementById(
     function(event){
 
         if(event.key === "Enter"){
+
             searchCustomer();
+
         }
 
     }
@@ -1327,26 +3115,41 @@ document.getElementById(
    INITIAL LOAD
 ========================= */
 
-loadGlobalStats();
+async function init(){
+
+    await loadAllUpis();
+
+    await loadCustomers();
+
+}
 
 
 /* =========================
    AUTO REFRESH
 ========================= */
 
-setInterval(() => {
+setInterval(
+    async function(){
 
-    loadGlobalStats();
+        await loadAllUpis();
 
-    if(currentCustomer){
+        await loadCustomers();
 
-        searchCustomer();
 
-    }
+        if(currentCustomer){
 
-}, 30000);
+            await refreshCustomerData();
+
+        }
+
+    },
+    30000
+);
+
+
+init();
 
 </script>
 
 </body>
-  </html>
+    </html>
