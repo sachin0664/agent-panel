@@ -248,22 +248,58 @@ button:disabled{
     gap:10px;
 }
 
-.paymentPreview{
-    width:100%;
-    max-width:260px;
-    display:block;
-    margin:15px auto;
-    border-radius:15px;
-    border:1px solid #e2e8f0;
-    padding:8px;
-    background:white;
+/* =========================
+   PAYMENT SCREENSHOT
+========================= */
+
+.paymentProofBox{
+    margin-top:15px;
+    padding:15px;
+    background:#fff;
+    border:1px solid #dbe3ef;
+    border-radius:14px;
 }
 
-.previewText{
+.paymentProofTitle{
+    font-size:15px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.paymentProofImage{
+    width:100%;
+    max-width:420px;
+    max-height:500px;
+    object-fit:contain;
+    display:block;
+    margin:10px auto;
+    border-radius:14px;
+    border:1px solid #cbd5e1;
+    background:#f8fafc;
+    padding:6px;
+}
+
+.viewProofBtn{
+    display:block;
+    width:100%;
+    max-width:420px;
+    margin:10px auto 0;
     text-align:center;
+    text-decoration:none;
+    border-radius:11px;
+    padding:12px 15px;
+    background:#2563eb;
+    color:white;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.noProof{
+    padding:12px;
+    border-radius:10px;
+    background:#fee2e2;
+    color:#991b1b;
     font-size:13px;
-    color:#64748b;
-    word-break:break-all;
 }
 
 @media(max-width:600px){
@@ -290,7 +326,6 @@ button:disabled{
 </head>
 
 <body>
-
 
 <div class="header">
 
@@ -894,12 +929,26 @@ function showQrPreview(url){
 
             <img
                 src="${url}"
-                class="paymentPreview"
+                style="
+                    width:100%;
+                    max-width:260px;
+                    display:block;
+                    margin:15px auto;
+                    border-radius:15px;
+                    border:1px solid #e2e8f0;
+                "
                 alt="Payment QR"
                 onerror="this.style.display='none'"
             >
 
-            <div class="previewText">
+            <div
+                style="
+                    text-align:center;
+                    font-size:13px;
+                    color:#64748b;
+                    word-break:break-all;
+                "
+            >
                 ${url}
             </div>
 
@@ -1406,7 +1455,6 @@ function clearCustomerSearch(){
 
 async function loadAdminTotals(){
 
-
     const {
         count:customerCount
     } =
@@ -1440,7 +1488,6 @@ async function loadAdminTotals(){
 
 
     (deposits || []).forEach(d => {
-
 
         const amount =
             Number(d.amount || 0);
@@ -1515,6 +1562,7 @@ async function loadAdminTotals(){
 
 /* =====================================================
    LOAD DEPOSITS
+   PAYMENT SCREENSHOT INCLUDED
 ===================================================== */
 
 async function loadDeposits(){
@@ -1575,7 +1623,6 @@ async function loadDeposits(){
     box.innerHTML =
     data.map(d => {
 
-
         const rate =
             commissionRate(
                 d.amount
@@ -1587,6 +1634,10 @@ async function loadDeposits(){
                 d.commission ??
                 commissionAmount(d.amount)
             );
+
+
+        const screenshot =
+            d.payment_proof || "";
 
 
         return `
@@ -1672,6 +1723,53 @@ async function loadDeposits(){
                 <span class="value">
                     ${d.utr || "-"}
                 </span>
+
+            </div>
+
+
+            <!-- =========================
+                 PAYMENT SCREENSHOT
+            ========================== -->
+
+            <div class="paymentProofBox">
+
+                <div class="paymentProofTitle">
+                    📸 Payment Screenshot
+                </div>
+
+
+                ${
+                    screenshot
+
+                    ?
+
+                    `
+                    <img
+                        src="${screenshot}"
+                        class="paymentProofImage"
+                        alt="Customer Payment Screenshot"
+                        onclick="window.open('${screenshot}','_blank')"
+                        style="cursor:pointer;"
+                    >
+
+                    <a
+                        href="${screenshot}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="viewProofBtn"
+                    >
+                        🔎 View Full Screenshot
+                    </a>
+                    `
+
+                    :
+
+                    `
+                    <div class="noProof">
+                        ❌ Customer did not upload a payment screenshot.
+                    </div>
+                    `
+                }
 
             </div>
 
@@ -2041,6 +2139,8 @@ document.addEventListener(
 
         await loadPaymentSettings();
 
+        await loadDeposits();
+
     }
 );
 
@@ -2055,7 +2155,13 @@ setInterval(
 );
 
 
+setInterval(
+    loadDeposits,
+    30000
+);
+
+
 </script>
 
 </body>
-    </html>
+        </html>
