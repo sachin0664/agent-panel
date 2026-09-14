@@ -83,11 +83,13 @@ body{
 }
 
 .status{
-  padding:8px 18px;
+  padding:8px 15px;
   border-radius:20px;
   background:#16a34a;
   border:2px solid #fff;
-  font-weight:700
+  font-weight:700;
+  cursor:pointer;
+  user-select:none
 }
 
 .status.off{
@@ -109,7 +111,12 @@ body{
   display:flex;
   justify-content:space-between;
   gap:8px;
-  font-size:14px
+  font-size:14px;
+  flex-wrap:wrap
+}
+
+.meta span{
+  word-break:break-word
 }
 
 .empty{
@@ -130,7 +137,20 @@ body{
   background:#07101d;
   color:#fff;
   font-size:18px;
-  font-weight:800
+  font-weight:800;
+  cursor:pointer
+}
+
+.add:disabled{
+  opacity:.5;
+  cursor:not-allowed
+}
+
+.limit-note{
+  text-align:center;
+  font-size:13px;
+  color:#64748b;
+  margin:-7px 0 16px
 }
 
 .modal{
@@ -186,7 +206,8 @@ body{
   padding:14px;
   border:0;
   border-radius:12px;
-  font-weight:700
+  font-weight:700;
+  cursor:pointer
 }
 
 .cancel{
@@ -253,6 +274,7 @@ body{
 
 <body>
 
+
 <header class="header">
 
   <h1>Link UPI</h1>
@@ -275,6 +297,14 @@ body{
 
     Add your UPI ID below.
 
+  </div>
+
+
+  <div
+    class="limit-note"
+    id="limitNote"
+  >
+    You can add up to 3 UPI IDs.
   </div>
 
 
@@ -324,6 +354,8 @@ body{
           <option>PhonePe</option>
 
           <option>Google Pay</option>
+
+          <option>MobiKwik</option>
 
           <option>Other</option>
 
@@ -479,6 +511,14 @@ body{
 
 <script>
 
+/* =====================================
+   SATHI PAY — MULTI UPI
+   Maximum 3 UPI
+   Customer:
+   ADD / ENABLE / DISABLE
+   NO DELETE
+===================================== */
+
 
 /* =====================================
    ELEMENTS
@@ -496,7 +536,16 @@ const modal =
 const msg =
   document.getElementById('msg');
 
+const addBtn =
+  document.getElementById('addBtn');
+
+const limitNote =
+  document.getElementById('limitNote');
+
+
 let customerId = null;
+
+let currentUPIs = [];
 
 
 /* =====================================
@@ -571,7 +620,205 @@ function esc(v){
 
 
 /* =====================================
-   LOAD UPI
+   FORMAT MONEY
+===================================== */
+
+function money(v){
+
+  const n =
+    Number(v);
+
+  if(
+    !Number.isFinite(n)
+  ){
+
+    return '0.00';
+
+  }
+
+  return n.toFixed(2);
+
+}
+
+
+/* =====================================
+   MIGRATE OLD SINGLE UPI
+   customers table
+   ->
+   customer_upis table
+===================================== */
+
+async function migrateOldUPI(id){
+
+  try{
+
+    /* Check if new table already has UPI */
+
+    const {
+      data: existing,
+      error: existingError
+    } =
+      await supabaseClient
+
+        .from('customer_upis')
+
+        .select('id,upi_id')
+
+        .eq(
+          'customer_id',
+          id
+        );
+
+
+    if(existingError){
+
+      console.error(
+        'New UPI table check error:',
+        existingError
+      );
+
+      return;
+
+    }
+
+
+    /* If new UPI already exists,
+       do not migrate old record again */
+
+    if(
+      existing &&
+      existing.length > 0
+    ){
+
+      return;
+
+    }
+
+
+    /* Get old UPI */
+
+    const {
+      data: oldData,
+      error: oldError
+    } =
+      await supabaseClient
+
+        .from('customers')
+
+        .select(
+          'id,upi_id,upi_provider,upi_enabled,upi_min_amount,upi_max_amount'
+        )
+
+        .eq(
+          'id',
+          id
+        )
+
+        .maybeSingle();
+
+
+    if(oldError){
+
+      console.error(
+        'Old UPI read error:',
+        oldError
+      );
+
+      return;
+
+    }
+
+
+    if(
+      !oldData ||
+      !oldData.upi_id
+    ){
+
+      return;
+
+    }
+
+
+    /* Insert old UPI
+       into new table */
+
+    const {
+      error: insertError
+    } =
+      await supabaseClient
+
+        .from('customer_upis')
+
+        .insert({
+
+          customer_id:
+            id,
+
+          upi_id:
+            String(
+              oldData.upi_id
+            )
+            .trim()
+            .toLowerCase(),
+
+          provider:
+            oldData.upi_provider ||
+            'Other',
+
+          enabled:
+            oldData.upi_enabled !== false,
+
+          min_amount:
+            Number(
+              oldData.upi_min_amount ||
+              50
+            ),
+
+          max_amount:
+            Number(
+              oldData.upi_max_amount ||
+              1000000
+            )
+
+        });
+
+
+    if(insertError){
+
+      /*
+       * Duplicate / already migrated
+       * is harmless.
+       */
+
+      console.warn(
+        'Old UPI migration:',
+        insertError
+      );
+
+      return;
+
+    }
+
+
+    console.log(
+      'Old UPI migrated successfully.'
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      'UPI migration error:',
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================
+   LOAD ALL UPIs
 ===================================== */
 
 async function loadUPI(){
@@ -583,8 +830,17 @@ async function loadUPI(){
   if(!id){
 
     return;
+
   }
 
+
+  /* Automatically preserve
+     existing working UPI */
+
+  await migrateOldUPI(id);
+
+
+  /* Get maximum 3 */
 
   const {
     data,
@@ -592,18 +848,23 @@ async function loadUPI(){
   } =
     await supabaseClient
 
-      .from('customers')
+      .from('customer_upis')
 
       .select(
-        'id,upi_id,upi_provider,upi_enabled,upi_min_amount,upi_max_amount'
+        'id,customer_id,upi_id,provider,enabled,min_amount,max_amount,created_at,updated_at'
       )
 
       .eq(
-        'id',
+        'customer_id',
         id
       )
 
-      .maybeSingle();
+      .order(
+        'created_at',
+        {
+          ascending:true
+        }
+      );
 
 
   if(error){
@@ -616,136 +877,394 @@ async function loadUPI(){
 
     list.innerHTML =
       '<div class="empty">Load Error: ' +
-      esc(error.message || 'Unknown error') +
+      esc(
+        error.message ||
+        'Unknown error'
+      ) +
       '</div>';
 
 
     empty.style.display =
       'none';
 
-
     return;
+
   }
 
 
-  if(
-    !data ||
-    !data.upi_id
-  ){
-
-    list.innerHTML =
-      '';
+  currentUPIs =
+    Array.isArray(data)
+      ? data
+      : [];
 
 
-    empty.style.display =
-      'block';
-
-
-    return;
-  }
-
-
-  empty.style.display =
-    'none';
-
-
-  const enabled =
-    data.upi_enabled !== false;
-
-
-  list.innerHTML = `
-
-    <div class="card">
-
-      <div class="row">
-
-        <div class="top">
-
-          <div class="upi-title">
-            UPI
-          </div>
-
-
-          <div
-            class="status ${enabled ? '' : 'off'}"
-          >
-
-            ${
-              enabled
-                ? 'Enabled'
-                : 'Disabled'
-            }
-
-          </div>
-
-        </div>
-
-
-        <div class="upi">
-
-          ${esc(data.upi_id)}
-
-        </div>
-
-
-        <div class="meta">
-
-          <span>
-
-            Limited Range:
-
-            ₹${
-              Number(
-                data.upi_min_amount || 50
-              ).toFixed(2)
-            }
-
-            ~
-
-            ₹${
-              Number(
-                data.upi_max_amount || 1000000
-              ).toFixed(2)
-            }
-
-          </span>
-
-
-          <span>
-
-            ${
-              esc(
-                data.upi_provider ||
-                'Provider'
-              )
-            }
-
-          </span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
+  renderUPIs();
 
 }
 
 
 /* =====================================
-   ADD UPI
+   RENDER UPI CARDS
 ===================================== */
 
-document.getElementById(
-  'addBtn'
-).onclick = () => {
+function renderUPIs(){
+
+  list.innerHTML =
+    '';
+
+
+  if(
+    currentUPIs.length === 0
+  ){
+
+    empty.style.display =
+      'block';
+
+  }
+  else{
+
+    empty.style.display =
+      'none';
+
+  }
+
+
+  /* Maximum 3 */
+
+  const visibleUPIs =
+    currentUPIs.slice(
+      0,
+      3
+    );
+
+
+  visibleUPIs.forEach(
+    (item,index) => {
+
+      const enabled =
+        item.enabled !== false;
+
+
+      const card =
+        document.createElement(
+          'div'
+        );
+
+
+      card.className =
+        'card';
+
+
+      card.innerHTML = `
+
+        <div class="row">
+
+          <div class="top">
+
+            <div class="upi-title">
+
+              UPI ${index + 1}
+
+            </div>
+
+
+            <div
+              class="status ${
+                enabled ? '' : 'off'
+              }"
+              data-id="${esc(item.id)}"
+              role="button"
+              tabindex="0"
+              title="Tap to ${
+                enabled
+                  ? 'disable'
+                  : 'enable'
+              }"
+            >
+
+              ${
+                enabled
+                  ? 'Enabled'
+                  : 'Disabled'
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="upi">
+
+            ${esc(item.upi_id)}
+
+          </div>
+
+
+          <div class="meta">
+
+            <span>
+
+              Payin:
+
+              ₹${money(item.min_amount)}
+
+              ~
+
+              ₹${money(item.max_amount)}
+
+            </span>
+
+
+            <span>
+
+              ${esc(
+                item.provider ||
+                'Other'
+              )}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      list.appendChild(
+        card
+      );
+
+
+      const status =
+        card.querySelector(
+          '.status'
+        );
+
+
+      status.addEventListener(
+        'click',
+        () => {
+
+          toggleUPI(
+            item.id,
+            enabled
+          );
+
+        }
+      );
+
+
+      status.addEventListener(
+        'keydown',
+        event => {
+
+          if(
+            event.key === 'Enter' ||
+            event.key === ' '
+          ){
+
+            event.preventDefault();
+
+            toggleUPI(
+              item.id,
+              enabled
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  updateAddButton();
+
+}
+
+
+/* =====================================
+   ADD BUTTON / 3 UPI LIMIT
+===================================== */
+
+function updateAddButton(){
+
+  const count =
+    currentUPIs.length;
+
+
+  if(
+    count >= 3
+  ){
+
+    addBtn.disabled =
+      true;
+
+    addBtn.textContent =
+      'Maximum 3 UPI Added';
+
+    limitNote.textContent =
+      'Maximum 3 UPI IDs allowed.';
+
+  }
+  else{
+
+    addBtn.disabled =
+      false;
+
+    addBtn.textContent =
+      'Add UPI';
+
+    limitNote.textContent =
+      `${count}/3 UPI IDs added.`;
+
+  }
+
+}
+
+
+/* =====================================
+   ENABLE / DISABLE UPI
+===================================== */
+
+async function toggleUPI(
+  upiRowId,
+  currentEnabled
+){
+
+  if(!upiRowId){
+
+    return;
+
+  }
+
+
+  const nextEnabled =
+    !currentEnabled;
+
+
+  /* Find card status */
+
+  const status =
+    document.querySelector(
+      `.status[data-id="${CSS.escape(upiRowId)}"]`
+    );
+
+
+  if(status){
+
+    status.style.pointerEvents =
+      'none';
+
+    status.textContent =
+      'Saving...';
+
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+
+      .from('customer_upis')
+
+      .update({
+
+        enabled:
+          nextEnabled,
+
+        updated_at:
+          new Date().toISOString()
+
+      })
+
+      .eq(
+        'id',
+        upiRowId
+      )
+
+      .eq(
+        'customer_id',
+        customerId
+      );
+
+
+  if(error){
+
+    console.error(
+      'UPI Status Error:',
+      error
+    );
+
+
+    alert(
+      'Unable to change UPI status: ' +
+      (
+        error.message ||
+        'Unknown error'
+      )
+    );
+
+
+    if(status){
+
+      status.style.pointerEvents =
+        '';
+
+    }
+
+
+    return;
+
+  }
+
+
+  await loadUPI();
+
+}
+
+
+/* =====================================
+   OPEN ADD MODAL
+===================================== */
+
+addBtn.onclick = () => {
+
+  if(
+    currentUPIs.length >= 3
+  ){
+
+    return;
+
+  }
+
 
   msg.textContent =
     '';
 
   msg.style.color =
     '#dc2626';
+
+
+  document
+    .getElementById('upiForm')
+    .reset();
+
+
+  document
+    .getElementById('min')
+    .value =
+    50;
+
+
+  document
+    .getElementById('max')
+    .value =
+    1000000;
+
 
   modal.style.display =
     'flex';
@@ -768,7 +1287,28 @@ document.getElementById(
 
 
 /* =====================================
-   SAVE UPI
+   CLOSE MODAL ON BACKGROUND
+===================================== */
+
+modal.addEventListener(
+  'click',
+  event => {
+
+    if(
+      event.target === modal
+    ){
+
+      modal.style.display =
+        'none';
+
+    }
+
+  }
+);
+
+
+/* =====================================
+   SAVE NEW UPI
 ===================================== */
 
 document.getElementById(
@@ -783,6 +1323,20 @@ document.getElementById(
 
   msg.textContent =
     '';
+
+
+  /* Extra frontend limit */
+
+  if(
+    currentUPIs.length >= 3
+  ){
+
+    msg.textContent =
+      'Maximum 3 UPI IDs allowed.';
+
+    return;
+
+  }
 
 
   const upi =
@@ -816,7 +1370,7 @@ document.getElementById(
 
 
   /* =================================
-     UPI VALIDATION
+     VALIDATION
   ================================= */
 
   if(
@@ -827,6 +1381,7 @@ document.getElementById(
       'Enter a valid UPI ID.';
 
     return;
+
   }
 
 
@@ -836,6 +1391,7 @@ document.getElementById(
       'Select a provider.';
 
     return;
+
   }
 
 
@@ -850,6 +1406,7 @@ document.getElementById(
       'Check the payin range.';
 
     return;
+
   }
 
 
@@ -874,6 +1431,7 @@ document.getElementById(
       'customer-login.html';
 
     return;
+
   }
 
 
@@ -882,7 +1440,134 @@ document.getElementById(
 
 
   /* =================================
-     SAVE UPI
+     FINAL COUNT CHECK
+  ================================= */
+
+  const {
+    data: latestUPIs,
+    error: countError
+  } =
+    await supabaseClient
+
+      .from('customer_upis')
+
+      .select(
+        'id'
+      )
+
+      .eq(
+        'customer_id',
+        customerId
+      );
+
+
+  if(countError){
+
+    msg.textContent =
+      'Unable to verify UPI limit: ' +
+      (
+        countError.message ||
+        'Unknown error'
+      );
+
+    return;
+
+  }
+
+
+  if(
+    latestUPIs &&
+    latestUPIs.length >= 3
+  ){
+
+    msg.textContent =
+      'Maximum 3 UPI IDs allowed.';
+
+    await loadUPI();
+
+    return;
+
+  }
+
+
+  /* =================================
+     DUPLICATE CHECK
+  ================================= */
+
+  const duplicate =
+    (latestUPIs || []).some(
+      item =>
+        String(
+          item.upi_id ||
+          ''
+        )
+        .trim()
+        .toLowerCase() === upi
+    );
+
+
+  /*
+   * The database unique index is the
+   * final protection. This frontend
+   * check gives a better message.
+   *
+   * Since latestUPIs only selected id
+   * above, perform proper duplicate
+   * lookup separately.
+   */
+
+  const {
+    data: duplicateRows,
+    error: duplicateError
+  } =
+    await supabaseClient
+
+      .from('customer_upis')
+
+      .select(
+        'id,upi_id'
+      )
+
+      .eq(
+        'customer_id',
+        customerId
+      );
+
+
+  if(duplicateError){
+
+    msg.textContent =
+      'Unable to check duplicate UPI.';
+
+    return;
+
+  }
+
+
+  const alreadyExists =
+    (duplicateRows || []).some(
+      row =>
+        String(
+          row.upi_id ||
+          ''
+        )
+        .trim()
+        .toLowerCase() === upi
+    );
+
+
+  if(alreadyExists){
+
+    msg.textContent =
+      'This UPI ID is already linked.';
+
+    return;
+
+  }
+
+
+  /* =================================
+     INSERT NEW UPI
   ================================= */
 
   const {
@@ -891,38 +1576,38 @@ document.getElementById(
   } =
     await supabaseClient
 
-      .from('customers')
+      .from('customer_upis')
 
-      .update({
+      .insert({
+
+        customer_id:
+          customerId,
 
         upi_id:
           upi,
 
-        upi_provider:
+        provider:
           provider,
 
-        upi_min_amount:
+        enabled:
+          true,
+
+        min_amount:
           min,
 
-        upi_max_amount:
+        max_amount:
           max
 
       })
 
-      .eq(
-        'id',
-        customerId
-      )
-
       .select(
-        'id,upi_id,upi_provider,upi_enabled,upi_min_amount,upi_max_amount'
+        'id,customer_id,upi_id,provider,enabled,min_amount,max_amount'
       )
-
-      .single();
+      .maybeSingle();
 
 
   /* =================================
-     SHOW EXACT DATABASE ERROR
+     DATABASE ERROR
   ================================= */
 
   if(error){
@@ -933,27 +1618,54 @@ document.getElementById(
     );
 
 
-    msg.textContent =
-      'Save Error: ' +
-      (
-        error.message ||
-        error.details ||
-        error.hint ||
-        'Unknown error'
-      );
+    if(
+      String(
+        error.message || ''
+      )
+      .toLowerCase()
+      .includes('maximum 3')
+    ){
+
+      msg.textContent =
+        'Maximum 3 UPI IDs allowed.';
+
+    }
+    else if(
+      String(
+        error.message || ''
+      )
+      .toLowerCase()
+      .includes('duplicate')
+    ){
+
+      msg.textContent =
+        'This UPI ID is already linked.';
+
+    }
+    else{
+
+      msg.textContent =
+        'Save Error: ' +
+        (
+          error.message ||
+          'Unknown error'
+        );
+
+    }
 
 
     return;
+
   }
 
 
   /* =================================
-     VERIFY SAVE
+     VERIFY
   ================================= */
 
   if(
     !data ||
-    data.id !== customerId ||
+    data.customer_id !== customerId ||
     data.upi_id !== upi
   ){
 
@@ -961,6 +1673,7 @@ document.getElementById(
       'UPI save could not be verified.';
 
     return;
+
   }
 
 
@@ -990,12 +1703,14 @@ document.getElementById(
 
       document
         .getElementById('min')
-        .value = 50;
+        .value =
+        50;
 
 
       document
         .getElementById('max')
-        .value = 1000000;
+        .value =
+        1000000;
 
 
       await loadUPI();
@@ -1015,9 +1730,8 @@ document.getElementById(
 
 loadUPI();
 
-
 </script>
 
 </body>
 
-            </html>
+                         </html>
