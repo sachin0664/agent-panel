@@ -3,9 +3,9 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Admin Login</title>
+<title>Sathi Pay Admin Login</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -18,7 +18,7 @@
 body{
     margin:0;
     min-height:100vh;
-    font-family:Arial,sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     background:#f4f7fb;
     display:flex;
     justify-content:center;
@@ -29,7 +29,7 @@ body{
 .box{
     width:100%;
     max-width:430px;
-    background:white;
+    background:#fff;
     border-radius:20px;
     padding:30px 24px;
     box-shadow:0 10px 35px rgba(0,0,0,.12);
@@ -93,26 +93,19 @@ button:disabled{
     cursor:not-allowed;
 }
 
-.secondaryBtn{
-    background:#64748b;
-}
-
-#message{
-    margin-top:18px;
-    text-align:center;
-    font-weight:bold;
-    line-height:1.5;
-}
-
-.forgotLink{
+.forgot-btn{
     display:block;
-    text-align:right;
-    margin-top:12px;
+    width:auto;
+    margin:16px auto 0;
+    padding:0;
+    background:none;
     color:#2563eb;
     font-size:14px;
     font-weight:bold;
-    text-decoration:none;
-    cursor:pointer;
+}
+
+.forgot-btn:hover{
+    text-decoration:underline;
 }
 
 .back{
@@ -123,43 +116,60 @@ button:disabled{
     text-decoration:none;
 }
 
-.forgotBox{
+.back:hover{
+    text-decoration:underline;
+}
+
+.message{
+    margin-top:18px;
+    text-align:center;
+    font-weight:bold;
+    line-height:1.5;
+    font-size:14px;
+}
+
+.success{
+    color:#16a34a;
+}
+
+.error{
+    color:#dc2626;
+}
+
+.hidden{
     display:none;
-    margin-top:22px;
-    padding-top:20px;
+}
+
+.divider{
+    margin:22px 0;
     border-top:1px solid #e5e7eb;
 }
 
-.forgotBox h2{
-    margin:0 0 8px;
-    font-size:20px;
-    color:#172033;
+.forgot-box{
+    margin-top:20px;
+    padding:18px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:15px;
 }
 
-.forgotNote{
-    color:#6b7280;
-    font-size:13px;
+.forgot-title{
+    font-size:17px;
+    font-weight:bold;
+    color:#172033;
+    margin-bottom:7px;
+}
+
+.forgot-text{
+    color:#64748b;
+    font-size:12px;
     line-height:1.5;
     margin-bottom:12px;
 }
 
-.smallBtn{
-    font-size:16px;
-    margin-top:15px;
-}
-
-.cancelBtn{
+.cancel-btn{
     background:#64748b;
-}
-
-.securityNote{
-    margin-top:15px;
-    padding:11px;
-    background:#f8fafc;
-    border-radius:10px;
-    color:#64748b;
-    font-size:12px;
-    line-height:1.5;
+    margin-top:10px;
 }
 
 </style>
@@ -187,9 +197,9 @@ button:disabled{
     </div>
 
 
-    <!-- =================================================
+    <!-- =========================
          LOGIN FORM
-    ================================================== -->
+    ========================== -->
 
     <form id="adminLoginForm">
 
@@ -219,90 +229,97 @@ button:disabled{
         >
 
 
-        <a
-            class="forgotLink"
-            href="javascript:void(0)"
-            onclick="showForgotPassword()"
-        >
-            Forgot Password?
-        </a>
-
-
         <button
             type="submit"
-            id="loginBtn"
-        >
+            id="loginBtn">
+
             🔐 Admin Login
+
         </button>
 
     </form>
 
 
-    <!-- =================================================
+    <!-- FORGOT PASSWORD BUTTON -->
+
+    <button
+        type="button"
+        class="forgot-btn"
+        id="showForgotBtn">
+
+        Forgot Password?
+
+    </button>
+
+
+    <!-- =========================
          FORGOT PASSWORD
-    ================================================== -->
+    ========================== -->
 
     <div
         id="forgotBox"
-        class="forgotBox"
-    >
+        class="forgot-box hidden">
 
-        <h2>
+        <div class="forgot-title">
             🔑 Reset Admin Password
-        </h2>
+        </div>
 
-        <div class="forgotNote">
-            Enter your admin email. If the account is eligible
-            for password recovery, Supabase will send a
-            password reset email.
+        <div class="forgot-text">
+            Enter your admin email. If the account is eligible,
+            Supabase will send a password reset link to that email.
         </div>
 
 
-        <input
-            type="email"
-            id="resetEmail"
-            placeholder="Enter admin email"
-            autocomplete="email"
-        >
+        <form id="forgotForm">
+
+            <label for="resetEmail">
+                Admin Email
+            </label>
+
+            <input
+                type="email"
+                id="resetEmail"
+                placeholder="Enter admin email"
+                autocomplete="email"
+                required
+            >
 
 
-        <button
-            type="button"
-            id="resetBtn"
-            class="smallBtn"
-            onclick="sendPasswordReset()"
-        >
-            📧 Send Reset Email
-        </button>
+            <button
+                type="submit"
+                id="resetBtn">
+
+                📧 Send Reset Link
+
+            </button>
 
 
-        <button
-            type="button"
-            class="smallBtn cancelBtn"
-            onclick="hideForgotPassword()"
-        >
-            ← Back to Login
-        </button>
+            <button
+                type="button"
+                class="cancel-btn"
+                id="cancelForgotBtn">
+
+                Cancel
+
+            </button>
+
+        </form>
 
     </div>
 
 
     <div
         id="message"
-    ></div>
-
-
-    <div class="securityNote">
-        🔒 Only accounts registered as Sathi Pay admins
-        can access the Admin Panel.
+        class="message">
     </div>
 
 
     <a
         class="back"
-        href="index.html"
-    >
+        href="index.html">
+
         ← Back to Customer Login
+
     </a>
 
 </div>
@@ -310,15 +327,16 @@ button:disabled{
 
 <script>
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+/* =========================
+   SUPABASE CONFIG
+========================= */
 
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
 
 const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -327,9 +345,9 @@ const supabaseClient =
     );
 
 
-/* =====================================================
+/* =========================
    ELEMENTS
-===================================================== */
+========================= */
 
 const form =
     document.getElementById(
@@ -341,14 +359,14 @@ const loginBtn =
         "loginBtn"
     );
 
-const resetBtn =
-    document.getElementById(
-        "resetBtn"
-    );
-
 const message =
     document.getElementById(
         "message"
+    );
+
+const showForgotBtn =
+    document.getElementById(
+        "showForgotBtn"
     );
 
 const forgotBox =
@@ -356,10 +374,35 @@ const forgotBox =
         "forgotBox"
     );
 
+const forgotForm =
+    document.getElementById(
+        "forgotForm"
+    );
 
-/* =====================================================
+const resetBtn =
+    document.getElementById(
+        "resetBtn"
+    );
+
+const cancelForgotBtn =
+    document.getElementById(
+        "cancelForgotBtn"
+    );
+
+const emailInput =
+    document.getElementById(
+        "email"
+    );
+
+const resetEmail =
+    document.getElementById(
+        "resetEmail"
+    );
+
+
+/* =========================
    MESSAGE
-===================================================== */
+========================= */
 
 function showMessage(
     text,
@@ -369,84 +412,22 @@ function showMessage(
     message.textContent =
         text;
 
-    if(type === "success"){
-
-        message.style.color =
-            "#16a34a";
-
-    }
-
-    else if(type === "error"){
-
-        message.style.color =
-            "#dc2626";
-
-    }
-
-    else{
-
-        message.style.color =
-            "#374151";
-
-    }
+    message.className =
+        "message " +
+        (
+            type === "success"
+            ? "success"
+            : "error"
+        );
 
 }
 
 
-/* =====================================================
-   FORGOT PASSWORD UI
-===================================================== */
+/* =========================
+   CHECK ADMIN
+========================= */
 
-function showForgotPassword(){
-
-    const email =
-        document
-        .getElementById(
-            "email"
-        )
-        .value
-        .trim();
-
-    if(email){
-
-        document
-        .getElementById(
-            "resetEmail"
-        )
-        .value =
-            email;
-
-    }
-
-    forgotBox.style.display =
-        "block";
-
-    showMessage(
-        "",
-        ""
-    );
-
-}
-
-
-function hideForgotPassword(){
-
-    forgotBox.style.display =
-        "none";
-
-    showMessage(
-        "",
-        ""
-    );
-
-}
-
-
-/* =====================================================
-   CHECK EXISTING ADMIN SESSION
-===================================================== */
-
-async function checkExistingAdmin(){
+async function checkAdmin(){
 
     try{
 
@@ -454,44 +435,80 @@ async function checkExistingAdmin(){
             data,
             error
         } =
-        await supabaseClient.auth.getUser();
+            await supabaseClient.auth.getUser();
 
-        if(
-            error ||
-            !data ||
-            !data.user
-        ){
 
-            return;
+        if(error || !data || !data.user){
+
+            return false;
 
         }
+
 
         const {
-            data:isAdmin,
-            error:adminError
+            data: isAdmin,
+            error: adminError
         } =
-        await supabaseClient.rpc(
-            "is_admin"
-        );
-
-        if(
-            !adminError &&
-            isAdmin === true
-        ){
-
-            window.location.replace(
-                "admin.html"
+            await supabaseClient.rpc(
+                "is_admin"
             );
 
+
+        if(
+            adminError ||
+            isAdmin !== true
+        ){
+
+            await supabaseClient.auth.signOut();
+
+            return false;
+
         }
+
+
+        return true;
+
+
+    }catch(error){
+
+        console.error(
+            "Admin check error:",
+            error
+        );
+
+        return false;
 
     }
 
-    catch(error){
+}
 
-        console.error(
-            "Session check error:",
-            error
+
+/* =========================
+   EXISTING SESSION CHECK
+========================= */
+
+async function checkExistingSession(){
+
+    const isAdmin =
+        await checkAdmin();
+
+
+    if(isAdmin){
+
+        showMessage(
+            "✅ You are already logged in. Opening admin panel...",
+            "success"
+        );
+
+
+        setTimeout(
+            function(){
+
+                window.location.href =
+                    "admin.html";
+
+            },
+            500
         );
 
     }
@@ -499,9 +516,9 @@ async function checkExistingAdmin(){
 }
 
 
-/* =====================================================
+/* =========================
    ADMIN LOGIN
-===================================================== */
+========================= */
 
 form.addEventListener(
     "submit",
@@ -511,35 +528,21 @@ form.addEventListener(
 
 
         const email =
-            document
-            .getElementById(
-                "email"
-            )
-            .value
-            .trim();
+            emailInput.value.trim();
 
         const password =
-            document
-            .getElementById(
+            document.getElementById(
                 "password"
-            )
-            .value;
+            ).value;
 
 
-        if(!email || !password){
+        showMessage(
+            "",
+            "success"
+        );
 
-            showMessage(
-                "Please enter admin email and password.",
-                "error"
-            );
+        message.textContent = "";
 
-            return;
-
-        }
-
-
-        message.textContent =
-            "";
 
         loginBtn.disabled =
             true;
@@ -550,19 +553,16 @@ form.addEventListener(
 
         try{
 
+            /* LOGIN */
+
             const {
                 data,
                 error
             } =
-            await supabaseClient.auth.signInWithPassword({
-
-                email:
-                    email,
-
-                password:
-                    password
-
-            });
+                await supabaseClient.auth.signInWithPassword({
+                    email:email,
+                    password:password
+                });
 
 
             if(error){
@@ -578,23 +578,21 @@ form.addEventListener(
             ){
 
                 throw new Error(
-                    "Login session not created."
+                    "Login session was not created."
                 );
 
             }
 
 
-            /* =========================================
-               SECURE ADMIN CHECK
-            ========================================= */
+            /* ADMIN PERMISSION CHECK */
 
             const {
-                data:isAdmin,
-                error:adminError
+                data: isAdmin,
+                error: adminError
             } =
-            await supabaseClient.rpc(
-                "is_admin"
-            );
+                await supabaseClient.rpc(
+                    "is_admin"
+                );
 
 
             if(adminError){
@@ -623,20 +621,22 @@ form.addEventListener(
             );
 
 
+            loginBtn.textContent =
+                "✅ Login Successful";
+
+
             setTimeout(
                 function(){
 
-                    window.location.replace(
-                        "admin.html"
-                    );
+                    window.location.href =
+                        "admin.html";
 
                 },
-                500
+                700
             );
 
-        }
 
-        catch(error){
+        }catch(error){
 
             console.error(
                 "Admin login error:",
@@ -666,134 +666,217 @@ form.addEventListener(
 );
 
 
-/* =====================================================
-   SEND PASSWORD RESET EMAIL
-===================================================== */
+/* =========================
+   SHOW FORGOT PASSWORD
+========================= */
 
-async function sendPasswordReset(){
+showForgotBtn.addEventListener(
+    "click",
+    function(){
 
-    const email =
-        document
-        .getElementById(
-            "resetEmail"
-        )
-        .value
-        .trim();
-
-
-    if(!email){
-
-        showMessage(
-            "Please enter your admin email.",
-            "error"
+        forgotBox.classList.remove(
+            "hidden"
         );
 
-        return;
+        showForgotBtn.classList.add(
+            "hidden"
+        );
+
+
+        if(emailInput.value.trim()){
+
+            resetEmail.value =
+                emailInput.value.trim();
+
+        }
+
+
+        resetEmail.focus();
 
     }
+);
 
 
-    resetBtn.disabled =
-        true;
+/* =========================
+   CANCEL FORGOT PASSWORD
+========================= */
 
-    resetBtn.textContent =
-        "Sending...";
+cancelForgotBtn.addEventListener(
+    "click",
+    function(){
+
+        forgotBox.classList.add(
+            "hidden"
+        );
+
+        showForgotBtn.classList.remove(
+            "hidden"
+        );
+
+        message.textContent = "";
+
+        message.className =
+            "message";
+
+    }
+);
 
 
-    showMessage(
-        "Sending password reset email...",
-        ""
-    );
+/* =========================
+   SEND PASSWORD RESET
+========================= */
+
+forgotForm.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
 
 
-    try{
+        const email =
+            resetEmail.value.trim();
 
-        const redirectUrl =
-            window.location.origin +
-            window.location.pathname
-            .replace(
-                "admin-login.html",
-                "admin-reset-password.html"
+
+        if(!email){
+
+            showMessage(
+                "❌ Please enter your admin email.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        resetBtn.disabled =
+            true;
+
+        resetBtn.textContent =
+            "Sending...";
+
+
+        message.textContent = "";
+
+        message.className =
+            "message";
+
+
+        try{
+
+            /*
+             * This automatically creates the
+             * correct GitHub Pages URL:
+             *
+             * /agent-panel/admin-reset-password.html
+             */
+
+            const resetUrl =
+                new URL(
+                    "admin-reset-password.html",
+                    window.location.href
+                ).href;
+
+
+            const {
+                error
+            } =
+                await supabaseClient.auth.resetPasswordForEmail(
+                    email,
+                    {
+                        redirectTo:
+                            resetUrl
+                    }
+                );
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            /*
+             * Do not reveal whether an email
+             * exists in Supabase Auth.
+             */
+
+            showMessage(
+                "✅ If this email is registered, a password reset link has been sent. Please check your email inbox and spam folder.",
+                "success"
             );
 
 
-        const {
-            error
-        } =
-        await supabaseClient.auth.resetPasswordForEmail(
-            email,
-            {
-                redirectTo:
-                    redirectUrl
-            }
-        );
+            resetBtn.textContent =
+                "📧 Reset Link Sent";
 
 
-        if(error){
+            setTimeout(
+                function(){
 
-            throw error;
+                    resetBtn.disabled =
+                        false;
+
+                    resetBtn.textContent =
+                        "📧 Send Reset Link";
+
+                },
+                4000
+            );
+
+
+        }catch(error){
+
+            console.error(
+                "Password reset error:",
+                error
+            );
+
+
+            showMessage(
+                "❌ Unable to send password reset email. Please try again.",
+                "error"
+            );
+
+
+            resetBtn.disabled =
+                false;
+
+            resetBtn.textContent =
+                "📧 Send Reset Link";
 
         }
 
-
-        /*
-          Do not reveal whether an email exists.
-          Supabase handles password recovery securely.
-        */
-
-        showMessage(
-            "✅ If this email is registered, a password reset link has been sent. Check your inbox and spam folder.",
-            "success"
-        );
-
-
-        resetBtn.disabled =
-            false;
-
-        resetBtn.textContent =
-            "📧 Send Reset Email";
-
     }
-
-    catch(error){
-
-        console.error(
-            "Password reset error:",
-            error
-        );
+);
 
 
-        showMessage(
-            "❌ Unable to send password reset email. Please try again.",
-            "error"
-        );
-
-
-        resetBtn.disabled =
-            false;
-
-        resetBtn.textContent =
-            "📧 Send Reset Email";
-
-    }
-
-}
-
-
-/* =====================================================
-   AUTH STATE MONITOR
-===================================================== */
+/* =========================
+   AUTH STATE
+========================= */
 
 supabaseClient.auth.onAuthStateChange(
-    function(event){
+    async function(
+        event,
+        session
+    ){
 
         if(
-            event === "SIGNED_OUT"
+            event === "SIGNED_IN" &&
+            session
         ){
 
-            /*
-              Stay on login page.
-            */
+            const isAdmin =
+                await checkAdmin();
+
+
+            if(isAdmin){
+
+                window.location.href =
+                    "admin.html";
+
+            }
 
         }
 
@@ -801,20 +884,13 @@ supabaseClient.auth.onAuthStateChange(
 );
 
 
-/* =====================================================
-   INITIAL LOAD
-===================================================== */
+/* =========================
+   INITIAL CHECK
+========================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async function(){
-
-        await checkExistingAdmin();
-
-    }
-);
+checkExistingSession();
 
 </script>
 
 </body>
-  </html>
+            </html>
