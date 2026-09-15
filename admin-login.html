@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sathi Pay Admin Login</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-radius: 20px;
+      padding: 30px 24px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .shield {
+      font-size: 55px;
+    }
+
+    h1 {
+      margin: 8px 0;
+      font-size: 30px;
+      color: #172033;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-weight: bold;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+    }
+
+    #message {
+      margin-top: 18px;
+      text-align: center;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: #2563eb;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+
+    <div class="header">
+      <div class="shield">🛡️</div>
+      <h1>Sathi Pay Admin</h1>
+      <div class="subtitle">Secure Admin Login</div>
+    </div>
+
+    <form id="adminLoginForm">
+
+      <label for="email">Admin Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter admin email"
+        autocomplete="email"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter admin password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button type="submit" id="loginBtn">
+        🔐 Admin Login
+      </button>
+
+    </form>
+
+    <div id="message"></div>
+
+    <a class="back" href="index.html">
+      ← Back to Customer Login
+    </a>
+
+  </div>
+
+<script>
+  const SUPABASE_URL = "https://lozluohksmjxbxixkbmq.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  const form = document.getElementById("adminLoginForm");
+  const loginBtn = document.getElementById("loginBtn");
+  const message = document.getElementById("message");
+
+  form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    message.textContent = "";
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Logging in...";
+
+    try {
+
+      const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data || !data.user) {
+        throw new Error("Login session not created.");
+      }
+
+      /*
+        IMPORTANT:
+        Admin permission is checked by the secure database
+        function public.is_admin().
+      */
+
+      const { data: isAdmin, error: adminError } =
+        await supabaseClient.rpc("is_admin");
+
+      if (adminError) {
+        await supabaseClient.auth.signOut();
+        throw adminError;
+      }
+
+      if (isAdmin !== true) {
+        await supabaseClient.auth.signOut();
+
+        throw new Error(
+          "This account is not registered as an admin."
+        );
+      }
+
+      message.style.color = "#16a34a";
+      message.textContent =
+        "✅ Admin login successful. Opening dashboard...";
+
+      setTimeout(function() {
+        window.location.href = "admin.html";
+      }, 700);
+
+    } catch (error) {
+
+      console.error(error);
+
+      message.style.color = "#dc2626";
+      message.textContent =
+        "❌ " + (error.message || "Admin login failed.");
+
+      loginBtn.disabled = false;
+      loginBtn.textContent = "🔐 Admin Login";
+    }
+  });
+</script>
+
+</body>
+  </html>
