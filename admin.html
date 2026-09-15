@@ -36,8 +36,26 @@ body{
 }
 
 .header p{
-    margin:7px 0 0;
+    margin:7px 0 12px;
     opacity:.9;
+}
+
+.headerActions{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:12px;
+}
+
+.headerBtn{
+    background:rgba(255,255,255,.18);
+    color:white;
+    border:1px solid rgba(255,255,255,.35);
+    padding:9px 13px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:bold;
 }
 
 .container{
@@ -295,7 +313,7 @@ button:disabled{
 }
 
 /* =====================================================
-   PAYMENT SCREENSHOT - SMALL THUMBNAIL
+   PAYMENT SCREENSHOT
 ===================================================== */
 
 .paymentProofBox{
@@ -331,14 +349,6 @@ button:disabled{
 
 .viewProofBtn{
     display:none;
-}
-
-.noProof{
-    padding:10px;
-    border-radius:10px;
-    background:#fee2e2;
-    color:#991b1b;
-    font-size:13px;
 }
 
 /* =====================================================
@@ -380,6 +390,82 @@ button:disabled{
     z-index:1000000;
 }
 
+/* =====================================================
+   SECURITY MODAL
+===================================================== */
+
+.securityModal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000000;
+    background:rgba(0,0,0,.65);
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+}
+
+.securityBox{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 15px 50px rgba(0,0,0,.25);
+}
+
+.securityHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.securityHeader h2{
+    margin:0;
+    font-size:20px;
+}
+
+.securityClose{
+    width:38px;
+    height:38px;
+    padding:0;
+    border-radius:50%;
+    background:#e2e8f0;
+    color:#111827;
+    font-size:20px;
+}
+
+.securityEmail{
+    padding:12px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    margin-bottom:15px;
+    word-break:break-word;
+    font-size:14px;
+}
+
+.securityNote{
+    font-size:12px;
+    color:#64748b;
+    line-height:1.5;
+    margin-top:10px;
+}
+
+/* =====================================================
+   PAGE LOCK
+===================================================== */
+
+body.pageLocked{
+    visibility:hidden;
+}
+
+body.pageReady{
+    visibility:visible;
+}
+
 @media(max-width:600px){
 
     .stats{
@@ -398,18 +484,47 @@ button:disabled{
         grid-template-columns:1fr;
     }
 
+    .headerActions{
+        flex-direction:column;
+        max-width:300px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .headerBtn{
+        width:100%;
+    }
+
 }
 
 </style>
 </head>
 
-<body>
+<body class="pageLocked">
 
 <div class="header">
 
     <h1>🛡️ Sathi Pay Admin</h1>
 
     <p>Customer Management Dashboard</p>
+
+    <div class="headerActions">
+
+        <button
+            class="headerBtn"
+            onclick="openSecurity()"
+        >
+            🔐 Security
+        </button>
+
+        <button
+            class="headerBtn"
+            onclick="logoutAdmin()"
+        >
+            🚪 Logout
+        </button>
+
+    </div>
 
 </div>
 
@@ -696,6 +811,102 @@ button:disabled{
 </div>
 
 
+<!-- =====================================================
+     SECURITY MODAL
+===================================================== -->
+
+<div
+    id="securityModal"
+    class="securityModal"
+    onclick="closeSecurity(event)"
+>
+
+    <div
+        class="securityBox"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="securityHeader">
+
+            <h2>
+                🔐 Admin Security
+            </h2>
+
+            <button
+                class="securityClose"
+                onclick="closeSecurity()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            id="adminEmail"
+            class="securityEmail"
+        >
+            Admin: Loading...
+        </div>
+
+        <h3>
+            🔑 Change Password
+        </h3>
+
+        <input
+            id="currentPassword"
+            type="password"
+            placeholder="Current password"
+            autocomplete="current-password"
+        >
+
+        <input
+            id="newPassword"
+            type="password"
+            placeholder="New password"
+            autocomplete="new-password"
+        >
+
+        <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Confirm new password"
+            autocomplete="new-password"
+        >
+
+        <button
+            id="changePasswordBtn"
+            class="blue full"
+            onclick="changeAdminPassword()"
+        >
+            🔑 Change Password
+        </button>
+
+        <div
+            id="securityStatus"
+            class="status"
+        >
+            Keep your admin password private.
+        </div>
+
+        <div class="securityNote">
+            Password change first verifies your current
+            password and then updates the Supabase login
+            password.
+        </div>
+
+        <button
+            class="red full"
+            style="margin-top:15px"
+            onclick="logoutAdmin()"
+        >
+            🚪 Logout Admin
+        </button>
+
+    </div>
+
+</div>
+
+
 <script>
 
 /* =====================================================
@@ -713,6 +924,399 @@ supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
+
+
+/* =====================================================
+   ADMIN SECURITY GUARD
+===================================================== */
+
+let currentAdminUser = null;
+
+async function verifyAdminAccess(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.getUser();
+
+        if(
+            error ||
+            !data ||
+            !data.user
+        ){
+
+            window.location.replace(
+                "admin-login.html"
+            );
+
+            return false;
+
+        }
+
+        currentAdminUser =
+            data.user;
+
+        const {
+            data:isAdmin,
+            error:adminError
+        } =
+        await supabaseClient.rpc(
+            "is_admin"
+        );
+
+        if(
+            adminError ||
+            isAdmin !== true
+        ){
+
+            await supabaseClient.auth.signOut();
+
+            window.location.replace(
+                "admin-login.html"
+            );
+
+            return false;
+
+        }
+
+        const emailBox =
+            document.getElementById(
+                "adminEmail"
+            );
+
+        if(emailBox){
+
+            emailBox.textContent =
+                "Admin: " +
+                (
+                    currentAdminUser.email ||
+                    "-"
+                );
+
+        }
+
+        document.body.classList.remove(
+            "pageLocked"
+        );
+
+        document.body.classList.add(
+            "pageReady"
+        );
+
+        return true;
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Admin security error:",
+            error
+        );
+
+        window.location.replace(
+            "admin-login.html"
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logoutAdmin(){
+
+    try{
+
+        await supabaseClient.auth.signOut();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+    window.location.replace(
+        "admin-login.html"
+    );
+
+}
+
+
+/* =====================================================
+   SECURITY MODAL
+===================================================== */
+
+function openSecurity(){
+
+    const modal =
+        document.getElementById(
+            "securityModal"
+        );
+
+    if(currentAdminUser){
+
+        document.getElementById(
+            "adminEmail"
+        ).textContent =
+            "Admin: " +
+            (
+                currentAdminUser.email ||
+                "-"
+            );
+
+    }
+
+    document.getElementById(
+        "securityStatus"
+    ).className =
+        "status";
+
+    document.getElementById(
+        "securityStatus"
+    ).textContent =
+        "Keep your admin password private.";
+
+    modal.style.display =
+        "flex";
+
+}
+
+
+function closeSecurity(event){
+
+    if(
+        event &&
+        event.target &&
+        event.target.id !== "securityModal"
+    ){
+        return;
+    }
+
+    document.getElementById(
+        "securityModal"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   CHANGE ADMIN PASSWORD
+===================================================== */
+
+async function changeAdminPassword(){
+
+    if(!currentAdminUser){
+
+        alert(
+            "Admin session not available."
+        );
+
+        return;
+
+    }
+
+    const currentPassword =
+        document
+        .getElementById(
+            "currentPassword"
+        )
+        .value;
+
+    const newPassword =
+        document
+        .getElementById(
+            "newPassword"
+        )
+        .value;
+
+    const confirmPassword =
+        document
+        .getElementById(
+            "confirmPassword"
+        )
+        .value;
+
+    const status =
+        document.getElementById(
+            "securityStatus"
+        );
+
+    const button =
+        document.getElementById(
+            "changePasswordBtn"
+        );
+
+    if(!currentPassword){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Please enter current password.";
+
+        return;
+
+    }
+
+    if(!newPassword){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Please enter new password.";
+
+        return;
+
+    }
+
+    if(newPassword.length < 8){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "New password must be at least 8 characters.";
+
+        return;
+
+    }
+
+    if(newPassword !== confirmPassword){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "New passwords do not match.";
+
+        return;
+
+    }
+
+    if(
+        currentPassword === newPassword
+    ){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "New password must be different from current password.";
+
+        return;
+
+    }
+
+    button.disabled = true;
+
+    button.textContent =
+        "Verifying...";
+
+    status.className =
+        "status";
+
+    status.textContent =
+        "Verifying current password...";
+
+    try{
+
+        /*
+          Re-authenticate the admin using the
+          current password before changing it.
+        */
+
+        const {
+            error:loginError
+        } =
+        await supabaseClient.auth.signInWithPassword({
+            email:currentAdminUser.email,
+            password:currentPassword
+        });
+
+        if(loginError){
+
+            throw new Error(
+                "Current password is incorrect."
+            );
+
+        }
+
+        status.textContent =
+            "Updating password...";
+
+        const {
+            error:updateError
+        } =
+        await supabaseClient.auth.updateUser({
+            password:newPassword
+        });
+
+        if(updateError){
+
+            throw updateError;
+
+        }
+
+        status.className =
+            "status success";
+
+        status.textContent =
+            "✅ Password changed successfully.";
+
+        document.getElementById(
+            "currentPassword"
+        ).value = "";
+
+        document.getElementById(
+            "newPassword"
+        ).value = "";
+
+        document.getElementById(
+            "confirmPassword"
+        ).value = "";
+
+        button.disabled = false;
+
+        button.textContent =
+            "🔑 Change Password";
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ " +
+            (
+                error.message ||
+                "Password change failed."
+            );
+
+        button.disabled = false;
+
+        button.textContent =
+            "🔑 Change Password";
+
+    }
+
+}
 
 
 /* =====================================================
@@ -800,7 +1404,8 @@ function openProof(url){
 
     image.src = url;
 
-    modal.style.display = "flex";
+    modal.style.display =
+        "flex";
 
     document.body.style.overflow =
         "hidden";
@@ -820,7 +1425,8 @@ function closeProof(){
             "proofModalImage"
         );
 
-    modal.style.display = "none";
+    modal.style.display =
+        "none";
 
     image.src = "";
 
@@ -846,7 +1452,9 @@ function showApprovedToast(amount){
     }
 
     const toast =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     toast.className =
         "approvedToast";
@@ -863,11 +1471,19 @@ function showApprovedToast(amount){
 
     `;
 
-    document.body.appendChild(toast);
+    document.body.appendChild(
+        toast
+    );
 
     setTimeout(
         function(){
-            toast.remove();
+
+            if(toast){
+
+                toast.remove();
+
+            }
+
         },
         2500
     );
@@ -892,7 +1508,9 @@ async function loadPaymentSettings(){
     } =
     await supabaseClient
         .from("payment_settings")
-        .select("id,upi_id,qr_url,updated_at")
+        .select(
+            "id,upi_id,qr_url,updated_at"
+        )
         .eq("id",1)
         .maybeSingle();
 
@@ -1020,13 +1638,17 @@ async function savePaymentSettings(){
 
     const upi =
         document
-        .getElementById("paymentUpi")
+        .getElementById(
+            "paymentUpi"
+        )
         .value
         .trim();
 
     const qr =
         document
-        .getElementById("paymentQr")
+        .getElementById(
+            "paymentQr"
+        )
         .value
         .trim();
 
@@ -1077,7 +1699,8 @@ async function savePaymentSettings(){
         .update({
             upi_id:upi,
             qr_url:qr,
-            updated_at:new Date().toISOString()
+            updated_at:
+                new Date().toISOString()
         })
         .eq("id",1);
 
@@ -1092,7 +1715,8 @@ async function savePaymentSettings(){
             "status error";
 
         status.textContent =
-            "❌ " + error.message;
+            "❌ " +
+            error.message;
 
         return;
 
@@ -1127,7 +1751,9 @@ async function searchCustomer(){
 
     const search =
         document
-        .getElementById("customerSearch")
+        .getElementById(
+            "customerSearch"
+        )
         .value
         .trim();
 
@@ -1224,7 +1850,9 @@ async function searchCustomer(){
 
     }
 
-    renderCustomer(customer);
+    renderCustomer(
+        customer
+    );
 
     status.className =
         "status success";
@@ -1247,19 +1875,29 @@ function renderCustomer(customer){
         );
 
     const wallet =
-        Number(customer.wallet_balance || 0);
+        Number(
+            customer.wallet_balance || 0
+        );
 
     const bonus =
-        Number(customer.bonus_balance || 0);
+        Number(
+            customer.bonus_balance || 0
+        );
 
     const depositBalance =
-        Number(customer.deposit_balance || 0);
+        Number(
+            customer.deposit_balance || 0
+        );
 
     const commission =
-        Number(customer.commission_balance || 0);
+        Number(
+            customer.commission_balance || 0
+        );
 
     const referral =
-        Number(customer.referral_balance || 0);
+        Number(
+            customer.referral_balance || 0
+        );
 
     box.innerHTML = `
 
@@ -1270,14 +1908,20 @@ function renderCustomer(customer){
             </h3>
 
             <div class="row">
-                <span class="label">UID</span>
+                <span class="label">
+                    UID
+                </span>
+
                 <span class="value">
                     ${customer.uid || "-"}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">Mobile</span>
+                <span class="label">
+                    Mobile
+                </span>
+
                 <span class="value">
                     ${customer.mobile || "-"}
                 </span>
@@ -1287,6 +1931,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Invitation Code
                 </span>
+
                 <span class="value">
                     ${customer.invitation_code || "-"}
                 </span>
@@ -1296,6 +1941,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Referred By
                 </span>
+
                 <span class="value">
                     ${customer.referred_by || "-"}
                 </span>
@@ -1305,6 +1951,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Account Status
                 </span>
+
                 <span class="value">
                     ${customer.status || "Active"}
                 </span>
@@ -1314,6 +1961,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Wallet Balance
                 </span>
+
                 <span class="value">
                     ${money(wallet)}
                 </span>
@@ -1323,6 +1971,7 @@ function renderCustomer(customer){
                 <span class="label">
                     ₹99 Bonus
                 </span>
+
                 <span class="value">
                     ${money(bonus)}
                 </span>
@@ -1332,6 +1981,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Deposit Balance
                 </span>
+
                 <span class="value">
                     ${money(depositBalance)}
                 </span>
@@ -1341,6 +1991,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Commission Balance
                 </span>
+
                 <span class="value">
                     ${money(commission)}
                 </span>
@@ -1350,6 +2001,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Referral Income
                 </span>
+
                 <span class="value">
                     ${money(referral)}
                 </span>
@@ -1359,6 +2011,7 @@ function renderCustomer(customer){
                 <span class="label">
                     Sell Status
                 </span>
+
                 <span class="value">
                     ${
                         customer.sell_on
@@ -1372,6 +2025,7 @@ function renderCustomer(customer){
                 <span class="label">
                     UPI ID
                 </span>
+
                 <span class="value">
                     ${customer.upi_id || "-"}
                 </span>
@@ -1438,60 +2092,66 @@ async function loadAdminTotals(){
     } =
     await supabaseClient
         .from("customer_deposits")
-        .select("amount,status,commission");
+        .select(
+            "amount,status,commission"
+        );
 
     let totalDeposit = 0;
     let totalCommission = 0;
     let pendingCount = 0;
 
-    (deposits || []).forEach(d => {
+    (deposits || []).forEach(
+        d => {
 
-        const amount =
-            Number(d.amount || 0);
-
-        if(
-            String(d.status)
-            .toLowerCase()
-            === "approved"
-        ){
-
-            totalDeposit +=
-                amount;
+            const amount =
+                Number(
+                    d.amount || 0
+                );
 
             if(
-                d.commission !== null &&
-                d.commission !== undefined
+                String(d.status)
+                .toLowerCase()
+                === "approved"
             ){
 
-                totalCommission +=
-                    Number(
-                        d.commission || 0
-                    );
+                totalDeposit +=
+                    amount;
+
+                if(
+                    d.commission !== null &&
+                    d.commission !== undefined
+                ){
+
+                    totalCommission +=
+                        Number(
+                            d.commission || 0
+                        );
+
+                }
+
+                else{
+
+                    totalCommission +=
+                        commissionAmount(
+                            amount
+                        );
+
+                }
 
             }
 
-            else{
+            if(
+                String(d.status)
+                .toLowerCase()
+                === "pending"
+            ){
 
-                totalCommission +=
-                    commissionAmount(
-                        amount
-                    );
+                pendingCount++;
 
             }
 
         }
-
-        if(
-            String(d.status)
-            .toLowerCase()
-            === "pending"
-        ){
-
-            pendingCount++;
-
-        }
-
-    });
+    );
 
     document.getElementById(
         "totalDeposits"
@@ -1532,9 +2192,12 @@ async function loadDeposits(){
     await supabaseClient
         .from("customer_deposits")
         .select("*")
-        .order("id",{
-            ascending:false
-        });
+        .order(
+            "id",
+            {
+                ascending:false
+            }
+        );
 
     if(error){
 
@@ -1566,185 +2229,207 @@ async function loadDeposits(){
     }
 
     box.innerHTML =
-    data.map(d => {
+    data.map(
+        d => {
 
-        const rate =
-            commissionRate(
-                d.amount
-            ) * 100;
+            const rate =
+                commissionRate(
+                    d.amount
+                ) * 100;
 
-        const calculatedCommission =
-            Number(
-                d.commission ??
-                commissionAmount(d.amount)
-            );
+            const calculatedCommission =
+                Number(
+                    d.commission ??
+                    commissionAmount(
+                        d.amount
+                    )
+                );
 
-        const screenshot =
-            d.payment_proof || "";
+            const screenshot =
+                d.payment_proof || "";
 
-        return `
+            return `
 
-        <div class="item">
+            <div class="item">
 
-            <h3>
-                💰 Deposit #${d.id}
-            </h3>
+                <h3>
+                    💰 Deposit #${d.id}
+                </h3>
 
-            <div class="row">
-                <span class="label">
-                    Amount
-                </span>
-                <span class="value">
-                    ${money(d.amount)}
-                </span>
-            </div>
+                <div class="row">
 
-            <div class="row">
-                <span class="label">
-                    Status
-                </span>
-                <span class="value">
-                    ${statusBadge(d.status)}
-                </span>
-            </div>
+                    <span class="label">
+                        Amount
+                    </span>
 
-            <div class="row">
-                <span class="label">
-                    Commission Rate
-                </span>
-                <span class="value">
-                    ${rate}%
-                </span>
-            </div>
+                    <span class="value">
+                        ${money(d.amount)}
+                    </span>
 
-            <div class="row">
-                <span class="label">
-                    Commission
-                </span>
-                <span class="value">
-                    ${money(calculatedCommission)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Customer ID
-                </span>
-                <span class="value">
-                    ${d.customer_id || "-"}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    UTR
-                </span>
-                <span class="value">
-                    ${d.utr || "-"}
-                </span>
-            </div>
-
-            <!-- SMALL PAYMENT SCREENSHOT -->
-
-            <div class="paymentProofBox">
-
-                <div class="paymentProofTitle">
-                    📸 Payment Screenshot
                 </div>
 
-                ${
-                    screenshot
+                <div class="row">
 
-                    ?
+                    <span class="label">
+                        Status
+                    </span>
 
-                    `
-                    <img
-                        src="${screenshot}"
-                        class="paymentProofImage"
-                        alt="Customer Payment Screenshot"
-                        onclick="openProof('${screenshot}')"
-                    >
-                    `
+                    <span class="value">
+                        ${statusBadge(d.status)}
+                    </span>
 
-                    :
+                </div>
 
-                    `
-                    <div class="noProof">
-                        ❌ Customer did not upload a payment screenshot.
+                <div class="row">
+
+                    <span class="label">
+                        Commission Rate
+                    </span>
+
+                    <span class="value">
+                        ${rate}%
+                    </span>
+
+                </div>
+
+                <div class="row">
+
+                    <span class="label">
+                        Commission
+                    </span>
+
+                    <span class="value">
+                        ${money(
+                            calculatedCommission
+                        )}
+                    </span>
+
+                </div>
+
+                <div class="row">
+
+                    <span class="label">
+                        Customer ID
+                    </span>
+
+                    <span class="value">
+                        ${d.customer_id || "-"}
+                    </span>
+
+                </div>
+
+                <div class="row">
+
+                    <span class="label">
+                        UTR
+                    </span>
+
+                    <span class="value">
+                        ${d.utr || "-"}
+                    </span>
+
+                </div>
+
+                <div class="paymentProofBox">
+
+                    <div class="paymentProofTitle">
+                        📸 Payment Screenshot
                     </div>
-                    `
-                }
 
-            </div>
-
-            <div class="row">
-
-                <span class="label">
-                    Created
-                </span>
-
-                <span class="value">
                     ${
-                        d.created_at
-                        ? new Date(
-                            d.created_at
-                        ).toLocaleString("en-IN")
-                        : "-"
+                        screenshot
+                        ?
+                        `
+                        <img
+                            src="${screenshot}"
+                            class="paymentProofImage"
+                            alt="Customer Payment Screenshot"
+                            onclick="openProof('${screenshot}')"
+                        >
+                        `
+                        :
+                        `
+                        <div class="noProof">
+                            ❌ Customer did not upload a payment screenshot.
+                        </div>
+                        `
                     }
-                </span>
+
+                </div>
+
+                <div class="row">
+
+                    <span class="label">
+                        Created
+                    </span>
+
+                    <span class="value">
+                        ${
+                            d.created_at
+                            ?
+                            new Date(
+                                d.created_at
+                            ).toLocaleString(
+                                "en-IN"
+                            )
+                            :
+                            "-"
+                        }
+                    </span>
+
+                </div>
+
+                <div class="actions">
+
+                    ${
+                        String(d.status)
+                        .toLowerCase()
+                        === "pending"
+
+                        ?
+
+                        `
+                        <button
+                            class="green"
+                            onclick="updateDeposit(
+                                ${d.id},
+                                'approved'
+                            )"
+                        >
+                            ✅ Approve
+                        </button>
+
+                        <button
+                            class="red"
+                            onclick="updateDeposit(
+                                ${d.id},
+                                'rejected'
+                            )"
+                        >
+                            ❌ Reject
+                        </button>
+                        `
+
+                        :
+
+                        `
+                        <button
+                            class="gray"
+                            disabled
+                        >
+                            ${d.status || "Processed"}
+                        </button>
+                        `
+                    }
+
+                </div>
 
             </div>
 
-            <div class="actions">
+            `;
 
-                ${
-                    String(d.status)
-                    .toLowerCase()
-                    === "pending"
-
-                    ?
-
-                    `
-                    <button
-                        class="green"
-                        onclick="updateDeposit(
-                            ${d.id},
-                            'approved'
-                        )"
-                    >
-                        ✅ Approve
-                    </button>
-
-                    <button
-                        class="red"
-                        onclick="updateDeposit(
-                            ${d.id},
-                            'rejected'
-                        )"
-                    >
-                        ❌ Reject
-                    </button>
-                    `
-
-                    :
-
-                    `
-                    <button
-                        class="gray"
-                        disabled
-                    >
-                        ${d.status || "Processed"}
-                    </button>
-                    `
-                }
-
-            </div>
-
-        </div>
-
-        `;
-
-    }).join("");
+        }
+    ).join("");
 
 }
 
@@ -1781,7 +2466,7 @@ async function updateDeposit(
         await supabaseClient.rpc(
             "admin_approve_customer_deposit",
             {
-                p_deposit_id: id
+                p_deposit_id:id
             }
         );
 
@@ -1913,7 +2598,8 @@ async function loadCustomers(){
     }
 
     box.innerHTML =
-    data.map(c => `
+    data.map(
+        c => `
 
         <div class="item">
 
@@ -1922,90 +2608,129 @@ async function loadCustomers(){
             </h3>
 
             <div class="row">
+
                 <span class="label">
                     UID
                 </span>
+
                 <span class="value">
                     ${c.uid || "-"}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Mobile
                 </span>
+
                 <span class="value">
                     ${c.mobile || "-"}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Invitation Code
                 </span>
+
                 <span class="value">
                     ${c.invitation_code || "-"}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Wallet
                 </span>
+
                 <span class="value">
-                    ${money(c.wallet_balance)}
+                    ${money(
+                        c.wallet_balance
+                    )}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Deposit Balance
                 </span>
+
                 <span class="value">
-                    ${money(c.deposit_balance)}
+                    ${money(
+                        c.deposit_balance
+                    )}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Commission
                 </span>
+
                 <span class="value">
-                    ${money(c.commission_balance)}
+                    ${money(
+                        c.commission_balance
+                    )}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Referral
                 </span>
+
                 <span class="value">
-                    ${money(c.referral_balance)}
+                    ${money(
+                        c.referral_balance
+                    )}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Bonus
                 </span>
+
                 <span class="value">
-                    ${money(c.bonus_balance)}
+                    ${money(
+                        c.bonus_balance
+                    )}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Status
                 </span>
+
                 <span class="value">
                     ${c.status || "Active"}
                 </span>
+
             </div>
 
             <div class="row">
+
                 <span class="label">
                     Sell
                 </span>
+
                 <span class="value">
                     ${
                         c.sell_on
@@ -2013,11 +2738,13 @@ async function loadCustomers(){
                         : "🔴 OFF"
                     }
                 </span>
+
             </div>
 
         </div>
 
-    `).join("");
+    `
+    ).join("");
 
 }
 
@@ -2029,6 +2756,13 @@ async function loadCustomers(){
 document.addEventListener(
     "DOMContentLoaded",
     async function(){
+
+        const allowed =
+            await verifyAdminAccess();
+
+        if(!allowed){
+            return;
+        }
 
         await loadAdminTotals();
 
@@ -2045,13 +2779,50 @@ document.addEventListener(
 ===================================================== */
 
 setInterval(
-    loadAdminTotals,
+    async function(){
+
+        if(!currentAdminUser){
+            return;
+        }
+
+        await loadAdminTotals();
+
+    },
     30000
 );
 
 setInterval(
-    loadDeposits,
+    async function(){
+
+        if(!currentAdminUser){
+            return;
+        }
+
+        await loadDeposits();
+
+    },
     30000
+);
+
+
+/* =====================================================
+   AUTH STATE MONITOR
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+    async function(event,session){
+
+        if(
+            event === "SIGNED_OUT"
+        ){
+
+            window.location.replace(
+                "admin-login.html"
+            );
+
+        }
+
+    }
 );
 
 </script>
