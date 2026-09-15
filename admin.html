@@ -248,11 +248,6 @@ button:disabled{
     gap:10px;
 }
 
-
-/* =========================
-   COMPACT APPROVED TOAST
-========================= */
-
 .approvedToast{
     position:fixed;
     top:18px;
@@ -298,11 +293,6 @@ button:disabled{
     }
 
 }
-
-
-/* =========================
-   PAYMENT SCREENSHOT
-========================= */
 
 .paymentProofBox{
     margin-top:15px;
@@ -387,13 +377,7 @@ button:disabled{
 
 </div>
 
-
 <div class="container">
-
-
-<!-- =========================
-     ADMIN STATS
-========================= -->
 
 <div class="stats">
 
@@ -403,15 +387,11 @@ button:disabled{
             👥 Total Customers
         </div>
 
-        <div
-            id="totalCustomers"
-            class="statValue"
-        >
+        <div id="totalCustomers" class="statValue">
             0
         </div>
 
     </div>
-
 
     <div class="stat">
 
@@ -419,15 +399,11 @@ button:disabled{
             💰 Total Deposits
         </div>
 
-        <div
-            id="totalDeposits"
-            class="statValue"
-        >
+        <div id="totalDeposits" class="statValue">
             ₹0.00
         </div>
 
     </div>
-
 
     <div class="stat">
 
@@ -435,15 +411,11 @@ button:disabled{
             ⏳ Pending Deposits
         </div>
 
-        <div
-            id="pendingDeposits"
-            class="statValue"
-        >
+        <div id="pendingDeposits" class="statValue">
             0
         </div>
 
     </div>
-
 
     <div class="stat">
 
@@ -451,21 +423,13 @@ button:disabled{
             💵 Total Commission
         </div>
 
-        <div
-            id="totalCommission"
-            class="statValue"
-        >
+        <div id="totalCommission" class="statValue">
             ₹0.00
         </div>
 
     </div>
 
 </div>
-
-
-<!-- =========================
-     PAYMENT SETTINGS
-========================= -->
 
 <div class="card">
 
@@ -479,15 +443,11 @@ button:disabled{
                 Current UPI ID
             </span>
 
-            <span
-                id="currentUpi"
-                class="value"
-            >
+            <span id="currentUpi" class="value">
                 Loading...
             </span>
 
         </div>
-
 
         <div class="row">
 
@@ -495,10 +455,7 @@ button:disabled{
                 QR Code URL
             </span>
 
-            <span
-                id="currentQr"
-                class="value"
-            >
+            <span id="currentQr" class="value">
                 Loading...
             </span>
 
@@ -506,9 +463,7 @@ button:disabled{
 
     </div>
 
-
     <h3>✏️ Update Payment Details</h3>
-
 
     <input
         id="paymentUpi"
@@ -517,14 +472,12 @@ button:disabled{
         autocomplete="off"
     >
 
-
     <input
         id="paymentQr"
         type="url"
         placeholder="Enter QR Code image URL"
         autocomplete="off"
     >
-
 
     <button
         id="savePaymentBtn"
@@ -534,23 +487,13 @@ button:disabled{
         💾 Save Payment Settings
     </button>
 
-
-    <div
-        id="paymentStatus"
-        class="status"
-    >
+    <div id="paymentStatus" class="status">
         Payment settings ready.
     </div>
-
 
     <div id="qrPreviewBox"></div>
 
 </div>
-
-
-<!-- =========================
-     CUSTOMER SEARCH
-========================= -->
 
 <div class="card">
 
@@ -563,7 +506,6 @@ button:disabled{
         autocomplete="off"
     >
 
-
     <div class="customerSearchButtons">
 
         <button
@@ -572,7 +514,6 @@ button:disabled{
         >
             🔍 Search
         </button>
-
 
         <button
             class="gray"
@@ -583,23 +524,13 @@ button:disabled{
 
     </div>
 
-
-    <div
-        id="searchStatus"
-        class="status"
-    >
+    <div id="searchStatus" class="status">
         Ready to search.
     </div>
-
 
     <div id="customerDetails"></div>
 
 </div>
-
-
-<!-- =========================
-     DEPOSIT REQUESTS
-========================= -->
 
 <div class="card">
 
@@ -612,15 +543,9 @@ button:disabled{
         🔄 Refresh Deposit Requests
     </button>
 
-
     <div id="depositList"></div>
 
 </div>
-
-
-<!-- =========================
-     ALL CUSTOMERS
-========================= -->
 
 <div class="card">
 
@@ -633,15 +558,9 @@ button:disabled{
         👥 View All Customers
     </button>
 
-
     <div id="customerList"></div>
 
 </div>
-
-
-<!-- =========================
-     COMMISSION RULES
-========================= -->
 
 <div class="card">
 
@@ -650,73 +569,38 @@ button:disabled{
     <div class="commissionBox">
 
         <div class="rate">
-
-            <span>
-                ₹1 – ₹9,999
-            </span>
-
-            <b>
-                6%
-            </b>
-
+            <span>₹1 – ₹9,999</span>
+            <b>6%</b>
         </div>
-
 
         <div class="rate">
-
-            <span>
-                ₹10,000 – ₹19,999
-            </span>
-
-            <b>
-                8%
-            </b>
-
+            <span>₹10,000 – ₹19,999</span>
+            <b>8%</b>
         </div>
-
 
         <div class="rate">
-
-            <span>
-                ₹20,000+
-            </span>
-
-            <b>
-                10%
-            </b>
-
+            <span>₹20,000+</span>
+            <b>10%</b>
         </div>
-
 
         <br>
 
-
         <div class="small">
-
             Commission is automatically calculated
             on each approved customer deposit.
-
         </div>
 
     </div>
 
 </div>
 
-
-<!-- =========================
-     REFERRAL RULES
-========================= -->
-
 <div class="card">
 
     <h2>👥 Referral Commission</h2>
 
-
     <div class="item">
 
-        <b>
-            Level A
-        </b>
+        <b>Level A</b>
 
         <span style="float:right">
             1%
@@ -724,12 +608,9 @@ button:disabled{
 
     </div>
 
-
     <div class="item">
 
-        <b>
-            Level B
-        </b>
+        <b>Level B</b>
 
         <span style="float:right">
             0.5%
@@ -737,12 +618,9 @@ button:disabled{
 
     </div>
 
-
     <div class="item">
 
-        <b>
-            Level C
-        </b>
+        <b>Level C</b>
 
         <span style="float:right">
             0.2%
@@ -752,12 +630,9 @@ button:disabled{
 
 </div>
 
-
 </div>
 
-
 <script>
-
 
 /* =====================================================
    SUPABASE
@@ -766,10 +641,8 @@ button:disabled{
 const SUPABASE_URL =
 "https://lozluohksmjxbxixkbmq.supabase.co";
 
-
 const SUPABASE_KEY =
 "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
-
 
 const supabaseClient =
 supabase.createClient(
@@ -789,31 +662,22 @@ function money(value){
 
 }
 
-
 function commissionRate(amount){
 
     const n =
         Number(amount || 0);
 
-
     if(n >= 20000){
-
         return 0.10;
-
     }
-
 
     if(n >= 10000){
-
         return 0.08;
-
     }
-
 
     return 0.06;
 
 }
-
 
 function commissionAmount(amount){
 
@@ -822,37 +686,28 @@ function commissionAmount(amount){
 
 }
 
-
 function statusBadge(status){
 
     const s =
         String(status || "pending")
         .toLowerCase();
 
-
     let cls = "pending";
-
 
     if(
         s === "approved" ||
         s === "success" ||
         s === "successful"
     ){
-
         cls = "approved";
-
     }
-
 
     if(
         s === "rejected" ||
         s === "failed"
     ){
-
         cls = "rejected";
-
     }
-
 
     return `
         <span class="badge ${cls}">
@@ -864,7 +719,7 @@ function statusBadge(status){
 
 
 /* =====================================================
-   COMPACT APPROVED MESSAGE
+   APPROVED TOAST
 ===================================================== */
 
 function showApprovedToast(amount){
@@ -874,21 +729,15 @@ function showApprovedToast(amount){
             ".approvedToast"
         );
 
-
     if(old){
-
         old.remove();
-
     }
-
 
     const toast =
         document.createElement("div");
 
-
     toast.className =
         "approvedToast";
-
 
     toast.innerHTML = `
 
@@ -902,15 +751,11 @@ function showApprovedToast(amount){
 
     `;
 
-
     document.body.appendChild(toast);
-
 
     setTimeout(
         function(){
-
             toast.remove();
-
         },
         2500
     );
@@ -929,7 +774,6 @@ async function loadPaymentSettings(){
             "paymentStatus"
         );
 
-
     const {
         data,
         error
@@ -939,7 +783,6 @@ async function loadPaymentSettings(){
         .select("id,upi_id,qr_url,updated_at")
         .eq("id",1)
         .maybeSingle();
-
 
     if(error){
 
@@ -953,7 +796,6 @@ async function loadPaymentSettings(){
 
     }
 
-
     if(!data){
 
         status.className =
@@ -966,35 +808,29 @@ async function loadPaymentSettings(){
 
     }
 
-
     document.getElementById(
         "currentUpi"
     ).textContent =
         data.upi_id || "-";
-
 
     document.getElementById(
         "currentQr"
     ).textContent =
         data.qr_url || "-";
 
-
     document.getElementById(
         "paymentUpi"
     ).value =
         data.upi_id || "";
-
 
     document.getElementById(
         "paymentQr"
     ).value =
         data.qr_url || "";
 
-
     showQrPreview(
         data.qr_url
     );
-
 
     status.className =
         "status success";
@@ -1016,7 +852,6 @@ function showQrPreview(url){
             "qrPreviewBox"
         );
 
-
     if(!url){
 
         box.innerHTML = "";
@@ -1024,7 +859,6 @@ function showQrPreview(url){
         return;
 
     }
-
 
     box.innerHTML = `
 
@@ -1078,25 +912,21 @@ async function savePaymentSettings(){
         .value
         .trim();
 
-
     const qr =
         document
         .getElementById("paymentQr")
         .value
         .trim();
 
-
     const status =
         document.getElementById(
             "paymentStatus"
         );
 
-
     const button =
         document.getElementById(
             "savePaymentBtn"
         );
-
 
     if(!upi){
 
@@ -1110,7 +940,6 @@ async function savePaymentSettings(){
 
     }
 
-
     if(!qr){
 
         status.className =
@@ -1123,12 +952,10 @@ async function savePaymentSettings(){
 
     }
 
-
     button.disabled = true;
 
     button.textContent =
         "Saving...";
-
 
     const {
         error
@@ -1142,12 +969,10 @@ async function savePaymentSettings(){
         })
         .eq("id",1);
 
-
     button.disabled = false;
 
     button.textContent =
         "💾 Save Payment Settings";
-
 
     if(error){
 
@@ -1161,21 +986,17 @@ async function savePaymentSettings(){
 
     }
 
-
     document.getElementById(
         "currentUpi"
     ).textContent =
         upi;
-
 
     document.getElementById(
         "currentQr"
     ).textContent =
         qr;
 
-
     showQrPreview(qr);
-
 
     status.className =
         "status success";
@@ -1198,21 +1019,17 @@ async function searchCustomer(){
         .value
         .trim();
 
-
     const status =
         document.getElementById(
             "searchStatus"
         );
-
 
     const box =
         document.getElementById(
             "customerDetails"
         );
 
-
     box.innerHTML = "";
-
 
     if(!search){
 
@@ -1226,20 +1043,16 @@ async function searchCustomer(){
 
     }
 
-
     status.className =
         "status";
 
     status.textContent =
         "Searching customer...";
 
-
     const upperSearch =
         search.toUpperCase();
 
-
     let result;
-
 
     if(
         upperSearch.startsWith("SP") ||
@@ -1255,7 +1068,6 @@ async function searchCustomer(){
 
     }
 
-
     else{
 
         result =
@@ -1270,14 +1082,11 @@ async function searchCustomer(){
 
     }
 
-
     const customer =
         result.data;
 
-
     const error =
         result.error;
-
 
     if(error){
 
@@ -1291,7 +1100,6 @@ async function searchCustomer(){
 
     }
 
-
     if(!customer){
 
         status.className =
@@ -1304,9 +1112,7 @@ async function searchCustomer(){
 
     }
 
-
     renderCustomer(customer);
-
 
     status.className =
         "status success";
@@ -1328,26 +1134,20 @@ function renderCustomer(customer){
             "customerDetails"
         );
 
-
     const wallet =
         Number(customer.wallet_balance || 0);
-
 
     const bonus =
         Number(customer.bonus_balance || 0);
 
-
     const depositBalance =
         Number(customer.deposit_balance || 0);
-
 
     const commission =
         Number(customer.commission_balance || 0);
 
-
     const referral =
         Number(customer.referral_balance || 0);
-
 
     box.innerHTML = `
 
@@ -1357,143 +1157,96 @@ function renderCustomer(customer){
                 👤 ${customer.name || "-"}
             </h3>
 
-
             <div class="row">
-
-                <span class="label">
-                    UID
-                </span>
-
+                <span class="label">UID</span>
                 <span class="value">
                     ${customer.uid || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
-                <span class="label">
-                    Mobile
-                </span>
-
+                <span class="label">Mobile</span>
                 <span class="value">
                     ${customer.mobile || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Invitation Code
                 </span>
-
                 <span class="value">
                     ${customer.invitation_code || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Referred By
                 </span>
-
                 <span class="value">
                     ${customer.referred_by || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Account Status
                 </span>
-
                 <span class="value">
                     ${customer.status || "Active"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Wallet Balance
                 </span>
-
                 <span class="value">
                     ${money(wallet)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     ₹99 Bonus
                 </span>
-
                 <span class="value">
                     ${money(bonus)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Deposit Balance
                 </span>
-
                 <span class="value">
                     ${money(depositBalance)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Commission Balance
                 </span>
-
                 <span class="value">
                     ${money(commission)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Referral Income
                 </span>
-
                 <span class="value">
                     ${money(referral)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Sell Status
                 </span>
-
                 <span class="value">
                     ${
                         customer.sell_on
@@ -1501,20 +1254,15 @@ function renderCustomer(customer){
                         : "🔴 OFF"
                     }
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     UPI ID
                 </span>
-
                 <span class="value">
                     ${customer.upi_id || "-"}
                 </span>
-
             </div>
 
         </div>
@@ -1525,7 +1273,7 @@ function renderCustomer(customer){
 
 
 /* =====================================================
-   CLEAR CUSTOMER SEARCH
+   CLEAR SEARCH
 ===================================================== */
 
 function clearCustomerSearch(){
@@ -1534,21 +1282,17 @@ function clearCustomerSearch(){
         "customerSearch"
     ).value = "";
 
-
     document.getElementById(
         "customerDetails"
     ).innerHTML = "";
-
 
     const status =
         document.getElementById(
             "searchStatus"
         );
 
-
     status.className =
         "status";
-
 
     status.textContent =
         "Ready to search.";
@@ -1572,12 +1316,10 @@ async function loadAdminTotals(){
             head:true
         });
 
-
     document.getElementById(
         "totalCustomers"
     ).textContent =
         customerCount || 0;
-
 
     const {
         data:deposits
@@ -1586,19 +1328,14 @@ async function loadAdminTotals(){
         .from("customer_deposits")
         .select("amount,status,commission");
 
-
     let totalDeposit = 0;
-
     let totalCommission = 0;
-
     let pendingCount = 0;
-
 
     (deposits || []).forEach(d => {
 
         const amount =
             Number(d.amount || 0);
-
 
         if(
             String(d.status)
@@ -1608,7 +1345,6 @@ async function loadAdminTotals(){
 
             totalDeposit +=
                 amount;
-
 
             if(
                 d.commission !== null &&
@@ -1633,7 +1369,6 @@ async function loadAdminTotals(){
 
         }
 
-
         if(
             String(d.status)
             .toLowerCase()
@@ -1646,18 +1381,15 @@ async function loadAdminTotals(){
 
     });
 
-
     document.getElementById(
         "totalDeposits"
     ).textContent =
         money(totalDeposit);
 
-
     document.getElementById(
         "totalCommission"
     ).textContent =
         money(totalCommission);
-
 
     document.getElementById(
         "pendingDeposits"
@@ -1678,10 +1410,8 @@ async function loadDeposits(){
             "depositList"
         );
 
-
     box.innerHTML =
         "<p>Loading deposits...</p>";
-
 
     const {
         data,
@@ -1693,7 +1423,6 @@ async function loadDeposits(){
         .order("id",{
             ascending:false
         });
-
 
     if(error){
 
@@ -1707,7 +1436,6 @@ async function loadDeposits(){
         return;
 
     }
-
 
     if(
         !data ||
@@ -1725,7 +1453,6 @@ async function loadDeposits(){
 
     }
 
-
     box.innerHTML =
     data.map(d => {
 
@@ -1734,17 +1461,14 @@ async function loadDeposits(){
                 d.amount
             ) * 100;
 
-
         const calculatedCommission =
             Number(
                 d.commission ??
                 commissionAmount(d.amount)
             );
 
-
         const screenshot =
             d.payment_proof || "";
-
 
         return `
 
@@ -1754,91 +1478,65 @@ async function loadDeposits(){
                 💰 Deposit #${d.id}
             </h3>
 
-
             <div class="row">
-
                 <span class="label">
                     Amount
                 </span>
-
                 <span class="value">
                     ${money(d.amount)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Status
                 </span>
-
                 <span class="value">
                     ${statusBadge(d.status)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Commission Rate
                 </span>
-
                 <span class="value">
                     ${rate}%
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Commission
                 </span>
-
                 <span class="value">
                     ${money(calculatedCommission)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Customer ID
                 </span>
-
                 <span class="value">
                     ${d.customer_id || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     UTR
                 </span>
-
                 <span class="value">
                     ${d.utr || "-"}
                 </span>
-
             </div>
-
 
             <div class="paymentProofBox">
 
                 <div class="paymentProofTitle">
                     📸 Payment Screenshot
                 </div>
-
 
                 ${
                     screenshot
@@ -1875,7 +1573,6 @@ async function loadDeposits(){
 
             </div>
 
-
             <div class="row">
 
                 <span class="label">
@@ -1893,7 +1590,6 @@ async function loadDeposits(){
                 </span>
 
             </div>
-
 
             <div class="actions">
 
@@ -1914,7 +1610,6 @@ async function loadDeposits(){
                     >
                         ✅ Approve
                     </button>
-
 
                     <button
                         class="red"
@@ -1952,7 +1647,6 @@ async function loadDeposits(){
 
 /* =====================================================
    UPDATE DEPOSIT
-   SECURE APPROVAL THROUGH DATABASE RPC
 ===================================================== */
 
 async function updateDeposit(
@@ -1965,24 +1659,14 @@ async function updateDeposit(
         ? "approve"
         : "reject";
 
-
     const confirmed =
         confirm(
             `Are you sure you want to ${action} this deposit?`
         );
 
-
     if(!confirmed){
-
         return;
-
     }
-
-
-    /* =================================================
-       APPROVE
-       SECURE DATABASE FUNCTION
-    ================================================= */
 
     if(status === "approved"){
 
@@ -1997,7 +1681,6 @@ async function updateDeposit(
             }
         );
 
-
         if(error){
 
             alert(
@@ -2008,7 +1691,6 @@ async function updateDeposit(
             return;
 
         }
-
 
         if(
             !data ||
@@ -2023,15 +1705,9 @@ async function updateDeposit(
 
         }
 
-
-        /* =============================================
-           COMPACT SUCCESS MESSAGE
-        ============================================= */
-
         showApprovedToast(
             data.amount
         );
-
 
         await loadDeposits();
 
@@ -2040,11 +1716,6 @@ async function updateDeposit(
         return;
 
     }
-
-
-    /* =================================================
-       REJECT
-    ================================================= */
 
     const {
         error
@@ -2055,7 +1726,6 @@ async function updateDeposit(
             status:"rejected"
         })
         .eq("id",id);
-
 
     if(error){
 
@@ -2068,11 +1738,9 @@ async function updateDeposit(
 
     }
 
-
     alert(
         "✅ Deposit rejected successfully."
     );
-
 
     await loadDeposits();
 
@@ -2092,10 +1760,8 @@ async function loadCustomers(){
             "customerList"
         );
 
-
     box.innerHTML =
         "<p>Loading customers...</p>";
-
 
     const {
         data,
@@ -2113,7 +1779,6 @@ async function loadCustomers(){
             }
         );
 
-
     if(error){
 
         box.innerHTML =
@@ -2126,7 +1791,6 @@ async function loadCustomers(){
         return;
 
     }
-
 
     if(
         !data ||
@@ -2144,7 +1808,6 @@ async function loadCustomers(){
 
     }
 
-
     box.innerHTML =
     data.map(c => `
 
@@ -2154,130 +1817,91 @@ async function loadCustomers(){
                 👤 ${c.name || "-"}
             </h3>
 
-
             <div class="row">
-
                 <span class="label">
                     UID
                 </span>
-
                 <span class="value">
                     ${c.uid || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Mobile
                 </span>
-
                 <span class="value">
                     ${c.mobile || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Invitation Code
                 </span>
-
                 <span class="value">
                     ${c.invitation_code || "-"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Wallet
                 </span>
-
                 <span class="value">
                     ${money(c.wallet_balance)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Deposit Balance
                 </span>
-
                 <span class="value">
                     ${money(c.deposit_balance)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Commission
                 </span>
-
                 <span class="value">
                     ${money(c.commission_balance)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Referral
                 </span>
-
                 <span class="value">
                     ${money(c.referral_balance)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Bonus
                 </span>
-
                 <span class="value">
                     ${money(c.bonus_balance)}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Status
                 </span>
-
                 <span class="value">
                     ${c.status || "Active"}
                 </span>
-
             </div>
 
-
             <div class="row">
-
                 <span class="label">
                     Sell
                 </span>
-
                 <span class="value">
                     ${
                         c.sell_on
@@ -2285,7 +1909,6 @@ async function loadCustomers(){
                         : "🔴 OFF"
                     }
                 </span>
-
             </div>
 
         </div>
@@ -2322,14 +1945,12 @@ setInterval(
     30000
 );
 
-
 setInterval(
     loadDeposits,
     30000
 );
 
-
 </script>
 
 </body>
-        </html>
+    </html>
