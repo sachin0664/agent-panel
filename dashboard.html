@@ -1320,8 +1320,6 @@ input:focus-visible{
         </a>
 
 
-        <!-- WALLET CONNECTED -->
-
         <a href="wallet.html">
 
             <span class="sidebar-icon">
@@ -1362,8 +1360,6 @@ input:focus-visible{
         </div>
 
 
-        <!-- SUPPORT CONNECTED -->
-
         <div class="sidebar-support">
 
             <a href="support.html">
@@ -1376,8 +1372,6 @@ input:focus-visible{
 
         </div>
 
-
-        <!-- SECURE LOGOUT -->
 
         <div class="sidebar-logout">
 
@@ -1403,8 +1397,6 @@ input:focus-visible{
 <div class="container">
 
 
-    <!-- PAGE INTRO -->
-
     <section class="page-intro">
 
         <h2>
@@ -1417,8 +1409,6 @@ input:focus-visible{
 
     </section>
 
-
-    <!-- PROFILE -->
 
     <div class="profile-card">
 
@@ -1467,10 +1457,6 @@ input:focus-visible{
     </div>
 
 
-    <!-- =====================================
-         WALLET
-    ====================================== -->
-
     <div
         class="wallet"
         id="wallet-section">
@@ -1518,10 +1504,6 @@ input:focus-visible{
 
     </div>
 
-
-    <!-- =====================================
-         BALANCE CARDS
-    ====================================== -->
 
     <div class="cards">
 
@@ -1590,10 +1572,6 @@ input:focus-visible{
 
     </div>
 
-
-    <!-- =====================================
-         COMMISSION RULES
-    ====================================== -->
 
     <div class="commission-box">
 
@@ -1720,10 +1698,6 @@ input:focus-visible{
     </div>
 
 
-    <!-- =====================================
-         SELL CONTROL
-    ====================================== -->
-
     <div class="sell-box">
 
         <div class="sell-header">
@@ -1773,10 +1747,6 @@ input:focus-visible{
 
     </div>
 
-
-    <!-- =====================================
-         QUICK ACTIONS
-    ====================================== -->
 
     <h3 class="section-title">
         Quick Actions
@@ -1851,8 +1821,6 @@ input:focus-visible{
         </a>
 
 
-        <!-- SUPPORT CONNECTED -->
-
         <a
             class="action"
             href="support.html">
@@ -1867,10 +1835,6 @@ input:focus-visible{
 
     </div>
 
-
-    <!-- =====================================
-         REFERRAL
-    ====================================== -->
 
     <div class="referral-box">
 
@@ -2047,25 +2011,56 @@ function getTodayRange(){
         new Date();
 
 
+    const parts =
+        new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone:"Asia/Kolkata",
+                year:"numeric",
+                month:"2-digit",
+                day:"2-digit"
+            }
+        ).formatToParts(now);
+
+
+    const map = {};
+
+
+    parts.forEach(
+        function(part){
+
+            if(part.type !== "literal"){
+
+                map[part.type] =
+                    part.value;
+
+            }
+
+        }
+    );
+
+
     const start =
         new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate()
+            `${map.year}-${map.month}-${map.day}T00:00:00+05:30`
         );
 
 
     const end =
         new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate() + 1
+            start.getTime() +
+            86400000
         );
 
 
     return {
-        start:start.toISOString(),
-        end:end.toISOString()
+
+        start:
+            start.toISOString(),
+
+        end:
+            end.toISOString()
+
     };
 
 }
@@ -2084,6 +2079,131 @@ async function loadTodayEarnings(
 
 
     let total = 0;
+
+
+    /* =====================================
+       PRIMARY SOURCE:
+       WALLET LEDGER COMMISSION CREDIT
+    ===================================== */
+
+    const {
+        data: ledger,
+        error: ledgerError
+    } =
+        await supabaseClient
+        .from("wallet_ledger")
+        .select(`
+            component,
+            direction,
+            amount,
+            reason,
+            reference,
+            created_at
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .eq(
+            "direction",
+            "credit"
+        )
+        .gte(
+            "created_at",
+            range.start
+        )
+        .lt(
+            "created_at",
+            range.end
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+
+    /* =====================================
+       USE LEDGER WHEN AVAILABLE
+    ===================================== */
+
+    if(!ledgerError){
+
+        if(ledger){
+
+            ledger.forEach(
+                function(row){
+
+                    const component =
+                        String(
+                            row.component ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const reason =
+                        String(
+                            row.reason ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const reference =
+                        String(
+                            row.reference ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const isCommission =
+                        component.includes(
+                            "commission"
+                        ) ||
+                        reason.includes(
+                            "commission"
+                        ) ||
+                        reference.includes(
+                            "commission"
+                        );
+
+
+                    if(isCommission){
+
+                        total +=
+                            Number(
+                                row.amount ||
+                                0
+                            );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        document.getElementById(
+            "todayEarnings"
+        ).innerText =
+            formatMoney(total);
+
+
+        return;
+
+    }
+
+
+    /* =====================================
+       FALLBACK:
+       OLD COMMISSION TABLES
+    ===================================== */
+
+    console.error(
+        "Wallet ledger earnings error:",
+        ledgerError
+    );
 
 
     /* =====================================
@@ -2136,7 +2256,8 @@ async function loadTodayEarnings(
 
                 total +=
                     Number(
-                        row.commission || 0
+                        row.commission ||
+                        0
                     );
 
             }
@@ -2195,7 +2316,8 @@ async function loadTodayEarnings(
 
                 total +=
                     Number(
-                        row.commission_amount || 0
+                        row.commission_amount ||
+                        0
                     );
 
             }
@@ -2368,9 +2490,6 @@ async function loadDashboard(){
 
         /* =================================
            WALLET
-
-           Wallet is synced in database
-           from the four balance fields.
         ================================= */
 
         const wallet =
