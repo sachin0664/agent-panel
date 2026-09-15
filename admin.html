@@ -56,6 +56,13 @@ body{
     border-radius:10px;
     font-size:13px;
     font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.headerBtn:hover{
+    background:rgba(255,255,255,.28);
 }
 
 .container{
@@ -510,6 +517,15 @@ body.pageReady{
 
     <div class="headerActions">
 
+        <!-- ADMIN WALLET -->
+        <a
+            href="admin-wallet.html"
+            class="headerBtn"
+        >
+            💰 Admin Wallet
+        </a>
+
+        <!-- SECURITY -->
         <button
             class="headerBtn"
             onclick="openSecurity()"
@@ -517,6 +533,7 @@ body.pageReady{
             🔐 Security
         </button>
 
+        <!-- LOGOUT -->
         <button
             class="headerBtn"
             onclick="logoutAdmin()"
@@ -1232,11 +1249,6 @@ async function changeAdminPassword(){
         "Verifying current password...";
 
     try{
-
-        /*
-          Re-authenticate the admin using the
-          current password before changing it.
-        */
 
         const {
             error:loginError
