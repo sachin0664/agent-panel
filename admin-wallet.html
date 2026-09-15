@@ -19,6 +19,14 @@ body{
     color:#17233d;
 }
 
+body.pageLocked{
+    visibility:hidden;
+}
+
+body.pageReady{
+    visibility:visible;
+}
+
 header{
     background:linear-gradient(135deg,#2563eb,#7c3aed);
     color:#fff;
@@ -48,7 +56,17 @@ header{
     font-weight:500;
 }
 
-.back-btn{
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.back-btn,
+.security-btn,
+.logout-btn{
     color:#fff;
     text-decoration:none;
     padding:10px 15px;
@@ -57,6 +75,11 @@ header{
     border:1px solid rgba(255,255,255,.35);
     font-size:13px;
     font-weight:700;
+    cursor:pointer;
+}
+
+.logout-btn{
+    background:rgba(220,38,38,.28);
 }
 
 .container{
@@ -655,6 +678,31 @@ td{
     margin-bottom:15px;
 }
 
+.modal-field{
+    margin-top:13px;
+}
+
+.modal-field label{
+    display:block;
+    margin-bottom:6px;
+    font-size:12px;
+    font-weight:700;
+    color:#374151;
+}
+
+.modal-field input{
+    width:100%;
+    padding:12px;
+    border:1px solid #dce2ef;
+    border-radius:11px;
+    outline:none;
+    font-size:13px;
+}
+
+.modal-field input:focus{
+    border-color:#6366f1;
+}
+
 .modal-actions{
     display:flex;
     gap:10px;
@@ -663,6 +711,37 @@ td{
 
 .modal-actions button{
     flex:1;
+}
+
+.security-message{
+    display:none;
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:12px;
+    line-height:1.4;
+}
+
+.security-success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+}
+
+.security-error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.security-email{
+    background:#f1f5f9;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:12px;
+    color:#334155;
+    word-break:break-all;
+    margin-bottom:5px;
 }
 
 @media(max-width:1050px){
@@ -692,8 +771,23 @@ td{
         padding:15px;
     }
 
+    .header-inner{
+        align-items:flex-start;
+    }
+
     .logo{
         font-size:20px;
+    }
+
+    .header-actions{
+        max-width:190px;
+    }
+
+    .back-btn,
+    .security-btn,
+    .logout-btn{
+        padding:8px 10px;
+        font-size:11px;
     }
 
     .container{
@@ -748,11 +842,15 @@ td{
     .wallet-total{
         font-size:29px;
     }
+
+    .modal-actions{
+        flex-direction:column;
+    }
 }
 </style>
 </head>
 
-<body>
+<body class="pageLocked">
 
 <header>
     <div class="header-inner">
@@ -762,9 +860,27 @@ td{
             <span>Admin Wallet Management</span>
         </div>
 
-        <a href="admin.html" class="back-btn">
-            ← Admin Panel
-        </a>
+        <div class="header-actions">
+
+            <a href="admin.html" class="back-btn">
+                ← Admin Panel
+            </a>
+
+            <button
+                type="button"
+                class="security-btn"
+                onclick="openSecurity()">
+                🔐 Security
+            </button>
+
+            <button
+                type="button"
+                class="logout-btn"
+                onclick="logoutAdmin()">
+                🚪 Logout
+            </button>
+
+        </div>
 
     </div>
 </header>
@@ -826,7 +942,10 @@ td{
                 autocomplete="off"
             >
 
-            <button class="btn" id="searchBtn" onclick="searchCustomer()">
+            <button
+                class="btn"
+                id="searchBtn"
+                onclick="searchCustomer()">
                 Search
             </button>
 
@@ -1163,7 +1282,7 @@ td{
 </div>
 
 
-<!-- CONFIRM MODAL -->
+<!-- CONFIRM PAYMENT MODAL -->
 
 <div class="modal" id="confirmModal">
 
@@ -1203,9 +1322,130 @@ td{
 </div>
 
 
+<!-- SECURITY MODAL -->
+
+<div class="modal" id="securityModal">
+
+    <div class="modal-box">
+
+        <h3>
+            🔐 Admin Security
+        </h3>
+
+        <p>
+            Change your admin password or securely logout from this device.
+        </p>
+
+        <div class="security-email">
+            Logged in as:
+            <b id="securityEmail">-</b>
+        </div>
+
+
+        <div class="modal-field">
+
+            <label for="currentAdminPassword">
+                Current Password
+            </label>
+
+            <input
+                type="password"
+                id="currentAdminPassword"
+                placeholder="Enter current password"
+                autocomplete="current-password">
+
+        </div>
+
+
+        <div class="modal-field">
+
+            <label for="newAdminPassword">
+                New Password
+            </label>
+
+            <input
+                type="password"
+                id="newAdminPassword"
+                placeholder="Minimum 8 characters"
+                minlength="8"
+                autocomplete="new-password">
+
+        </div>
+
+
+        <div class="modal-field">
+
+            <label for="confirmAdminPassword">
+                Confirm New Password
+            </label>
+
+            <input
+                type="password"
+                id="confirmAdminPassword"
+                placeholder="Confirm new password"
+                minlength="8"
+                autocomplete="new-password">
+
+        </div>
+
+
+        <div
+            id="securityMessage"
+            class="security-message">
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="btn"
+                onclick="closeSecurity()">
+
+                Close
+
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-success"
+                id="changePasswordBtn"
+                onclick="changeAdminPassword()">
+
+                🔑 Change Password
+
+            </button>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                onclick="logoutAdmin()">
+
+                🚪 Logout Admin
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -1214,21 +1454,466 @@ const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
 const supabaseClient =
-    supabase.createClient(
+    window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
 
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let currentAdminUser = null;
 
 let customers = [];
 let upis = [];
 let currentCustomer = null;
 let pendingPayment = null;
 
+let pageInitialized = false;
+let redirecting = false;
 
-/* =========================
+
+/* =====================================================
+   ADMIN SECURITY
+===================================================== */
+
+async function verifyAdminAccess(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.getUser();
+
+
+        if(
+            error ||
+            !data ||
+            !data.user
+        ){
+
+            window.location.replace(
+                "admin-login.html"
+            );
+
+            return false;
+
+        }
+
+
+        currentAdminUser =
+            data.user;
+
+
+        const {
+            data:isAdmin,
+            error:adminError
+        } =
+        await supabaseClient.rpc(
+            "is_admin"
+        );
+
+
+        if(
+            adminError ||
+            isAdmin !== true
+        ){
+
+            console.error(
+                "Admin verification failed:",
+                adminError
+            );
+
+            await supabaseClient.auth.signOut();
+
+            window.location.replace(
+                "admin-login.html"
+            );
+
+            return false;
+
+        }
+
+
+        document.getElementById(
+            "securityEmail"
+        ).textContent =
+            currentAdminUser.email ||
+            "-";
+
+
+        document.body.classList.remove(
+            "pageLocked"
+        );
+
+        document.body.classList.add(
+            "pageReady"
+        );
+
+
+        return true;
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Admin access error:",
+            error
+        );
+
+        window.location.replace(
+            "admin-login.html"
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logoutAdmin(){
+
+    if(redirecting) return;
+
+    redirecting = true;
+
+    try{
+
+        await supabaseClient.auth.signOut();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }
+
+    window.location.replace(
+        "admin-login.html"
+    );
+
+}
+
+
+/* =====================================================
+   SECURITY MODAL
+===================================================== */
+
+function openSecurity(){
+
+    if(!currentAdminUser) return;
+
+
+    document.getElementById(
+        "securityEmail"
+    ).textContent =
+        currentAdminUser.email ||
+        "-";
+
+
+    document.getElementById(
+        "securityModal"
+    ).style.display =
+        "flex";
+
+
+    hideSecurityMessage();
+
+}
+
+
+function closeSecurity(){
+
+    document.getElementById(
+        "securityModal"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "currentAdminPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "newAdminPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "confirmAdminPassword"
+    ).value = "";
+
+
+    hideSecurityMessage();
+
+}
+
+
+function showSecurityMessage(
+    text,
+    type
+){
+
+    const el =
+        document.getElementById(
+            "securityMessage"
+        );
+
+
+    el.textContent =
+        text;
+
+
+    el.className =
+        "security-message " +
+        (
+            type === "error"
+            ? "security-error"
+            : "security-success"
+        );
+
+}
+
+
+function hideSecurityMessage(){
+
+    const el =
+        document.getElementById(
+            "securityMessage"
+        );
+
+
+    el.textContent = "";
+
+    el.className =
+        "security-message";
+
+}
+
+
+/* =====================================================
+   CHANGE ADMIN PASSWORD
+===================================================== */
+
+async function changeAdminPassword(){
+
+    if(!currentAdminUser){
+
+        showSecurityMessage(
+            "Admin session not found. Please login again.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const currentPassword =
+        document.getElementById(
+            "currentAdminPassword"
+        ).value;
+
+
+    const newPassword =
+        document.getElementById(
+            "newAdminPassword"
+        ).value;
+
+
+    const confirmPassword =
+        document.getElementById(
+            "confirmAdminPassword"
+        ).value;
+
+
+    hideSecurityMessage();
+
+
+    if(!currentPassword){
+
+        showSecurityMessage(
+            "Please enter your current password.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(newPassword.length < 8){
+
+        showSecurityMessage(
+            "New password must be at least 8 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        newPassword !==
+        confirmPassword
+    ){
+
+        showSecurityMessage(
+            "New passwords do not match.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        newPassword ===
+        currentPassword
+    ){
+
+        showSecurityMessage(
+            "New password must be different from the current password.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "changePasswordBtn"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Updating...";
+
+
+    try{
+
+        /*
+          Re-authenticate first using the current password.
+        */
+
+        const {
+            error:loginError
+        } =
+        await supabaseClient.auth.signInWithPassword({
+            email:
+                currentAdminUser.email,
+
+            password:
+                currentPassword
+        });
+
+
+        if(loginError){
+
+            throw new Error(
+                "Current password is incorrect."
+            );
+
+        }
+
+
+        /*
+          Update password.
+        */
+
+        const {
+            error:updateError
+        } =
+        await supabaseClient.auth.updateUser({
+            password:
+                newPassword
+        });
+
+
+        if(updateError){
+
+            throw updateError;
+
+        }
+
+
+        showSecurityMessage(
+            "✅ Password changed successfully. Please login again with your new password.",
+            "success"
+        );
+
+
+        button.disabled = true;
+
+
+        setTimeout(
+            async function(){
+
+                await supabaseClient.auth.signOut();
+
+                window.location.replace(
+                    "admin-login.html"
+                );
+
+            },
+            1200
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Password change error:",
+            error
+        );
+
+
+        showSecurityMessage(
+            "❌ " +
+            (
+                error.message ||
+                "Unable to change password."
+            ),
+            "error"
+        );
+
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "🔑 Change Password";
+
+    }
+
+}
+
+
+/* =====================================================
    MONEY
-========================= */
+===================================================== */
 
 function money(value){
 
@@ -1244,9 +1929,9 @@ function money(value){
 }
 
 
-/* =========================
+/* =====================================================
    DATE
-========================= */
+===================================================== */
 
 function formatDate(value){
 
@@ -1270,9 +1955,9 @@ function formatDate(value){
 }
 
 
-/* =========================
+/* =====================================================
    ESCAPE HTML
-========================= */
+===================================================== */
 
 function esc(value){
 
@@ -1286,9 +1971,9 @@ function esc(value){
 }
 
 
-/* =========================
+/* =====================================================
    MESSAGE
-========================= */
+===================================================== */
 
 function showMessage(
     elementId,
@@ -1301,7 +1986,9 @@ function showMessage(
             elementId
         );
 
+
     el.textContent = text;
+
 
     el.className =
         "message " +
@@ -1321,16 +2008,19 @@ function hideMessage(elementId){
             elementId
         );
 
-    el.className = "message";
+
+    el.className =
+        "message";
+
 
     el.textContent = "";
 
 }
 
 
-/* =========================
+/* =====================================================
    LOAD CUSTOMERS
-========================= */
+===================================================== */
 
 async function loadCustomers(){
 
@@ -1339,6 +2029,7 @@ async function loadCustomers(){
             "customersGrid"
         );
 
+
     grid.innerHTML = `
         <div class="loading">
             Loading customers...
@@ -1346,7 +2037,10 @@ async function loadCustomers(){
     `;
 
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
         .from("customers")
         .select(`
@@ -1373,18 +2067,21 @@ async function loadCustomers(){
 
         console.error(error);
 
+
         grid.innerHTML = `
             <div class="empty">
                 Unable to load customers.
             </div>
         `;
 
+
         return;
 
     }
 
 
-    customers = data || [];
+    customers =
+        data || [];
 
 
     document.getElementById(
@@ -1400,13 +2097,16 @@ async function loadCustomers(){
 }
 
 
-/* =========================
+/* =====================================================
    LOAD ALL UPIS
-========================= */
+===================================================== */
 
 async function loadAllUpis(){
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
         .from("customer_upis")
         .select(`
@@ -1437,34 +2137,39 @@ async function loadAllUpis(){
     }
 
 
-    upis = data || [];
+    upis =
+        data || [];
 
 }
 
 
-/* =========================
+/* =====================================================
    GLOBAL STATS
-========================= */
+===================================================== */
 
 async function calculateGlobalStats(){
 
     let wallet = 0;
+
     let deposit = 0;
 
 
-    customers.forEach(c => {
+    customers.forEach(
+        c => {
 
-        wallet +=
-            Number(
-                c.wallet_balance || 0
-            );
+            wallet +=
+                Number(
+                    c.wallet_balance || 0
+                );
 
-        deposit +=
-            Number(
-                c.deposit_balance || 0
-            );
 
-    });
+            deposit +=
+                Number(
+                    c.deposit_balance || 0
+                );
+
+        }
+    );
 
 
     const {
@@ -1474,7 +2179,10 @@ async function calculateGlobalStats(){
         await supabaseClient
         .from("withdrawal_requests")
         .select("amount")
-        .eq("status","approved");
+        .eq(
+            "status",
+            "approved"
+        );
 
 
     let payments = 0;
@@ -1482,12 +2190,16 @@ async function calculateGlobalStats(){
 
     if(!error){
 
-        (data || []).forEach(row => {
+        (data || []).forEach(
+            row => {
 
-            payments +=
-                Number(row.amount || 0);
+                payments +=
+                    Number(
+                        row.amount || 0
+                    );
 
-        });
+            }
+        );
 
     }
 
@@ -1512,9 +2224,9 @@ async function calculateGlobalStats(){
 }
 
 
-/* =========================
+/* =====================================================
    RENDER CUSTOMER CARDS
-========================= */
+===================================================== */
 
 function renderCustomers(
     list = customers
@@ -1540,90 +2252,92 @@ function renderCustomers(
 
 
     grid.innerHTML =
-        list.map(customer => {
+        list.map(
+            customer => {
 
-            const customerUpis =
-                upis.filter(
-                    u =>
-                        u.customer_id ===
-                        customer.id
-                );
+                const customerUpis =
+                    upis.filter(
+                        u =>
+                            u.customer_id ===
+                            customer.id
+                    );
 
 
-            return `
-                <div
-                    class="customer-card"
-                    onclick="openCustomer('${esc(customer.id)}')">
+                return `
+                    <div
+                        class="customer-card"
+                        onclick="openCustomer('${esc(customer.id)}')">
 
-                    <div class="customer-top">
+                        <div class="customer-top">
 
-                        <div>
+                            <div>
 
-                            <div class="customer-name">
-                                ${esc(customer.name || "Customer")}
+                                <div class="customer-name">
+                                    ${esc(customer.name || "Customer")}
+                                </div>
+
+                                <div class="customer-uid">
+                                    UID: ${esc(customer.uid || "-")}
+                                </div>
+
                             </div>
 
-                            <div class="customer-uid">
-                                UID: ${esc(customer.uid || "-")}
+                            <div class="status">
+                                ${esc(String(customer.status || "ACTIVE").toUpperCase())}
                             </div>
 
                         </div>
 
-                        <div class="status">
-                            ${esc(String(customer.status || "ACTIVE").toUpperCase())}
-                        </div>
 
-                    </div>
+                        <div class="customer-money">
 
+                            <div class="money-box">
 
-                    <div class="customer-money">
+                                <small>
+                                    Wallet
+                                </small>
 
-                        <div class="money-box">
+                                <strong>
+                                    ${money(customer.wallet_balance)}
+                                </strong>
 
-                            <small>
-                                Wallet
-                            </small>
-
-                            <strong>
-                                ${money(customer.wallet_balance)}
-                            </strong>
-
-                        </div>
+                            </div>
 
 
-                        <div class="money-box">
+                            <div class="money-box">
 
-                            <small>
-                                Deposit
-                            </small>
+                                <small>
+                                    Deposit
+                                </small>
 
-                            <strong>
-                                ${money(customer.deposit_balance)}
-                            </strong>
+                                <strong>
+                                    ${money(customer.deposit_balance)}
+                                </strong>
+
+                            </div>
 
                         </div>
 
+
+                        <div class="customer-payment">
+
+                            UPI IDs:
+                            ${customerUpis.length}
+
+                        </div>
+
                     </div>
+                `;
 
-
-                    <div class="customer-payment">
-
-                        UPI IDs:
-                        ${customerUpis.length}
-
-                    </div>
-
-                </div>
-            `;
-
-        }).join("");
+            }
+        ).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    SEARCH
-========================= */
+===================================================== */
 
 async function searchCustomer(){
 
@@ -1631,6 +2345,7 @@ async function searchCustomer(){
         document.getElementById(
             "uidSearch"
         );
+
 
     const uid =
         input.value.trim();
@@ -1659,19 +2374,24 @@ async function searchCustomer(){
             c =>
                 String(c.uid || "")
                 .toLowerCase()
-                === uid.toLowerCase()
+                ===
+                uid.toLowerCase()
         );
 
 
     if(found){
 
-        openCustomer(found.id);
+        openCustomer(
+            found.id
+        );
+
 
         showMessage(
             "searchMessage",
             "Customer found.",
             "success"
         );
+
 
         return;
 
@@ -1687,9 +2407,9 @@ async function searchCustomer(){
 }
 
 
-/* =========================
+/* =====================================================
    OPEN CUSTOMER
-========================= */
+===================================================== */
 
 async function openCustomer(
     customerId
@@ -1716,42 +2436,47 @@ async function openCustomer(
     }
 
 
-    currentCustomer = customer;
+    currentCustomer =
+        customer;
 
 
     document.getElementById(
         "detailsCard"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     document.getElementById(
         "detailName"
     ).textContent =
-        customer.name || "Customer";
+        customer.name ||
+        "Customer";
 
 
     document.getElementById(
         "detailUid"
     ).textContent =
-        customer.uid || "-";
+        customer.uid ||
+        "-";
 
 
     document.getElementById(
         "detailMobile"
     ).textContent =
-        customer.mobile || "-";
+        customer.mobile ||
+        "-";
 
 
     document.getElementById(
         "detailStatus"
     ).textContent =
         String(
-            customer.status || "-"
+            customer.status ||
+            "-"
         ).toUpperCase();
 
 
     updateCustomerBalances();
-
 
     renderCustomerUpis();
 
@@ -1781,9 +2506,9 @@ async function openCustomer(
 }
 
 
-/* =========================
+/* =====================================================
    UPDATE BALANCES
-========================= */
+===================================================== */
 
 async function updateCustomerBalances(){
 
@@ -1852,12 +2577,16 @@ async function updateCustomerBalances(){
 
     if(!error){
 
-        (data || []).forEach(row => {
+        (data || []).forEach(
+            row => {
 
-            total +=
-                Number(row.amount || 0);
+                total +=
+                    Number(
+                        row.amount || 0
+                    );
 
-        });
+            }
+        );
 
     }
 
@@ -1870,9 +2599,9 @@ async function updateCustomerBalances(){
 }
 
 
-/* =========================
+/* =====================================================
    RENDER UPIS
-========================= */
+===================================================== */
 
 function renderCustomerUpis(){
 
@@ -1900,6 +2629,7 @@ function renderCustomerUpis(){
                 No UPI ID linked with this customer.
             </div>
         `;
+
 
         populateWithdrawalUpis();
 
@@ -2007,9 +2737,9 @@ function renderCustomerUpis(){
 }
 
 
-/* =========================
+/* =====================================================
    ENABLE / DISABLE UPI
-========================= */
+===================================================== */
 
 async function toggleUpi(
     upiId,
@@ -2019,12 +2749,17 @@ async function toggleUpi(
     if(!currentCustomer) return;
 
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
         .from("customer_upis")
         .update({
-            enabled:enabled,
-            updated_at:new Date().toISOString()
+            enabled:
+                enabled,
+
+            updated_at:
+                new Date().toISOString()
         })
         .eq(
             "id",
@@ -2036,11 +2771,13 @@ async function toggleUpi(
 
         console.error(error);
 
+
         showMessage(
             "withdrawMessage",
             "Unable to update UPI.",
             "error"
         );
+
 
         return;
 
@@ -2063,9 +2800,9 @@ async function toggleUpi(
 }
 
 
-/* =========================
+/* =====================================================
    DELETE UPI
-========================= */
+===================================================== */
 
 async function deleteUpi(
     upiId
@@ -2096,7 +2833,9 @@ async function deleteUpi(
     if(!ok) return;
 
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
         .from("customer_upis")
         .delete()
@@ -2110,11 +2849,13 @@ async function deleteUpi(
 
         console.error(error);
 
+
         showMessage(
             "withdrawMessage",
             "Unable to delete UPI. It may be linked with payment history.",
             "error"
         );
+
 
         return;
 
@@ -2135,9 +2876,9 @@ async function deleteUpi(
 }
 
 
-/* =========================
+/* =====================================================
    WITHDRAWAL UPI OPTIONS
-========================= */
+===================================================== */
 
 function populateWithdrawalUpis(){
 
@@ -2166,28 +2907,35 @@ function populateWithdrawalUpis(){
         );
 
 
-    enabledUpis.forEach(u => {
+    enabledUpis.forEach(
+        u => {
 
-        const option =
-            document.createElement(
-                "option"
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                u.id;
+
+
+            option.textContent =
+                u.upi_id +
+                " (" +
+                (
+                    u.provider ||
+                    "Other"
+                ) +
+                ")";
+
+
+            select.appendChild(
+                option
             );
 
-
-        option.value = u.id;
-
-        option.textContent =
-            u.upi_id +
-            " (" +
-            (u.provider || "Other") +
-            ")";
-
-
-        select.appendChild(
-            option
-        );
-
-    });
+        }
+    );
 
 
     if(!enabledUpis.length){
@@ -2197,10 +2945,12 @@ function populateWithdrawalUpis(){
                 "option"
             );
 
+
         option.value = "";
 
         option.textContent =
             "No enabled UPI available";
+
 
         select.appendChild(
             option
@@ -2211,9 +2961,9 @@ function populateWithdrawalUpis(){
 }
 
 
-/* =========================
+/* =====================================================
    APPROVE WITHDRAWAL
-========================= */
+===================================================== */
 
 function approveWithdrawal(){
 
@@ -2250,7 +3000,10 @@ function approveWithdrawal(){
         ).value.trim();
 
 
-    if(!amount || amount <= 0){
+    if(
+        !amount ||
+        amount <= 0
+    ){
 
         showMessage(
             "withdrawMessage",
@@ -2263,9 +3016,11 @@ function approveWithdrawal(){
     }
 
 
-    if(amount >
+    if(
+        amount >
         Number(
-            currentCustomer.wallet_balance || 0
+            currentCustomer.wallet_balance ||
+            0
         )
     ){
 
@@ -2320,7 +3075,8 @@ function approveWithdrawal(){
     if(
         amount <
         Number(
-            selectedUpi.min_amount || 0
+            selectedUpi.min_amount ||
+            0
         )
     ){
 
@@ -2338,7 +3094,8 @@ function approveWithdrawal(){
     if(
         amount >
         Number(
-            selectedUpi.max_amount || 999999999
+            selectedUpi.max_amount ||
+            999999999
         )
     ){
 
@@ -2384,11 +3141,17 @@ function approveWithdrawal(){
     ).innerHTML =
 
         "Customer: <b>" +
-        esc(currentCustomer.name || "Customer") +
+        esc(
+            currentCustomer.name ||
+            "Customer"
+        ) +
         "</b><br>" +
 
         "UID: <b>" +
-        esc(currentCustomer.uid || "-") +
+        esc(
+            currentCustomer.uid ||
+            "-"
+        ) +
         "</b><br><br>" +
 
         "Payment: <b>" +
@@ -2396,7 +3159,9 @@ function approveWithdrawal(){
         "</b><br>" +
 
         "UPI: <b>" +
-        esc(selectedUpi.upi_id) +
+        esc(
+            selectedUpi.upi_id
+        ) +
         "</b><br><br>" +
 
         "Wallet will be debited immediately after approval.";
@@ -2410,9 +3175,9 @@ function approveWithdrawal(){
 }
 
 
-/* =========================
+/* =====================================================
    CONFIRM PAYMENT
-========================= */
+===================================================== */
 
 async function confirmPayment(){
 
@@ -2425,7 +3190,9 @@ async function confirmPayment(){
         );
 
 
-    button.disabled = true;
+    button.disabled =
+        true;
+
 
     button.textContent =
         "Processing...";
@@ -2448,12 +3215,15 @@ async function confirmPayment(){
                     pendingPayment.amount,
 
                 p_note:
-                    pendingPayment.note || null
+                    pendingPayment.note ||
+                    null
             }
         );
 
 
-    button.disabled = false;
+    button.disabled =
+        false;
+
 
     button.textContent =
         "Confirm Payment";
@@ -2463,7 +3233,9 @@ async function confirmPayment(){
 
         console.error(error);
 
+
         closeConfirm();
+
 
         showMessage(
             "withdrawMessage",
@@ -2471,6 +3243,7 @@ async function confirmPayment(){
             "Payment approval failed.",
             "error"
         );
+
 
         return;
 
@@ -2483,13 +3256,16 @@ async function confirmPayment(){
     showMessage(
         "withdrawMessage",
         "Payment approved successfully. Wallet debited by " +
-        money(pendingPayment.amount) +
+        money(
+            pendingPayment.amount
+        ) +
         ".",
         "success"
     );
 
 
-    pendingPayment = null;
+    pendingPayment =
+        null;
 
 
     document.getElementById(
@@ -2512,9 +3288,9 @@ async function confirmPayment(){
 }
 
 
-/* =========================
+/* =====================================================
    REFRESH CUSTOMER
-========================= */
+===================================================== */
 
 async function refreshCustomerData(){
 
@@ -2525,7 +3301,10 @@ async function refreshCustomerData(){
         currentCustomer.id;
 
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
         .from("customers")
         .select(`
@@ -2581,32 +3360,39 @@ async function refreshCustomerData(){
 
     await loadAllUpis();
 
+
     renderCustomers();
+
 
     updateCustomerBalances();
 
+
     renderCustomerUpis();
+
 
     loadWithdrawalHistory(
         data.id
     );
 
+
     loadLedger(
         data.id
     );
 
+
     loadDepositHistory(
         data.id
     );
+
 
     calculateGlobalStats();
 
 }
 
 
-/* =========================
+/* =====================================================
    WITHDRAWAL HISTORY
-========================= */
+===================================================== */
 
 async function loadWithdrawalHistory(
     customerId
@@ -2659,6 +3445,7 @@ async function loadWithdrawalHistory(
 
         console.error(error);
 
+
         body.innerHTML = `
             <tr>
                 <td colspan="5" class="empty">
@@ -2667,12 +3454,16 @@ async function loadWithdrawalHistory(
             </tr>
         `;
 
+
         return;
 
     }
 
 
-    if(!data || !data.length){
+    if(
+        !data ||
+        !data.length
+    ){
 
         body.innerHTML = `
             <tr>
@@ -2682,83 +3473,96 @@ async function loadWithdrawalHistory(
             </tr>
         `;
 
+
         return;
 
     }
 
 
     body.innerHTML =
-        data.map(row => {
+        data.map(
+            row => {
 
-            const upi =
-                upis.find(
-                    u =>
-                        String(u.id) ===
-                        String(row.customer_upi_id)
-                );
-
-
-            const status =
-                String(
-                    row.status || "-"
-                ).toLowerCase();
+                const upi =
+                    upis.find(
+                        u =>
+                            String(u.id) ===
+                            String(
+                                row.customer_upi_id
+                            )
+                    );
 
 
-            return `
-                <tr>
+                const status =
+                    String(
+                        row.status ||
+                        "-"
+                    ).toLowerCase();
 
-                    <td>
-                        ${formatDate(
-                            row.processed_at ||
-                            row.requested_at
-                        )}
-                    </td>
 
-                    <td>
-                        ${esc(
-                            upi
-                            ? upi.upi_id
-                            : "-"
-                        )}
-                    </td>
+                return `
+                    <tr>
 
-                    <td>
-                        <b>
-                            ${money(row.amount)}
-                        </b>
-                    </td>
+                        <td>
+                            ${formatDate(
+                                row.processed_at ||
+                                row.requested_at
+                            )}
+                        </td>
 
-                    <td>
-                        <span class="${
-                            status === "approved"
-                            ? "approved"
-                            : status === "pending"
-                            ? "pending"
-                            : status === "rejected"
-                            ? "rejected"
-                            : status === "failed"
-                            ? "failed"
-                            : ""
-                        }">
-                            ${esc(status.toUpperCase())}
-                        </span>
-                    </td>
+                        <td>
+                            ${esc(
+                                upi
+                                ? upi.upi_id
+                                : "-"
+                            )}
+                        </td>
 
-                    <td>
-                        ${esc(row.note || "-")}
-                    </td>
+                        <td>
+                            <b>
+                                ${money(row.amount)}
+                            </b>
+                        </td>
 
-                </tr>
-            `;
+                        <td>
+                            <span class="${
+                                status === "approved"
+                                ? "approved"
+                                : status === "pending"
+                                ? "pending"
+                                : status === "rejected"
+                                ? "rejected"
+                                : status === "failed"
+                                ? "failed"
+                                : ""
+                            }">
 
-        }).join("");
+                                ${esc(
+                                    status.toUpperCase()
+                                )}
+
+                            </span>
+                        </td>
+
+                        <td>
+                            ${esc(
+                                row.note ||
+                                "-"
+                            )}
+                        </td>
+
+                    </tr>
+                `;
+
+            }
+        ).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    WALLET LEDGER
-========================= */
+===================================================== */
 
 async function loadLedger(
     customerId
@@ -2812,6 +3616,7 @@ async function loadLedger(
 
         console.error(error);
 
+
         body.innerHTML = `
             <tr>
                 <td colspan="7" class="empty">
@@ -2820,12 +3625,16 @@ async function loadLedger(
             </tr>
         `;
 
+
         return;
 
     }
 
 
-    if(!data || !data.length){
+    if(
+        !data ||
+        !data.length
+    ){
 
         body.innerHTML = `
             <tr>
@@ -2835,101 +3644,149 @@ async function loadLedger(
             </tr>
         `;
 
+
         return;
 
     }
 
 
     body.innerHTML =
-        data.map(row => {
+        data.map(
+            row => {
 
-            const component =
-                String(
-                    row.component || "manual"
-                ).toLowerCase();
-
-
-            const direction =
-                String(
-                    row.direction || ""
-                ).toLowerCase();
+                const component =
+                    String(
+                        row.component ||
+                        "manual"
+                    ).toLowerCase();
 
 
-            let badge =
-                "manual-badge";
+                const direction =
+                    String(
+                        row.direction ||
+                        ""
+                    ).toLowerCase();
 
 
-            if(component === "deposit"){
-                badge = "deposit-badge";
+                let badge =
+                    "manual-badge";
+
+
+                if(
+                    component ===
+                    "deposit"
+                ){
+
+                    badge =
+                        "deposit-badge";
+
+                }
+
+
+                if(
+                    component ===
+                    "commission"
+                ){
+
+                    badge =
+                        "commission-badge";
+
+                }
+
+
+                if(
+                    component ===
+                    "referral"
+                ){
+
+                    badge =
+                        "referral-badge";
+
+                }
+
+
+                if(
+                    component ===
+                    "bonus"
+                ){
+
+                    badge =
+                        "bonus-badge";
+
+                }
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            ${formatDate(
+                                row.created_at
+                            )}
+                        </td>
+
+                        <td>
+                            <span class="badge ${badge}">
+                                ${esc(
+                                    component.toUpperCase()
+                                )}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge ${
+                                direction === "credit"
+                                ? "credit-badge"
+                                : "debit-badge"
+                            }">
+
+                                ${esc(
+                                    direction.toUpperCase()
+                                )}
+
+                            </span>
+                        </td>
+
+                        <td>
+                            <b>
+                                ${money(row.amount)}
+                            </b>
+                        </td>
+
+                        <td>
+                            <b>
+                                ${money(
+                                    row.balance_after
+                                )}
+                            </b>
+                        </td>
+
+                        <td>
+                            ${esc(
+                                row.reason ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${esc(
+                                row.reference ||
+                                "-"
+                            )}
+                        </td>
+
+                    </tr>
+                `;
+
             }
-
-            if(component === "commission"){
-                badge = "commission-badge";
-            }
-
-            if(component === "referral"){
-                badge = "referral-badge";
-            }
-
-            if(component === "bonus"){
-                badge = "bonus-badge";
-            }
-
-
-            return `
-                <tr>
-
-                    <td>
-                        ${formatDate(row.created_at)}
-                    </td>
-
-                    <td>
-                        <span class="badge ${badge}">
-                            ${esc(component.toUpperCase())}
-                        </span>
-                    </td>
-
-                    <td>
-                        <span class="badge ${
-                            direction === "credit"
-                            ? "credit-badge"
-                            : "debit-badge"
-                        }">
-                            ${esc(direction.toUpperCase())}
-                        </span>
-                    </td>
-
-                    <td>
-                        <b>
-                            ${money(row.amount)}
-                        </b>
-                    </td>
-
-                    <td>
-                        <b>
-                            ${money(row.balance_after)}
-                        </b>
-                    </td>
-
-                    <td>
-                        ${esc(row.reason || "-")}
-                    </td>
-
-                    <td>
-                        ${esc(row.reference || "-")}
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
+        ).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    DEPOSIT HISTORY
-========================= */
+===================================================== */
 
 async function loadDepositHistory(
     customerId
@@ -2981,6 +3838,7 @@ async function loadDepositHistory(
 
         console.error(error);
 
+
         body.innerHTML = `
             <tr>
                 <td colspan="5" class="empty">
@@ -2989,12 +3847,16 @@ async function loadDepositHistory(
             </tr>
         `;
 
+
         return;
 
     }
 
 
-    if(!data || !data.length){
+    if(
+        !data ||
+        !data.length
+    ){
 
         body.innerHTML = `
             <tr>
@@ -3004,66 +3866,83 @@ async function loadDepositHistory(
             </tr>
         `;
 
+
         return;
 
     }
 
 
     body.innerHTML =
-        data.map(row => {
+        data.map(
+            row => {
 
-            const status =
-                String(
-                    row.status || "-"
-                ).toLowerCase();
+                const status =
+                    String(
+                        row.status ||
+                        "-"
+                    ).toLowerCase();
 
 
-            return `
-                <tr>
+                return `
+                    <tr>
 
-                    <td>
-                        ${formatDate(row.created_at)}
-                    </td>
+                        <td>
+                            ${formatDate(
+                                row.created_at
+                            )}
+                        </td>
 
-                    <td>
-                        <b>
-                            ${money(row.amount)}
-                        </b>
-                    </td>
+                        <td>
+                            <b>
+                                ${money(row.amount)}
+                            </b>
+                        </td>
 
-                    <td>
-                        ${money(row.commission)}
-                    </td>
+                        <td>
+                            ${money(
+                                row.commission
+                            )}
+                        </td>
 
-                    <td>
-                        ${esc(row.utr || "-")}
-                    </td>
+                        <td>
+                            ${esc(
+                                row.utr ||
+                                "-"
+                            )}
+                        </td>
 
-                    <td>
-                        <span class="${
-                            status === "approved"
-                            ? "approved"
-                            : status === "pending"
-                            ? "pending"
-                            : status === "rejected"
-                            ? "rejected"
-                            : ""
-                        }">
-                            ${esc(status.toUpperCase())}
-                        </span>
-                    </td>
+                        <td>
 
-                </tr>
-            `;
+                            <span class="${
+                                status === "approved"
+                                ? "approved"
+                                : status === "pending"
+                                ? "pending"
+                                : status === "rejected"
+                                ? "rejected"
+                                : ""
+                            }">
 
-        }).join("");
+                                ${esc(
+                                    status.toUpperCase()
+                                )}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }
+        ).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    CLOSE DETAILS
-========================= */
+===================================================== */
 
 function closeDetails(){
 
@@ -3072,14 +3951,16 @@ function closeDetails(){
     ).style.display =
         "none";
 
-    currentCustomer = null;
+
+    currentCustomer =
+        null;
 
 }
 
 
-/* =========================
-   MODAL
-========================= */
+/* =====================================================
+   CLOSE CONFIRM
+===================================================== */
 
 function closeConfirm(){
 
@@ -3091,9 +3972,9 @@ function closeConfirm(){
 }
 
 
-/* =========================
+/* =====================================================
    ENTER SEARCH
-========================= */
+===================================================== */
 
 document.getElementById(
     "uidSearch"
@@ -3101,7 +3982,10 @@ document.getElementById(
     "keydown",
     function(event){
 
-        if(event.key === "Enter"){
+        if(
+            event.key ===
+            "Enter"
+        ){
 
             searchCustomer();
 
@@ -3111,11 +3995,30 @@ document.getElementById(
 );
 
 
-/* =========================
+/* =====================================================
    INITIAL LOAD
-========================= */
+===================================================== */
 
 async function init(){
+
+    if(pageInitialized) return;
+
+    pageInitialized = true;
+
+
+    const allowed =
+        await verifyAdminAccess();
+
+
+    if(!allowed){
+
+        pageInitialized =
+            false;
+
+        return;
+
+    }
+
 
     await loadAllUpis();
 
@@ -3124,12 +4027,51 @@ async function init(){
 }
 
 
-/* =========================
+/* =====================================================
    AUTO REFRESH
-========================= */
+===================================================== */
 
 setInterval(
     async function(){
+
+        if(
+            !currentAdminUser ||
+            redirecting
+        ){
+
+            return;
+
+        }
+
+
+        /*
+          Verify that the current session is
+          still valid before refreshing data.
+        */
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.getUser();
+
+
+        if(
+            error ||
+            !data ||
+            !data.user
+        ){
+
+            logoutAdmin();
+
+            return;
+
+        }
+
+
+        currentAdminUser =
+            data.user;
+
 
         await loadAllUpis();
 
@@ -3146,6 +4088,101 @@ setInterval(
     30000
 );
 
+
+/* =====================================================
+   AUTH STATE LISTENER
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+    function(
+        event,
+        session
+    ){
+
+        if(
+            event ===
+            "SIGNED_OUT"
+        ){
+
+            if(
+                !redirecting
+            ){
+
+                redirecting =
+                    true;
+
+                window.location.replace(
+                    "admin-login.html"
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        if(
+            event ===
+            "SIGNED_IN" &&
+            session &&
+            session.user
+        ){
+
+            currentAdminUser =
+                session.user;
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   MODAL OUTSIDE CLICK
+===================================================== */
+
+document.getElementById(
+    "securityModal"
+).addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target ===
+            this
+        ){
+
+            closeSecurity();
+
+        }
+
+    }
+);
+
+
+document.getElementById(
+    "confirmModal"
+).addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target ===
+            this
+        ){
+
+            closeConfirm();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
 
 init();
 
