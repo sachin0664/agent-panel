@@ -7,6 +7,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="customer-guard.js"></script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 
@@ -219,6 +220,7 @@ th{
 
 /* RESPONSIVE */
 @media(max-width:900px){
+
     .sidebar{
         display:none;
     }
@@ -292,15 +294,35 @@ th{
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-    <div class="logo">💳 Sathi Pay</div>
+
+    <div class="logo">
+        💳 Sathi Pay
+    </div>
 
     <nav class="nav">
-        <a href="deshboard.html">🏠 Dashboard</a>
-        <a href="deposit.html">💰 Deposit</a>
-        <a href="earnings.html" class="active">📈 Earnings</a>
-        <a href="referral.html">👥 Referral</a>
-        <a href="profile.html">👤 Profile</a>
+
+        <a href="dashboard.html">
+            🏠 Dashboard
+        </a>
+
+        <a href="deposit.html">
+            💰 Deposit
+        </a>
+
+        <a href="earnings.html" class="active">
+            📈 Earnings
+        </a>
+
+        <a href="referral.html">
+            👥 Referral
+        </a>
+
+        <a href="profile.html">
+            👤 Profile
+        </a>
+
     </nav>
+
 </aside>
 
 
@@ -308,15 +330,32 @@ th{
 <main class="main">
 
     <div class="topbar">
-        <h1>My Earnings</h1>
-        <button class="logout" onclick="logout()">Logout</button>
+
+        <h1>
+            My Earnings
+        </h1>
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
     </div>
 
 
     <!-- TOTAL -->
     <section class="hero">
-        <small>Total Earnings</small>
-        <h2 id="totalEarnings">₹0.00</h2>
+
+        <small>
+            Total Earnings
+        </small>
+
+        <h2 id="totalEarnings">
+            ₹0.00
+        </h2>
+
     </section>
 
 
@@ -324,21 +363,62 @@ th{
     <div class="grid">
 
         <div class="card">
-            <div class="icon">💰</div>
-            <h3>Deposit Commission</h3>
-            <div class="amount" id="depositCommission">₹0.00</div>
+
+            <div class="icon">
+                💰
+            </div>
+
+            <h3>
+                Deposit Commission
+            </h3>
+
+            <div
+                class="amount"
+                id="depositCommission"
+            >
+                ₹0.00
+            </div>
+
         </div>
 
-        <div class="card">
-            <div class="icon">👥</div>
-            <h3>Referral Income</h3>
-            <div class="amount" id="referralIncome">₹0.00</div>
-        </div>
 
         <div class="card">
-            <div class="icon">🎁</div>
-            <h3>Bonus</h3>
-            <div class="amount" id="bonusIncome">₹0.00</div>
+
+            <div class="icon">
+                👥
+            </div>
+
+            <h3>
+                Referral Income
+            </h3>
+
+            <div
+                class="amount"
+                id="referralIncome"
+            >
+                ₹0.00
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🎁
+            </div>
+
+            <h3>
+                Bonus
+            </h3>
+
+            <div
+                class="amount"
+                id="bonusIncome"
+            >
+                ₹0.00
+            </div>
+
         </div>
 
     </div>
@@ -346,79 +426,161 @@ th{
 
     <!-- DEPOSIT COMMISSION RULES -->
     <section class="section">
-        <h2>Deposit Commission Rules</h2>
+
+        <h2>
+            Deposit Commission Rules
+        </h2>
 
         <div class="rules">
 
             <div class="rule">
-                <strong>6%</strong>
-                <span>₹1 – ₹9,999</span>
+
+                <strong>
+                    6%
+                </strong>
+
+                <span>
+                    ₹1 – ₹9,999
+                </span>
+
             </div>
 
-            <div class="rule">
-                <strong>8%</strong>
-                <span>₹10,000 – ₹19,999</span>
-            </div>
 
             <div class="rule">
-                <strong>10%</strong>
-                <span>₹20,000+</span>
+
+                <strong>
+                    8%
+                </strong>
+
+                <span>
+                    ₹10,000 – ₹19,999
+                </span>
+
+            </div>
+
+
+            <div class="rule">
+
+                <strong>
+                    10%
+                </strong>
+
+                <span>
+                    ₹20,000+
+                </span>
+
             </div>
 
         </div>
+
     </section>
 
 
     <!-- REFERRAL RULES -->
     <section class="section">
-        <h2>Referral Commission</h2>
+
+        <h2>
+            Referral Commission
+        </h2>
 
         <div class="rules">
 
             <div class="rule">
-                <strong>1%</strong>
-                <span>Level A</span>
+
+                <strong>
+                    1%
+                </strong>
+
+                <span>
+                    Level A
+                </span>
+
             </div>
 
-            <div class="rule">
-                <strong>0.5%</strong>
-                <span>Level B</span>
-            </div>
 
             <div class="rule">
-                <strong>0.2%</strong>
-                <span>Level C</span>
+
+                <strong>
+                    0.5%
+                </strong>
+
+                <span>
+                    Level B
+                </span>
+
+            </div>
+
+
+            <div class="rule">
+
+                <strong>
+                    0.2%
+                </strong>
+
+                <span>
+                    Level C
+                </span>
+
             </div>
 
         </div>
+
     </section>
 
 
     <!-- HISTORY -->
     <section class="section">
 
-        <h2>Earnings History</h2>
+        <h2>
+            Earnings History
+        </h2>
 
         <div class="table-wrap">
 
             <table>
 
                 <thead>
+
                     <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Level</th>
-                        <th>Amount</th>
-                        <th>Status</th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Level
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
                     </tr>
+
                 </thead>
 
+
                 <tbody id="earningsHistory">
+
                     <tr>
-                        <td colspan="5" class="empty">
+
+                        <td
+                            colspan="5"
+                            class="empty"
+                        >
                             Loading earnings...
                         </td>
+
                     </tr>
+
                 </tbody>
 
             </table>
@@ -433,29 +595,61 @@ th{
 <!-- MOBILE NAV -->
 <nav class="bottom-nav">
 
-    <a href="deshboard.html">
-        <span>🏠</span>
+    <a href="dashboard.html">
+
+        <span>
+            🏠
+        </span>
+
         Home
+
     </a>
+
 
     <a href="deposit.html">
-        <span>💰</span>
+
+        <span>
+            💰
+        </span>
+
         Deposit
+
     </a>
 
-    <a href="earnings.html" class="active">
-        <span>📈</span>
+
+    <a
+        href="earnings.html"
+        class="active"
+    >
+
+        <span>
+            📈
+        </span>
+
         Earnings
+
     </a>
+
 
     <a href="referral.html">
-        <span>👥</span>
+
+        <span>
+            👥
+        </span>
+
         Referral
+
     </a>
 
+
     <a href="profile.html">
-        <span>👤</span>
+
+        <span>
+            👤
+        </span>
+
         Profile
+
     </a>
 
 </nav>
@@ -472,21 +666,31 @@ const SUPABASE_KEY =
 "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
 const supabaseClient =
-supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 const customerId =
-localStorage.getItem("sathiPayCustomerId");
+localStorage.getItem(
+    "sathiPayCustomerId"
+);
 
 
 function money(value){
 
-    const number = Number(value || 0);
+    const number =
+        Number(value || 0);
 
-    return "₹" + number.toLocaleString("en-IN",{
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-    });
+    return "₹" +
+        number.toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
 }
 
 
@@ -494,7 +698,9 @@ async function loadEarnings(){
 
     if(!customerId){
 
-        window.location.href = "login.html";
+        window.location.href =
+            "login.html";
+
         return;
     }
 
@@ -503,9 +709,14 @@ async function loadEarnings(){
 
         /* CUSTOMER */
 
-        const {data:customer,error:customerError}
-            = await supabaseClient
+        const {
+            data:customer,
+            error:customerError
+        } =
+        await supabaseClient
+
             .from("customers")
+
             .select(`
                 id,
                 name,
@@ -514,20 +725,32 @@ async function loadEarnings(){
                 commission_balance,
                 referral_balance
             `)
-            .eq("id",customerId)
+
+            .eq(
+                "id",
+                customerId
+            )
+
             .single();
 
 
         if(customerError){
+
             throw customerError;
+
         }
 
 
         /* DEPOSIT COMMISSION */
 
-        const {data:deposits,error:depositError}
-            = await supabaseClient
+        const {
+            data:deposits,
+            error:depositError
+        } =
+        await supabaseClient
+
             .from("customer_deposits")
+
             .select(`
                 id,
                 amount,
@@ -535,21 +758,42 @@ async function loadEarnings(){
                 status,
                 created_at
             `)
-            .eq("customer_id",customerId)
-            .eq("status","approved")
-            .order("created_at",{ascending:false});
+
+            .eq(
+                "customer_id",
+                customerId
+            )
+
+            .eq(
+                "status",
+                "approved"
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
 
 
         if(depositError){
+
             throw depositError;
+
         }
 
 
         /* REFERRAL COMMISSIONS */
 
-        const {data:referrals,error:referralError}
-            = await supabaseClient
+        const {
+            data:referrals,
+            error:referralError
+        } =
+        await supabaseClient
+
             .from("customer_referral_commissions")
+
             .select(`
                 id,
                 level,
@@ -559,12 +803,24 @@ async function loadEarnings(){
                 status,
                 created_at
             `)
-            .eq("customer_id",customerId)
-            .order("created_at",{ascending:false});
+
+            .eq(
+                "customer_id",
+                customerId
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
 
 
         if(referralError){
+
             throw referralError;
+
         }
 
 
@@ -572,35 +828,53 @@ async function loadEarnings(){
 
         let depositTotal = 0;
 
-        (deposits || []).forEach(item => {
+        (deposits || []).forEach(
+            item => {
 
-            depositTotal += Number(item.commission || 0);
+                depositTotal +=
+                    Number(
+                        item.commission || 0
+                    );
 
-        });
+            }
+        );
 
 
         /* REFERRAL TOTAL */
 
         let referralTotal = 0;
 
-        (referrals || []).forEach(item => {
+        (referrals || []).forEach(
+            item => {
 
-            if(item.status === "approved"){
-                referralTotal += Number(
-                    item.commission_amount || 0
-                );
+                if(
+                    item.status ===
+                    "approved"
+                ){
+
+                    referralTotal +=
+                        Number(
+                            item.commission_amount ||
+                            0
+                        );
+
+                }
+
             }
-
-        });
+        );
 
 
         const bonusTotal =
-            Number(customer.bonus_balance || 0);
+            Number(
+                customer.bonus_balance ||
+                0
+            );
 
 
         /*
-         * Use the actual transaction totals.
-         * This avoids counting the same referral amount twice.
+         * Use actual transaction totals.
+         * This avoids counting the same referral
+         * amount twice.
          */
 
         const total =
@@ -609,17 +883,28 @@ async function loadEarnings(){
             bonusTotal;
 
 
-        document.getElementById("depositCommission")
-            .textContent = money(depositTotal);
+        document.getElementById(
+            "depositCommission"
+        ).textContent =
+            money(depositTotal);
 
-        document.getElementById("referralIncome")
-            .textContent = money(referralTotal);
 
-        document.getElementById("bonusIncome")
-            .textContent = money(bonusTotal);
+        document.getElementById(
+            "referralIncome"
+        ).textContent =
+            money(referralTotal);
 
-        document.getElementById("totalEarnings")
-            .textContent = money(total);
+
+        document.getElementById(
+            "bonusIncome"
+        ).textContent =
+            money(bonusTotal);
+
+
+        document.getElementById(
+            "totalEarnings"
+        ).textContent =
+            money(total);
 
 
         /* HISTORY */
@@ -627,137 +912,210 @@ async function loadEarnings(){
         const history = [];
 
 
-        (deposits || []).forEach(item => {
+        (deposits || []).forEach(
+            item => {
 
-            const commission =
-                Number(item.commission || 0);
-
-            if(commission > 0){
-
-                history.push({
-
-                    date:item.created_at,
-
-                    type:"Deposit Commission",
-
-                    level:"—",
-
-                    amount:commission,
-
-                    status:item.status
-
-                });
-
-            }
-
-        });
+                const commission =
+                    Number(
+                        item.commission ||
+                        0
+                    );
 
 
-        (referrals || []).forEach(item => {
+                if(commission > 0){
 
-            const commission =
-                Number(item.commission_amount || 0);
+                    history.push({
 
-            if(
-                commission > 0 &&
-                item.status === "approved"
-            ){
+                        date:
+                            item.created_at,
 
-                history.push({
+                        type:
+                            "Deposit Commission",
 
-                    date:item.created_at,
+                        level:
+                            "—",
 
-                    type:"Referral Commission",
+                        amount:
+                            commission,
 
-                    level:"Level " +
-                        (
-                            item.level === 1 ? "A" :
-                            item.level === 2 ? "B" :
-                            item.level === 3 ? "C" :
-                            item.level
-                        ),
+                        status:
+                            item.status
 
-                    amount:commission,
+                    });
 
-                    status:item.status
-
-                });
+                }
 
             }
+        );
 
-        });
+
+        (referrals || []).forEach(
+            item => {
+
+                const commission =
+                    Number(
+                        item.commission_amount ||
+                        0
+                    );
+
+
+                if(
+                    commission > 0 &&
+                    item.status ===
+                    "approved"
+                ){
+
+                    history.push({
+
+                        date:
+                            item.created_at,
+
+                        type:
+                            "Referral Commission",
+
+                        level:
+                            "Level " +
+                            (
+                                item.level === 1
+                                ? "A"
+                                :
+                                item.level === 2
+                                ? "B"
+                                :
+                                item.level === 3
+                                ? "C"
+                                :
+                                item.level
+                            ),
+
+                        amount:
+                            commission,
+
+                        status:
+                            item.status
+
+                    });
+
+                }
+
+            }
+        );
 
 
         history.sort(
             (a,b) =>
-            new Date(b.date) -
-            new Date(a.date)
+                new Date(b.date) -
+                new Date(a.date)
         );
 
 
         const tbody =
-            document.getElementById("earningsHistory");
+            document.getElementById(
+                "earningsHistory"
+            );
 
 
         if(history.length === 0){
 
             tbody.innerHTML = `
+
                 <tr>
-                    <td colspan="5" class="empty">
+
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
                         No earnings available yet.
                     </td>
+
                 </tr>
+
             `;
 
             return;
+
         }
 
 
         tbody.innerHTML =
-            history.map(item => {
+            history.map(
+                item => {
 
-                const date =
-                    new Date(item.date)
-                    .toLocaleString("en-IN",{
-                        day:"2-digit",
-                        month:"short",
-                        year:"numeric"
-                    });
-
-
-                return `
-                    <tr>
-                        <td>${date}</td>
-                        <td>${item.type}</td>
-                        <td>${item.level}</td>
-                        <td>
-                            <strong>
-                                ${money(item.amount)}
-                            </strong>
-                        </td>
-                        <td>
-                            <span class="status">
-                                ${item.status}
-                            </span>
-                        </td>
-                    </tr>
-                `;
-
-            }).join("");
+                    const date =
+                        new Date(
+                            item.date
+                        ).toLocaleString(
+                            "en-IN",
+                            {
+                                day:"2-digit",
+                                month:"short",
+                                year:"numeric"
+                            }
+                        );
 
 
-    }catch(error){
+                    return `
+
+                        <tr>
+
+                            <td>
+                                ${date}
+                            </td>
+
+                            <td>
+                                ${item.type}
+                            </td>
+
+                            <td>
+                                ${item.level}
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    ${money(item.amount)}
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                <span class="status">
+                                    ${item.status}
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            ).join("");
+
+
+    }
+    catch(error){
 
         console.error(error);
 
-        document.getElementById("earningsHistory")
-            .innerHTML = `
-                <tr>
-                    <td colspan="5" class="empty">
-                        Unable to load earnings.
-                    </td>
-                </tr>
-            `;
+        document.getElementById(
+            "earningsHistory"
+        ).innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="empty"
+                >
+                    Unable to load earnings.
+                </td>
+
+            </tr>
+
+        `;
+
     }
 
 }
@@ -767,11 +1125,21 @@ async function loadEarnings(){
 
 function logout(){
 
-    localStorage.removeItem("sathiPayCustomerId");
-    localStorage.removeItem("sathiPayUID");
-    localStorage.removeItem("sathiPayInvitationCode");
+    localStorage.removeItem(
+        "sathiPayCustomerId"
+    );
 
-    window.location.href = "login.html";
+    localStorage.removeItem(
+        "sathiPayUID"
+    );
+
+    localStorage.removeItem(
+        "sathiPayInvitationCode"
+    );
+
+    window.location.href =
+        "login.html";
+
 }
 
 
@@ -782,9 +1150,12 @@ loadEarnings();
 
 /* AUTO REFRESH */
 
-setInterval(loadEarnings,30000);
+setInterval(
+    loadEarnings,
+    30000
+);
 
 </script>
 
 </body>
-      </html>
+    </html>
