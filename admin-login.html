@@ -1,238 +1,819 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sathi Pay Admin Login</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>Sathi Pay - Admin Login</title>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .box {
-      width: 100%;
-      max-width: 430px;
-      background: white;
-      border-radius: 20px;
-      padding: 30px 24px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
-    }
+<style>
 
-    .header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
+*{
+    box-sizing:border-box;
+}
 
-    .shield {
-      font-size: 55px;
-    }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
 
-    h1 {
-      margin: 8px 0;
-      font-size: 30px;
-      color: #172033;
-    }
+.box{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:20px;
+    padding:30px 24px;
+    box-shadow:0 10px 35px rgba(0,0,0,.12);
+}
 
-    .subtitle {
-      color: #6b7280;
-      font-size: 16px;
-    }
+.header{
+    text-align:center;
+    margin-bottom:28px;
+}
 
-    label {
-      display: block;
-      margin: 18px 0 8px;
-      font-weight: bold;
-      color: #374151;
-    }
+.shield{
+    font-size:55px;
+}
 
-    input {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid #d1d5db;
-      border-radius: 12px;
-      font-size: 16px;
-      outline: none;
-    }
+h1{
+    margin:8px 0;
+    font-size:30px;
+    color:#172033;
+}
 
-    input:focus {
-      border-color: #2563eb;
-    }
+.subtitle{
+    color:#6b7280;
+    font-size:16px;
+}
 
-    button {
-      width: 100%;
-      margin-top: 24px;
-      padding: 15px;
-      border: 0;
-      border-radius: 12px;
-      background: #2563eb;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+label{
+    display:block;
+    margin:18px 0 8px;
+    font-weight:bold;
+    color:#374151;
+}
 
-    button:disabled {
-      opacity: 0.6;
-    }
+input{
+    width:100%;
+    padding:15px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+}
 
-    #message {
-      margin-top: 18px;
-      text-align: center;
-      font-weight: bold;
-      line-height: 1.5;
-    }
+input:focus{
+    border-color:#2563eb;
+}
 
-    .back {
-      display: block;
-      text-align: center;
-      margin-top: 22px;
-      color: #2563eb;
-      text-decoration: none;
-    }
-  </style>
+button{
+    width:100%;
+    margin-top:24px;
+    padding:15px;
+    border:0;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.secondaryBtn{
+    background:#64748b;
+}
+
+#message{
+    margin-top:18px;
+    text-align:center;
+    font-weight:bold;
+    line-height:1.5;
+}
+
+.forgotLink{
+    display:block;
+    text-align:right;
+    margin-top:12px;
+    color:#2563eb;
+    font-size:14px;
+    font-weight:bold;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:22px;
+    color:#2563eb;
+    text-decoration:none;
+}
+
+.forgotBox{
+    display:none;
+    margin-top:22px;
+    padding-top:20px;
+    border-top:1px solid #e5e7eb;
+}
+
+.forgotBox h2{
+    margin:0 0 8px;
+    font-size:20px;
+    color:#172033;
+}
+
+.forgotNote{
+    color:#6b7280;
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:12px;
+}
+
+.smallBtn{
+    font-size:16px;
+    margin-top:15px;
+}
+
+.cancelBtn{
+    background:#64748b;
+}
+
+.securityNote{
+    margin-top:15px;
+    padding:11px;
+    background:#f8fafc;
+    border-radius:10px;
+    color:#64748b;
+    font-size:12px;
+    line-height:1.5;
+}
+
+</style>
+
 </head>
 
 <body>
 
-  <div class="box">
+<div class="box">
 
     <div class="header">
-      <div class="shield">🛡️</div>
-      <h1>Sathi Pay Admin</h1>
-      <div class="subtitle">Secure Admin Login</div>
+
+        <div class="shield">
+            🛡️
+        </div>
+
+        <h1>
+            Sathi Pay Admin
+        </h1>
+
+        <div class="subtitle">
+            Secure Admin Login
+        </div>
+
     </div>
+
+
+    <!-- =================================================
+         LOGIN FORM
+    ================================================== -->
 
     <form id="adminLoginForm">
 
-      <label for="email">Admin Email</label>
-      <input
-        type="email"
-        id="email"
-        placeholder="Enter admin email"
-        autocomplete="email"
-        required
-      >
+        <label for="email">
+            Admin Email
+        </label>
 
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter admin password"
-        autocomplete="current-password"
-        required
-      >
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter admin email"
+            autocomplete="email"
+            required
+        >
 
-      <button type="submit" id="loginBtn">
-        🔐 Admin Login
-      </button>
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter admin password"
+            autocomplete="current-password"
+            required
+        >
+
+
+        <a
+            class="forgotLink"
+            href="javascript:void(0)"
+            onclick="showForgotPassword()"
+        >
+            Forgot Password?
+        </a>
+
+
+        <button
+            type="submit"
+            id="loginBtn"
+        >
+            🔐 Admin Login
+        </button>
 
     </form>
 
-    <div id="message"></div>
 
-    <a class="back" href="index.html">
-      ← Back to Customer Login
+    <!-- =================================================
+         FORGOT PASSWORD
+    ================================================== -->
+
+    <div
+        id="forgotBox"
+        class="forgotBox"
+    >
+
+        <h2>
+            🔑 Reset Admin Password
+        </h2>
+
+        <div class="forgotNote">
+            Enter your admin email. If the account is eligible
+            for password recovery, Supabase will send a
+            password reset email.
+        </div>
+
+
+        <input
+            type="email"
+            id="resetEmail"
+            placeholder="Enter admin email"
+            autocomplete="email"
+        >
+
+
+        <button
+            type="button"
+            id="resetBtn"
+            class="smallBtn"
+            onclick="sendPasswordReset()"
+        >
+            📧 Send Reset Email
+        </button>
+
+
+        <button
+            type="button"
+            class="smallBtn cancelBtn"
+            onclick="hideForgotPassword()"
+        >
+            ← Back to Login
+        </button>
+
+    </div>
+
+
+    <div
+        id="message"
+    ></div>
+
+
+    <div class="securityNote">
+        🔒 Only accounts registered as Sathi Pay admins
+        can access the Admin Panel.
+    </div>
+
+
+    <a
+        class="back"
+        href="index.html"
+    >
+        ← Back to Customer Login
     </a>
 
-  </div>
+</div>
+
 
 <script>
-  const SUPABASE_URL = "https://lozluohksmjxbxixkbmq.supabase.co";
 
-  const SUPABASE_KEY =
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://lozluohksmjxbxixkbmq.supabase.co";
+
+const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
-  const form = document.getElementById("adminLoginForm");
-  const loginBtn = document.getElementById("loginBtn");
-  const message = document.getElementById("message");
 
-  form.addEventListener("submit", async function(event) {
-    event.preventDefault();
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+const form =
+    document.getElementById(
+        "adminLoginForm"
+    );
 
-    message.textContent = "";
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Logging in...";
+const loginBtn =
+    document.getElementById(
+        "loginBtn"
+    );
 
-    try {
+const resetBtn =
+    document.getElementById(
+        "resetBtn"
+    );
 
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
+const message =
+    document.getElementById(
+        "message"
+    );
 
-      if (error) {
-        throw error;
-      }
+const forgotBox =
+    document.getElementById(
+        "forgotBox"
+    );
 
-      if (!data || !data.user) {
-        throw new Error("Login session not created.");
-      }
 
-      /*
-        IMPORTANT:
-        Admin permission is checked by the secure database
-        function public.is_admin().
-      */
+/* =====================================================
+   MESSAGE
+===================================================== */
 
-      const { data: isAdmin, error: adminError } =
-        await supabaseClient.rpc("is_admin");
+function showMessage(
+    text,
+    type
+){
 
-      if (adminError) {
-        await supabaseClient.auth.signOut();
-        throw adminError;
-      }
+    message.textContent =
+        text;
 
-      if (isAdmin !== true) {
-        await supabaseClient.auth.signOut();
+    if(type === "success"){
 
-        throw new Error(
-          "This account is not registered as an admin."
-        );
-      }
+        message.style.color =
+            "#16a34a";
 
-      message.style.color = "#16a34a";
-      message.textContent =
-        "✅ Admin login successful. Opening dashboard...";
-
-      setTimeout(function() {
-        window.location.href = "admin.html";
-      }, 700);
-
-    } catch (error) {
-
-      console.error(error);
-
-      message.style.color = "#dc2626";
-      message.textContent =
-        "❌ " + (error.message || "Admin login failed.");
-
-      loginBtn.disabled = false;
-      loginBtn.textContent = "🔐 Admin Login";
     }
-  });
+
+    else if(type === "error"){
+
+        message.style.color =
+            "#dc2626";
+
+    }
+
+    else{
+
+        message.style.color =
+            "#374151";
+
+    }
+
+}
+
+
+/* =====================================================
+   FORGOT PASSWORD UI
+===================================================== */
+
+function showForgotPassword(){
+
+    const email =
+        document
+        .getElementById(
+            "email"
+        )
+        .value
+        .trim();
+
+    if(email){
+
+        document
+        .getElementById(
+            "resetEmail"
+        )
+        .value =
+            email;
+
+    }
+
+    forgotBox.style.display =
+        "block";
+
+    showMessage(
+        "",
+        ""
+    );
+
+}
+
+
+function hideForgotPassword(){
+
+    forgotBox.style.display =
+        "none";
+
+    showMessage(
+        "",
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   CHECK EXISTING ADMIN SESSION
+===================================================== */
+
+async function checkExistingAdmin(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.getUser();
+
+        if(
+            error ||
+            !data ||
+            !data.user
+        ){
+
+            return;
+
+        }
+
+        const {
+            data:isAdmin,
+            error:adminError
+        } =
+        await supabaseClient.rpc(
+            "is_admin"
+        );
+
+        if(
+            !adminError &&
+            isAdmin === true
+        ){
+
+            window.location.replace(
+                "admin.html"
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Session check error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+form.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const email =
+            document
+            .getElementById(
+                "email"
+            )
+            .value
+            .trim();
+
+        const password =
+            document
+            .getElementById(
+                "password"
+            )
+            .value;
+
+
+        if(!email || !password){
+
+            showMessage(
+                "Please enter admin email and password.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        message.textContent =
+            "";
+
+        loginBtn.disabled =
+            true;
+
+        loginBtn.textContent =
+            "Logging in...";
+
+
+        try{
+
+            const {
+                data,
+                error
+            } =
+            await supabaseClient.auth.signInWithPassword({
+
+                email:
+                    email,
+
+                password:
+                    password
+
+            });
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            if(
+                !data ||
+                !data.user
+            ){
+
+                throw new Error(
+                    "Login session not created."
+                );
+
+            }
+
+
+            /* =========================================
+               SECURE ADMIN CHECK
+            ========================================= */
+
+            const {
+                data:isAdmin,
+                error:adminError
+            } =
+            await supabaseClient.rpc(
+                "is_admin"
+            );
+
+
+            if(adminError){
+
+                await supabaseClient.auth.signOut();
+
+                throw adminError;
+
+            }
+
+
+            if(isAdmin !== true){
+
+                await supabaseClient.auth.signOut();
+
+                throw new Error(
+                    "This account is not registered as an admin."
+                );
+
+            }
+
+
+            showMessage(
+                "✅ Admin login successful. Opening dashboard...",
+                "success"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    window.location.replace(
+                        "admin.html"
+                    );
+
+                },
+                500
+            );
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+
+            showMessage(
+                "❌ " +
+                (
+                    error.message ||
+                    "Admin login failed."
+                ),
+                "error"
+            );
+
+
+            loginBtn.disabled =
+                false;
+
+            loginBtn.textContent =
+                "🔐 Admin Login";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   SEND PASSWORD RESET EMAIL
+===================================================== */
+
+async function sendPasswordReset(){
+
+    const email =
+        document
+        .getElementById(
+            "resetEmail"
+        )
+        .value
+        .trim();
+
+
+    if(!email){
+
+        showMessage(
+            "Please enter your admin email.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    resetBtn.disabled =
+        true;
+
+    resetBtn.textContent =
+        "Sending...";
+
+
+    showMessage(
+        "Sending password reset email...",
+        ""
+    );
+
+
+    try{
+
+        const redirectUrl =
+            window.location.origin +
+            window.location.pathname
+            .replace(
+                "admin-login.html",
+                "admin-reset-password.html"
+            );
+
+
+        const {
+            error
+        } =
+        await supabaseClient.auth.resetPasswordForEmail(
+            email,
+            {
+                redirectTo:
+                    redirectUrl
+            }
+        );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        /*
+          Do not reveal whether an email exists.
+          Supabase handles password recovery securely.
+        */
+
+        showMessage(
+            "✅ If this email is registered, a password reset link has been sent. Check your inbox and spam folder.",
+            "success"
+        );
+
+
+        resetBtn.disabled =
+            false;
+
+        resetBtn.textContent =
+            "📧 Send Reset Email";
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Password reset error:",
+            error
+        );
+
+
+        showMessage(
+            "❌ Unable to send password reset email. Please try again.",
+            "error"
+        );
+
+
+        resetBtn.disabled =
+            false;
+
+        resetBtn.textContent =
+            "📧 Send Reset Email";
+
+    }
+
+}
+
+
+/* =====================================================
+   AUTH STATE MONITOR
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+    function(event){
+
+        if(
+            event === "SIGNED_OUT"
+        ){
+
+            /*
+              Stay on login page.
+            */
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function(){
+
+        await checkExistingAdmin();
+
+    }
+);
+
 </script>
 
 </body>
