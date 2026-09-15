@@ -11,13 +11,14 @@
         return;
     }
 
-    // Global logout helper
+    // Global customer logout helper
     window.sathiPayLogout = function () {
         localStorage.removeItem(CUSTOMER_ID_KEY);
         localStorage.removeItem(UID_KEY);
         localStorage.removeItem(INVITE_KEY);
 
-        window.location.href = "login.html";
+        // Customer login page
+        window.location.href = "customer-login.html";
     };
 
     // Current customer ID helper
