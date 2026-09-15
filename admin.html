@@ -248,6 +248,58 @@ button:disabled{
     gap:10px;
 }
 
+
+/* =========================
+   COMPACT APPROVED TOAST
+========================= */
+
+.approvedToast{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:99999;
+
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    background:#dcfce7;
+    color:#166534;
+
+    border:1px solid #86efac;
+    border-radius:10px;
+
+    padding:7px 12px;
+
+    font-size:14px;
+    font-weight:bold;
+
+    box-shadow:0 4px 14px rgba(0,0,0,.12);
+
+    animation:toastIn .2s ease;
+}
+
+.approvedToast .check{
+    font-size:16px;
+    font-weight:bold;
+}
+
+@keyframes toastIn{
+
+    from{
+        opacity:0;
+        transform:translate(-50%,-8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translate(-50%,0);
+    }
+
+}
+
+
 /* =========================
    PAYMENT SCREENSHOT
 ========================= */
@@ -807,6 +859,61 @@ function statusBadge(status){
             ${status || "Pending"}
         </span>
     `;
+
+}
+
+
+/* =====================================================
+   COMPACT APPROVED MESSAGE
+===================================================== */
+
+function showApprovedToast(amount){
+
+    const old =
+        document.querySelector(
+            ".approvedToast"
+        );
+
+
+    if(old){
+
+        old.remove();
+
+    }
+
+
+    const toast =
+        document.createElement("div");
+
+
+    toast.className =
+        "approvedToast";
+
+
+    toast.innerHTML = `
+
+        <span class="check">
+            ✓
+        </span>
+
+        <span>
+            Approved ${money(amount)}
+        </span>
+
+    `;
+
+
+    document.body.appendChild(toast);
+
+
+    setTimeout(
+        function(){
+
+            toast.remove();
+
+        },
+        2500
+    );
 
 }
 
@@ -1562,7 +1669,6 @@ async function loadAdminTotals(){
 
 /* =====================================================
    LOAD DEPOSITS
-   PAYMENT SCREENSHOT INCLUDED
 ===================================================== */
 
 async function loadDeposits(){
@@ -1727,10 +1833,6 @@ async function loadDeposits(){
             </div>
 
 
-            <!-- =========================
-                 PAYMENT SCREENSHOT
-            ========================== -->
-
             <div class="paymentProofBox">
 
                 <div class="paymentProofTitle">
@@ -1879,7 +1981,7 @@ async function updateDeposit(
 
     /* =================================================
        APPROVE
-       USE SECURE DATABASE FUNCTION
+       SECURE DATABASE FUNCTION
     ================================================= */
 
     if(status === "approved"){
@@ -1922,8 +2024,12 @@ async function updateDeposit(
         }
 
 
-        alert(
-            "✅ Deposit approved successfully."
+        /* =============================================
+           COMPACT SUCCESS MESSAGE
+        ============================================= */
+
+        showApprovedToast(
+            data.amount
         );
 
 
@@ -2226,4 +2332,4 @@ setInterval(
 </script>
 
 </body>
-    </html>
+        </html>
