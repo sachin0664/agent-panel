@@ -8,8 +8,6 @@
 
 <title>Sathi Pay - Home</title>
 
-<script src="customer-guard.js"></script>
-
 <style>
 
 *{
@@ -1216,11 +1214,6 @@ header{
 
 <body>
 
-
-<!-- =========================================================
-     HEADER
-========================================================= -->
-
 <header>
 
     <div class="header-row">
@@ -1245,7 +1238,6 @@ header{
 
         </div>
 
-
         <div class="header-right">
 
             <button
@@ -1265,7 +1257,6 @@ header{
 
             </button>
 
-
             <div class="profile-btn">
                 👤
             </div>
@@ -1275,11 +1266,6 @@ header{
     </div>
 
 </header>
-
-
-<!-- =========================================================
-     NOTIFICATION PANEL
-========================================================= -->
 
 <div
     class="notification-panel"
@@ -1312,15 +1298,7 @@ header{
 
 </div>
 
-
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
 <main class="container">
-
-
-    <!-- HERO -->
 
     <section class="hero">
 
@@ -1371,9 +1349,7 @@ header{
 
         </div>
 
-
         <div class="balance-grid">
-
 
             <div class="balance-card">
 
@@ -1395,7 +1371,6 @@ header{
 
             </div>
 
-
             <div class="balance-card">
 
                 <div class="balance-icon">
@@ -1416,7 +1391,6 @@ header{
 
             </div>
 
-
             <div class="balance-card">
 
                 <div class="balance-icon">
@@ -1436,7 +1410,6 @@ header{
                 </div>
 
             </div>
-
 
             <div class="balance-card">
 
@@ -1469,9 +1442,6 @@ header{
         </div>
 
     </section>
-
-
-    <!-- REFERRAL LINK -->
 
     <section class="referral-link-box">
 
@@ -1513,9 +1483,6 @@ header{
 
     </section>
 
-
-    <!-- QUICK ACTIONS -->
-
     <section class="quick-actions">
 
         <a
@@ -1530,7 +1497,6 @@ header{
 
         </a>
 
-
         <a
             class="quick-action"
             href="referral.html">
@@ -1542,7 +1508,6 @@ header{
             My Team
 
         </a>
-
 
         <a
             class="quick-action"
@@ -1556,7 +1521,6 @@ header{
 
         </a>
 
-
         <a
             class="quick-action"
             href="referral.html">
@@ -1568,7 +1532,6 @@ header{
             Referral
 
         </a>
-
 
         <a
             class="quick-action"
@@ -1585,11 +1548,7 @@ header{
 
     </section>
 
-
-    <!-- COMMISSION INFORMATION -->
-
     <section class="info-grid">
-
 
         <div class="deposit-commission">
 
@@ -1632,13 +1591,11 @@ header{
 
         </div>
 
-
         <div class="referral-commission">
 
             <div class="ref-title">
                 Referral Commission
             </div>
-
 
             <div class="ref-row">
 
@@ -1656,7 +1613,6 @@ header{
 
             </div>
 
-
             <div class="ref-row">
 
                 <div class="level-circle level-b">
@@ -1672,7 +1628,6 @@ header{
                 </div>
 
             </div>
-
 
             <div class="ref-row">
 
@@ -1693,9 +1648,6 @@ header{
         </div>
 
     </section>
-
-
-    <!-- SELL CONTROL -->
 
     <section class="sell-control">
 
@@ -1723,7 +1675,6 @@ header{
 
         </div>
 
-
         <label class="sell-switch">
 
             <input
@@ -1736,9 +1687,6 @@ header{
         </label>
 
     </section>
-
-
-    <!-- RECENT TRANSACTIONS -->
 
     <section class="transactions-box">
 
@@ -1758,7 +1706,6 @@ header{
 
         </div>
 
-
         <div id="transactionList">
 
             <div class="no-notification">
@@ -1769,17 +1716,11 @@ header{
 
     </section>
 
-
     <div id="message">
         Loading dashboard...
     </div>
 
 </main>
-
-
-<!-- =========================================================
-     SECURITY MODAL
-========================================================= -->
 
 <div
     class="security-modal"
@@ -1816,7 +1757,6 @@ header{
 
             </div>
 
-
             <div class="security-point">
 
                 🔑
@@ -1826,7 +1766,6 @@ header{
                 </span>
 
             </div>
-
 
             <div class="security-point">
 
@@ -1841,7 +1780,6 @@ header{
 
         </div>
 
-
         <button
             class="security-close"
             onclick="closeSecurityModal()">
@@ -1853,11 +1791,6 @@ header{
     </div>
 
 </div>
-
-
-<!-- =========================================================
-     MOBILE BOTTOM NAV
-========================================================= -->
 
 <nav class="bottom-nav">
 
@@ -1873,7 +1806,6 @@ header{
 
     </a>
 
-
     <a href="deposit.html">
 
         <span>
@@ -1884,7 +1816,6 @@ header{
 
     </a>
 
-
     <a href="link-upi.html">
 
         <span class="plus">
@@ -1892,7 +1823,6 @@ header{
         </span>
 
     </a>
-
 
     <a href="referral.html">
 
@@ -1903,7 +1833,6 @@ header{
         Team
 
     </a>
-
 
     <a href="wallet.html">
 
@@ -1917,7 +1846,6 @@ header{
 
 </nav>
 
-
 <!-- =========================================================
      SUPABASE
 ========================================================= -->
@@ -1925,10 +1853,6 @@ header{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =========================================================
-   SUPABASE CONFIG
-========================================================= */
 
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
@@ -1942,6 +1866,16 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
+</script>
+
+<!-- =========================================================
+     CUSTOMER SECURITY GUARD
+     IMPORTANT: MUST LOAD AFTER SUPABASE CLIENT
+========================================================= -->
+
+<script src="customer-guard.js"></script>
+
+<script>
 
 /* =========================================================
    CUSTOMER ID
@@ -2393,20 +2327,6 @@ async function loadNotifications(
         `<div class="no-notification">
             Loading notifications...
         </div>`;
-
-
-    /*
-     * Broadcast notifications:
-     *
-     * customer_id IS NULL
-     *
-     * Customer-specific:
-     *
-     * customer_id = current customer
-     *
-     * Admin can therefore publish one
-     * notification for every user.
-     */
 
 
     const {
@@ -3000,8 +2920,6 @@ async function loadDashboard(){
         }
 
 
-        /* NAME */
-
         document.getElementById(
             "customerName"
         ).innerText =
@@ -3009,16 +2927,12 @@ async function loadDashboard(){
             "Customer";
 
 
-        /* UID */
-
         document.getElementById(
             "customerUID"
         ).innerText =
             customer.uid ||
             "Not available";
 
-
-        /* BALANCES */
 
         const wallet =
             Number(
@@ -3043,19 +2957,6 @@ async function loadDashboard(){
             formatMoney(referral);
 
 
-        /*
-         * NOTE:
-         * bonus_balance is only DISPLAYED.
-         *
-         * Dashboard does NOT credit ₹99.
-         *
-         * ₹99 must be credited once during
-         * successful registration.
-         */
-
-
-        /* SELL */
-
         const sellToggle =
             document.getElementById(
                 "sellToggle"
@@ -3074,8 +2975,6 @@ async function loadDashboard(){
             sellOn
         );
 
-
-        /* REFERRAL */
 
         const code =
             customer.invitation_code ||
@@ -3270,7 +3169,6 @@ async function changeSellStatus(){
 
 /* =========================================================
    SECURITY WARNING
-   SHOW ON EVERY FRESH LOGIN / PAGE SESSION
 ========================================================= */
 
 function openSecurityModal(){
@@ -3336,13 +3234,6 @@ document.addEventListener(
         loadDashboard();
 
 
-        /*
-         * Security warning appears once
-         * on every fresh dashboard page session.
-         *
-         * No permanent localStorage flag is used.
-         */
-
         setTimeout(
             function(){
 
@@ -3371,8 +3262,7 @@ setInterval(
 
 
 /* =========================================================
-   CLOSE NOTIFICATION PANEL WHEN
-   CLICKING OUTSIDE
+   CLOSE NOTIFICATION PANEL
 ========================================================= */
 
 document.addEventListener(
