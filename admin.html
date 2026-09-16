@@ -292,24 +292,17 @@ button:disabled{
     left:50%;
     transform:translateX(-50%);
     z-index:99999;
-
     display:flex;
     align-items:center;
     gap:7px;
-
     background:#dcfce7;
     color:#166534;
-
     border:1px solid #86efac;
     border-radius:10px;
-
     padding:7px 12px;
-
     font-size:14px;
     font-weight:bold;
-
     box-shadow:0 4px 14px rgba(0,0,0,.12);
-
     animation:toastIn .2s ease;
 }
 
@@ -3730,6 +3723,17 @@ function renderCustomer(customer){
                 </span>
             </div>
 
+            <div class="actions">
+
+                <button
+                    class="red full"
+                    onclick="deleteCustomer('${customer.id}')"
+                >
+                    🗑️ Delete Customer
+                </button>
+
+            </div>
+
         </div>
 
     `;
@@ -3765,6 +3769,126 @@ function clearCustomerSearch(){
 
     status.textContent =
         "Ready to search.";
+
+}
+
+
+/* =====================================================
+   DELETE CUSTOMER
+===================================================== */
+
+async function deleteCustomer(customerId){
+
+    if(!customerId){
+
+        alert(
+            "❌ Customer ID missing."
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "⚠️ Kya aap is customer ko permanently delete karna chahte hain?\n\nSirf ye customer delete hoga.\n\nYe action undo nahi kiya ja sakta."
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.rpc(
+            "admin_delete_customer",
+            {
+                p_customer_id:customerId
+            }
+        );
+
+
+        if(error){
+
+            alert(
+                "❌ Customer delete failed:\n\n" +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        if(data !== true){
+
+            alert(
+                "❌ Customer delete failed."
+            );
+
+            return;
+
+        }
+
+
+        alert(
+            "✅ Customer successfully deleted."
+        );
+
+
+        document.getElementById(
+            "customerDetails"
+        ).innerHTML = "";
+
+
+        document.getElementById(
+            "customerSearch"
+        ).value = "";
+
+
+        document.getElementById(
+            "searchStatus"
+        ).className =
+            "status success";
+
+
+        document.getElementById(
+            "searchStatus"
+        ).textContent =
+            "✅ Customer deleted successfully.";
+
+
+        await loadCustomers();
+
+        await loadAdminTotals();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Delete customer error:",
+            error
+        );
+
+        alert(
+            "❌ " +
+            (
+                error.message ||
+                "Customer delete failed."
+            )
+        );
+
+    }
 
 }
 
@@ -4477,6 +4601,17 @@ async function loadCustomers(){
                         : "🔴 OFF"
                     }
                 </span>
+
+            </div>
+
+            <div class="actions">
+
+                <button
+                    class="red full"
+                    onclick="deleteCustomer('${c.id}')"
+                >
+                    🗑️ Delete Customer
+                </button>
 
             </div>
 
