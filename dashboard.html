@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Dashboard</title>
+<title>Sathi Pay - Home</title>
 
 <script src="customer-guard.js"></script>
 
@@ -26,9 +26,18 @@ body{
     background:
         radial-gradient(circle at 10% 5%,rgba(8,127,245,.08),transparent 25%),
         radial-gradient(circle at 90% 20%,rgba(10,203,157,.08),transparent 25%),
-        #f4f8ff;
-    color:#172b4d;
-    padding-bottom:90px;
+        #f3f8ff;
+    color:#14366d;
+    padding-bottom:100px;
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
 }
 
 a{
@@ -37,293 +46,195 @@ a{
     -webkit-tap-highlight-color:transparent;
 }
 
-button,
-input{
-    font-family:inherit;
-}
-
 /* =========================================================
    HEADER
 ========================================================= */
 
 header{
-    position:relative;
-    z-index:100;
     background:rgba(255,255,255,.96);
-    min-height:82px;
-    padding:14px 24px;
-    border-bottom:1px solid #e5edf7;
+    padding:18px 25px;
+    border-bottom:1px solid #e4edf8;
     box-shadow:0 3px 18px rgba(20,60,100,.05);
+    position:relative;
+    z-index:1000;
 }
 
 .header-row{
     max-width:1250px;
     margin:auto;
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
 }
 
 .brand{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:13px;
 }
 
 .brand-logo{
-    width:49px;
-    height:49px;
-    border-radius:16px;
+    width:55px;
+    height:55px;
+    border-radius:17px;
     background:linear-gradient(135deg,#087ff5,#0acb9d);
+    color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    color:white;
-    font-size:28px;
+    font-size:32px;
     font-weight:900;
-    box-shadow:0 9px 22px rgba(8,127,245,.25);
+    box-shadow:0 8px 20px rgba(8,127,245,.22);
 }
 
 .brand-text h1{
     margin:0;
-    font-size:25px;
-    color:#073b82;
+    font-size:29px;
+    color:#063b82;
+    letter-spacing:-.5px;
+}
+
+.brand-text h1 span{
+    color:#09b98e;
 }
 
 .brand-text p{
     margin:3px 0 0;
-    font-size:10px;
-    color:#7b8798;
-    font-weight:700;
+    color:#8190a8;
+    font-size:11px;
+    font-weight:600;
 }
 
 .header-right{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:15px;
 }
 
-.header-uid{
-    background:linear-gradient(135deg,#087ff5,#13cfa5);
-    color:white;
-    padding:10px 15px;
-    border-radius:13px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-.header-status{
-    margin-left:7px;
-    background:rgba(255,255,255,.20);
-    padding:4px 7px;
-    border-radius:20px;
-    font-size:9px;
-}
-
-.notification{
-    position:relative;
-    width:42px;
-    height:42px;
+.notification-btn{
+    width:48px;
+    height:48px;
+    border:0;
     border-radius:50%;
     background:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:21px;
-    box-shadow:0 5px 15px rgba(20,60,100,.10);
+    box-shadow:0 5px 18px rgba(20,60,100,.12);
+    position:relative;
+    font-size:25px;
 }
 
 .notification-badge{
     position:absolute;
-    right:-2px;
-    top:-4px;
-    min-width:18px;
-    height:18px;
-    padding:0 5px;
-    border-radius:20px;
-    background:#e63950;
+    right:-3px;
+    top:-5px;
+    min-width:22px;
+    height:22px;
+    padding:0 6px;
+    background:#e51f43;
     color:white;
+    border-radius:20px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:9px;
-    font-weight:bold;
+    font-size:10px;
+    font-weight:900;
+    border:2px solid white;
 }
 
-.header-profile{
-    width:43px;
-    height:43px;
+.profile-btn{
+    width:48px;
+    height:48px;
     border-radius:50%;
-    background:linear-gradient(135deg,#116bc2,#273d8e);
+    background:linear-gradient(135deg,#124fba,#063d89);
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:21px;
+    font-size:25px;
 }
 
 /* =========================================================
-   SIDEBAR
+   NOTIFICATION PANEL
 ========================================================= */
 
-.sidebar{
+.notification-panel{
     position:fixed;
-    top:100px;
-    left:18px;
-    bottom:18px;
-    width:225px;
-    background:rgba(255,255,255,.98);
-    border:1px solid #e5edf7;
-    border-radius:23px;
-    padding:14px 12px;
-    box-shadow:0 8px 30px rgba(31,64,104,.10);
-    z-index:90;
+    top:78px;
+    right:22px;
+    width:350px;
+    max-width:calc(100% - 28px);
+    background:white;
+    border:1px solid #e4edf7;
+    border-radius:20px;
+    box-shadow:0 18px 50px rgba(10,45,90,.18);
+    z-index:5000;
+    display:none;
+    overflow:hidden;
+}
+
+.notification-panel.show{
+    display:block;
+}
+
+.notification-head{
+    padding:16px 18px;
+    background:linear-gradient(135deg,#087ff5,#12cda2);
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.notification-head strong{
+    font-size:16px;
+}
+
+.notification-head button{
+    border:0;
+    background:rgba(255,255,255,.18);
+    color:white;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+}
+
+.notification-list{
+    max-height:420px;
     overflow-y:auto;
 }
 
-.sidebar-profile{
-    background:linear-gradient(135deg,#edf7ff,#f5f0ff);
-    border-radius:18px;
-    padding:14px;
-    margin-bottom:13px;
+.notification-item{
+    padding:15px 17px;
+    border-bottom:1px solid #edf2f7;
 }
 
-.sidebar-avatar{
-    width:47px;
-    height:47px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#087ff5,#6c5ce7);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-    margin-bottom:9px;
+.notification-item:last-child{
+    border-bottom:0;
 }
 
-.sidebar-name{
-    font-size:15px;
-    font-weight:bold;
-    color:#17345f;
-}
-
-.sidebar-uid{
-    font-size:10px;
-    color:#718096;
-    margin-top:4px;
-    word-break:break-all;
-}
-
-.sidebar-status{
-    display:inline-block;
-    margin-top:7px;
-    padding:4px 9px;
-    border-radius:20px;
-    background:#dff9ee;
-    color:#079669;
-    font-size:10px;
-    font-weight:bold;
-}
-
-.sidebar-menu{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-}
-
-.sidebar-menu a{
-    display:flex;
-    align-items:center;
-    gap:11px;
-    min-height:45px;
-    padding:8px 11px;
-    border-radius:13px;
-    color:#526581;
+.notification-item-title{
     font-size:13px;
-    font-weight:600;
-    transition:.2s;
+    font-weight:900;
+    color:#173e79;
 }
 
-.sidebar-menu a:hover{
-    background:#eef6ff;
-    color:#087ff5;
-}
-
-.sidebar-menu a.active{
-    background:linear-gradient(135deg,#147df5,#18cfa5);
-    color:white;
-    box-shadow:0 6px 15px rgba(20,125,245,.20);
-}
-
-.sidebar-icon{
-    width:29px;
-    height:29px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:9px;
-    background:#edf5ff;
-    font-size:17px;
-    flex-shrink:0;
-}
-
-.sidebar-menu a.active .sidebar-icon{
-    background:rgba(255,255,255,.18);
-}
-
-.sidebar-extra{
-    margin-top:14px;
-    display:flex;
-    flex-direction:column;
-    gap:9px;
-}
-
-.sidebar-promo{
-    background:linear-gradient(135deg,#126ff3,#16cda5);
-    color:white;
-    border-radius:16px;
-    padding:14px;
-}
-
-.sidebar-promo strong{
-    display:block;
-    font-size:15px;
-}
-
-.sidebar-promo small{
-    display:block;
-    margin-top:6px;
+.notification-item-message{
+    margin-top:5px;
+    color:#68788f;
+    font-size:11px;
     line-height:1.5;
-    opacity:.92;
 }
 
-.sidebar-support{
-    background:#f1f8ff;
-    border:1px solid #dcecfb;
-    border-radius:15px;
-    padding:8px 12px;
+.notification-item-time{
+    margin-top:7px;
+    color:#9aa7b8;
+    font-size:9px;
 }
 
-.sidebar-support a{
-    display:flex;
-    align-items:center;
-    gap:9px;
-    color:#173f78;
+.no-notification{
+    padding:28px 18px;
+    text-align:center;
+    color:#8290a4;
     font-size:12px;
-    font-weight:bold;
-    padding:6px 0;
-}
-
-.sidebar-logout a{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:12px;
-    border-radius:12px;
-    background:#fff1f3;
-    color:#d83a52;
-    font-size:13px;
-    font-weight:bold;
 }
 
 /* =========================================================
@@ -331,782 +242,629 @@ header{
 ========================================================= */
 
 .container{
-    max-width:1030px;
-    margin:0 auto;
-    padding:22px 20px;
-}
-
-@media(min-width:901px){
-
-    .container{
-        margin-left:260px;
-        margin-right:20px;
-        max-width:none;
-    }
-
+    max-width:1180px;
+    margin:auto;
+    padding:18px 22px;
 }
 
 /* =========================================================
-   HERO
+   HERO PROFILE
 ========================================================= */
 
-.page-intro{
+.hero{
     background:
-        linear-gradient(135deg,#066fff 0%,#5d36dc 52%,#08c99d 100%);
+        linear-gradient(135deg,#076ef1 0%,#173ed1 45%,#08c99d 100%);
+    border-radius:25px;
+    padding:19px;
     color:white;
-    border-radius:26px;
-    padding:28px;
-    min-height:165px;
+    box-shadow:0 13px 32px rgba(31,91,215,.20);
     position:relative;
     overflow:hidden;
-    box-shadow:0 16px 35px rgba(50,75,210,.20);
 }
 
-.page-intro:before{
+.hero:after{
     content:"";
     position:absolute;
-    width:230px;
-    height:230px;
+    width:250px;
+    height:250px;
     border-radius:50%;
-    right:-85px;
-    top:-105px;
-    background:rgba(255,255,255,.13);
+    right:-90px;
+    top:-130px;
+    background:rgba(255,255,255,.10);
 }
 
-.page-intro:after{
-    content:"₹";
-    position:absolute;
-    right:42px;
-    bottom:-62px;
-    font-size:170px;
-    font-weight:900;
-    opacity:.08;
-}
-
-.hero-content{
+.profile-line{
     position:relative;
     z-index:2;
-}
-
-.hero-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.22);
-    padding:7px 11px;
-    border-radius:30px;
-    font-size:10px;
-    font-weight:bold;
-    margin-bottom:12px;
-}
-
-.page-intro h2{
-    margin:0;
-    font-size:30px;
-}
-
-.page-intro p{
-    margin:8px 0 0;
-    font-size:13px;
-    opacity:.92;
-    max-width:650px;
-    line-height:1.55;
-}
-
-/* =========================================================
-   SECURITY BANNER
-========================================================= */
-
-.security-notice{
-    margin-top:15px;
-    background:#fff;
-    border:1px solid #ffe0a6;
-    border-left:5px solid #f59e0b;
-    border-radius:18px;
-    padding:15px 17px;
     display:flex;
     align-items:center;
-    gap:13px;
-    box-shadow:0 5px 18px rgba(20,60,100,.06);
-}
-
-.security-icon{
-    width:43px;
-    height:43px;
-    flex-shrink:0;
-    border-radius:13px;
-    background:#fff5df;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:21px;
-}
-
-.security-title{
-    font-size:13px;
-    font-weight:900;
-    color:#9a5b00;
-}
-
-.security-text{
-    margin-top:4px;
-    font-size:11px;
-    color:#6f7888;
-    line-height:1.45;
-}
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profile-card{
-    background:white;
-    margin-top:15px;
-    border-radius:20px;
-    padding:17px 20px;
-    box-shadow:0 6px 22px rgba(20,60,100,.08);
-    border:1px solid #e9f0f7;
-}
-
-.profile-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.profile-left{
-    display:flex;
-    align-items:center;
-    gap:13px;
+    gap:14px;
 }
 
 .profile-avatar{
-    width:49px;
-    height:49px;
+    width:66px;
+    height:66px;
     border-radius:50%;
-    background:linear-gradient(135deg,#087ff5,#6c5ce7);
+    background:linear-gradient(135deg,#0dd2bb,#4e5bea);
+    border:2px solid rgba(255,255,255,.55);
     display:flex;
     align-items:center;
     justify-content:center;
-    color:white;
-    font-size:22px;
+    font-size:35px;
+    flex-shrink:0;
+}
+
+.profile-info{
+    min-width:0;
 }
 
 .profile-name{
-    font-size:19px;
-    font-weight:bold;
-}
-
-.uid{
-    margin-top:5px;
-    color:#718096;
-    font-size:12px;
-}
-
-.uid b{
-    color:#3867d6;
-}
-
-.status{
-    background:#e8fff5;
-    color:#00a878;
-    padding:7px 11px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-/* =========================================================
-   BONUS
-========================================================= */
-
-.bonus-card{
-    margin-top:15px;
-    background:
-        linear-gradient(135deg,#fff8e6,#fff0bd);
-    border:1px solid #f3d47d;
-    border-radius:22px;
-    padding:19px;
-    position:relative;
-    overflow:hidden;
-    box-shadow:0 8px 24px rgba(196,140,20,.10);
-}
-
-.bonus-card:before{
-    content:"🎁";
-    position:absolute;
-    right:18px;
-    top:8px;
-    font-size:70px;
-    opacity:.10;
-}
-
-.bonus-card:after{
-    content:"₹99";
-    position:absolute;
-    right:8px;
-    bottom:-30px;
-    font-size:90px;
-    font-weight:900;
-    color:#d99b13;
-    opacity:.08;
-}
-
-.bonus-content{
-    position:relative;
-    z-index:2;
-}
-
-.bonus-label{
-    font-size:10px;
-    color:#a66a00;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:.7px;
-}
-
-.bonus-title{
-    margin-top:5px;
     font-size:22px;
     font-weight:900;
-    color:#744900;
 }
 
-.bonus-subtitle{
-    margin-top:5px;
-    color:#806735;
-    font-size:11px;
-    line-height:1.5;
-    max-width:650px;
-}
-
-.bonus-amount{
+.active-pill{
     display:inline-block;
-    margin-top:12px;
-    padding:8px 14px;
-    background:white;
-    border-radius:12px;
-    color:#d88b00;
-    font-size:19px;
+    margin-left:7px;
+    background:#35e39d;
+    color:#08704e;
+    padding:5px 11px;
+    border-radius:20px;
+    font-size:10px;
     font-weight:900;
-    box-shadow:0 4px 12px rgba(190,130,20,.10);
+    vertical-align:middle;
 }
 
-.bonus-note{
-    margin-top:8px;
-    font-size:9px;
-    color:#92743b;
-}
-
-/* =========================================================
-   WALLET
-========================================================= */
-
-.wallet{
-    margin-top:16px;
-    background:linear-gradient(135deg,#087ff5 0%,#5d36dc 52%,#0acb9d 100%);
-    color:white;
-    padding:24px;
-    border-radius:24px;
-    position:relative;
-    overflow:hidden;
-    box-shadow:0 14px 32px rgba(67,75,210,.20);
-}
-
-.wallet:before{
-    content:"";
-    position:absolute;
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    right:-65px;
-    top:-85px;
-    background:rgba(255,255,255,.13);
-}
-
-.wallet:after{
-    content:"";
-    position:absolute;
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    right:70px;
-    bottom:-75px;
-    background:rgba(255,255,255,.08);
-}
-
-.wallet-content{
-    position:relative;
-    z-index:2;
-}
-
-.wallet-top{
+.uid-row{
+    margin-top:6px;
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    gap:8px;
+    font-size:13px;
 }
 
-.wallet-title{
-    font-size:12px;
-    opacity:.86;
-}
-
-.wallet-chip{
+.uid-copy{
+    border:0;
     background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.18);
-    padding:6px 10px;
-    border-radius:20px;
-    font-size:9px;
-    font-weight:bold;
+    color:white;
+    width:30px;
+    height:30px;
+    border-radius:8px;
+    font-size:16px;
 }
 
-.wallet-amount{
-    font-size:36px;
-    font-weight:900;
-    margin:7px 0 18px;
-}
-
-.wallet-row{
-    display:flex;
-    justify-content:space-between;
-    font-size:12px;
-}
-
-.wallet-row span{
-    opacity:.78;
-}
-
-.wallet-divider{
-    height:1px;
-    background:rgba(255,255,255,.18);
-    margin:9px 0;
+.hero-arrow{
+    margin-left:auto;
+    font-size:34px;
+    position:relative;
+    z-index:2;
 }
 
 /* =========================================================
-   BALANCE CARDS
+   TOP BALANCE CARDS
 ========================================================= */
 
-.cards{
+.balance-grid{
+    position:relative;
+    z-index:3;
+    margin-top:18px;
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:13px;
-    margin-top:16px;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
 }
 
-.card{
-    background:white;
+.balance-card{
+    min-height:140px;
+    border-radius:18px;
     padding:17px;
-    min-height:125px;
-    border-radius:19px;
-    box-shadow:0 5px 17px rgba(20,60,100,.07);
-    border:1px solid #e8f0f7;
-    position:relative;
-    overflow:hidden;
+    background:rgba(255,255,255,.13);
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 7px 18px rgba(0,0,0,.08);
 }
 
-.card:after{
-    content:"";
-    position:absolute;
-    width:70px;
-    height:70px;
-    right:-28px;
-    bottom:-28px;
-    border-radius:50%;
-    background:#f5f9ff;
-}
-
-.card-icon{
-    width:39px;
-    height:39px;
-    border-radius:11px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;
-    margin-bottom:11px;
-    position:relative;
-    z-index:2;
-}
-
-.card-icon.blue-bg{
-    background:#e7f3ff;
-}
-
-.card-icon.orange-bg{
-    background:#fff4dc;
-}
-
-.card-icon.purple-bg{
-    background:#f0e8ff;
-}
-
-.card-title{
-    color:#65748b;
-    font-size:11px;
-    margin-bottom:7px;
-    position:relative;
-    z-index:2;
-}
-
-.card-value{
-    font-size:21px;
-    font-weight:bold;
-    position:relative;
-    z-index:2;
-}
-
-.orange{
-    color:#f39c12;
-}
-
-.blue{
-    color:#3867d6;
-}
-
-.purple{
-    color:#6c5ce7;
-}
-
-/* =========================================================
-   SECTION
-========================================================= */
-
-.section-title{
-    margin:22px 0 10px;
-    font-size:18px;
-    color:#163e76;
-}
-
-/* =========================================================
-   COMMISSION
-========================================================= */
-
-.commission-box{
-    background:white;
-    margin-top:16px;
-    padding:19px;
-    border-radius:20px;
-    box-shadow:0 5px 18px rgba(20,60,100,.07);
-    border:1px solid #e8f0f7;
-}
-
-.commission-heading{
-    display:flex;
-    align-items:center;
-    gap:11px;
-    margin-bottom:15px;
-}
-
-.commission-icon{
+.balance-icon{
     width:43px;
     height:43px;
-    border-radius:13px;
-    background:linear-gradient(135deg,#08b995,#087ff5);
+    border-radius:12px;
+    background:rgba(255,255,255,.20);
     display:flex;
     align-items:center;
     justify-content:center;
-    color:white;
-    font-size:21px;
-}
-
-.commission-heading h3{
-    margin:0;
-    font-size:17px;
-}
-
-.commission-heading p{
-    margin:3px 0 0;
-    font-size:11px;
-    color:#7a8799;
-}
-
-.rate-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-}
-
-.rate{
-    padding:15px 10px;
-    border-radius:14px;
-    text-align:center;
-    border:1px solid #e5edf6;
-}
-
-.rate:nth-child(1){
-    background:#eafff7;
-}
-
-.rate:nth-child(2){
-    background:#eef8ff;
-}
-
-.rate:nth-child(3){
-    background:#f4edff;
-}
-
-.rate-range{
-    font-size:13px;
-    font-weight:bold;
-}
-
-.rate-percent{
-    margin-top:6px;
     font-size:22px;
-    font-weight:bold;
+    margin-bottom:10px;
 }
 
-.rate:nth-child(1) .rate-percent{
-    color:#08a77e;
-}
-
-.rate:nth-child(2) .rate-percent{
-    color:#087ff5;
-}
-
-.rate:nth-child(3) .rate-percent{
-    color:#6c35d8;
-}
-
-.rate-label{
-    font-size:10px;
-    color:#748197;
-}
-
-.referral-rates{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:9px;
-    margin-top:10px;
-}
-
-.ref-rate{
-    padding:12px;
-    border-radius:12px;
-    background:#f7faff;
-    border:1px solid #e6eef7;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.balance-title{
     font-size:12px;
+    opacity:.95;
 }
 
-.ref-rate b{
-    color:#087ff5;
+.balance-value{
+    margin-top:5px;
+    font-size:25px;
+    font-weight:900;
+}
+
+.balance-small{
+    margin-top:4px;
+    font-size:10px;
+    opacity:.85;
 }
 
 /* =========================================================
-   SELL
+   REFERRAL LINK
 ========================================================= */
 
-.sell-box{
-    margin-top:16px;
+.referral-link-box{
+    margin-top:15px;
     background:white;
-    padding:19px;
-    border-radius:20px;
-    box-shadow:0 5px 18px rgba(20,60,100,.07);
-    border:1px solid #e8f0f7;
-}
-
-.sell-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.sell-title-wrap{
+    border-radius:19px;
+    padding:12px;
     display:flex;
     align-items:center;
-    gap:11px;
+    gap:12px;
+    box-shadow:0 6px 20px rgba(20,60,100,.08);
+    border:1px solid #e6eef7;
 }
 
-.sell-icon{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    background:#e7fff5;
+.link-icon{
+    width:52px;
+    height:52px;
+    flex-shrink:0;
+    border-radius:15px;
+    background:#eaf5ff;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:21px;
+    font-size:26px;
 }
 
-.sell-title{
-    font-size:17px;
-    font-weight:bold;
+.link-content{
+    flex:1;
+    min-width:0;
 }
 
-.sell-subtitle{
-    color:#7a8799;
+.link-label{
     font-size:11px;
-    margin-top:3px;
-}
-
-.switch{
-    position:relative;
-    width:55px;
-    height:30px;
-}
-
-.switch input{
-    display:none;
-}
-
-.slider{
-    position:absolute;
-    inset:0;
-    background:#d1d5db;
-    border-radius:30px;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.slider:before{
-    content:"";
-    position:absolute;
-    width:22px;
-    height:22px;
-    left:4px;
-    top:4px;
-    background:white;
-    border-radius:50%;
-    transition:.3s;
-    box-shadow:0 2px 5px rgba(0,0,0,.15);
-}
-
-input:checked + .slider{
-    background:#00b894;
-}
-
-input:checked + .slider:before{
-    transform:translateX(25px);
-}
-
-.sell-status{
-    margin-top:12px;
-    font-size:12px;
+    color:#31578d;
     font-weight:bold;
 }
 
-.sell-open{
-    color:#00a878;
+.link-value{
+    margin-top:5px;
+    color:#334f73;
+    font-size:12px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-.sell-closed{
-    color:#dc2626;
+.copy-link-btn,
+.share-btn{
+    border:0;
+    border-radius:14px;
+    font-weight:900;
+}
+
+.copy-link-btn{
+    width:43px;
+    height:43px;
+    background:#eef6ff;
+    color:#087ff5;
+    font-size:19px;
+}
+
+.share-btn{
+    padding:13px 23px;
+    background:linear-gradient(135deg,#5b20db,#7624eb);
+    color:white;
+    font-size:13px;
 }
 
 /* =========================================================
    QUICK ACTIONS
 ========================================================= */
 
-.actions{
+.quick-actions{
     display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:10px;
+    grid-template-columns:repeat(5,1fr);
+    gap:11px;
+    margin-top:15px;
 }
 
-.action{
+.quick-action{
     background:white;
-    padding:14px 7px;
-    min-height:100px;
+    border:1px solid #e6edf6;
     border-radius:17px;
-    text-align:center;
-    color:#172033;
-    box-shadow:0 4px 15px rgba(20,60,100,.06);
-    border:1px solid #e7eef6;
-    font-size:11px;
-    font-weight:bold;
+    min-height:125px;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    transition:.2s;
+    box-shadow:0 5px 18px rgba(20,60,100,.06);
+    color:#14366d;
+    font-weight:bold;
+    font-size:12px;
 }
 
-.action:hover{
-    transform:translateY(-2px);
-    box-shadow:0 7px 20px rgba(20,60,100,.10);
-}
-
-.action-icon{
-    width:43px;
-    height:43px;
-    border-radius:13px;
-    background:#edf6ff;
+.quick-icon{
+    width:56px;
+    height:56px;
+    border-radius:16px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:22px;
-    margin-bottom:8px;
+    font-size:28px;
+    margin-bottom:9px;
+}
+
+.green-icon{
+    background:#e5fff4;
+}
+
+.purple-icon{
+    background:#f0e7ff;
+}
+
+.blue-icon{
+    background:#e6f3ff;
+}
+
+.pink-icon{
+    background:#ffeaf0;
+}
+
+.download-icon{
+    background:#e8f5ff;
 }
 
 /* =========================================================
-   REFERRAL
+   INFORMATION GRID
 ========================================================= */
 
-.referral-box{
-    margin-top:16px;
-    background:linear-gradient(135deg,#ff9f43,#ee5253);
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:15px;
+}
+
+/* =========================================================
+   DEPOSIT COMMISSION
+========================================================= */
+
+.deposit-commission{
+    background:linear-gradient(135deg,#0752b5,#063d91);
     color:white;
+    border-radius:21px;
     padding:20px;
+    min-height:180px;
+    box-shadow:0 9px 23px rgba(8,60,150,.16);
+}
+
+.commission-top{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.commission-icon-big{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:rgba(255,255,255,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+}
+
+.commission-label{
+    font-size:12px;
+    font-weight:bold;
+}
+
+.commission-main{
+    margin-top:5px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.commission-percent{
+    font-size:44px;
+    font-weight:900;
+}
+
+.final-pill{
+    background:#28dd98;
+    color:#086744;
+    padding:7px 13px;
     border-radius:20px;
-    box-shadow:0 9px 22px rgba(238,82,83,.13);
+    font-size:11px;
+    font-weight:900;
+}
+
+.commission-example{
+    margin-top:7px;
+    font-size:13px;
+}
+
+.commission-note{
+    margin-top:5px;
+    font-size:10px;
+    opacity:.8;
+}
+
+/* =========================================================
+   REFERRAL COMMISSION
+========================================================= */
+
+.referral-commission{
+    background:white;
+    border-radius:21px;
+    padding:20px;
+    border:1px solid #e7eef7;
+    box-shadow:0 6px 20px rgba(20,60,100,.07);
+}
+
+.ref-title{
+    font-size:18px;
+    font-weight:900;
+    color:#123e7a;
+}
+
+.ref-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:15px;
+}
+
+.level-circle{
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:13px;
+    font-weight:900;
+}
+
+.level-a{
+    background:#0dbf72;
+}
+
+.level-b{
+    background:#147df5;
+}
+
+.level-c{
+    background:#f29b12;
+}
+
+.level-name{
+    flex:1;
+    color:#75849b;
+    font-size:13px;
+}
+
+.level-percent{
+    font-size:16px;
+    font-weight:900;
+    color:#123e7a;
+}
+
+/* =========================================================
+   SELL CONTROL
+========================================================= */
+
+.sell-control{
+    margin-top:15px;
+    background:linear-gradient(135deg,#f3fffb,#e7fff6);
+    border:1px solid #c8f1df;
+    border-radius:22px;
+    padding:18px 21px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.sell-power{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#0bbd73;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:31px;
+}
+
+.sell-info{
+    flex:1;
+}
+
+.sell-title{
+    font-size:18px;
+    font-weight:900;
+    color:#124478;
+}
+
+.sell-subtitle{
+    margin-top:4px;
+    font-size:11px;
+    color:#6e8295;
+}
+
+.sell-status{
+    font-size:17px;
+    font-weight:900;
+    margin-top:4px;
+}
+
+.sell-on{
+    color:#09a966;
+}
+
+.sell-off{
+    color:#dc3545;
+}
+
+.sell-switch{
+    width:58px;
+    height:32px;
     position:relative;
+}
+
+.sell-switch input{
+    display:none;
+}
+
+.sell-slider{
+    position:absolute;
+    inset:0;
+    background:#ccd5df;
+    border-radius:30px;
+}
+
+.sell-slider:before{
+    content:"";
+    position:absolute;
+    width:24px;
+    height:24px;
+    left:4px;
+    top:4px;
+    background:white;
+    border-radius:50%;
+    transition:.25s;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+.sell-switch input:checked + .sell-slider{
+    background:#09bd75;
+}
+
+.sell-switch input:checked + .sell-slider:before{
+    transform:translateX(26px);
+}
+
+/* =========================================================
+   RECENT TRANSACTIONS
+========================================================= */
+
+.transactions-box{
+    margin-top:15px;
+    background:white;
+    border:1px solid #e6edf6;
+    border-radius:21px;
+    box-shadow:0 6px 20px rgba(20,60,100,.07);
     overflow:hidden;
 }
 
-.referral-box:after{
-    content:"👥";
-    position:absolute;
-    right:22px;
-    top:10px;
-    font-size:75px;
-    opacity:.10;
+.transactions-head{
+    padding:17px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #edf2f7;
 }
 
-.referral-title{
+.transactions-head h3{
+    margin:0;
+    color:#123e7a;
     font-size:18px;
-    font-weight:bold;
-    position:relative;
-    z-index:2;
 }
 
-.referral-subtitle{
+.view-all{
+    color:#087ff5;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.transaction{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 20px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.transaction:last-child{
+    border-bottom:0;
+}
+
+.transaction-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    flex-shrink:0;
+}
+
+.transaction-main{
+    flex:1;
+    min-width:0;
+}
+
+.transaction-title{
+    font-size:12px;
+    font-weight:900;
+    color:#173d76;
+}
+
+.transaction-sub{
+    margin-top:3px;
+    color:#8190a4;
+    font-size:10px;
+}
+
+.transaction-amount{
+    text-align:right;
+    font-size:13px;
+    font-weight:900;
+}
+
+.credit{
+    color:#08a96d;
+}
+
+.debit{
+    color:#dc3545;
+}
+
+.transaction-status{
     margin-top:4px;
-    font-size:11px;
-    opacity:.9;
-    position:relative;
-    z-index:2;
-}
-
-.referral-code{
-    background:rgba(255,255,255,.18);
-    padding:12px;
-    border-radius:11px;
-    margin-top:13px;
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:20px;
+    background:#e8fff4;
+    color:#08a56c;
+    font-size:8px;
     font-weight:bold;
-    letter-spacing:1px;
-    word-break:break-all;
-    position:relative;
-    z-index:2;
 }
 
-.referral-link{
-    margin-top:9px;
-    font-size:11px;
-    opacity:.9;
-    word-break:break-all;
-    position:relative;
-    z-index:2;
+.transaction-time{
+    color:#8997aa;
+    font-size:9px;
+    margin-top:3px;
 }
+
+/* =========================================================
+   MESSAGE
+========================================================= */
 
 #message{
     text-align:center;
-    margin:15px 0 10px;
-    font-size:12px;
-    color:#718096;
+    padding:14px;
+    color:#7c8ba0;
+    font-size:11px;
 }
 
 /* =========================================================
@@ -1116,105 +874,86 @@ input:checked + .slider:before{
 .security-modal{
     position:fixed;
     inset:0;
-    background:rgba(8,24,48,.68);
+    background:rgba(5,25,55,.70);
     backdrop-filter:blur(7px);
     -webkit-backdrop-filter:blur(7px);
-    z-index:9999;
+    z-index:99999;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:20px;
-    opacity:0;
-    visibility:hidden;
-    transition:.25s ease;
-}
-
-.security-modal.show{
-    opacity:1;
-    visibility:visible;
+    padding:18px;
 }
 
 .security-modal-box{
     width:100%;
     max-width:430px;
     background:white;
-    border-radius:26px;
-    padding:26px;
-    box-shadow:0 25px 70px rgba(0,0,0,.25);
+    border-radius:25px;
+    padding:25px;
     text-align:center;
-    transform:translateY(20px) scale(.97);
-    transition:.25s ease;
-}
-
-.security-modal.show .security-modal-box{
-    transform:translateY(0) scale(1);
+    box-shadow:0 25px 70px rgba(0,0,0,.28);
 }
 
 .modal-lock{
-    width:68px;
-    height:68px;
-    margin:0 auto 15px;
-    border-radius:22px;
-    background:linear-gradient(135deg,#fff3d8,#ffe3a0);
+    width:66px;
+    height:66px;
+    border-radius:21px;
+    background:#fff3d8;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:32px;
+    margin:0 auto 14px;
+    font-size:31px;
 }
 
 .security-modal-box h2{
     margin:0;
-    color:#18345e;
+    color:#173c72;
     font-size:22px;
 }
 
 .security-modal-box h3{
-    margin:12px 0 0;
+    margin:10px 0 0;
     color:#d97706;
-    font-size:16px;
-    line-height:1.4;
+    font-size:15px;
+    line-height:1.45;
 }
 
 .security-modal-box p{
-    color:#68778d;
-    font-size:12px;
+    color:#6f7e91;
+    font-size:11px;
     line-height:1.6;
-    margin:10px 0 0;
 }
 
 .security-points{
-    text-align:left;
-    margin:17px 0;
-    padding:14px;
     background:#f7faff;
-    border:1px solid #e5edf7;
+    border:1px solid #e4edf7;
     border-radius:15px;
+    padding:12px;
+    text-align:left;
+    margin:15px 0;
 }
 
 .security-point{
-    display:flex;
-    gap:9px;
     margin:8px 0;
+    display:flex;
+    gap:8px;
+    color:#52647c;
     font-size:11px;
-    color:#526581;
-    line-height:1.4;
 }
 
 .security-point b{
-    color:#d83a52;
+    color:#d43d55;
 }
 
 .security-close{
     width:100%;
     border:0;
-    padding:13px;
     border-radius:14px;
+    padding:13px;
     background:linear-gradient(135deg,#087ff5,#0acb9d);
     color:white;
-    font-size:13px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:0 7px 18px rgba(8,127,245,.20);
+    font-weight:900;
 }
 
 /* =========================================================
@@ -1222,83 +961,73 @@ input:checked + .slider:before{
 ========================================================= */
 
 .bottom-nav{
+    display:none;
     position:fixed;
-    left:12px;
-    right:12px;
-    bottom:10px;
-    height:70px;
-    background:rgba(255,255,255,.97);
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    box-shadow:0 -5px 25px rgba(20,60,100,.13);
-    border:1px solid #e5edf7;
+    left:8px;
+    right:8px;
+    bottom:8px;
+    height:74px;
+    background:rgba(255,255,255,.98);
+    border:1px solid #e1eaf5;
     border-radius:23px;
-    z-index:100;
+    box-shadow:0 -6px 25px rgba(20,60,100,.13);
+    z-index:9000;
+    align-items:center;
+    justify-content:space-around;
 }
 
 .bottom-nav a{
     text-align:center;
-    color:#667085;
+    color:#50627c;
     font-size:10px;
-    font-weight:600;
-    min-width:48px;
+    font-weight:bold;
+    min-width:52px;
 }
 
 .bottom-nav span{
     display:block;
-    font-size:21px;
+    font-size:22px;
     margin-bottom:3px;
 }
 
 .bottom-nav .active{
-    color:#087ff5;
-    font-weight:bold;
+    color:#08ad6f;
 }
 
 .plus{
-    width:55px;
-    height:55px;
+    width:58px;
+    height:58px;
     border-radius:50%;
-    background:linear-gradient(135deg,#087ff5,#11cda7);
+    background:linear-gradient(135deg,#09bb72,#05a96a);
     color:white !important;
     display:flex !important;
     align-items:center;
     justify-content:center;
-    font-size:29px !important;
-    margin-top:-28px;
-    border:5px solid #f4f8ff;
-    box-shadow:0 7px 18px rgba(8,127,245,.25);
-}
-
-@media(min-width:901px){
-
-    .bottom-nav{
-        display:none;
-    }
-
+    font-size:31px !important;
+    margin-top:-31px;
+    border:5px solid #f3f8ff;
+    box-shadow:0 7px 20px rgba(0,170,110,.28);
 }
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
 @media(max-width:900px){
 
     header{
-        min-height:75px;
         padding:12px 14px;
     }
 
     .brand-logo{
-        width:42px;
-        height:42px;
-        font-size:24px;
-        border-radius:13px;
+        width:44px;
+        height:44px;
+        border-radius:14px;
+        font-size:25px;
     }
 
     .brand-text h1{
-        font-size:21px;
+        font-size:22px;
     }
 
     .brand-text p{
@@ -1309,166 +1038,176 @@ input:checked + .slider:before{
         gap:7px;
     }
 
-    .header-uid{
-        display:none;
-    }
-
-    .notification{
-        width:38px;
-        height:38px;
-        font-size:19px;
-    }
-
-    .header-profile{
-        width:39px;
-        height:39px;
-        font-size:19px;
-    }
-
-    .sidebar{
-        display:none;
+    .notification-btn,
+    .profile-btn{
+        width:40px;
+        height:40px;
     }
 
     .container{
-        margin:auto;
-        padding:14px 13px 95px;
-        max-width:700px;
+        padding:13px 12px 100px;
     }
 
-    .page-intro{
-        min-height:140px;
-        padding:20px;
+    .hero{
         border-radius:21px;
+        padding:15px;
     }
 
-    .page-intro h2{
-        font-size:23px;
+    .profile-avatar{
+        width:55px;
+        height:55px;
+        font-size:28px;
     }
 
-    .page-intro p{
+    .profile-name{
+        font-size:18px;
+    }
+
+    .uid-row{
         font-size:11px;
     }
 
-    .security-notice{
-        align-items:flex-start;
+    .balance-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:9px;
     }
 
-    .profile-card{
-        margin-top:12px;
+    .balance-card{
+        min-height:116px;
+        padding:13px;
     }
 
-    .bonus-title{
-        font-size:19px;
+    .balance-value{
+        font-size:20px;
     }
 
-    .actions{
-        grid-template-columns:repeat(3,1fr);
+    .balance-title{
+        font-size:10px;
+    }
+
+    .quick-actions{
+        grid-template-columns:repeat(5,1fr);
+        gap:7px;
+    }
+
+    .quick-action{
+        min-height:98px;
+        font-size:9px;
+    }
+
+    .quick-icon{
+        width:43px;
+        height:43px;
+        font-size:21px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .bottom-nav{
+        display:flex;
     }
 
 }
 
 @media(max-width:520px){
 
-    .cards{
-        grid-template-columns:1fr 1fr;
-        gap:10px;
+    .brand-text p{
+        display:none;
     }
 
-    .card{
-        min-height:118px;
-        padding:14px;
+    .hero-arrow{
+        font-size:27px;
     }
 
-    .card-value{
-        font-size:18px;
+    .referral-link-box{
+        gap:7px;
     }
 
-    .card-icon{
-        width:36px;
-        height:36px;
-        font-size:18px;
+    .link-icon{
+        width:42px;
+        height:42px;
+        font-size:21px;
     }
 
-    .rate-grid{
-        grid-template-columns:1fr;
-    }
-
-    .referral-rates{
-        grid-template-columns:1fr;
-    }
-
-    .action{
-        min-height:88px;
-        padding:12px 5px;
+    .link-value{
         font-size:10px;
     }
 
-    .action-icon{
+    .share-btn{
+        padding:11px 14px;
+        font-size:11px;
+    }
+
+    .copy-link-btn{
+        width:37px;
+        height:37px;
+    }
+
+    .quick-action{
+        min-height:88px;
+    }
+
+    .quick-icon{
         width:38px;
         height:38px;
-        font-size:19px;
+        font-size:18px;
+        border-radius:12px;
     }
 
-    .wallet{
-        padding:20px;
+    .commission-percent{
+        font-size:38px;
     }
 
-    .wallet-amount{
-        font-size:29px;
+    .transaction{
+        padding:12px 13px;
     }
 
-    .profile-name{
+    .transaction-icon{
+        width:37px;
+        height:37px;
+        font-size:18px;
+    }
+
+    .notification-panel{
+        top:62px;
+        right:10px;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .balance-value{
         font-size:17px;
     }
 
-    .status{
-        font-size:10px;
-        padding:6px 9px;
+    .balance-card{
+        min-height:105px;
     }
 
-    .bonus-card{
-        padding:16px;
+    .quick-actions{
+        gap:5px;
     }
 
-    .security-text{
-        font-size:10px;
+    .quick-action{
+        font-size:8px;
     }
 
-    .security-modal-box{
-        padding:22px 18px;
-    }
-
-}
-
-@media(max-width:360px){
-
-    .bottom-nav{
-        left:5px;
-        right:5px;
-    }
-
-    .bottom-nav a{
-        min-width:42px;
-        font-size:9px;
-    }
-
-    .plus{
-        width:50px;
-        height:50px;
-        font-size:25px !important;
+    .quick-icon{
+        width:34px;
+        height:34px;
     }
 
 }
 
-a:focus-visible,
-input:focus-visible,
-button:focus-visible{
-    outline:3px solid rgba(8,127,245,.25);
-    outline-offset:2px;
-}
+/* =========================================================
+   UTILITY
+========================================================= */
 
-.loading{
-    opacity:.55;
+.hidden{
+    display:none !important;
 }
 
 </style>
@@ -1477,8 +1216,569 @@ button:focus-visible{
 
 <body>
 
+
 <!-- =========================================================
-     SECURITY POPUP
+     HEADER
+========================================================= -->
+
+<header>
+
+    <div class="header-row">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                S
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    Sathi <span>Pay</span>
+                </h1>
+
+                <p>
+                    Secure Payments • Better Tomorrow
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <button
+                class="notification-btn"
+                onclick="toggleNotifications()"
+                aria-label="Notifications">
+
+                🔔
+
+                <span
+                    class="notification-badge"
+                    id="notificationCount">
+
+                    0
+
+                </span>
+
+            </button>
+
+
+            <div class="profile-btn">
+                👤
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     NOTIFICATION PANEL
+========================================================= -->
+
+<div
+    class="notification-panel"
+    id="notificationPanel">
+
+    <div class="notification-head">
+
+        <strong>
+            Notifications
+        </strong>
+
+        <button
+            onclick="toggleNotifications()">
+
+            ×
+
+        </button>
+
+    </div>
+
+    <div
+        class="notification-list"
+        id="notificationList">
+
+        <div class="no-notification">
+            Loading notifications...
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="profile-line">
+
+            <div class="profile-avatar">
+                👤
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-name">
+
+                    Hi,
+                    <span id="customerName">
+                        Customer
+                    </span>
+
+                    <span class="active-pill">
+                        Active
+                    </span>
+
+                </div>
+
+                <div class="uid-row">
+
+                    UID:
+                    <span id="customerUID">
+                        Loading...
+                    </span>
+
+                    <button
+                        class="uid-copy"
+                        onclick="copyUID()"
+                        title="Copy UID">
+
+                        📋
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="hero-arrow">
+                ›
+            </div>
+
+        </div>
+
+
+        <div class="balance-grid">
+
+
+            <div class="balance-card">
+
+                <div class="balance-icon">
+                    💼
+                </div>
+
+                <div class="balance-title">
+                    Total Balance
+                </div>
+
+                <div
+                    class="balance-value"
+                    id="walletBalance">
+
+                    ₹0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="balance-card">
+
+                <div class="balance-icon">
+                    🎁
+                </div>
+
+                <div class="balance-title">
+                    Referral Commission
+                </div>
+
+                <div
+                    class="balance-value"
+                    id="referralBalance">
+
+                    ₹0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="balance-card">
+
+                <div class="balance-icon">
+                    🪙
+                </div>
+
+                <div class="balance-title">
+                    Today's Earnings
+                </div>
+
+                <div
+                    class="balance-value"
+                    id="todayEarnings">
+
+                    ₹0.00
+
+                </div>
+
+            </div>
+
+
+            <div class="balance-card">
+
+                <div class="balance-icon">
+                    👑
+                </div>
+
+                <div class="balance-title">
+                    Total Earnings
+                </div>
+
+                <div
+                    class="balance-value"
+                    id="totalEarnings">
+
+                    ₹0.00
+
+                </div>
+
+                <div
+                    class="balance-small"
+                    id="quotaText">
+
+                    Quota VIP 1
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REFERRAL LINK -->
+
+    <section class="referral-link-box">
+
+        <div class="link-icon">
+            🔗
+        </div>
+
+        <div class="link-content">
+
+            <div class="link-label">
+                Your Referral Link
+            </div>
+
+            <div
+                class="link-value"
+                id="referralLink">
+
+                Loading referral link...
+
+            </div>
+
+        </div>
+
+        <button
+            class="copy-link-btn"
+            onclick="copyReferralLink()">
+
+            📋
+
+        </button>
+
+        <button
+            class="share-btn"
+            onclick="shareReferral()">
+
+            Share
+
+        </button>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <section class="quick-actions">
+
+        <a
+            class="quick-action"
+            href="deposit.html">
+
+            <div class="quick-icon green-icon">
+                💰
+            </div>
+
+            Deposit
+
+        </a>
+
+
+        <a
+            class="quick-action"
+            href="referral.html">
+
+            <div class="quick-icon purple-icon">
+                👥
+            </div>
+
+            My Team
+
+        </a>
+
+
+        <a
+            class="quick-action"
+            href="wallet.html">
+
+            <div class="quick-icon blue-icon">
+                💼
+            </div>
+
+            Wallet
+
+        </a>
+
+
+        <a
+            class="quick-action"
+            href="referral.html">
+
+            <div class="quick-icon pink-icon">
+                🔗
+            </div>
+
+            Referral
+
+        </a>
+
+
+        <a
+            class="quick-action"
+            href="#"
+            onclick="showAppMessage(); return false;">
+
+            <div class="quick-icon download-icon">
+                ⬇️
+            </div>
+
+            App Download
+
+        </a>
+
+    </section>
+
+
+    <!-- COMMISSION INFORMATION -->
+
+    <section class="info-grid">
+
+
+        <div class="deposit-commission">
+
+            <div class="commission-top">
+
+                <div class="commission-icon-big">
+                    📈
+                </div>
+
+                <div>
+
+                    <div class="commission-label">
+                        Deposit Commission
+                    </div>
+
+                    <div class="commission-main">
+
+                        <span class="commission-percent">
+                            6%
+                        </span>
+
+                        <span class="final-pill">
+                            Final
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="commission-example">
+                Example: ₹1,000 → ₹60
+            </div>
+
+            <div class="commission-note">
+                Commission is calculated according to
+                the approved deposit rules.
+            </div>
+
+        </div>
+
+
+        <div class="referral-commission">
+
+            <div class="ref-title">
+                Referral Commission
+            </div>
+
+
+            <div class="ref-row">
+
+                <div class="level-circle level-a">
+                    A
+                </div>
+
+                <div class="level-name">
+                    Level
+                </div>
+
+                <div class="level-percent">
+                    1%
+                </div>
+
+            </div>
+
+
+            <div class="ref-row">
+
+                <div class="level-circle level-b">
+                    B
+                </div>
+
+                <div class="level-name">
+                    Level
+                </div>
+
+                <div class="level-percent">
+                    0.5%
+                </div>
+
+            </div>
+
+
+            <div class="ref-row">
+
+                <div class="level-circle level-c">
+                    C
+                </div>
+
+                <div class="level-name">
+                    Level
+                </div>
+
+                <div class="level-percent">
+                    0.2%
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SELL CONTROL -->
+
+    <section class="sell-control">
+
+        <div class="sell-power">
+            ⏻
+        </div>
+
+        <div class="sell-info">
+
+            <div class="sell-title">
+                Your Account Status
+            </div>
+
+            <div
+                class="sell-status sell-off"
+                id="sellStatus">
+
+                Sell OFF
+
+            </div>
+
+            <div class="sell-subtitle">
+                Control your selling activity
+            </div>
+
+        </div>
+
+
+        <label class="sell-switch">
+
+            <input
+                type="checkbox"
+                id="sellToggle"
+                onchange="changeSellStatus()">
+
+            <span class="sell-slider"></span>
+
+        </label>
+
+    </section>
+
+
+    <!-- RECENT TRANSACTIONS -->
+
+    <section class="transactions-box">
+
+        <div class="transactions-head">
+
+            <h3>
+                Recent Transactions
+            </h3>
+
+            <a
+                href="transactions.html"
+                class="view-all">
+
+                View All ›
+
+            </a>
+
+        </div>
+
+
+        <div id="transactionList">
+
+            <div class="no-notification">
+                Loading transactions...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div id="message">
+        Loading dashboard...
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     SECURITY MODAL
 ========================================================= -->
 
 <div
@@ -1500,36 +1800,47 @@ button:focus-visible{
         </h3>
 
         <p>
-            Keep your Sathi Pay account information private.
-            Genuine support will never ask you to reveal your
-            OTP, password or PIN.
+            Genuine Sathi Pay support will never ask you
+            to reveal your OTP, password or PIN.
         </p>
 
         <div class="security-points">
 
             <div class="security-point">
+
                 🛡️
+
                 <span>
-                    <b>Never share</b> your OTP with anyone.
+                    <b>Never share</b> your OTP.
                 </span>
+
             </div>
 
+
             <div class="security-point">
+
                 🔑
+
                 <span>
                     Never share your <b>password</b> or PIN.
                 </span>
+
             </div>
 
+
             <div class="security-point">
+
                 🚨
+
                 <span>
                     If someone asks for these details,
                     do not share them.
                 </span>
+
             </div>
 
         </div>
+
 
         <button
             class="security-close"
@@ -1545,771 +1856,10 @@ button:focus-visible{
 
 
 <!-- =========================================================
-     HEADER
-========================================================= -->
-
-<header>
-
-    <div class="header-row">
-
-        <div class="brand">
-
-            <div class="brand-logo">
-                S
-            </div>
-
-            <div class="brand-text">
-
-                <h1>Sathi Pay</h1>
-
-                <p>
-                    Secure • Fast • Reliable
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="header-right">
-
-            <div class="header-uid">
-
-                UID:
-                <span id="headerCustomerUID">
-                    Loading...
-                </span>
-
-                <span class="header-status">
-                    ● Active
-                </span>
-
-            </div>
-
-            <div class="notification">
-
-                🔔
-
-                <span class="notification-badge">
-                    3
-                </span>
-
-            </div>
-
-            <div class="header-profile">
-                👤
-            </div>
-
-        </div>
-
-    </div>
-
-</header>
-
-
-<!-- =========================================================
-     SIDEBAR
-========================================================= -->
-
-<aside class="sidebar">
-
-    <div class="sidebar-profile">
-
-        <div class="sidebar-avatar">
-            👤
-        </div>
-
-        <div
-            class="sidebar-name"
-            id="sidebarCustomerName">
-            Loading...
-        </div>
-
-        <div class="sidebar-uid">
-
-            UID:
-            <span id="sidebarCustomerUID">
-                Loading...
-            </span>
-
-        </div>
-
-        <div class="sidebar-status">
-            ● Active
-        </div>
-
-    </div>
-
-    <nav class="sidebar-menu">
-
-        <a href="dashboard.html" class="active">
-
-            <span class="sidebar-icon">
-                🏠
-            </span>
-
-            Dashboard
-
-        </a>
-
-        <a href="deposit.html">
-
-            <span class="sidebar-icon">
-                💰
-            </span>
-
-            Deposit
-
-        </a>
-
-        <a href="commission.html">
-
-            <span class="sidebar-icon">
-                📊
-            </span>
-
-            Earnings
-
-        </a>
-
-        <a href="referral.html">
-
-            <span class="sidebar-icon">
-                👥
-            </span>
-
-            Referral
-
-        </a>
-
-        <a href="wallet.html">
-
-            <span class="sidebar-icon">
-                💼
-            </span>
-
-            Wallet
-
-        </a>
-
-        <a href="profile.html">
-
-            <span class="sidebar-icon">
-                👤
-            </span>
-
-            Profile
-
-        </a>
-
-    </nav>
-
-    <div class="sidebar-extra">
-
-        <div class="sidebar-promo">
-
-            <strong>
-                🎁 ₹99 Welcome Bonus
-            </strong>
-
-            <small>
-                Welcome to Sathi Pay.<br>
-                Check your wallet for credited bonus.
-            </small>
-
-        </div>
-
-        <div class="sidebar-support">
-
-            <a href="support.html">
-                🎧 Support
-            </a>
-
-            <a href="support.html">
-                ✈️ Telegram
-            </a>
-
-        </div>
-
-        <div class="sidebar-logout">
-
-            <a
-                href="customer-login.html"
-                onclick="logoutCustomer(); return false;">
-
-                🚪 Logout
-
-            </a>
-
-        </div>
-
-    </div>
-
-</aside>
-
-
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
-<div class="container">
-
-    <!-- HERO -->
-
-    <section class="page-intro">
-
-        <div class="hero-content">
-
-            <div class="hero-badge">
-                ✨ MEMBER DASHBOARD
-            </div>
-
-            <h2>
-                Welcome to Sathi Pay 👋
-            </h2>
-
-            <p>
-                Manage your wallet, deposits, earnings and
-                referral network from one secure place.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- SECURITY BANNER -->
-
-    <section class="security-notice">
-
-        <div class="security-icon">
-            🔐
-        </div>
-
-        <div>
-
-            <div class="security-title">
-                NEVER SHARE OTP OR PASSWORD
-            </div>
-
-            <div class="security-text">
-                Sathi Pay will never ask you to share your
-                OTP, password or PIN. Keep your account
-                information private and secure.
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- PROFILE -->
-
-    <div class="profile-card">
-
-        <div class="profile-top">
-
-            <div class="profile-left">
-
-                <div class="profile-avatar">
-                    👤
-                </div>
-
-                <div>
-
-                    <div
-                        class="profile-name"
-                        id="customerName">
-
-                        Loading...
-
-                    </div>
-
-                    <div class="uid">
-
-                        UID:
-                        <b id="customerUID">
-                            Loading...
-                        </b>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div
-                class="status"
-                id="accountStatus">
-
-                Active
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- WELCOME BONUS -->
-
-    <section class="bonus-card">
-
-        <div class="bonus-content">
-
-            <div class="bonus-label">
-                🎁 NEW MEMBER BENEFIT
-            </div>
-
-            <div class="bonus-title">
-                ₹99 Welcome Bonus
-            </div>
-
-            <div class="bonus-subtitle">
-                Welcome to Sathi Pay. Eligible new users can
-                receive a ₹99 welcome bonus according to the
-                registration and bonus rules.
-            </div>
-
-            <div
-                class="bonus-amount"
-                id="welcomeBonusAmount">
-
-                ₹0.00
-
-            </div>
-
-            <div class="bonus-note">
-                Current bonus balance shown above.
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- WALLET -->
-
-    <div
-        class="wallet"
-        id="wallet-section">
-
-        <div class="wallet-content">
-
-            <div class="wallet-top">
-
-                <div class="wallet-title">
-                    Available Wallet Balance
-                </div>
-
-                <div class="wallet-chip">
-                    🔒 SECURE WALLET
-                </div>
-
-            </div>
-
-            <div
-                class="wallet-amount"
-                id="walletBalance">
-
-                ₹0.00
-
-            </div>
-
-            <div class="wallet-row">
-
-                <span>
-                    Bonus
-                </span>
-
-                <b id="bonusBalance">
-                    ₹0.00
-                </b>
-
-            </div>
-
-            <div class="wallet-divider"></div>
-
-            <div class="wallet-row">
-
-                <span>
-                    Commission
-                </span>
-
-                <b id="commissionBalance">
-                    ₹0.00
-                </b>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- BALANCE CARDS -->
-
-    <div class="cards">
-
-        <div class="card">
-
-            <div class="card-icon blue-bg">
-                💰
-            </div>
-
-            <div class="card-title">
-                Deposit Balance
-            </div>
-
-            <div
-                class="card-value blue"
-                id="depositBalance">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="card-icon orange-bg">
-                👥
-            </div>
-
-            <div class="card-title">
-                Referral Income
-            </div>
-
-            <div
-                class="card-value orange"
-                id="referralBalance">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="card-icon purple-bg">
-                📈
-            </div>
-
-            <div class="card-title">
-                Today's Earnings
-            </div>
-
-            <div
-                class="card-value purple"
-                id="todayEarnings">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- COMMISSION -->
-
-    <div class="commission-box">
-
-        <div class="commission-heading">
-
-            <div class="commission-icon">
-                💰
-            </div>
-
-            <div>
-
-                <h3>
-                    Deposit Commission Rules
-                </h3>
-
-                <p>
-                    Commission is calculated only on approved deposits.
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="rate-grid">
-
-            <div class="rate">
-
-                <div class="rate-range">
-                    ₹1 – ₹9,999
-                </div>
-
-                <div class="rate-percent">
-                    6%
-                </div>
-
-                <div class="rate-label">
-                    Commission
-                </div>
-
-            </div>
-
-            <div class="rate">
-
-                <div class="rate-range">
-                    ₹10,000 – ₹19,999
-                </div>
-
-                <div class="rate-percent">
-                    8%
-                </div>
-
-                <div class="rate-label">
-                    Commission
-                </div>
-
-            </div>
-
-            <div class="rate">
-
-                <div class="rate-range">
-                    ₹20,000+
-                </div>
-
-                <div class="rate-percent">
-                    10%
-                </div>
-
-                <div class="rate-label">
-                    Commission
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="referral-rates">
-
-            <div class="ref-rate">
-
-                <span>
-                    Referral Level A
-                </span>
-
-                <b>
-                    1%
-                </b>
-
-            </div>
-
-            <div class="ref-rate">
-
-                <span>
-                    Referral Level B
-                </span>
-
-                <b>
-                    0.5%
-                </b>
-
-            </div>
-
-            <div class="ref-rate">
-
-                <span>
-                    Referral Level C
-                </span>
-
-                <b>
-                    0.2%
-                </b>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- SELL -->
-
-    <div class="sell-box">
-
-        <div class="sell-header">
-
-            <div class="sell-title-wrap">
-
-                <div class="sell-icon">
-                    🛍️
-                </div>
-
-                <div>
-
-                    <div class="sell-title">
-                        Sell Control
-                    </div>
-
-                    <div class="sell-subtitle">
-                        Control your selling activity
-                    </div>
-
-                </div>
-
-            </div>
-
-            <label class="switch">
-
-                <input
-                    type="checkbox"
-                    id="sellToggle"
-                    onchange="changeSellStatus()">
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-        <div
-            id="sellStatus"
-            class="sell-status sell-closed">
-
-            ● Closed - Selling OFF
-
-        </div>
-
-    </div>
-
-
-    <!-- QUICK ACTIONS -->
-
-    <h3 class="section-title">
-        Quick Actions
-    </h3>
-
-    <div class="actions">
-
-        <a
-            class="action"
-            href="deposit.html">
-
-            <span class="action-icon">
-                💰
-            </span>
-
-            Deposit
-
-        </a>
-
-        <a
-            class="action"
-            href="transactions.html">
-
-            <span class="action-icon">
-                📜
-            </span>
-
-            History
-
-        </a>
-
-        <a
-            class="action"
-            href="link-upi.html">
-
-            <span class="action-icon">
-                🔗
-            </span>
-
-            Link UPI
-
-        </a>
-
-        <a
-            class="action"
-            href="referral.html">
-
-            <span class="action-icon">
-                👥
-            </span>
-
-            Team
-
-        </a>
-
-        <a
-            class="action"
-            href="commission.html">
-
-            <span class="action-icon">
-                📊
-            </span>
-
-            Earnings
-
-        </a>
-
-        <a
-            class="action"
-            href="support.html">
-
-            <span class="action-icon">
-                🎧
-            </span>
-
-            Support
-
-        </a>
-
-    </div>
-
-
-    <!-- REFERRAL -->
-
-    <div class="referral-box">
-
-        <div class="referral-title">
-            🔗 Invite & Earn
-        </div>
-
-        <div class="referral-subtitle">
-            Share your referral code and grow your team.
-        </div>
-
-        <div
-            class="referral-code"
-            id="invitationCode">
-
-            Loading...
-
-        </div>
-
-        <div
-            class="referral-link"
-            id="referralLink">
-
-            Loading referral link...
-
-        </div>
-
-    </div>
-
-
-    <div id="message">
-        Loading dashboard...
-    </div>
-
-</div>
-
-
-<!-- =========================================================
      MOBILE BOTTOM NAV
 ========================================================= -->
 
-<div class="bottom-nav">
+<nav class="bottom-nav">
 
     <a
         href="dashboard.html"
@@ -2323,6 +1873,7 @@ button:focus-visible{
 
     </a>
 
+
     <a href="deposit.html">
 
         <span>
@@ -2333,6 +1884,7 @@ button:focus-visible{
 
     </a>
 
+
     <a href="link-upi.html">
 
         <span class="plus">
@@ -2340,6 +1892,7 @@ button:focus-visible{
         </span>
 
     </a>
+
 
     <a href="referral.html">
 
@@ -2351,6 +1904,7 @@ button:focus-visible{
 
     </a>
 
+
     <a href="wallet.html">
 
         <span>
@@ -2361,7 +1915,7 @@ button:focus-visible{
 
     </a>
 
-</div>
+</nav>
 
 
 <!-- =========================================================
@@ -2400,29 +1954,22 @@ function getCustomerId(){
             "sathiPayCustomerId"
         );
 
-    if(
-        id &&
-        id.trim() !== ""
-    ){
-
+    if(id && id.trim() !== ""){
         return id.trim();
-
     }
 
     return null;
-
 }
 
 
 /* =========================================================
-   MONEY FORMAT
+   MONEY
 ========================================================= */
 
 function formatMoney(value){
 
     return "₹" +
-        Number(value || 0)
-        .toLocaleString(
+        Number(value || 0).toLocaleString(
             "en-IN",
             {
                 minimumFractionDigits:2,
@@ -2434,13 +1981,154 @@ function formatMoney(value){
 
 
 /* =========================================================
+   COPY UID
+========================================================= */
+
+async function copyUID(){
+
+    const uid =
+        document.getElementById(
+            "customerUID"
+        ).innerText.trim();
+
+    if(
+        !uid ||
+        uid === "Loading..." ||
+        uid === "Not available"
+    ){
+        return;
+    }
+
+    try{
+
+        await navigator.clipboard.writeText(uid);
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "UID copied successfully.";
+
+    }
+    catch(error){
+
+        const textarea =
+            document.createElement("textarea");
+
+        textarea.value = uid;
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        textarea.remove();
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "UID copied successfully.";
+
+    }
+
+}
+
+
+/* =========================================================
+   REFERRAL LINK
+========================================================= */
+
+let currentReferralLink = "";
+
+
+async function copyReferralLink(){
+
+    if(!currentReferralLink){
+        return;
+    }
+
+    try{
+
+        await navigator.clipboard.writeText(
+            currentReferralLink
+        );
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "Referral link copied.";
+
+    }
+    catch(error){
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "Unable to copy referral link.";
+
+    }
+
+}
+
+
+async function shareReferral(){
+
+    if(!currentReferralLink){
+        return;
+    }
+
+    const shareData = {
+
+        title:"Sathi Pay",
+
+        text:
+            "Join me on Sathi Pay using my referral link:",
+
+        url:currentReferralLink
+
+    };
+
+
+    if(
+        navigator.share
+    ){
+
+        try{
+
+            await navigator.share(
+                shareData
+            );
+
+        }
+        catch(error){
+
+            console.log(
+                "Share cancelled."
+            );
+
+        }
+
+    }
+    else{
+
+        await copyReferralLink();
+
+        alert(
+            "Referral link copied. You can now share it."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    TODAY RANGE
 ========================================================= */
 
 function getTodayRange(){
 
-    const now =
-        new Date();
+    const now = new Date();
 
     const parts =
         new Intl.DateTimeFormat(
@@ -2470,6 +2158,7 @@ function getTodayRange(){
         }
     );
 
+
     const start =
         new Date(
             `${map.year}-${map.month}-${map.day}T00:00:00+05:30`
@@ -2481,13 +2170,12 @@ function getTodayRange(){
             86400000
         );
 
+
     return {
 
-        start:
-            start.toISOString(),
+        start:start.toISOString(),
 
-        end:
-            end.toISOString()
+        end:end.toISOString()
 
     };
 
@@ -2509,8 +2197,8 @@ async function loadTodayEarnings(
 
 
     const {
-        data: ledger,
-        error: ledgerError
+        data,
+        error
     } =
         await supabaseClient
         .from("wallet_ledger")
@@ -2537,179 +2225,45 @@ async function loadTodayEarnings(
         .lt(
             "created_at",
             range.end
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
         );
 
 
-    if(!ledgerError){
+    if(
+        !error &&
+        data
+    ){
 
-        if(ledger){
+        data.forEach(
+            function(row){
 
-            ledger.forEach(
-                function(row){
+                const component =
+                    String(
+                        row.component || ""
+                    ).toLowerCase();
 
-                    const component =
-                        String(
-                            row.component ||
-                            ""
-                        ).toLowerCase();
+                const reason =
+                    String(
+                        row.reason || ""
+                    ).toLowerCase();
 
-                    const reason =
-                        String(
-                            row.reason ||
-                            ""
-                        ).toLowerCase();
+                const reference =
+                    String(
+                        row.reference || ""
+                    ).toLowerCase();
 
-                    const reference =
-                        String(
-                            row.reference ||
-                            ""
-                        ).toLowerCase();
 
-                    const isCommission =
-                        component.includes("commission") ||
-                        reason.includes("commission") ||
-                        reference.includes("commission");
+                if(
+                    component.includes("commission") ||
+                    reason.includes("commission") ||
+                    reference.includes("commission")
+                ){
 
-                    if(isCommission){
-
-                        total +=
-                            Number(
-                                row.amount ||
-                                0
-                            );
-
-                    }
+                    total +=
+                        Number(
+                            row.amount || 0
+                        );
 
                 }
-            );
-
-        }
-
-        document.getElementById(
-            "todayEarnings"
-        ).innerText =
-            formatMoney(total);
-
-        return;
-
-    }
-
-
-    console.error(
-        "Wallet ledger earnings error:",
-        ledgerError
-    );
-
-
-    const {
-        data: deposits,
-        error: depositError
-    } =
-        await supabaseClient
-        .from(
-            "customer_deposits"
-        )
-        .select(
-            "commission"
-        )
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .eq(
-            "status",
-            "approved"
-        )
-        .gte(
-            "created_at",
-            range.start
-        )
-        .lt(
-            "created_at",
-            range.end
-        );
-
-
-    if(depositError){
-
-        console.error(
-            "Deposit earnings error:",
-            depositError
-        );
-
-    }
-
-    if(deposits){
-
-        deposits.forEach(
-            function(row){
-
-                total +=
-                    Number(
-                        row.commission ||
-                        0
-                    );
-
-            }
-        );
-
-    }
-
-
-    const {
-        data: referrals,
-        error: referralError
-    } =
-        await supabaseClient
-        .from(
-            "customer_referral_commissions"
-        )
-        .select(
-            "commission_amount"
-        )
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .eq(
-            "status",
-            "approved"
-        )
-        .gte(
-            "created_at",
-            range.start
-        )
-        .lt(
-            "created_at",
-            range.end
-        );
-
-
-    if(referralError){
-
-        console.error(
-            "Referral earnings error:",
-            referralError
-        );
-
-    }
-
-    if(referrals){
-
-        referrals.forEach(
-            function(row){
-
-                total +=
-                    Number(
-                        row.commission_amount ||
-                        0
-                    );
 
             }
         );
@@ -2726,6 +2280,657 @@ async function loadTodayEarnings(
 
 
 /* =========================================================
+   TOTAL EARNINGS
+========================================================= */
+
+async function loadTotalEarnings(
+    customerId,
+    customer
+){
+
+    let total = 0;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("wallet_ledger")
+        .select(`
+            component,
+            direction,
+            amount,
+            reason,
+            reference
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .eq(
+            "direction",
+            "credit"
+        );
+
+
+    if(
+        !error &&
+        data
+    ){
+
+        data.forEach(
+            function(row){
+
+                const component =
+                    String(
+                        row.component || ""
+                    ).toLowerCase();
+
+                const reason =
+                    String(
+                        row.reason || ""
+                    ).toLowerCase();
+
+                const reference =
+                    String(
+                        row.reference || ""
+                    ).toLowerCase();
+
+
+                const commission =
+                    component.includes("commission") ||
+                    reason.includes("commission") ||
+                    reference.includes("commission");
+
+
+                const referral =
+                    component.includes("referral") ||
+                    reason.includes("referral") ||
+                    reference.includes("referral");
+
+
+                if(
+                    commission ||
+                    referral
+                ){
+
+                    total +=
+                        Number(
+                            row.amount || 0
+                        );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "totalEarnings"
+    ).innerText =
+        formatMoney(total);
+
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+async function loadNotifications(
+    customerId
+){
+
+    const list =
+        document.getElementById(
+            "notificationList"
+        );
+
+    list.innerHTML =
+        `<div class="no-notification">
+            Loading notifications...
+        </div>`;
+
+
+    /*
+     * Broadcast notifications:
+     *
+     * customer_id IS NULL
+     *
+     * Customer-specific:
+     *
+     * customer_id = current customer
+     *
+     * Admin can therefore publish one
+     * notification for every user.
+     */
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("notifications")
+        .select(`
+            id,
+            customer_id,
+            title,
+            message,
+            type,
+            is_active,
+            created_at
+        `)
+        .eq(
+            "is_active",
+            true
+        )
+        .or(
+            `customer_id.is.null,customer_id.eq.${customerId}`
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        )
+        .limit(30);
+
+
+    if(error){
+
+        console.error(
+            "Notification error:",
+            error
+        );
+
+        list.innerHTML =
+            `<div class="no-notification">
+                No notifications available.
+            </div>`;
+
+        document.getElementById(
+            "notificationCount"
+        ).innerText = "0";
+
+        return;
+
+    }
+
+
+    if(
+        !data ||
+        data.length === 0
+    ){
+
+        list.innerHTML =
+            `<div class="no-notification">
+                No new notifications.
+            </div>`;
+
+        document.getElementById(
+            "notificationCount"
+        ).innerText = "0";
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "notificationCount"
+    ).innerText =
+        data.length > 99
+        ? "99+"
+        : data.length;
+
+
+    list.innerHTML = "";
+
+
+    data.forEach(
+        function(row){
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "notification-item";
+
+
+            const title =
+                document.createElement("div");
+
+            title.className =
+                "notification-item-title";
+
+            title.innerText =
+                row.title ||
+                "Sathi Pay Update";
+
+
+            const message =
+                document.createElement("div");
+
+            message.className =
+                "notification-item-message";
+
+            message.innerText =
+                row.message ||
+                "";
+
+
+            const time =
+                document.createElement("div");
+
+            time.className =
+                "notification-item-time";
+
+            time.innerText =
+                formatDateTime(
+                    row.created_at
+                );
+
+
+            item.appendChild(title);
+            item.appendChild(message);
+            item.appendChild(time);
+
+            list.appendChild(item);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NOTIFICATION TOGGLE
+========================================================= */
+
+function toggleNotifications(){
+
+    const panel =
+        document.getElementById(
+            "notificationPanel"
+        );
+
+    panel.classList.toggle(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   RECENT TRANSACTIONS
+========================================================= */
+
+async function loadTransactions(
+    customerId
+){
+
+    const list =
+        document.getElementById(
+            "transactionList"
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("wallet_ledger")
+        .select(`
+            id,
+            component,
+            direction,
+            amount,
+            reason,
+            reference,
+            created_at
+        `)
+        .eq(
+            "customer_id",
+            customerId
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        )
+        .limit(5);
+
+
+    if(error){
+
+        console.error(
+            "Transaction error:",
+            error
+        );
+
+        list.innerHTML =
+            `<div class="no-notification">
+                No recent transactions.
+            </div>`;
+
+        return;
+
+    }
+
+
+    if(
+        !data ||
+        data.length === 0
+    ){
+
+        list.innerHTML =
+            `<div class="no-notification">
+                No recent transactions.
+            </div>`;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    data.forEach(
+        function(row){
+
+            const direction =
+                String(
+                    row.direction || ""
+                ).toLowerCase();
+
+
+            const isCredit =
+                direction === "credit";
+
+
+            const title =
+                getTransactionTitle(
+                    row
+                );
+
+
+            const icon =
+                getTransactionIcon(
+                    row
+                );
+
+
+            const amount =
+                formatMoney(
+                    row.amount
+                );
+
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "transaction";
+
+
+            const iconDiv =
+                document.createElement("div");
+
+            iconDiv.className =
+                "transaction-icon " +
+                (
+                    isCredit
+                    ? "green-icon"
+                    : "pink-icon"
+                );
+
+            iconDiv.innerText =
+                icon;
+
+
+            const main =
+                document.createElement("div");
+
+            main.className =
+                "transaction-main";
+
+
+            const titleDiv =
+                document.createElement("div");
+
+            titleDiv.className =
+                "transaction-title";
+
+            titleDiv.innerText =
+                title;
+
+
+            const sub =
+                document.createElement("div");
+
+            sub.className =
+                "transaction-sub";
+
+            sub.innerText =
+                row.reason ||
+                row.reference ||
+                (
+                    isCredit
+                    ? "Credit"
+                    : "Debit"
+                );
+
+
+            main.appendChild(titleDiv);
+            main.appendChild(sub);
+
+
+            const right =
+                document.createElement("div");
+
+            right.className =
+                "transaction-amount";
+
+
+            const amountDiv =
+                document.createElement("div");
+
+            amountDiv.className =
+                isCredit
+                ? "credit"
+                : "debit";
+
+            amountDiv.innerText =
+                (
+                    isCredit
+                    ? "+ "
+                    : "- "
+                ) + amount;
+
+
+            const status =
+                document.createElement("span");
+
+            status.className =
+                "transaction-status";
+
+            status.innerText =
+                isCredit
+                ? "Completed"
+                : "Processed";
+
+
+            const time =
+                document.createElement("div");
+
+            time.className =
+                "transaction-time";
+
+            time.innerText =
+                formatDateTime(
+                    row.created_at
+                );
+
+
+            right.appendChild(amountDiv);
+            right.appendChild(status);
+            right.appendChild(time);
+
+
+            div.appendChild(iconDiv);
+            div.appendChild(main);
+            div.appendChild(right);
+
+
+            list.appendChild(div);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   TRANSACTION TITLE
+========================================================= */
+
+function getTransactionTitle(row){
+
+    const text =
+        (
+            String(
+                row.component || ""
+            ) +
+            " " +
+            String(
+                row.reason || ""
+            ) +
+            " " +
+            String(
+                row.reference || ""
+            )
+        ).toLowerCase();
+
+
+    if(text.includes("deposit")){
+        return "Deposit Received";
+    }
+
+    if(text.includes("commission")){
+        return "Commission Credit";
+    }
+
+    if(text.includes("referral")){
+        return "Referral Income";
+    }
+
+    if(text.includes("bonus")){
+        return "Welcome Bonus";
+    }
+
+    if(text.includes("top")){
+        return "Wallet Top-up";
+    }
+
+    return row.component ||
+        "Wallet Transaction";
+
+}
+
+
+/* =========================================================
+   TRANSACTION ICON
+========================================================= */
+
+function getTransactionIcon(row){
+
+    const text =
+        (
+            String(row.component || "") +
+            " " +
+            String(row.reason || "") +
+            " " +
+            String(row.reference || "")
+        ).toLowerCase();
+
+
+    if(text.includes("deposit")){
+        return "💰";
+    }
+
+    if(text.includes("commission")){
+        return "🎁";
+    }
+
+    if(text.includes("referral")){
+        return "🔗";
+    }
+
+    if(text.includes("bonus")){
+        return "🎁";
+    }
+
+    if(text.includes("top")){
+        return "💼";
+    }
+
+    return "₹";
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDateTime(
+    value
+){
+
+    if(!value){
+        return "";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            hour12:true,
+            timeZone:"Asia/Kolkata"
+        }
+    );
+
+}
+
+
+/* =========================================================
    LOAD DASHBOARD
 ========================================================= */
 
@@ -2736,6 +2941,7 @@ async function loadDashboard(){
             "message"
         );
 
+
     try{
 
         const customerId =
@@ -2743,9 +2949,6 @@ async function loadDashboard(){
 
 
         if(!customerId){
-
-            message.innerText =
-                "Please login again.";
 
             window.location.href =
                 "customer-login.html";
@@ -2756,7 +2959,7 @@ async function loadDashboard(){
 
 
         const {
-            data: customer,
+            data:customer,
             error
         } =
             await supabaseClient
@@ -2783,9 +2986,7 @@ async function loadDashboard(){
 
 
         if(error){
-
             throw error;
-
         }
 
 
@@ -2799,69 +3000,22 @@ async function loadDashboard(){
         }
 
 
-        /* CUSTOMER NAME */
-
-        const customerName =
-            customer.name ||
-            "Customer";
-
+        /* NAME */
 
         document.getElementById(
             "customerName"
         ).innerText =
-            customerName;
-
-
-        document.getElementById(
-            "sidebarCustomerName"
-        ).innerText =
-            customerName;
+            customer.name ||
+            "Customer";
 
 
         /* UID */
 
-        const customerUID =
-            customer.uid ||
-            "Not available";
-
-
         document.getElementById(
             "customerUID"
         ).innerText =
-            customerUID;
-
-
-        document.getElementById(
-            "sidebarCustomerUID"
-        ).innerText =
-            customerUID;
-
-
-        document.getElementById(
-            "headerCustomerUID"
-        ).innerText =
-            customerUID;
-
-
-        /* STATUS */
-
-        const rawStatus =
-            String(
-                customer.status ||
-                "Active"
-            );
-
-
-        const lowerStatus =
-            rawStatus.toLowerCase();
-
-
-        document.getElementById(
-            "accountStatus"
-        ).innerText =
-            lowerStatus === "active"
-            ? "Active"
-            : rawStatus;
+            customer.uid ||
+            "Not available";
 
 
         /* BALANCES */
@@ -2869,21 +3023,6 @@ async function loadDashboard(){
         const wallet =
             Number(
                 customer.wallet_balance || 0
-            );
-
-        const bonus =
-            Number(
-                customer.bonus_balance || 0
-            );
-
-        const deposit =
-            Number(
-                customer.deposit_balance || 0
-            );
-
-        const commission =
-            Number(
-                customer.commission_balance || 0
             );
 
         const referral =
@@ -2899,92 +3038,67 @@ async function loadDashboard(){
 
 
         document.getElementById(
-            "bonusBalance"
-        ).innerText =
-            formatMoney(bonus);
-
-
-        /*
-         * IMPORTANT:
-         * This displays the actual current
-         * bonus_balance from Supabase.
-         * It does NOT create or credit ₹99.
-         */
-
-        document.getElementById(
-            "welcomeBonusAmount"
-        ).innerText =
-            formatMoney(bonus);
-
-
-        document.getElementById(
-            "depositBalance"
-        ).innerText =
-            formatMoney(deposit);
-
-
-        document.getElementById(
-            "commissionBalance"
-        ).innerText =
-            formatMoney(commission);
-
-
-        document.getElementById(
             "referralBalance"
         ).innerText =
             formatMoney(referral);
 
 
-        /* SELL STATUS */
+        /*
+         * NOTE:
+         * bonus_balance is only DISPLAYED.
+         *
+         * Dashboard does NOT credit ₹99.
+         *
+         * ₹99 must be credited once during
+         * successful registration.
+         */
+
+
+        /* SELL */
 
         const sellToggle =
             document.getElementById(
                 "sellToggle"
             );
 
+
         const sellOn =
             customer.sell_on === true;
+
 
         sellToggle.checked =
             sellOn;
 
-        updateSellText(
+
+        updateSellStatus(
             sellOn
         );
 
 
-        /* INVITATION CODE */
+        /* REFERRAL */
 
-        const invitationCode =
+        const code =
             customer.invitation_code ||
             "";
 
 
-        document.getElementById(
-            "invitationCode"
-        ).innerText =
-            invitationCode ||
-            "Not available";
+        if(code){
 
-
-        /* REFERRAL LINK */
-
-        if(invitationCode){
-
-            const link =
+            currentReferralLink =
                 window.location.origin +
                 "/?invite=" +
-                encodeURIComponent(
-                    invitationCode
-                );
+                encodeURIComponent(code);
 
 
             document.getElementById(
                 "referralLink"
             ).innerText =
-                link;
+                currentReferralLink;
 
-        }else{
+        }
+        else{
+
+            currentReferralLink = "";
 
             document.getElementById(
                 "referralLink"
@@ -2994,9 +3108,26 @@ async function loadDashboard(){
         }
 
 
-        await loadTodayEarnings(
-            customerId
-        );
+        await Promise.all([
+
+            loadTodayEarnings(
+                customerId
+            ),
+
+            loadTotalEarnings(
+                customerId,
+                customer
+            ),
+
+            loadNotifications(
+                customerId
+            ),
+
+            loadTransactions(
+                customerId
+            )
+
+        ]);
 
 
         message.innerText =
@@ -3020,10 +3151,10 @@ async function loadDashboard(){
 
 
 /* =========================================================
-   SELL TEXT
+   SELL STATUS
 ========================================================= */
 
-function updateSellText(
+function updateSellStatus(
     isOn
 ){
 
@@ -3032,21 +3163,23 @@ function updateSellText(
             "sellStatus"
         );
 
+
     if(isOn){
 
         status.innerText =
-            "● Open - Selling ON";
+            "Sell ON";
 
         status.className =
-            "sell-status sell-open";
+            "sell-status sell-on";
 
-    }else{
+    }
+    else{
 
         status.innerText =
-            "● Closed - Selling OFF";
+            "Sell OFF";
 
         status.className =
-            "sell-status sell-closed";
+            "sell-status sell-off";
 
     }
 
@@ -3054,13 +3187,14 @@ function updateSellText(
 
 
 /* =========================================================
-   CHANGE SELL STATUS
+   CHANGE SELL
 ========================================================= */
 
 async function changeSellStatus(){
 
     const customerId =
         getCustomerId();
+
 
     if(!customerId){
 
@@ -3071,23 +3205,25 @@ async function changeSellStatus(){
 
     }
 
+
     const toggle =
         document.getElementById(
             "sellToggle"
         );
 
+
     const newStatus =
         toggle.checked;
 
-    updateSellText(
+
+    updateSellStatus(
         newStatus
     );
 
-    try{
 
-        const {
-            error
-        } =
+    const {
+        error
+    } =
         await supabaseClient
         .from("customers")
         .update({
@@ -3099,33 +3235,13 @@ async function changeSellStatus(){
         );
 
 
-        if(error){
+    if(error){
 
-            toggle.checked =
-                !newStatus;
+        toggle.checked =
+            !newStatus;
 
-            updateSellText(
-                !newStatus
-            );
-
-            throw error;
-
-        }
-
-
-        document.getElementById(
-            "message"
-        ).innerText =
-            newStatus
-            ? "Selling is now ON."
-            : "Selling is now OFF.";
-
-    }
-    catch(error){
-
-        console.error(
-            "Sell status error:",
-            error
+        updateSellStatus(
+            !newStatus
         );
 
         document.getElementById(
@@ -3133,18 +3249,29 @@ async function changeSellStatus(){
         ).innerText =
             "Unable to update selling status.";
 
+        console.error(
+            error
+        );
+
+        return;
+
     }
+
+
+    document.getElementById(
+        "message"
+    ).innerText =
+        newStatus
+        ? "Selling is now ON."
+        : "Selling is now OFF.";
 
 }
 
 
 /* =========================================================
-   SECURITY MODAL - SHOW ONLY ONCE
+   SECURITY WARNING
+   SHOW ON EVERY FRESH LOGIN / PAGE SESSION
 ========================================================= */
-
-const SECURITY_WARNING_KEY =
-    "sathiPaySecurityWarningShown";
-
 
 function openSecurityModal(){
 
@@ -3153,32 +3280,14 @@ function openSecurityModal(){
             "securityModal"
         );
 
-    if(!modal){
-        return;
-    }
 
+    if(modal){
 
-    /*
-     * Check if the security warning
-     * has already been shown.
-     */
-
-    const alreadyShown =
-        localStorage.getItem(
-            SECURITY_WARNING_KEY
+        modal.classList.remove(
+            "hidden"
         );
 
-
-    if(alreadyShown === "true"){
-
-        return;
-
     }
-
-
-    modal.classList.add(
-        "show"
-    );
 
 }
 
@@ -3193,68 +3302,25 @@ function closeSecurityModal(){
 
     if(modal){
 
-        modal.classList.remove(
-            "show"
+        modal.classList.add(
+            "hidden"
         );
 
     }
-
-
-    /*
-     * Remember permanently that
-     * this warning has been shown.
-     */
-
-    localStorage.setItem(
-        SECURITY_WARNING_KEY,
-        "true"
-    );
 
 }
 
 
 /* =========================================================
-   LOGOUT
+   APP MESSAGE
 ========================================================= */
 
-function logoutCustomer(){
+function showAppMessage(){
 
-    /*
-     * Remove security warning flag on logout.
-     *
-     * This means after a fresh login,
-     * the security warning can appear
-     * once again.
-     */
-
-    localStorage.removeItem(
-        SECURITY_WARNING_KEY
-    );
-
-
-    if(window.sathiPayLogout){
-
-        window.sathiPayLogout();
-
-        return;
-
-    }
-
-
-    localStorage.removeItem(
-        "sathiPayCustomerId"
-    );
-
-    localStorage.removeItem(
-        "sathiPayUID"
-    );
-
-    localStorage.removeItem(
-        "sathiPayInvitationCode"
-    );
-
-    window.location.href =
-        "customer-login.html";
+    document.getElementById(
+        "message"
+    ).innerText =
+        "App download option will be available soon.";
 
 }
 
@@ -3271,8 +3337,10 @@ document.addEventListener(
 
 
         /*
-         * Security warning will appear
-         * only if it has not been shown before.
+         * Security warning appears once
+         * on every fresh dashboard page session.
+         *
+         * No permanent localStorage flag is used.
          */
 
         setTimeout(
@@ -3299,6 +3367,42 @@ setInterval(
 
     },
     30000
+);
+
+
+/* =========================================================
+   CLOSE NOTIFICATION PANEL WHEN
+   CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const panel =
+            document.getElementById(
+                "notificationPanel"
+            );
+
+        const button =
+            document.querySelector(
+                ".notification-btn"
+            );
+
+
+        if(
+            panel.classList.contains("show") &&
+            !panel.contains(event.target) &&
+            !button.contains(event.target)
+        ){
+
+            panel.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
 );
 
 </script>
