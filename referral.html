@@ -8,6 +8,10 @@
 
 <title>Sathi Pay - Referral</title>
 
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CUSTOMER GUARD -->
 <script src="customer-guard.js"></script>
 
 <style>
@@ -820,14 +824,23 @@ td{
 
 <script>
 
+/* =========================
+   SUPABASE CONFIG
+========================= */
+
 const SUPABASE_URL =
     "https://lozluohksmjxbxixkbmq.supabase.co";
 
 const SUPABASE_KEY =
     "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
+
+/* =========================
+   SUPABASE CLIENT
+========================= */
+
 const supabaseClient =
-    supabase.createClient(
+    window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
@@ -856,100 +869,182 @@ function getCustomerId(){
 
 async function loadCustomer(){
 
-    customerId =
-        getCustomerId();
+    try{
 
-    if(!customerId){
+        customerId =
+            getCustomerId();
 
-        window.location.href =
-            "login.html";
 
-        return;
+        if(!customerId){
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+            .from("customers")
+            .select(`
+                id,
+                name,
+                uid,
+                invitation_code,
+                referred_by,
+                referral_balance,
+                status
+            `)
+            .eq(
+                "id",
+                customerId
+            )
+            .maybeSingle();
+
+
+        if(error){
+
+            console.error(
+                "Customer Load Error:",
+                error
+            );
+
+            document.getElementById(
+                "referralCode"
+            ).textContent =
+                "Unable to load";
+
+            document.getElementById(
+                "referralLink"
+            ).value =
+                "Unable to load";
+
+            return;
+
+        }
+
+
+        if(!data){
+
+            document.getElementById(
+                "referralCode"
+            ).textContent =
+                "Customer not found";
+
+            document.getElementById(
+                "referralLink"
+            ).value =
+                "Customer not found";
+
+            return;
+
+        }
+
+
+        currentCustomer =
+            data;
+
+
+        /* =========================
+           REFERRAL CODE
+        ========================= */
+
+        const invitationCode =
+            String(
+                data.invitation_code || ""
+            ).trim();
+
+
+        document.getElementById(
+            "referralCode"
+        ).textContent =
+            invitationCode || "N/A";
+
+
+        /* =========================
+           REFERRAL LINK
+        ========================= */
+
+        if(invitationCode){
+
+            const registerUrl =
+                new URL(
+                    "register.html",
+                    window.location.href
+                );
+
+
+            registerUrl.searchParams.set(
+                "ref",
+                invitationCode
+            );
+
+
+            document.getElementById(
+                "referralLink"
+            ).value =
+                registerUrl.href;
+
+        }
+        else{
+
+            document.getElementById(
+                "referralLink"
+            ).value =
+                "Referral code not available";
+
+        }
+
+
+        /* =========================
+           REFERRAL EARNINGS
+        ========================= */
+
+        document.getElementById(
+            "referralEarnings"
+        ).textContent =
+            Number(
+                data.referral_balance || 0
+            ).toFixed(2);
+
+
+        /* =========================
+           LOAD TEAM
+        ========================= */
+
+        await loadTeam();
+
+
+        /* =========================
+           LOAD HISTORY
+        ========================= */
+
+        await loadReferralHistory();
 
     }
+    catch(error){
 
-
-    const { data, error } =
-        await supabaseClient
-        .from("customers")
-        .select(`
-            id,
-            name,
-            uid,
-            invitation_code,
-            referred_by,
-            referral_balance,
-            status
-        `)
-        .eq(
-            "id",
-            customerId
-        )
-        .single();
-
-
-    if(error || !data){
-
-        console.error(error);
+        console.error(
+            "Referral Page Error:",
+            error
+        );
 
         document.getElementById(
             "referralCode"
         ).textContent =
             "Unable to load";
 
-        return;
+        document.getElementById(
+            "referralLink"
+        ).value =
+            "Unable to load";
 
     }
-
-
-    currentCustomer = data;
-
-
-    /* REFERRAL CODE */
-
-    document.getElementById(
-        "referralCode"
-    ).textContent =
-        data.invitation_code || "N/A";
-
-
-    /* REFERRAL LINK */
-
-    const registerFile =
-        "register.html";
-
-    const link =
-        window.location.origin +
-        window.location.pathname
-            .replace(
-                "referral.html",
-                registerFile
-            ) +
-        "?ref=" +
-        encodeURIComponent(
-            data.invitation_code || ""
-        );
-
-
-    document.getElementById(
-        "referralLink"
-    ).value =
-        link;
-
-
-    /* REFERRAL EARNING */
-
-    document.getElementById(
-        "referralEarnings"
-    ).textContent =
-        Number(
-            data.referral_balance || 0
-        ).toFixed(2);
-
-
-    await loadTeam();
-
-    await loadReferralHistory();
 
 }
 
@@ -965,6 +1060,16 @@ async function loadTeam(){
         !currentCustomer.invitation_code
     ){
 
+        document.getElementById(
+            "directTeam"
+        ).textContent =
+            "0";
+
+        document.getElementById(
+            "totalTeam"
+        ).textContent =
+            "0";
+
         return;
 
     }
@@ -972,8 +1077,6 @@ async function loadTeam(){
 
     /*
      * LEVEL A
-     * Customers who used
-     * my invitation code.
      */
 
     const {
@@ -1135,7 +1238,11 @@ async function loadTeam(){
         new Set();
 
 
-    [...direct, ...levelB, ...levelC]
+    [
+        ...direct,
+        ...levelB,
+        ...levelC
+    ]
     .forEach(function(customer){
 
         if(customer.id){
@@ -1206,7 +1313,10 @@ async function loadReferralHistory(){
 
     if(error){
 
-        console.error(error);
+        console.error(
+            "Referral History Error:",
+            error
+        );
 
         container.innerHTML = `
             <div class="empty">
@@ -1274,6 +1384,7 @@ async function loadReferralHistory(){
             </thead>
 
             <tbody>
+
     `;
 
 
@@ -1386,6 +1497,10 @@ async function copyCode(){
 
     if(!code){
 
+        alert(
+            "Referral code available nahi hai."
+        );
+
         return;
 
     }
@@ -1404,8 +1519,26 @@ async function copyCode(){
     }
     catch(error){
 
+        const textarea =
+            document.createElement("textarea");
+
+        textarea.value =
+            code;
+
+        document.body.appendChild(
+            textarea
+        );
+
+        textarea.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        textarea.remove();
+
         alert(
-            "Unable to copy referral code."
+            "Referral code copied!"
         );
 
     }
@@ -1431,8 +1564,15 @@ async function copyLink(){
 
     if(
         !link ||
-        link === "Loading..."
+        link === "Loading..." ||
+        link === "Unable to load" ||
+        link === "Customer not found" ||
+        link === "Referral code not available"
     ){
+
+        alert(
+            "Referral link available nahi hai."
+        );
 
         return;
 
@@ -1451,6 +1591,8 @@ async function copyLink(){
 
     }
     catch(error){
+
+        input.focus();
 
         input.select();
 
@@ -1541,7 +1683,9 @@ function logoutCustomer(){
 loadCustomer();
 
 
-/* AUTO REFRESH */
+/* =========================
+   AUTO REFRESH
+========================= */
 
 setInterval(
     loadCustomer,
