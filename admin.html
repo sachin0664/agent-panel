@@ -99,6 +99,11 @@ input:focus{
     border-color:#2563eb;
 }
 
+input[type="file"]{
+    background:#f8fafc;
+    padding:12px;
+}
+
 button{
     border:0;
     border-radius:11px;
@@ -359,6 +364,44 @@ button:disabled{
 }
 
 /* =====================================================
+   PAYMENT QR
+===================================================== */
+
+.qrAdminPreview{
+    width:100%;
+    max-width:280px;
+    max-height:320px;
+    object-fit:contain;
+    display:block;
+    margin:15px auto;
+    border-radius:15px;
+    border:1px solid #dbe3ef;
+    background:white;
+    padding:8px;
+}
+
+.qrSelectBox{
+    background:#f8fafc;
+    border:1px dashed #94a3b8;
+    border-radius:14px;
+    padding:15px;
+    margin:10px 0;
+}
+
+.qrSelectTitle{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.qrCurrentBox{
+    margin-top:12px;
+    padding:15px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+}
+
+/* =====================================================
    FULL SCREEN SCREENSHOT VIEWER
 ===================================================== */
 
@@ -517,7 +560,6 @@ body.pageReady{
 
     <div class="headerActions">
 
-        <!-- ADMIN WALLET -->
         <a
             href="admin-wallet.html"
             class="headerBtn"
@@ -525,7 +567,6 @@ body.pageReady{
             💰 Admin Wallet
         </a>
 
-        <!-- SECURITY -->
         <button
             class="headerBtn"
             onclick="openSecurity()"
@@ -533,7 +574,6 @@ body.pageReady{
             🔐 Security
         </button>
 
-        <!-- LOGOUT -->
         <button
             class="headerBtn"
             onclick="logoutAdmin()"
@@ -599,6 +639,11 @@ body.pageReady{
 
 </div>
 
+
+<!-- =====================================================
+     PAYMENT SETTINGS
+===================================================== -->
+
 <div class="card">
 
     <h2>🏦 Payment Settings</h2>
@@ -617,21 +662,31 @@ body.pageReady{
 
         </div>
 
-        <div class="row">
+    </div>
 
-            <span class="label">
-                QR Code URL
-            </span>
 
-            <span id="currentQr" class="value">
-                Loading...
-            </span>
+    <div class="qrCurrentBox">
 
+        <div
+            class="qrSelectTitle"
+        >
+            📷 Current Payment QR
+        </div>
+
+        <div
+            id="currentQrBox"
+            style="text-align:center;"
+        >
+            Loading QR...
         </div>
 
     </div>
 
-    <h3>✏️ Update Payment Details</h3>
+
+    <h3>
+        ✏️ Update Payment Details
+    </h3>
+
 
     <input
         id="paymentUpi"
@@ -640,12 +695,29 @@ body.pageReady{
         autocomplete="off"
     >
 
-    <input
-        id="paymentQr"
-        type="url"
-        placeholder="Enter QR Code image URL"
-        autocomplete="off"
-    >
+
+    <div class="qrSelectBox">
+
+        <div class="qrSelectTitle">
+            📷 Select New QR Code
+        </div>
+
+        <input
+            id="paymentQr"
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+        >
+
+        <div class="small">
+            Gallery se QR image select karein.
+            QR URL paste karne ki zarurat nahi hai.
+        </div>
+
+    </div>
+
+
+    <div id="newQrPreviewBox"></div>
+
 
     <button
         id="savePaymentBtn"
@@ -655,13 +727,17 @@ body.pageReady{
         💾 Save Payment Settings
     </button>
 
+
     <div id="paymentStatus" class="status">
         Payment settings ready.
     </div>
 
-    <div id="qrPreviewBox"></div>
-
 </div>
+
+
+<!-- =====================================================
+     SEARCH CUSTOMER
+===================================================== -->
 
 <div class="card">
 
@@ -700,6 +776,11 @@ body.pageReady{
 
 </div>
 
+
+<!-- =====================================================
+     DEPOSIT REQUESTS
+===================================================== -->
+
 <div class="card">
 
     <h2>💰 Deposit Requests</h2>
@@ -715,6 +796,11 @@ body.pageReady{
 
 </div>
 
+
+<!-- =====================================================
+     ALL CUSTOMERS
+===================================================== -->
+
 <div class="card">
 
     <h2>👥 All Customers</h2>
@@ -729,6 +815,11 @@ body.pageReady{
     <div id="customerList"></div>
 
 </div>
+
+
+<!-- =====================================================
+     DEPOSIT COMMISSION
+===================================================== -->
 
 <div class="card">
 
@@ -761,6 +852,11 @@ body.pageReady{
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     REFERRAL COMMISSION
+===================================================== -->
 
 <div class="card">
 
@@ -1342,6 +1438,7 @@ function money(value){
 
 }
 
+
 function commissionRate(amount){
 
     const n =
@@ -1359,12 +1456,14 @@ function commissionRate(amount){
 
 }
 
+
 function commissionAmount(amount){
 
     return Number(amount || 0) *
         commissionRate(amount);
 
 }
+
 
 function statusBadge(status){
 
@@ -1394,6 +1493,22 @@ function statusBadge(status){
             ${status || "Pending"}
         </span>
     `;
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
@@ -1504,6 +1619,276 @@ function showApprovedToast(amount){
 
 
 /* =====================================================
+   QR IMAGE -> DATA URL
+===================================================== */
+
+function readQrFile(file){
+
+    return new Promise(
+        function(resolve,reject){
+
+            if(!file){
+
+                reject(
+                    new Error(
+                        "QR image not selected."
+                    )
+                );
+
+                return;
+
+            }
+
+            if(
+                !file.type ||
+                !file.type.startsWith("image/")
+            ){
+
+                reject(
+                    new Error(
+                        "Please select a valid image file."
+                    )
+                );
+
+                return;
+
+            }
+
+            /*
+             * QR ko unnecessarily bahut bada database
+             * data banne se bachane ke liye resize kiya
+             * ja raha hai.
+             */
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(event){
+
+                    const img =
+                        new Image();
+
+                    img.onload =
+                        function(){
+
+                            let width =
+                                img.width;
+
+                            let height =
+                                img.height;
+
+                            const maxSize =
+                                1200;
+
+                            if(
+                                width > maxSize ||
+                                height > maxSize
+                            ){
+
+                                const scale =
+                                    Math.min(
+                                        maxSize / width,
+                                        maxSize / height
+                                    );
+
+                                width =
+                                    Math.round(
+                                        width * scale
+                                    );
+
+                                height =
+                                    Math.round(
+                                        height * scale
+                                    );
+
+                            }
+
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
+
+                            canvas.width =
+                                width;
+
+                            canvas.height =
+                                height;
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+                            ctx.fillStyle =
+                                "#ffffff";
+
+                            ctx.fillRect(
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+                            ctx.drawImage(
+                                img,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+                            /*
+                             * PNG rakha gaya hai taaki
+                             * QR clarity maximum rahe.
+                             */
+
+                            const dataUrl =
+                                canvas.toDataURL(
+                                    "image/png"
+                                );
+
+                            resolve(
+                                dataUrl
+                            );
+
+                        };
+
+                    img.onerror =
+                        function(){
+
+                            reject(
+                                new Error(
+                                    "QR image read nahi ho paayi."
+                                )
+                            );
+
+                        };
+
+                    img.src =
+                        event.target.result;
+
+                };
+
+            reader.onerror =
+                function(){
+
+                    reject(
+                        new Error(
+                            "QR file read failed."
+                        )
+                    );
+
+                };
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SHOW CURRENT QR
+===================================================== */
+
+function showCurrentQr(url){
+
+    const box =
+        document.getElementById(
+            "currentQrBox"
+        );
+
+    if(!url){
+
+        box.innerHTML = `
+            <div class="small">
+                ❌ QR code available nahi hai.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    box.innerHTML = `
+
+        <img
+            src="${escapeHtml(url)}"
+            class="qrAdminPreview"
+            alt="Current Payment QR"
+            onclick="openProof('${escapeHtml(url)}')"
+            onerror="
+                this.style.display='none';
+                this.parentElement.innerHTML +=
+                '<div class=\\'status error\\'>QR image load nahi ho paayi.</div>';
+            "
+        >
+
+        <div
+            class="small"
+            style="text-align:center;"
+        >
+            Current QR Code
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   NEW QR PREVIEW
+===================================================== */
+
+function showNewQrPreview(url){
+
+    const box =
+        document.getElementById(
+            "newQrPreviewBox"
+        );
+
+    if(!url){
+
+        box.innerHTML = "";
+
+        return;
+
+    }
+
+    box.innerHTML = `
+
+        <div class="item">
+
+            <h3>
+                👀 New QR Preview
+            </h3>
+
+            <img
+                src="${escapeHtml(url)}"
+                class="qrAdminPreview"
+                alt="New QR Preview"
+            >
+
+            <div
+                class="small"
+                style="text-align:center;"
+            >
+                Ye QR Save karne ke baad
+                Payment Settings me current QR ban jayega.
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
    PAYMENT SETTINGS
 ===================================================== */
 
@@ -1513,6 +1898,12 @@ async function loadPaymentSettings(){
         document.getElementById(
             "paymentStatus"
         );
+
+    status.className =
+        "status";
+
+    status.textContent =
+        "Loading payment settings...";
 
     const {
         data,
@@ -1532,7 +1923,21 @@ async function loadPaymentSettings(){
             "status error";
 
         status.textContent =
-            error.message;
+            "❌ " + error.message;
+
+        document.getElementById(
+            "currentUpi"
+        ).textContent =
+            "-";
+
+        document.getElementById(
+            "currentQrBox"
+        ).innerHTML =
+            `
+            <div class="small">
+                QR load nahi ho paaya.
+            </div>
+            `;
 
         return;
 
@@ -1544,7 +1949,7 @@ async function loadPaymentSettings(){
             "status error";
 
         status.textContent =
-            "Payment settings record not found.";
+            "❌ Payment settings record not found.";
 
         return;
 
@@ -1556,21 +1961,11 @@ async function loadPaymentSettings(){
         data.upi_id || "-";
 
     document.getElementById(
-        "currentQr"
-    ).textContent =
-        data.qr_url || "-";
-
-    document.getElementById(
         "paymentUpi"
     ).value =
         data.upi_id || "";
 
-    document.getElementById(
-        "paymentQr"
-    ).value =
-        data.qr_url || "";
-
-    showQrPreview(
+    showCurrentQr(
         data.qr_url
     );
 
@@ -1584,62 +1979,77 @@ async function loadPaymentSettings(){
 
 
 /* =====================================================
-   QR PREVIEW
+   QR FILE SELECT PREVIEW
 ===================================================== */
 
-function showQrPreview(url){
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
 
-    const box =
-        document.getElementById(
-            "qrPreviewBox"
+        const qrInput =
+            document.getElementById(
+                "paymentQr"
+            );
+
+        if(!qrInput){
+            return;
+        }
+
+        qrInput.addEventListener(
+            "change",
+            async function(){
+
+                const file =
+                    this.files &&
+                    this.files[0];
+
+                if(!file){
+
+                    showNewQrPreview("");
+
+                    return;
+
+                }
+
+                try{
+
+                    const dataUrl =
+                        await readQrFile(
+                            file
+                        );
+
+                    showNewQrPreview(
+                        dataUrl
+                    );
+
+                }
+
+                catch(error){
+
+                    showNewQrPreview("");
+
+                    const status =
+                        document.getElementById(
+                            "paymentStatus"
+                        );
+
+                    status.className =
+                        "status error";
+
+                    status.textContent =
+                        "❌ " +
+                        (
+                            error.message ||
+                            "QR preview failed."
+                        );
+
+                }
+
+            }
         );
 
-    if(!url){
-
-        box.innerHTML = "";
-
-        return;
-
     }
-
-    box.innerHTML = `
-
-        <div class="item">
-
-            <h3>
-                📷 QR Preview
-            </h3>
-
-            <img
-                src="${url}"
-                style="
-                    width:100%;
-                    max-width:260px;
-                    display:block;
-                    margin:15px auto;
-                    border-radius:15px;
-                    border:1px solid #e2e8f0;
-                "
-                alt="Payment QR"
-                onerror="this.style.display='none'"
-            >
-
-            <div
-                style="
-                    text-align:center;
-                    font-size:13px;
-                    color:#64748b;
-                    word-break:break-all;
-                "
-            >
-                ${url}
-            </div>
-
-        </div>
-
-    `;
-
-}
+);
 
 
 /* =====================================================
@@ -1656,13 +2066,10 @@ async function savePaymentSettings(){
         .value
         .trim();
 
-    const qr =
-        document
-        .getElementById(
+    const qrInput =
+        document.getElementById(
             "paymentQr"
-        )
-        .value
-        .trim();
+        );
 
     const status =
         document.getElementById(
@@ -1680,77 +2087,251 @@ async function savePaymentSettings(){
             "status error";
 
         status.textContent =
-            "Please enter UPI ID.";
+            "❌ Please enter UPI ID.";
 
         return;
 
     }
 
-    if(!qr){
 
-        status.className =
-            "status error";
-
-        status.textContent =
-            "Please enter QR Code URL.";
-
-        return;
-
-    }
+    /*
+     * Existing QR ko preserve karne ke liye pehle
+     * current database value read karenge.
+     */
 
     button.disabled = true;
 
     button.textContent =
-        "Saving...";
+        "Checking...";
 
-    const {
-        error
-    } =
-    await supabaseClient
-        .from("payment_settings")
-        .update({
-            upi_id:upi,
-            qr_url:qr,
-            updated_at:
-                new Date().toISOString()
-        })
-        .eq("id",1);
+    status.className =
+        "status";
 
-    button.disabled = false;
+    status.textContent =
+        "Payment settings check ho rahi hain...";
 
-    button.textContent =
-        "💾 Save Payment Settings";
 
-    if(error){
+    try{
+
+        const {
+            data:currentData,
+            error:currentError
+        } =
+        await supabaseClient
+            .from("payment_settings")
+            .select(
+                "id,upi_id,qr_url"
+            )
+            .eq("id",1)
+            .maybeSingle();
+
+
+        if(currentError){
+
+            throw currentError;
+
+        }
+
+
+        if(!currentData){
+
+            throw new Error(
+                "payment_settings me id = 1 ka record nahi mila."
+            );
+
+        }
+
+
+        let qrData =
+            currentData.qr_url || "";
+
+
+        /*
+         * Agar admin ne new QR select kiya hai,
+         * to new QR ko Data URL me convert karenge.
+         */
+
+        if(
+            qrInput.files &&
+            qrInput.files.length > 0
+        ){
+
+            button.textContent =
+                "Preparing QR...";
+
+            status.textContent =
+                "QR image prepare ho rahi hai...";
+
+            qrData =
+                await readQrFile(
+                    qrInput.files[0]
+                );
+
+        }
+
+
+        if(!qrData){
+
+            throw new Error(
+                "QR code available nahi hai. Please QR image select karein."
+            );
+
+        }
+
+
+        button.textContent =
+            "Saving...";
+
+        status.textContent =
+            "UPI aur QR database me save ho rahe hain...";
+
+
+        const {
+            data:updatedRows,
+            error:updateError
+        } =
+        await supabaseClient
+            .from("payment_settings")
+            .update({
+                upi_id:upi,
+                qr_url:qrData,
+                updated_at:
+                    new Date().toISOString()
+            })
+            .eq("id",1)
+            .select(
+                "id,upi_id,qr_url,updated_at"
+            );
+
+
+        if(updateError){
+
+            throw updateError;
+
+        }
+
+
+        /*
+         * Sabse important verification:
+         * update ke baad database se dobara read karenge.
+         */
+
+        const {
+            data:verifyData,
+            error:verifyError
+        } =
+        await supabaseClient
+            .from("payment_settings")
+            .select(
+                "id,upi_id,qr_url,updated_at"
+            )
+            .eq("id",1)
+            .maybeSingle();
+
+
+        if(verifyError){
+
+            throw verifyError;
+
+        }
+
+
+        if(!verifyData){
+
+            throw new Error(
+                "Save ke baad payment settings verify nahi ho paayi."
+            );
+
+        }
+
+
+        if(
+            verifyData.upi_id !== upi
+        ){
+
+            throw new Error(
+                "UPI ID database me expected value se match nahi hui."
+            );
+
+        }
+
+
+        if(
+            !verifyData.qr_url
+        ){
+
+            throw new Error(
+                "QR database me save nahi hui."
+            );
+
+        }
+
+
+        /*
+         * UI ko verified database value se update karenge.
+         */
+
+        document.getElementById(
+            "currentUpi"
+        ).textContent =
+            verifyData.upi_id || "-";
+
+        document.getElementById(
+            "paymentUpi"
+        ).value =
+            verifyData.upi_id || "";
+
+        showCurrentQr(
+            verifyData.qr_url
+        );
+
+
+        /*
+         * File input clear kar dete hain.
+         * Database me QR already permanently save ho chuki hai.
+         */
+
+        qrInput.value = "";
+
+        showNewQrPreview("");
+
+
+        status.className =
+            "status success";
+
+        status.textContent =
+            "✅ Payment settings successfully saved. Refresh ke baad bhi ye settings rahengi.";
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Payment settings save error:",
+            error
+        );
 
         status.className =
             "status error";
 
         status.textContent =
             "❌ " +
-            error.message;
-
-        return;
+            (
+                error.message ||
+                "Payment settings save failed."
+            );
 
     }
 
-    document.getElementById(
-        "currentUpi"
-    ).textContent =
-        upi;
+    finally{
 
-    document.getElementById(
-        "currentQr"
-    ).textContent =
-        qr;
+        button.disabled = false;
 
-    showQrPreview(qr);
+        button.textContent =
+            "💾 Save Payment Settings";
 
-    status.className =
-        "status success";
-
-    status.textContent =
-        "✅ Payment settings updated successfully.";
+    }
 
 }
 
@@ -1916,7 +2497,7 @@ function renderCustomer(customer){
         <div class="item">
 
             <h3>
-                👤 ${customer.name || "-"}
+                👤 ${escapeHtml(customer.name || "-")}
             </h3>
 
             <div class="row">
@@ -1925,7 +2506,7 @@ function renderCustomer(customer){
                 </span>
 
                 <span class="value">
-                    ${customer.uid || "-"}
+                    ${escapeHtml(customer.uid || "-")}
                 </span>
             </div>
 
@@ -1935,7 +2516,7 @@ function renderCustomer(customer){
                 </span>
 
                 <span class="value">
-                    ${customer.mobile || "-"}
+                    ${escapeHtml(customer.mobile || "-")}
                 </span>
             </div>
 
@@ -1945,7 +2526,7 @@ function renderCustomer(customer){
                 </span>
 
                 <span class="value">
-                    ${customer.invitation_code || "-"}
+                    ${escapeHtml(customer.invitation_code || "-")}
                 </span>
             </div>
 
@@ -1955,7 +2536,7 @@ function renderCustomer(customer){
                 </span>
 
                 <span class="value">
-                    ${customer.referred_by || "-"}
+                    ${escapeHtml(customer.referred_by || "-")}
                 </span>
             </div>
 
@@ -1965,7 +2546,7 @@ function renderCustomer(customer){
                 </span>
 
                 <span class="value">
-                    ${customer.status || "Active"}
+                    ${escapeHtml(customer.status || "Active")}
                 </span>
             </div>
 
@@ -2039,7 +2620,7 @@ function renderCustomer(customer){
                 </span>
 
                 <span class="value">
-                    ${customer.upi_id || "-"}
+                    ${escapeHtml(customer.upi_id || "-")}
                 </span>
             </div>
 
@@ -2099,6 +2680,7 @@ async function loadAdminTotals(){
     ).textContent =
         customerCount || 0;
 
+
     const {
         data:deposits
     } =
@@ -2108,9 +2690,13 @@ async function loadAdminTotals(){
             "amount,status,commission"
         );
 
+
     let totalDeposit = 0;
+
     let totalCommission = 0;
+
     let pendingCount = 0;
+
 
     (deposits || []).forEach(
         d => {
@@ -2120,6 +2706,7 @@ async function loadAdminTotals(){
                     d.amount || 0
                 );
 
+
             if(
                 String(d.status)
                 .toLowerCase()
@@ -2128,6 +2715,7 @@ async function loadAdminTotals(){
 
                 totalDeposit +=
                     amount;
+
 
                 if(
                     d.commission !== null &&
@@ -2152,6 +2740,7 @@ async function loadAdminTotals(){
 
             }
 
+
             if(
                 String(d.status)
                 .toLowerCase()
@@ -2165,15 +2754,18 @@ async function loadAdminTotals(){
         }
     );
 
+
     document.getElementById(
         "totalDeposits"
     ).textContent =
         money(totalDeposit);
 
+
     document.getElementById(
         "totalCommission"
     ).textContent =
         money(totalCommission);
+
 
     document.getElementById(
         "pendingDeposits"
@@ -2197,6 +2789,7 @@ async function loadDeposits(){
     box.innerHTML =
         "<p>Loading deposits...</p>";
 
+
     const {
         data,
         error
@@ -2211,18 +2804,20 @@ async function loadDeposits(){
             }
         );
 
+
     if(error){
 
         box.innerHTML =
         `
         <div class="status error">
-            ${error.message}
+            ${escapeHtml(error.message)}
         </div>
         `;
 
         return;
 
     }
+
 
     if(
         !data ||
@@ -2240,6 +2835,7 @@ async function loadDeposits(){
 
     }
 
+
     box.innerHTML =
     data.map(
         d => {
@@ -2249,6 +2845,7 @@ async function loadDeposits(){
                     d.amount
                 ) * 100;
 
+
             const calculatedCommission =
                 Number(
                     d.commission ??
@@ -2257,15 +2854,17 @@ async function loadDeposits(){
                     )
                 );
 
+
             const screenshot =
                 d.payment_proof || "";
+
 
             return `
 
             <div class="item">
 
                 <h3>
-                    💰 Deposit #${d.id}
+                    💰 Deposit #${escapeHtml(d.id)}
                 </h3>
 
                 <div class="row">
@@ -2325,7 +2924,7 @@ async function loadDeposits(){
                     </span>
 
                     <span class="value">
-                        ${d.customer_id || "-"}
+                        ${escapeHtml(d.customer_id || "-")}
                     </span>
 
                 </div>
@@ -2337,7 +2936,7 @@ async function loadDeposits(){
                     </span>
 
                     <span class="value">
-                        ${d.utr || "-"}
+                        ${escapeHtml(d.utr || "-")}
                     </span>
 
                 </div>
@@ -2353,15 +2952,15 @@ async function loadDeposits(){
                         ?
                         `
                         <img
-                            src="${screenshot}"
+                            src="${escapeHtml(screenshot)}"
                             class="paymentProofImage"
                             alt="Customer Payment Screenshot"
-                            onclick="openProof('${screenshot}')"
+                            onclick="openProof('${escapeHtml(screenshot)}')"
                         >
                         `
                         :
                         `
-                        <div class="noProof">
+                        <div class="small">
                             ❌ Customer did not upload a payment screenshot.
                         </div>
                         `
@@ -2429,7 +3028,7 @@ async function loadDeposits(){
                             class="gray"
                             disabled
                         >
-                            ${d.status || "Processed"}
+                            ${escapeHtml(d.status || "Processed")}
                         </button>
                         `
                     }
@@ -2460,14 +3059,17 @@ async function updateDeposit(
         ? "approve"
         : "reject";
 
+
     const confirmed =
         confirm(
             `Are you sure you want to ${action} this deposit?`
         );
 
+
     if(!confirmed){
         return;
     }
+
 
     if(status === "approved"){
 
@@ -2482,6 +3084,7 @@ async function updateDeposit(
             }
         );
 
+
         if(error){
 
             alert(
@@ -2492,6 +3095,7 @@ async function updateDeposit(
             return;
 
         }
+
 
         if(
             !data ||
@@ -2506,9 +3110,11 @@ async function updateDeposit(
 
         }
 
+
         showApprovedToast(
             data.amount
         );
+
 
         await loadDeposits();
 
@@ -2517,6 +3123,7 @@ async function updateDeposit(
         return;
 
     }
+
 
     const {
         error
@@ -2527,6 +3134,7 @@ async function updateDeposit(
             status:"rejected"
         })
         .eq("id",id);
+
 
     if(error){
 
@@ -2539,9 +3147,11 @@ async function updateDeposit(
 
     }
 
+
     alert(
         "✅ Deposit rejected successfully."
     );
+
 
     await loadDeposits();
 
@@ -2564,6 +3174,7 @@ async function loadCustomers(){
     box.innerHTML =
         "<p>Loading customers...</p>";
 
+
     const {
         data,
         error
@@ -2580,18 +3191,20 @@ async function loadCustomers(){
             }
         );
 
+
     if(error){
 
         box.innerHTML =
         `
         <div class="status error">
-            ${error.message}
+            ${escapeHtml(error.message)}
         </div>
         `;
 
         return;
 
     }
+
 
     if(
         !data ||
@@ -2609,6 +3222,7 @@ async function loadCustomers(){
 
     }
 
+
     box.innerHTML =
     data.map(
         c => `
@@ -2616,7 +3230,7 @@ async function loadCustomers(){
         <div class="item">
 
             <h3>
-                👤 ${c.name || "-"}
+                👤 ${escapeHtml(c.name || "-")}
             </h3>
 
             <div class="row">
@@ -2626,7 +3240,7 @@ async function loadCustomers(){
                 </span>
 
                 <span class="value">
-                    ${c.uid || "-"}
+                    ${escapeHtml(c.uid || "-")}
                 </span>
 
             </div>
@@ -2638,7 +3252,7 @@ async function loadCustomers(){
                 </span>
 
                 <span class="value">
-                    ${c.mobile || "-"}
+                    ${escapeHtml(c.mobile || "-")}
                 </span>
 
             </div>
@@ -2650,7 +3264,7 @@ async function loadCustomers(){
                 </span>
 
                 <span class="value">
-                    ${c.invitation_code || "-"}
+                    ${escapeHtml(c.invitation_code || "-")}
                 </span>
 
             </div>
@@ -2732,7 +3346,7 @@ async function loadCustomers(){
                 </span>
 
                 <span class="value">
-                    ${c.status || "Active"}
+                    ${escapeHtml(c.status || "Active")}
                 </span>
 
             </div>
@@ -2776,6 +3390,7 @@ document.addEventListener(
             return;
         }
 
+
         await loadAdminTotals();
 
         await loadPaymentSettings();
@@ -2787,7 +3402,7 @@ document.addEventListener(
 
 
 /* =====================================================
-   AUTO REFRESH
+   AUTO REFRESH TOTALS
 ===================================================== */
 
 setInterval(
@@ -2802,6 +3417,11 @@ setInterval(
     },
     30000
 );
+
+
+/* =====================================================
+   AUTO REFRESH DEPOSITS
+===================================================== */
 
 setInterval(
     async function(){
