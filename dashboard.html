@@ -13,7 +13,7 @@
 <style>
 
 /* =========================================================
-   SATHI PAY PREMIUM DASHBOARD
+   RESET
 ========================================================= */
 
 *{
@@ -27,15 +27,14 @@ html{
 body{
     margin:0;
     font-family:Arial,Helvetica,sans-serif;
-    background:
-        radial-gradient(circle at 10% 10%,rgba(8,127,245,.08),transparent 28%),
-        radial-gradient(circle at 90% 20%,rgba(17,205,167,.08),transparent 28%),
-        #f4f8fd;
+    background:#f4f8ff;
     color:#172b4d;
     padding-bottom:90px;
 }
 
 a{
+    text-decoration:none;
+    color:inherit;
     -webkit-tap-highlight-color:transparent;
 }
 
@@ -52,16 +51,15 @@ input{
 header{
     position:relative;
     z-index:100;
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    background:rgba(255,255,255,.96);
     min-height:82px;
     padding:14px 24px;
-    border-bottom:1px solid rgba(220,231,244,.8);
+    border-bottom:1px solid #e5edf7;
+    box-shadow:0 3px 18px rgba(20,60,100,.05);
 }
 
 .header-row{
-    max-width:1280px;
+    max-width:1250px;
     margin:auto;
     display:flex;
     justify-content:space-between;
@@ -78,21 +76,23 @@ header{
     width:49px;
     height:49px;
     border-radius:16px;
-    background:linear-gradient(135deg,#087ff5,#14d2a5);
+    background:linear-gradient(
+        135deg,
+        #087ff5,
+        #0acb9d
+    );
     display:flex;
     align-items:center;
     justify-content:center;
     color:white;
     font-size:28px;
-    font-weight:bold;
-    box-shadow:
-        0 9px 22px rgba(8,127,245,.22),
-        inset 0 1px rgba(255,255,255,.35);
+    font-weight:900;
+    box-shadow:0 9px 22px rgba(8,127,245,.25);
 }
 
 .brand-text h1{
     margin:0;
-    font-size:24px;
+    font-size:25px;
     color:#073b82;
     letter-spacing:.2px;
 }
@@ -100,9 +100,8 @@ header{
 .brand-text p{
     margin:3px 0 0;
     font-size:10px;
-    color:#718096;
-    font-weight:bold;
-    letter-spacing:.4px;
+    color:#7b8798;
+    font-weight:700;
 }
 
 .header-right{
@@ -112,42 +111,44 @@ header{
 }
 
 .header-uid{
-    background:linear-gradient(135deg,#087ff5,#14cba5);
+    background:linear-gradient(
+        135deg,
+        #087ff5,
+        #13cfa5
+    );
     color:white;
     padding:10px 15px;
     border-radius:13px;
     font-size:11px;
     font-weight:bold;
-    box-shadow:0 7px 18px rgba(8,127,245,.17);
+    box-shadow:0 7px 18px rgba(8,127,245,.16);
 }
 
 .header-status{
-    margin-left:6px;
-    background:rgba(255,255,255,.18);
-    color:white;
-    padding:4px 8px;
+    margin-left:7px;
+    background:rgba(255,255,255,.20);
+    padding:4px 7px;
     border-radius:20px;
     font-size:9px;
 }
 
 .notification{
     position:relative;
-    width:43px;
-    height:43px;
-    border-radius:14px;
+    width:42px;
+    height:42px;
+    border-radius:50%;
     background:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:20px;
-    box-shadow:0 5px 17px rgba(20,60,100,.09);
-    border:1px solid #e8eff7;
+    font-size:21px;
+    box-shadow:0 5px 15px rgba(20,60,100,.10);
 }
 
 .notification-badge{
     position:absolute;
-    right:-3px;
-    top:-5px;
+    right:-2px;
+    top:-4px;
     min-width:18px;
     height:18px;
     padding:0 5px;
@@ -164,14 +165,17 @@ header{
 .header-profile{
     width:43px;
     height:43px;
-    border-radius:14px;
-    background:linear-gradient(135deg,#123f78,#087ff5);
+    border-radius:50%;
+    background:linear-gradient(
+        135deg,
+        #116bc2,
+        #273d8e
+    );
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:20px;
-    box-shadow:0 6px 17px rgba(18,63,120,.18);
+    font-size:21px;
 }
 
 
@@ -181,41 +185,45 @@ header{
 
 .sidebar{
     position:fixed;
-    top:101px;
+    top:100px;
     left:18px;
     bottom:18px;
-    width:230px;
-    background:rgba(255,255,255,.94);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-    border:1px solid #e3ecf6;
-    border-radius:24px;
+    width:225px;
+    background:rgba(255,255,255,.98);
+    border:1px solid #e5edf7;
+    border-radius:23px;
     padding:14px 12px;
-    box-shadow:0 10px 35px rgba(31,64,104,.10);
+    box-shadow:0 8px 30px rgba(31,64,104,.10);
     z-index:90;
     overflow-y:auto;
 }
 
 .sidebar-profile{
-    background:linear-gradient(135deg,#eef7ff,#f4f0ff);
+    background:linear-gradient(
+        135deg,
+        #edf7ff,
+        #f5f0ff
+    );
     border-radius:18px;
     padding:14px;
     margin-bottom:13px;
-    border:1px solid #e4edf8;
 }
 
 .sidebar-avatar{
     width:47px;
     height:47px;
-    border-radius:15px;
-    background:linear-gradient(135deg,#087ff5,#6c5ce7);
+    border-radius:50%;
+    background:linear-gradient(
+        135deg,
+        #087ff5,
+        #6c5ce7
+    );
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:21px;
+    font-size:22px;
     margin-bottom:9px;
-    box-shadow:0 7px 17px rgba(8,127,245,.18);
 }
 
 .sidebar-name{
@@ -252,10 +260,9 @@ header{
     display:flex;
     align-items:center;
     gap:11px;
-    min-height:44px;
+    min-height:45px;
     padding:8px 11px;
     border-radius:13px;
-    text-decoration:none;
     color:#526581;
     font-size:13px;
     font-weight:600;
@@ -265,13 +272,16 @@ header{
 .sidebar-menu a:hover{
     background:#eef6ff;
     color:#087ff5;
-    transform:translateX(2px);
 }
 
 .sidebar-menu a.active{
-    background:linear-gradient(135deg,#147df5,#18cfa5);
+    background:linear-gradient(
+        135deg,
+        #147df5,
+        #18cfa5
+    );
     color:white;
-    box-shadow:0 7px 18px rgba(20,125,245,.20);
+    box-shadow:0 6px 15px rgba(20,125,245,.20);
 }
 
 .sidebar-icon{
@@ -282,7 +292,7 @@ header{
     justify-content:center;
     border-radius:9px;
     background:#edf5ff;
-    font-size:16px;
+    font-size:17px;
     flex-shrink:0;
 }
 
@@ -298,22 +308,24 @@ header{
 }
 
 .sidebar-promo{
-    background:linear-gradient(135deg,#126ff3,#16cda5);
+    background:linear-gradient(
+        135deg,
+        #126ff3,
+        #16cda5
+    );
     color:white;
     border-radius:16px;
     padding:14px;
-    box-shadow:0 8px 18px rgba(18,111,243,.15);
 }
 
 .sidebar-promo strong{
     display:block;
     font-size:15px;
-    line-height:1.2;
 }
 
 .sidebar-promo small{
     display:block;
-    margin-top:7px;
+    margin-top:6px;
     line-height:1.5;
     opacity:.92;
 }
@@ -330,14 +342,9 @@ header{
     align-items:center;
     gap:9px;
     color:#173f78;
-    text-decoration:none;
     font-size:12px;
     font-weight:bold;
     padding:6px 0;
-}
-
-.sidebar-logout{
-    margin-top:2px;
 }
 
 .sidebar-logout a{
@@ -348,7 +355,6 @@ header{
     border-radius:12px;
     background:#fff1f3;
     color:#d83a52;
-    text-decoration:none;
     font-size:13px;
     font-weight:bold;
 }
@@ -359,7 +365,7 @@ header{
 ========================================================= */
 
 .container{
-    max-width:1050px;
+    max-width:1030px;
     margin:0 auto;
     padding:22px 20px;
 }
@@ -367,7 +373,7 @@ header{
 @media(min-width:901px){
 
     .container{
-        margin-left:265px;
+        margin-left:260px;
         margin-right:20px;
         max-width:none;
     }
@@ -376,191 +382,119 @@ header{
 
 
 /* =========================================================
-   HERO
+   WELCOME HERO
 ========================================================= */
 
 .page-intro{
     background:
-        radial-gradient(circle at 88% 20%,rgba(255,255,255,.18),transparent 25%),
-        radial-gradient(circle at 70% 110%,rgba(255,255,255,.10),transparent 30%),
-        linear-gradient(135deg,#087ff5 0%,#4b48dc 50%,#10cba5 100%);
+        linear-gradient(
+            135deg,
+            #066fff 0%,
+            #5d36dc 52%,
+            #08c99d 100%
+        );
     color:white;
-    border-radius:23px;
-    padding:25px 26px;
+    border-radius:24px;
+    padding:26px;
     min-height:145px;
     position:relative;
     overflow:hidden;
-    box-shadow:0 14px 32px rgba(8,127,245,.18);
+    box-shadow:0 14px 32px rgba(50,75,210,.20);
 }
 
 .page-intro:before{
     content:"";
     position:absolute;
-    width:190px;
-    height:190px;
-    border:1px solid rgba(255,255,255,.16);
+    width:210px;
+    height:210px;
     border-radius:50%;
-    right:-70px;
-    top:-90px;
+    right:-80px;
+    top:-95px;
+    background:rgba(255,255,255,.12);
 }
 
 .page-intro:after{
     content:"₹";
     position:absolute;
-    right:35px;
-    top:-35px;
-    font-size:170px;
-    font-weight:bold;
+    right:45px;
+    bottom:-58px;
+    font-size:165px;
+    font-weight:900;
     opacity:.08;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+}
+
+.hero-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.20);
+    padding:6px 10px;
+    border-radius:30px;
+    font-size:10px;
+    font-weight:bold;
+    margin-bottom:11px;
 }
 
 .page-intro h2{
     margin:0;
     font-size:29px;
-    position:relative;
-    z-index:2;
 }
 
 .page-intro p{
     margin:8px 0 0;
     font-size:13px;
-    opacity:.93;
-    position:relative;
-    z-index:2;
-    max-width:580px;
-}
-
-.hero-badges{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:16px;
-    position:relative;
-    z-index:3;
-}
-
-.hero-badge{
-    padding:7px 11px;
-    border-radius:30px;
-    background:rgba(255,255,255,.14);
-    border:1px solid rgba(255,255,255,.18);
-    font-size:10px;
-    font-weight:bold;
+    opacity:.92;
+    max-width:650px;
+    line-height:1.5;
 }
 
 
 /* =========================================================
-   SECURITY WARNING
+   SECURITY NOTICE
 ========================================================= */
 
-.security-alert{
-    margin-top:14px;
-    background:linear-gradient(135deg,#fff8e7,#fffdf7);
-    border:1px solid #f6df9b;
+.security-notice{
+    margin-top:15px;
+    background:#fff;
+    border:1px solid #ffe1a8;
+    border-left:5px solid #f59e0b;
     border-radius:18px;
-    padding:14px 16px;
+    padding:15px 17px;
     display:flex;
     align-items:center;
-    gap:12px;
-    box-shadow:0 5px 17px rgba(130,100,20,.06);
+    gap:13px;
+    box-shadow:0 5px 18px rgba(20,60,100,.06);
 }
 
 .security-icon{
     width:42px;
     height:42px;
-    min-width:42px;
+    flex-shrink:0;
     border-radius:13px;
-    background:#fff0bd;
+    background:#fff5df;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:21px;
 }
 
-.security-text strong{
-    display:block;
-    color:#8a5a00;
+.security-title{
     font-size:13px;
+    font-weight:900;
+    color:#9a5b00;
 }
 
-.security-text span{
-    display:block;
+.security-text{
     margin-top:3px;
-    color:#806f4d;
     font-size:11px;
-    line-height:1.5;
-}
-
-
-/* =========================================================
-   WELCOME BONUS
-========================================================= */
-
-.welcome-bonus{
-    margin-top:14px;
-    background:
-        radial-gradient(circle at 90% 0%,rgba(255,255,255,.24),transparent 30%),
-        linear-gradient(135deg,#ff9f43,#ee5253);
-    color:white;
-    border-radius:21px;
-    padding:18px 20px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
-    overflow:hidden;
-    position:relative;
-    box-shadow:0 10px 25px rgba(238,82,83,.15);
-}
-
-.welcome-bonus:after{
-    content:"🎁";
-    position:absolute;
-    right:22px;
-    bottom:-15px;
-    font-size:82px;
-    opacity:.13;
-}
-
-.bonus-left{
-    display:flex;
-    align-items:center;
-    gap:13px;
-    position:relative;
-    z-index:2;
-}
-
-.bonus-icon{
-    width:52px;
-    height:52px;
-    border-radius:16px;
-    background:rgba(255,255,255,.18);
-    border:1px solid rgba(255,255,255,.20);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:27px;
-}
-
-.bonus-title{
-    font-size:17px;
-    font-weight:bold;
-}
-
-.bonus-subtitle{
-    margin-top:4px;
-    font-size:11px;
-    opacity:.9;
-}
-
-.bonus-amount{
-    position:relative;
-    z-index:2;
-    font-size:27px;
-    font-weight:bold;
-    background:rgba(255,255,255,.15);
-    padding:10px 15px;
-    border-radius:14px;
+    color:#6f7888;
+    line-height:1.45;
 }
 
 
@@ -569,12 +503,12 @@ header{
 ========================================================= */
 
 .profile-card{
-    background:rgba(255,255,255,.96);
+    background:white;
     margin-top:15px;
     border-radius:20px;
     padding:17px 20px;
-    box-shadow:0 7px 24px rgba(20,60,100,.07);
-    border:1px solid #e7eef7;
+    box-shadow:0 6px 22px rgba(20,60,100,.08);
+    border:1px solid #e9f0f7;
 }
 
 .profile-top{
@@ -592,14 +526,17 @@ header{
 .profile-avatar{
     width:49px;
     height:49px;
-    border-radius:16px;
-    background:linear-gradient(135deg,#087ff5,#6c5ce7);
+    border-radius:50%;
+    background:linear-gradient(
+        135deg,
+        #087ff5,
+        #6c5ce7
+    );
     display:flex;
     align-items:center;
     justify-content:center;
     color:white;
     font-size:22px;
-    box-shadow:0 7px 17px rgba(8,127,245,.17);
 }
 
 .profile-name{
@@ -628,67 +565,154 @@ header{
 
 
 /* =========================================================
+   WELCOME BONUS
+========================================================= */
+
+.bonus-card{
+    margin-top:15px;
+    background:
+        linear-gradient(
+            135deg,
+            #fff7df,
+            #fff1c5
+        );
+    border:1px solid #f7d889;
+    border-radius:21px;
+    padding:18px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 7px 22px rgba(196,140,20,.10);
+}
+
+.bonus-card:after{
+    content:"₹99";
+    position:absolute;
+    right:-5px;
+    top:-15px;
+    font-size:95px;
+    font-weight:900;
+    color:#e8aa25;
+    opacity:.08;
+}
+
+.bonus-content{
+    position:relative;
+    z-index:2;
+}
+
+.bonus-label{
+    font-size:11px;
+    color:#a66a00;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+}
+
+.bonus-title{
+    margin-top:5px;
+    font-size:21px;
+    font-weight:900;
+    color:#784b00;
+}
+
+.bonus-subtitle{
+    margin-top:5px;
+    color:#866b35;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.bonus-amount{
+    display:inline-block;
+    margin-top:11px;
+    padding:8px 13px;
+    background:#fff;
+    border-radius:12px;
+    color:#d88b00;
+    font-size:20px;
+    font-weight:900;
+    box-shadow:0 4px 12px rgba(190,130,20,.10);
+}
+
+
+/* =========================================================
    WALLET
 ========================================================= */
 
 .wallet{
     margin-top:16px;
     background:
-        radial-gradient(circle at 85% 5%,rgba(255,255,255,.18),transparent 23%),
-        radial-gradient(circle at 70% 120%,rgba(255,255,255,.10),transparent 25%),
-        linear-gradient(135deg,#087ff5 0%,#5536dc 55%,#0acb9d 100%);
+        linear-gradient(
+            135deg,
+            #087ff5 0%,
+            #5d36dc 52%,
+            #0acb9d 100%
+        );
     color:white;
     padding:24px;
     border-radius:23px;
     position:relative;
     overflow:hidden;
-    box-shadow:0 14px 30px rgba(67,75,210,.19);
+    box-shadow:0 13px 30px rgba(67,75,210,.20);
 }
 
 .wallet:before{
     content:"";
     position:absolute;
-    width:185px;
-    height:185px;
+    width:180px;
+    height:180px;
     border-radius:50%;
-    right:-75px;
-    top:-95px;
-    border:1px solid rgba(255,255,255,.16);
+    right:-65px;
+    top:-85px;
+    background:rgba(255,255,255,.13);
 }
 
 .wallet:after{
     content:"";
     position:absolute;
-    width:110px;
-    height:110px;
+    width:120px;
+    height:120px;
     border-radius:50%;
-    right:65px;
-    bottom:-72px;
-    border:1px solid rgba(255,255,255,.12);
+    right:70px;
+    bottom:-75px;
+    background:rgba(255,255,255,.08);
+}
+
+.wallet-content{
+    position:relative;
+    z-index:2;
+}
+
+.wallet-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .wallet-title{
     font-size:12px;
-    opacity:.84;
-    position:relative;
-    z-index:2;
+    opacity:.86;
+}
+
+.wallet-chip{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.18);
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:9px;
+    font-weight:bold;
 }
 
 .wallet-amount{
     font-size:36px;
-    font-weight:bold;
-    margin:6px 0 18px;
-    position:relative;
-    z-index:2;
-    letter-spacing:.2px;
+    font-weight:900;
+    margin:7px 0 18px;
 }
 
 .wallet-row{
     display:flex;
     justify-content:space-between;
     font-size:12px;
-    position:relative;
-    z-index:2;
 }
 
 .wallet-row span{
@@ -714,37 +738,31 @@ header{
 }
 
 .card{
-    background:rgba(255,255,255,.97);
+    background:white;
     padding:17px;
     min-height:125px;
     border-radius:19px;
-    box-shadow:0 6px 20px rgba(20,60,100,.065);
-    border:1px solid #e7eef6;
+    box-shadow:0 5px 17px rgba(20,60,100,.07);
+    border:1px solid #e8f0f7;
     position:relative;
     overflow:hidden;
-    transition:.2s;
-}
-
-.card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 24px rgba(20,60,100,.10);
 }
 
 .card:after{
     content:"";
     position:absolute;
-    width:80px;
-    height:80px;
+    width:70px;
+    height:70px;
+    right:-28px;
+    bottom:-28px;
     border-radius:50%;
-    right:-40px;
-    bottom:-40px;
-    background:#f4f8fd;
+    background:#f5f9ff;
 }
 
 .card-icon{
-    width:40px;
-    height:40px;
-    border-radius:12px;
+    width:39px;
+    height:39px;
+    border-radius:11px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -795,7 +813,7 @@ header{
 
 
 /* =========================================================
-   SECTION TITLE
+   SECTION
 ========================================================= */
 
 .section-title{
@@ -810,12 +828,12 @@ header{
 ========================================================= */
 
 .commission-box{
-    background:rgba(255,255,255,.97);
+    background:white;
     margin-top:16px;
     padding:19px;
-    border-radius:21px;
-    box-shadow:0 6px 21px rgba(20,60,100,.065);
-    border:1px solid #e7eef6;
+    border-radius:20px;
+    box-shadow:0 5px 18px rgba(20,60,100,.07);
+    border:1px solid #e8f0f7;
 }
 
 .commission-heading{
@@ -829,7 +847,11 @@ header{
     width:43px;
     height:43px;
     border-radius:13px;
-    background:linear-gradient(135deg,#08b995,#087ff5);
+    background:linear-gradient(
+        135deg,
+        #08b995,
+        #087ff5
+    );
     display:flex;
     align-items:center;
     justify-content:center;
@@ -930,11 +952,11 @@ header{
 
 .sell-box{
     margin-top:16px;
-    background:rgba(255,255,255,.97);
+    background:white;
     padding:19px;
-    border-radius:21px;
-    box-shadow:0 6px 21px rgba(20,60,100,.065);
-    border:1px solid #e7eef6;
+    border-radius:20px;
+    box-shadow:0 5px 18px rgba(20,60,100,.07);
+    border:1px solid #e8f0f7;
 }
 
 .sell-header{
@@ -1032,21 +1054,20 @@ input:checked + .slider:before{
 
 .actions{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:11px;
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;
 }
 
 .action{
-    background:rgba(255,255,255,.97);
-    padding:16px 8px;
-    min-height:95px;
+    background:white;
+    padding:14px 7px;
+    min-height:100px;
     border-radius:17px;
     text-align:center;
-    text-decoration:none;
     color:#172033;
-    box-shadow:0 5px 17px rgba(20,60,100,.06);
+    box-shadow:0 4px 15px rgba(20,60,100,.06);
     border:1px solid #e7eef6;
-    font-size:12px;
+    font-size:11px;
     font-weight:bold;
     display:flex;
     flex-direction:column;
@@ -1056,8 +1077,8 @@ input:checked + .slider:before{
 }
 
 .action:hover{
-    transform:translateY(-3px);
-    box-shadow:0 9px 22px rgba(20,60,100,.10);
+    transform:translateY(-2px);
+    box-shadow:0 7px 20px rgba(20,60,100,.10);
 }
 
 .action-icon{
@@ -1079,13 +1100,15 @@ input:checked + .slider:before{
 
 .referral-box{
     margin-top:16px;
-    background:
-        radial-gradient(circle at 90% 0%,rgba(255,255,255,.18),transparent 25%),
-        linear-gradient(135deg,#ff9f43,#ee5253);
+    background:linear-gradient(
+        135deg,
+        #ff9f43,
+        #ee5253
+    );
     color:white;
     padding:20px;
-    border-radius:21px;
-    box-shadow:0 10px 24px rgba(238,82,83,.13);
+    border-radius:20px;
+    box-shadow:0 9px 22px rgba(238,82,83,.13);
     position:relative;
     overflow:hidden;
 }
@@ -1093,14 +1116,14 @@ input:checked + .slider:before{
 .referral-box:after{
     content:"👥";
     position:absolute;
-    right:20px;
-    bottom:-25px;
-    font-size:100px;
-    opacity:.08;
+    right:22px;
+    top:10px;
+    font-size:75px;
+    opacity:.10;
 }
 
 .referral-title{
-    font-size:17px;
+    font-size:18px;
     font-weight:bold;
     position:relative;
     z-index:2;
@@ -1158,9 +1181,7 @@ input:checked + .slider:before{
     right:12px;
     bottom:10px;
     height:70px;
-    background:rgba(255,255,255,.96);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    background:rgba(255,255,255,.97);
     display:flex;
     justify-content:space-around;
     align-items:center;
@@ -1171,9 +1192,8 @@ input:checked + .slider:before{
 }
 
 .bottom-nav a{
-    text-decoration:none;
-    color:#667085;
     text-align:center;
+    color:#667085;
     font-size:10px;
     font-weight:600;
     min-width:48px;
@@ -1194,15 +1214,19 @@ input:checked + .slider:before{
     width:55px;
     height:55px;
     border-radius:50%;
-    background:linear-gradient(135deg,#087ff5,#11cda7);
+    background:linear-gradient(
+        135deg,
+        #087ff5,
+        #11cda7
+    );
     color:white !important;
     display:flex !important;
     align-items:center;
     justify-content:center;
     font-size:29px !important;
     margin-top:-28px;
-    border:5px solid #f4f8fd;
-    box-shadow:0 7px 19px rgba(8,127,245,.25);
+    border:5px solid #f4f8ff;
+    box-shadow:0 7px 18px rgba(8,127,245,.25);
 }
 
 @media(min-width:901px){
@@ -1221,14 +1245,14 @@ input:checked + .slider:before{
 @media(max-width:900px){
 
     header{
-        min-height:72px;
+        min-height:75px;
         padding:12px 14px;
     }
 
     .brand-logo{
         width:42px;
         height:42px;
-        font-size:23px;
+        font-size:24px;
         border-radius:13px;
     }
 
@@ -1251,13 +1275,13 @@ input:checked + .slider:before{
     .notification{
         width:38px;
         height:38px;
-        font-size:18px;
+        font-size:19px;
     }
 
     .header-profile{
         width:39px;
         height:39px;
-        font-size:18px;
+        font-size:19px;
     }
 
     .sidebar{
@@ -1266,14 +1290,14 @@ input:checked + .slider:before{
 
     .container{
         margin:auto;
-        padding:13px 13px 95px;
+        padding:14px 13px 95px;
         max-width:700px;
     }
 
     .page-intro{
         min-height:130px;
         padding:20px;
-        border-radius:19px;
+        border-radius:20px;
     }
 
     .page-intro h2{
@@ -1282,36 +1306,22 @@ input:checked + .slider:before{
 
     .page-intro p{
         font-size:11px;
-        max-width:80%;
     }
 
-    .hero-badges{
-        margin-top:13px;
+    .security-notice{
+        align-items:flex-start;
     }
 
-    .hero-badge{
-        font-size:9px;
-        padding:6px 9px;
+    .bonus-title{
+        font-size:19px;
     }
 
     .profile-card{
         margin-top:12px;
     }
 
-    .security-alert{
-        align-items:flex-start;
-    }
-
-    .welcome-bonus{
-        padding:16px;
-    }
-
-    .bonus-title{
-        font-size:15px;
-    }
-
-    .bonus-amount{
-        font-size:22px;
+    .actions{
+        grid-template-columns:repeat(3,1fr);
     }
 
 }
@@ -1351,11 +1361,6 @@ input:checked + .slider:before{
         grid-template-columns:1fr;
     }
 
-    .actions{
-        grid-template-columns:repeat(3,1fr);
-        gap:8px;
-    }
-
     .action{
         min-height:88px;
         padding:12px 5px;
@@ -1369,7 +1374,7 @@ input:checked + .slider:before{
     }
 
     .wallet{
-        padding:21px;
+        padding:20px;
     }
 
     .wallet-amount{
@@ -1385,14 +1390,12 @@ input:checked + .slider:before{
         padding:6px 9px;
     }
 
-    .welcome-bonus{
-        align-items:flex-start;
-        flex-direction:column;
+    .bonus-card{
+        padding:16px;
     }
 
-    .bonus-amount{
-        width:100%;
-        text-align:center;
+    .security-text{
+        font-size:10px;
     }
 
 }
@@ -1420,15 +1423,12 @@ input:checked + .slider:before{
         font-size:25px !important;
     }
 
-    .page-intro h2{
-        font-size:21px;
-    }
-
 }
 
-.loading{
-    opacity:.55;
-}
+
+/* =========================================================
+   FOCUS
+========================================================= */
 
 a:focus-visible,
 input:focus-visible{
@@ -1436,7 +1436,12 @@ input:focus-visible{
     outline-offset:2px;
 }
 
+.loading{
+    opacity:.55;
+}
+
 </style>
+
 </head>
 
 
@@ -1462,7 +1467,7 @@ input:focus-visible{
                 <h1>Sathi Pay</h1>
 
                 <p>
-                    SECURE • FAST • RELIABLE
+                    Secure • Fast • Reliable
                 </p>
 
             </div>
@@ -1508,7 +1513,6 @@ input:focus-visible{
 </header>
 
 
-
 <!-- =========================================================
      SIDEBAR
 ========================================================= -->
@@ -1524,9 +1528,7 @@ input:focus-visible{
         <div
             class="sidebar-name"
             id="sidebarCustomerName">
-
             Loading...
-
         </div>
 
         <div class="sidebar-uid">
@@ -1626,7 +1628,8 @@ input:focus-visible{
             </strong>
 
             <small>
-                Start your Sathi Pay journey with a welcome reward.
+                Welcome to Sathi Pay.<br>
+                Start building your earnings.
             </small>
 
         </div>
@@ -1662,7 +1665,6 @@ input:focus-visible{
 </aside>
 
 
-
 <!-- =========================================================
      MAIN
 ========================================================= -->
@@ -1670,98 +1672,53 @@ input:focus-visible{
 <div class="container">
 
 
-    <!-- HERO -->
+    <!-- WELCOME -->
 
     <section class="page-intro">
 
-        <h2>
-            Welcome to Sathi Pay 👋
-        </h2>
-
-        <p>
-            Your secure dashboard for deposits, wallet,
-            earnings and referrals.
-        </p>
-
-
-        <div class="hero-badges">
+        <div class="hero-content">
 
             <div class="hero-badge">
-                🔒 Secure Account
+                ✨ MEMBER DASHBOARD
             </div>
 
-            <div class="hero-badge">
-                ⚡ Fast Processing
-            </div>
+            <h2>
+                Welcome to Sathi Pay 👋
+            </h2>
 
-            <div class="hero-badge">
-                💎 Member Dashboard
-            </div>
+            <p>
+                Manage your wallet, deposits, earnings and
+                referral network from one secure place.
+            </p>
 
         </div>
 
     </section>
 
 
+    <!-- SECURITY -->
 
-    <!-- SECURITY ALERT -->
-
-    <div class="security-alert">
+    <section class="security-notice">
 
         <div class="security-icon">
             🔐
         </div>
 
-        <div class="security-text">
+        <div>
 
-            <strong>
-                Security Alert
-            </strong>
-
-            <span>
-                Never share your OTP, password, UPI PIN or
-                other confidential details with anyone.
-                Sathi Pay support will never ask for your OTP or password.
-            </span>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- WELCOME BONUS -->
-
-    <div class="welcome-bonus">
-
-        <div class="bonus-left">
-
-            <div class="bonus-icon">
-                🎁
+            <div class="security-title">
+                SECURITY ALERT — NEVER SHARE YOUR OTP OR PASSWORD
             </div>
 
-            <div>
-
-                <div class="bonus-title">
-                    Welcome to Sathi Pay!
-                </div>
-
-                <div class="bonus-subtitle">
-                    New registrations are eligible for a
-                    ₹99 welcome bonus.
-                </div>
-
+            <div class="security-text">
+                Sathi Pay will never ask you to share your OTP,
+                password or PIN. Keep your account details private
+                and do not share them with anyone.
             </div>
 
         </div>
 
-
-        <div class="bonus-amount">
-            ₹99 BONUS
-        </div>
-
-    </div>
-
+    </section>
 
 
     <!-- PROFILE -->
@@ -1813,6 +1770,37 @@ input:focus-visible{
     </div>
 
 
+    <!-- WELCOME BONUS -->
+
+    <section class="bonus-card">
+
+        <div class="bonus-content">
+
+            <div class="bonus-label">
+                🎁 NEW MEMBER BENEFIT
+            </div>
+
+            <div class="bonus-title">
+                ₹99 Welcome Bonus
+            </div>
+
+            <div class="bonus-subtitle">
+                Your welcome bonus is shown in your wallet
+                balance after successful registration.
+            </div>
+
+            <div
+                class="bonus-amount"
+                id="welcomeBonusAmount">
+
+                ₹99.00
+
+            </div>
+
+        </div>
+
+    </section>
+
 
     <!-- WALLET -->
 
@@ -1820,49 +1808,61 @@ input:focus-visible{
         class="wallet"
         id="wallet-section">
 
-        <div class="wallet-title">
-            Available Wallet Balance
-        </div>
+        <div class="wallet-content">
 
-        <div
-            class="wallet-amount"
-            id="walletBalance">
+            <div class="wallet-top">
 
-            ₹0.00
+                <div class="wallet-title">
+                    Available Wallet Balance
+                </div>
 
-        </div>
+                <div class="wallet-chip">
+                    🔒 SECURE WALLET
+                </div>
+
+            </div>
 
 
-        <div class="wallet-row">
+            <div
+                class="wallet-amount"
+                id="walletBalance">
 
-            <span>
-                Bonus Balance
-            </span>
-
-            <b id="bonusBalance">
                 ₹0.00
-            </b>
 
-        </div>
-
-
-        <div class="wallet-divider"></div>
+            </div>
 
 
-        <div class="wallet-row">
+            <div class="wallet-row">
 
-            <span>
-                Commission
-            </span>
+                <span>
+                    Bonus
+                </span>
 
-            <b id="commissionBalance">
-                ₹0.00
-            </b>
+                <b id="bonusBalance">
+                    ₹0.00
+                </b>
+
+            </div>
+
+
+            <div class="wallet-divider"></div>
+
+
+            <div class="wallet-row">
+
+                <span>
+                    Commission
+                </span>
+
+                <b id="commissionBalance">
+                    ₹0.00
+                </b>
+
+            </div>
 
         </div>
 
     </div>
-
 
 
     <!-- BALANCE CARDS -->
@@ -1933,7 +1933,6 @@ input:focus-visible{
         </div>
 
     </div>
-
 
 
     <!-- COMMISSION -->
@@ -2063,8 +2062,7 @@ input:focus-visible{
     </div>
 
 
-
-    <!-- SELL CONTROL -->
+    <!-- SELL -->
 
     <div class="sell-box">
 
@@ -2116,7 +2114,6 @@ input:focus-visible{
     </div>
 
 
-
     <!-- QUICK ACTIONS -->
 
     <h3 class="section-title">
@@ -2155,13 +2152,13 @@ input:focus-visible{
 
         <a
             class="action"
-            href="profile.html">
+            href="link-upi.html">
 
             <span class="action-icon">
-                👤
+                🔗
             </span>
 
-            Profile
+            Link UPI
 
         </a>
 
@@ -2207,7 +2204,6 @@ input:focus-visible{
     </div>
 
 
-
     <!-- REFERRAL -->
 
     <div class="referral-box">
@@ -2239,13 +2235,11 @@ input:focus-visible{
     </div>
 
 
-
     <div id="message">
         Loading dashboard...
     </div>
 
 </div>
-
 
 
 <!-- =========================================================
@@ -2312,7 +2306,6 @@ input:focus-visible{
 </div>
 
 
-
 <!-- =========================================================
      SUPABASE
 ========================================================= -->
@@ -2350,7 +2343,10 @@ function getCustomerId(){
             "sathiPayCustomerId"
         );
 
-    if(id && id.trim() !== ""){
+    if(
+        id &&
+        id.trim() !== ""
+    ){
 
         return id.trim();
 
@@ -2408,7 +2404,9 @@ function getTodayRange(){
     parts.forEach(
         function(part){
 
-            if(part.type !== "literal"){
+            if(
+                part.type !== "literal"
+            ){
 
                 map[part.type] =
                     part.value;
@@ -2460,10 +2458,7 @@ async function loadTodayEarnings(
     let total = 0;
 
 
-    /* =====================================================
-       PRIMARY SOURCE:
-       WALLET LEDGER COMMISSION CREDIT
-    ===================================================== */
+    /* PRIMARY SOURCE */
 
     const {
         data: ledger,
@@ -2570,16 +2565,13 @@ async function loadTodayEarnings(
     }
 
 
-    /* =====================================================
-       FALLBACK:
-       OLD COMMISSION TABLES
-    ===================================================== */
-
     console.error(
         "Wallet ledger earnings error:",
         ledgerError
     );
 
+
+    /* FALLBACK DEPOSITS */
 
     const {
         data: deposits,
@@ -2636,6 +2628,8 @@ async function loadTodayEarnings(
 
     }
 
+
+    /* FALLBACK REFERRALS */
 
     const {
         data: referrals,
@@ -2719,9 +2713,7 @@ async function loadDashboard(){
             getCustomerId();
 
 
-        /* =================================================
-           LOGIN CHECK
-        ================================================= */
+        /* LOGIN CHECK */
 
         if(!customerId){
 
@@ -2736,9 +2728,7 @@ async function loadDashboard(){
         }
 
 
-        /* =================================================
-           CUSTOMER DATA
-        ================================================= */
+        /* CUSTOMER DATA */
 
         const {
             data: customer,
@@ -2784,9 +2774,7 @@ async function loadDashboard(){
         }
 
 
-        /* =================================================
-           CUSTOMER NAME
-        ================================================= */
+        /* CUSTOMER NAME */
 
         const customerName =
             customer.name ||
@@ -2805,10 +2793,7 @@ async function loadDashboard(){
             customerName;
 
 
-
-        /* =================================================
-           UID
-        ================================================= */
+        /* UID */
 
         const customerUID =
             customer.uid ||
@@ -2833,10 +2818,7 @@ async function loadDashboard(){
             customerUID;
 
 
-
-        /* =================================================
-           STATUS
-        ================================================= */
+        /* STATUS */
 
         const rawStatus =
             String(
@@ -2857,10 +2839,7 @@ async function loadDashboard(){
             : rawStatus;
 
 
-
-        /* =================================================
-           WALLET
-        ================================================= */
+        /* WALLET */
 
         const wallet =
             Number(
@@ -2898,10 +2877,7 @@ async function loadDashboard(){
             formatMoney(wallet);
 
 
-
-        /* =================================================
-           BONUS
-        ================================================= */
+        /* BONUS */
 
         document.getElementById(
             "bonusBalance"
@@ -2909,10 +2885,27 @@ async function loadDashboard(){
             formatMoney(bonus);
 
 
+        /*
+         * Show actual bonus balance.
+         * If the welcome bonus exists,
+         * it will be reflected here.
+         */
 
-        /* =================================================
-           DEPOSIT
-        ================================================= */
+        const welcomeBonus =
+            document.getElementById(
+                "welcomeBonusAmount"
+            );
+
+
+        if(welcomeBonus){
+
+            welcomeBonus.innerText =
+                formatMoney(bonus);
+
+        }
+
+
+        /* DEPOSIT */
 
         document.getElementById(
             "depositBalance"
@@ -2920,10 +2913,7 @@ async function loadDashboard(){
             formatMoney(deposit);
 
 
-
-        /* =================================================
-           COMMISSION
-        ================================================= */
+        /* COMMISSION */
 
         document.getElementById(
             "commissionBalance"
@@ -2931,10 +2921,7 @@ async function loadDashboard(){
             formatMoney(commission);
 
 
-
-        /* =================================================
-           REFERRAL
-        ================================================= */
+        /* REFERRAL */
 
         document.getElementById(
             "referralBalance"
@@ -2942,10 +2929,7 @@ async function loadDashboard(){
             formatMoney(referral);
 
 
-
-        /* =================================================
-           SELL STATUS
-        ================================================= */
+        /* SELL STATUS */
 
         const sellToggle =
             document.getElementById(
@@ -2966,10 +2950,7 @@ async function loadDashboard(){
         );
 
 
-
-        /* =================================================
-           INVITATION CODE
-        ================================================= */
+        /* INVITATION CODE */
 
         const invitationCode =
             customer.invitation_code ||
@@ -2983,10 +2964,7 @@ async function loadDashboard(){
             "Not available";
 
 
-
-        /* =================================================
-           REFERRAL LINK
-        ================================================= */
+        /* REFERRAL LINK */
 
         if(invitationCode){
 
@@ -3013,10 +2991,7 @@ async function loadDashboard(){
         }
 
 
-
-        /* =================================================
-           TODAY EARNINGS
-        ================================================= */
+        /* TODAY EARNINGS */
 
         await loadTodayEarnings(
             customerId
@@ -3026,7 +3001,8 @@ async function loadDashboard(){
         message.innerText =
             "Dashboard updated";
 
-    }catch(error){
+    }
+    catch(error){
 
         console.error(
             "Dashboard error:",
@@ -3152,8 +3128,8 @@ async function changeSellStatus(){
             ? "Selling is now ON."
             : "Selling is now OFF.";
 
-
-    }catch(error){
+    }
+    catch(error){
 
         console.error(
             "Sell status error:",
@@ -3235,4 +3211,5 @@ setInterval(
 </script>
 
 </body>
-    </html>
+
+   </html>
