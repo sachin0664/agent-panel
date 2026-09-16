@@ -667,9 +667,7 @@ body.pageReady{
 
     <div class="qrCurrentBox">
 
-        <div
-            class="qrSelectTitle"
-        >
+        <div class="qrSelectTitle">
             📷 Current Payment QR
         </div>
 
@@ -1490,7 +1488,7 @@ function statusBadge(status){
 
     return `
         <span class="badge ${cls}">
-            ${status || "Pending"}
+            ${escapeHtml(status || "Pending")}
         </span>
     `;
 
@@ -1654,12 +1652,6 @@ function readQrFile(file){
 
             }
 
-            /*
-             * QR ko unnecessarily bahut bada database
-             * data banne se bachane ke liye resize kiya
-             * ja raha hai.
-             */
-
             const reader =
                 new FileReader();
 
@@ -1738,11 +1730,6 @@ function readQrFile(file){
                                 height
                             );
 
-                            /*
-                             * PNG rakha gaya hai taaki
-                             * QR clarity maximum rahe.
-                             */
-
                             const dataUrl =
                                 canvas.toDataURL(
                                     "image/png"
@@ -1793,6 +1780,7 @@ function readQrFile(file){
 
 /* =====================================================
    SHOW CURRENT QR
+   FIXED - NO INFINITE ONERROR LOOP
 ===================================================== */
 
 function showCurrentQr(url){
@@ -1802,40 +1790,115 @@ function showCurrentQr(url){
             "currentQrBox"
         );
 
+    /*
+     * Purana content completely clear.
+     * Broken image ko innerHTML += se recreate
+     * nahi kiya jayega.
+     */
+
+    box.innerHTML = "";
+
     if(!url){
 
-        box.innerHTML = `
-            <div class="small">
-                ❌ QR code available nahi hai.
-            </div>
-        `;
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.className =
+            "small";
+
+        empty.textContent =
+            "❌ QR code available nahi hai.";
+
+        box.appendChild(
+            empty
+        );
 
         return;
 
     }
 
-    box.innerHTML = `
 
-        <img
-            src="${escapeHtml(url)}"
-            class="qrAdminPreview"
-            alt="Current Payment QR"
-            onclick="openProof('${escapeHtml(url)}')"
-            onerror="
-                this.style.display='none';
-                this.parentElement.innerHTML +=
-                '<div class=\\'status error\\'>QR image load nahi ho paayi.</div>';
-            "
-        >
+    const img =
+        document.createElement(
+            "img"
+        );
 
-        <div
-            class="small"
-            style="text-align:center;"
-        >
-            Current QR Code
-        </div>
+    img.className =
+        "qrAdminPreview";
 
-    `;
+    img.alt =
+        "Current Payment QR";
+
+    img.src =
+        url;
+
+
+    img.onclick =
+        function(){
+
+            openProof(
+                url
+            );
+
+        };
+
+
+    /*
+     * IMPORTANT:
+     * Agar image load fail hoti hai,
+     * sirf box ka content replace hoga.
+     *
+     * Broken image ko dobara create nahi kiya jayega.
+     * Isliye infinite loop nahi hoga.
+     */
+
+    img.onerror =
+        function(){
+
+            box.innerHTML = "";
+
+            const errorBox =
+                document.createElement(
+                    "div"
+                );
+
+            errorBox.className =
+                "status error";
+
+            errorBox.textContent =
+                "❌ QR image load nahi ho paayi.";
+
+            box.appendChild(
+                errorBox
+            );
+
+        };
+
+
+    box.appendChild(
+        img
+    );
+
+
+    const text =
+        document.createElement(
+            "div"
+        );
+
+    text.className =
+        "small";
+
+    text.style.textAlign =
+        "center";
+
+    text.textContent =
+        "Current QR Code";
+
+    box.appendChild(
+        text
+    );
 
 }
 
@@ -1917,6 +1980,7 @@ async function loadPaymentSettings(){
         .eq("id",1)
         .maybeSingle();
 
+
     if(error){
 
         status.className =
@@ -1943,6 +2007,7 @@ async function loadPaymentSettings(){
 
     }
 
+
     if(!data){
 
         status.className =
@@ -1955,19 +2020,23 @@ async function loadPaymentSettings(){
 
     }
 
+
     document.getElementById(
         "currentUpi"
     ).textContent =
         data.upi_id || "-";
+
 
     document.getElementById(
         "paymentUpi"
     ).value =
         data.upi_id || "";
 
+
     showCurrentQr(
         data.qr_url
     );
+
 
     status.className =
         "status success";
@@ -2081,6 +2150,7 @@ async function savePaymentSettings(){
             "savePaymentBtn"
         );
 
+
     if(!upi){
 
         status.className =
@@ -2093,11 +2163,6 @@ async function savePaymentSettings(){
 
     }
 
-
-    /*
-     * Existing QR ko preserve karne ke liye pehle
-     * current database value read karenge.
-     */
 
     button.disabled = true;
 
@@ -2112,6 +2177,10 @@ async function savePaymentSettings(){
 
 
     try{
+
+        /*
+         * Existing QR preserve karenge.
+         */
 
         const {
             data:currentData,
@@ -2147,8 +2216,8 @@ async function savePaymentSettings(){
 
 
         /*
-         * Agar admin ne new QR select kiya hai,
-         * to new QR ko Data URL me convert karenge.
+         * New QR selected hai to usko Data URL
+         * me convert karenge.
          */
 
         if(
@@ -2161,6 +2230,7 @@ async function savePaymentSettings(){
 
             status.textContent =
                 "QR image prepare ho rahi hai...";
+
 
             qrData =
                 await readQrFile(
@@ -2212,8 +2282,7 @@ async function savePaymentSettings(){
 
 
         /*
-         * Sabse important verification:
-         * update ke baad database se dobara read karenge.
+         * UPDATE ke baad verify.
          */
 
         const {
@@ -2268,7 +2337,7 @@ async function savePaymentSettings(){
 
 
         /*
-         * UI ko verified database value se update karenge.
+         * Verified database value se UI update.
          */
 
         document.getElementById(
@@ -2276,20 +2345,17 @@ async function savePaymentSettings(){
         ).textContent =
             verifyData.upi_id || "-";
 
+
         document.getElementById(
             "paymentUpi"
         ).value =
             verifyData.upi_id || "";
 
+
         showCurrentQr(
             verifyData.qr_url
         );
 
-
-        /*
-         * File input clear kar dete hain.
-         * Database me QR already permanently save ho chuki hai.
-         */
 
         qrInput.value = "";
 
@@ -2301,7 +2367,6 @@ async function savePaymentSettings(){
 
         status.textContent =
             "✅ Payment settings successfully saved. Refresh ke baad bhi ye settings rahengi.";
-
 
     }
 
@@ -2360,7 +2425,9 @@ async function searchCustomer(){
             "customerDetails"
         );
 
+
     box.innerHTML = "";
+
 
     if(!search){
 
@@ -2374,16 +2441,19 @@ async function searchCustomer(){
 
     }
 
+
     status.className =
         "status";
 
     status.textContent =
         "Searching customer...";
 
+
     const upperSearch =
         search.toUpperCase();
 
     let result;
+
 
     if(
         upperSearch.startsWith("SP") ||
@@ -2413,11 +2483,13 @@ async function searchCustomer(){
 
     }
 
+
     const customer =
         result.data;
 
     const error =
         result.error;
+
 
     if(error){
 
@@ -2431,6 +2503,7 @@ async function searchCustomer(){
 
     }
 
+
     if(!customer){
 
         status.className =
@@ -2443,9 +2516,11 @@ async function searchCustomer(){
 
     }
 
+
     renderCustomer(
         customer
     );
+
 
     status.className =
         "status success";
@@ -2467,30 +2542,36 @@ function renderCustomer(customer){
             "customerDetails"
         );
 
+
     const wallet =
         Number(
             customer.wallet_balance || 0
         );
+
 
     const bonus =
         Number(
             customer.bonus_balance || 0
         );
 
+
     const depositBalance =
         Number(
             customer.deposit_balance || 0
         );
+
 
     const commission =
         Number(
             customer.commission_balance || 0
         );
 
+
     const referral =
         Number(
             customer.referral_balance || 0
         );
+
 
     box.innerHTML = `
 
@@ -2641,17 +2722,21 @@ function clearCustomerSearch(){
         "customerSearch"
     ).value = "";
 
+
     document.getElementById(
         "customerDetails"
     ).innerHTML = "";
+
 
     const status =
         document.getElementById(
             "searchStatus"
         );
 
+
     status.className =
         "status";
+
 
     status.textContent =
         "Ready to search.";
@@ -2674,6 +2759,7 @@ async function loadAdminTotals(){
             count:"exact",
             head:true
         });
+
 
     document.getElementById(
         "totalCustomers"
@@ -2785,6 +2871,7 @@ async function loadDeposits(){
         document.getElementById(
             "depositList"
         );
+
 
     box.innerHTML =
         "<p>Loading deposits...</p>";
@@ -3170,6 +3257,7 @@ async function loadCustomers(){
         document.getElementById(
             "customerList"
         );
+
 
     box.innerHTML =
         "<p>Loading customers...</p>";
