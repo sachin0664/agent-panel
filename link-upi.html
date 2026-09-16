@@ -219,6 +219,11 @@ body{
   color:#fff
 }
 
+.save:disabled{
+  opacity:.6;
+  cursor:not-allowed
+}
+
 .msg{
   font-size:13px;
   margin-top:10px;
@@ -433,6 +438,7 @@ body{
         <button
           class="save"
           type="submit"
+          id="saveBtn"
         >
 
           Save UPI
@@ -514,6 +520,7 @@ body{
 /* =====================================
    SATHI PAY — MULTI UPI
    Maximum 3 UPI
+   GLOBAL UPI UNIQUENESS
    Customer:
    ADD / ENABLE / DISABLE
    NO DELETE
@@ -541,6 +548,9 @@ const addBtn =
 
 const limitNote =
   document.getElementById('limitNote');
+
+const saveBtn =
+  document.getElementById('saveBtn');
 
 
 let customerId = null;
@@ -571,6 +581,7 @@ async function getCustomerId(){
       'customer-login.html';
 
     return null;
+
   }
 
 
@@ -628,6 +639,7 @@ function money(v){
   const n =
     Number(v);
 
+
   if(
     !Number.isFinite(n)
   ){
@@ -636,6 +648,7 @@ function money(v){
 
   }
 
+
   return n.toFixed(2);
 
 }
@@ -643,16 +656,11 @@ function money(v){
 
 /* =====================================
    MIGRATE OLD SINGLE UPI
-   customers table
-   ->
-   customer_upis table
 ===================================== */
 
 async function migrateOldUPI(id){
 
   try{
-
-    /* Check if new table already has UPI */
 
     const {
       data: existing,
@@ -682,9 +690,6 @@ async function migrateOldUPI(id){
     }
 
 
-    /* If new UPI already exists,
-       do not migrate old record again */
-
     if(
       existing &&
       existing.length > 0
@@ -694,8 +699,6 @@ async function migrateOldUPI(id){
 
     }
 
-
-    /* Get old UPI */
 
     const {
       data: oldData,
@@ -739,9 +742,6 @@ async function migrateOldUPI(id){
     }
 
 
-    /* Insert old UPI
-       into new table */
-
     const {
       error: insertError
     } =
@@ -784,11 +784,6 @@ async function migrateOldUPI(id){
 
 
     if(insertError){
-
-      /*
-       * Duplicate / already migrated
-       * is harmless.
-       */
 
       console.warn(
         'Old UPI migration:',
@@ -834,13 +829,8 @@ async function loadUPI(){
   }
 
 
-  /* Automatically preserve
-     existing working UPI */
-
   await migrateOldUPI(id);
 
-
-  /* Get maximum 3 */
 
   const {
     data,
@@ -928,8 +918,6 @@ function renderUPIs(){
 
   }
 
-
-  /* Maximum 3 */
 
   const visibleUPIs =
     currentUPIs.slice(
@@ -1145,8 +1133,6 @@ async function toggleUPI(
     !currentEnabled;
 
 
-  /* Find card status */
-
   const status =
     document.querySelector(
       `.status[data-id="${CSS.escape(upiRowId)}"]`
@@ -1266,6 +1252,14 @@ addBtn.onclick = () => {
     1000000;
 
 
+  saveBtn.disabled =
+    false;
+
+
+  saveBtn.textContent =
+    'Save UPI';
+
+
   modal.style.display =
     'flex';
 
@@ -1324,8 +1318,6 @@ document.getElementById(
   msg.textContent =
     '';
 
-
-  /* Extra frontend limit */
 
   if(
     currentUPIs.length >= 3
@@ -1491,34 +1483,12 @@ document.getElementById(
 
 
   /* =================================
-     DUPLICATE CHECK
+     CHECK SAME CUSTOMER DUPLICATE
   ================================= */
 
-  const duplicate =
-    (latestUPIs || []).some(
-      item =>
-        String(
-          item.upi_id ||
-          ''
-        )
-        .trim()
-        .toLowerCase() === upi
-    );
-
-
-  /*
-   * The database unique index is the
-   * final protection. This frontend
-   * check gives a better message.
-   *
-   * Since latestUPIs only selected id
-   * above, perform proper duplicate
-   * lookup separately.
-   */
-
   const {
-    data: duplicateRows,
-    error: duplicateError
+    data: ownUPIs,
+    error: ownDuplicateError
   } =
     await supabaseClient
 
@@ -1534,18 +1504,18 @@ document.getElementById(
       );
 
 
-  if(duplicateError){
+  if(ownDuplicateError){
 
     msg.textContent =
-      'Unable to check duplicate UPI.';
+      'Unable to check existing UPI IDs.';
 
     return;
 
   }
 
 
-  const alreadyExists =
-    (duplicateRows || []).some(
+  const ownDuplicate =
+    (ownUPIs || []).some(
       row =>
         String(
           row.upi_id ||
@@ -1556,10 +1526,10 @@ document.getElementById(
     );
 
 
-  if(alreadyExists){
+  if(ownDuplicate){
 
     msg.textContent =
-      'This UPI ID is already linked.';
+      'This UPI ID is already linked to your account.';
 
     return;
 
@@ -1567,7 +1537,21 @@ document.getElementById(
 
 
   /* =================================
-     INSERT NEW UPI
+     SAVE BUTTON LOCK
+  ================================= */
+
+  saveBtn.disabled =
+    true;
+
+  saveBtn.textContent =
+    'Checking...';
+
+
+  /* =================================
+     INSERT
+     
+     GLOBAL DUPLICATE IS ENFORCED
+     BY SUPABASE DATABASE TRIGGER
   ================================= */
 
   const {
@@ -1618,41 +1602,76 @@ document.getElementById(
     );
 
 
-    if(
-      String(
-        error.message || ''
+    saveBtn.disabled =
+      false;
+
+    saveBtn.textContent =
+      'Save UPI';
+
+
+    const errorText =
+      (
+        String(
+          error.message ||
+          ''
+        ) +
+        ' ' +
+        String(
+          error.details ||
+          ''
+        ) +
+        ' ' +
+        String(
+          error.hint ||
+          ''
+        )
       )
-      .toLowerCase()
-      .includes('maximum 3')
+      .toLowerCase();
+
+
+    /* GLOBAL DUPLICATE */
+
+    if(
+      errorText.includes(
+        'upi_already_linked'
+      ) ||
+      errorText.includes(
+        'upi already linked'
+      )
+    ){
+
+      msg.textContent =
+        'This UPI ID is already linked to another account.';
+
+      return;
+
+    }
+
+
+    /* MAXIMUM 3 */
+
+    if(
+      errorText.includes(
+        'maximum 3'
+      )
     ){
 
       msg.textContent =
         'Maximum 3 UPI IDs allowed.';
 
-    }
-    else if(
-      String(
-        error.message || ''
-      )
-      .toLowerCase()
-      .includes('duplicate')
-    ){
+      await loadUPI();
 
-      msg.textContent =
-        'This UPI ID is already linked.';
-
-    }
-    else{
-
-      msg.textContent =
-        'Save Error: ' +
-        (
-          error.message ||
-          'Unknown error'
-        );
+      return;
 
     }
 
+
+    msg.textContent =
+      'Save Error: ' +
+      (
+        error.message ||
+        'Unknown error'
+      );
 
     return;
 
@@ -1666,8 +1685,20 @@ document.getElementById(
   if(
     !data ||
     data.customer_id !== customerId ||
-    data.upi_id !== upi
+    String(
+      data.upi_id ||
+      ''
+    )
+    .trim()
+    .toLowerCase() !== upi
   ){
+
+    saveBtn.disabled =
+      false;
+
+    saveBtn.textContent =
+      'Save UPI';
+
 
     msg.textContent =
       'UPI save could not be verified.';
@@ -1687,6 +1718,13 @@ document.getElementById(
 
   msg.textContent =
     'UPI added successfully.';
+
+
+  saveBtn.disabled =
+    true;
+
+  saveBtn.textContent =
+    'Saved';
 
 
   setTimeout(
@@ -1713,6 +1751,14 @@ document.getElementById(
         1000000;
 
 
+      saveBtn.disabled =
+        false;
+
+
+      saveBtn.textContent =
+        'Save UPI';
+
+
       await loadUPI();
 
     },
@@ -1734,4 +1780,4 @@ loadUPI();
 
 </body>
 
-                         </html>
+  </html>
