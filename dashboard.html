@@ -3139,8 +3139,12 @@ async function changeSellStatus(){
 
 
 /* =========================================================
-   SECURITY MODAL
+   SECURITY MODAL - SHOW ONLY ONCE
 ========================================================= */
+
+const SECURITY_WARNING_KEY =
+    "sathiPaySecurityWarningShown";
+
 
 function openSecurityModal(){
 
@@ -3149,13 +3153,32 @@ function openSecurityModal(){
             "securityModal"
         );
 
-    if(modal){
+    if(!modal){
+        return;
+    }
 
-        modal.classList.add(
-            "show"
+
+    /*
+     * Check if the security warning
+     * has already been shown.
+     */
+
+    const alreadyShown =
+        localStorage.getItem(
+            SECURITY_WARNING_KEY
         );
 
+
+    if(alreadyShown === "true"){
+
+        return;
+
     }
+
+
+    modal.classList.add(
+        "show"
+    );
 
 }
 
@@ -3167,6 +3190,7 @@ function closeSecurityModal(){
             "securityModal"
         );
 
+
     if(modal){
 
         modal.classList.remove(
@@ -3174,6 +3198,17 @@ function closeSecurityModal(){
         );
 
     }
+
+
+    /*
+     * Remember permanently that
+     * this warning has been shown.
+     */
+
+    localStorage.setItem(
+        SECURITY_WARNING_KEY,
+        "true"
+    );
 
 }
 
@@ -3184,6 +3219,19 @@ function closeSecurityModal(){
 
 function logoutCustomer(){
 
+    /*
+     * Remove security warning flag on logout.
+     *
+     * This means after a fresh login,
+     * the security warning can appear
+     * once again.
+     */
+
+    localStorage.removeItem(
+        SECURITY_WARNING_KEY
+    );
+
+
     if(window.sathiPayLogout){
 
         window.sathiPayLogout();
@@ -3191,6 +3239,7 @@ function logoutCustomer(){
         return;
 
     }
+
 
     localStorage.removeItem(
         "sathiPayCustomerId"
@@ -3220,9 +3269,10 @@ document.addEventListener(
 
         loadDashboard();
 
+
         /*
-         * Show security warning whenever
-         * dashboard is opened.
+         * Security warning will appear
+         * only if it has not been shown before.
          */
 
         setTimeout(
@@ -3255,4 +3305,4 @@ setInterval(
 
 </body>
 
-   </html>
+    </html>
