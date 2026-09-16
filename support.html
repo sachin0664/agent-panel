@@ -1,574 +1,885 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Sathi Pay - Support</title>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Customer Guard -->
 <script src="customer-guard.js"></script>
+
+
 <style>
+
 *{
     box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#f4f7ff;
-    color:#17233d;
+
+    margin:0;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background:#eef4ff;
+
+    color:#172033;
+
 }
 
-header{
-    background:linear-gradient(135deg,#2563eb,#7c3aed);
-    color:#fff;
-    padding:18px 20px;
-    box-shadow:0 5px 20px rgba(37,99,235,.25);
+
+.header{
+
+    background:#ffffff;
+
+    padding:18px 16px;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0,0,0,0.08);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:10;
+
 }
 
-.header-inner{
-    max-width:1100px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
+
+.header h1{
+
+    margin:0;
+
+    font-size:22px;
+
+    color:#1769ff;
+
 }
 
-.logo{
-    font-size:23px;
-    font-weight:800;
-}
 
-.logo span{
-    display:block;
-    font-size:12px;
-    opacity:.85;
-    margin-top:4px;
-}
+.header p{
 
-.back-btn{
-    color:#fff;
-    text-decoration:none;
-    background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.35);
-    padding:10px 15px;
-    border-radius:12px;
+    margin:5px 0 0;
+
+    color:#6b7280;
+
     font-size:13px;
-    font-weight:700;
+
 }
+
 
 .container{
-    max-width:1100px;
-    margin:25px auto;
-    padding:0 16px 40px;
+
+    width:100%;
+
+    max-width:600px;
+
+    margin:auto;
+
+    padding:20px 15px 40px;
+
 }
 
-.hero{
-    background:linear-gradient(135deg,#2563eb,#7c3aed);
-    color:#fff;
-    border-radius:24px;
-    padding:30px 25px;
-    margin-bottom:20px;
-    box-shadow:0 12px 30px rgba(79,70,229,.2);
-}
-
-.hero-icon{
-    width:58px;
-    height:58px;
-    border-radius:18px;
-    background:rgba(255,255,255,.18);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:29px;
-    margin-bottom:15px;
-}
-
-.hero h1{
-    font-size:29px;
-    margin-bottom:8px;
-}
-
-.hero p{
-    font-size:14px;
-    opacity:.9;
-    line-height:1.6;
-}
-
-.section-title{
-    font-size:21px;
-    font-weight:800;
-    margin:25px 0 14px;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-}
 
 .card{
-    background:#fff;
-    border-radius:20px;
-    padding:21px;
-    border:1px solid #edf0f7;
-    box-shadow:0 8px 25px rgba(31,41,55,.07);
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    margin-bottom:16px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,0.07);
+
 }
 
-.card-icon{
-    width:50px;
-    height:50px;
-    border-radius:15px;
+
+.icon{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:14px;
+
+    background:#eef4ff;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
-    font-size:25px;
+
+    font-size:30px;
+
     margin-bottom:14px;
-    background:#eef2ff;
+
 }
 
-.card h3{
-    font-size:17px;
-    margin-bottom:7px;
+
+.card h2{
+
+    margin:0 0 8px;
+
+    font-size:19px;
+
 }
+
 
 .card p{
-    color:#718096;
-    font-size:13px;
-    line-height:1.6;
-    margin-bottom:16px;
+
+    margin:0 0 16px;
+
+    color:#667085;
+
+    font-size:14px;
+
+    line-height:1.5;
+
 }
 
-.btn{
-    display:block;
+
+button{
+
     width:100%;
-    text-align:center;
-    text-decoration:none;
-    color:#fff;
-    padding:12px 15px;
+
+    border:none;
+
     border-radius:12px;
-    font-size:13px;
-    font-weight:800;
-    background:linear-gradient(135deg,#2563eb,#7c3aed);
+
+    padding:13px 16px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
 }
 
-.download{
-    background:#eff6ff;
+
+.blue{
+
+    background:#1769ff;
+
+    color:#ffffff;
+
 }
 
-.support{
-    background:#f5f3ff;
-}
 
 .telegram{
-    background:#ecfdf5;
+
+    background:#229ed9;
+
+    color:#ffffff;
+
 }
 
-.download .card-icon{
-    background:#dbeafe;
+
+.green{
+
+    background:#16a34a;
+
+    color:#ffffff;
+
 }
 
-.support .card-icon{
-    background:#ede9fe;
+
+.disabled{
+
+    background:#d1d5db;
+
+    color:#6b7280;
+
+    cursor:not-allowed;
+
 }
 
-.telegram .card-icon{
-    background:#d1fae5;
+
+button:active{
+
+    transform:scale(0.99);
+
 }
 
-.info-box{
-    background:#fff;
-    border-radius:20px;
-    padding:21px;
-    border:1px solid #edf0f7;
-    box-shadow:0 8px 25px rgba(31,41,55,.07);
+
+.status{
+
+    text-align:center;
+
+    margin-top:10px;
+
+    font-size:13px;
+
+    color:#667085;
+
 }
 
-.info-row{
-    display:flex;
-    align-items:flex-start;
-    gap:13px;
-    padding:14px 0;
-    border-bottom:1px solid #edf0f7;
-}
-
-.info-row:last-child{
-    border-bottom:0;
-}
-
-.info-number{
-    width:32px;
-    height:32px;
-    border-radius:10px;
-    background:#eef2ff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:14px;
-    font-weight:800;
-    color:#4f46e5;
-    flex-shrink:0;
-}
-
-.info-row h4{
-    font-size:14px;
-    margin-bottom:4px;
-}
-
-.info-row p{
-    color:#718096;
-    font-size:12px;
-    line-height:1.5;
-}
 
 .footer{
+
     text-align:center;
-    color:#94a3b8;
+
+    color:#8a94a6;
+
     font-size:12px;
+
     margin-top:25px;
+
 }
 
-@media(max-width:750px){
-    .cards{
-        grid-template-columns:1fr;
-    }
-
-    .container{
-        margin:18px auto;
-        padding:0 12px 30px;
-    }
-
-    .hero{
-        padding:25px 20px;
-        border-radius:20px;
-    }
-
-    .hero h1{
-        font-size:24px;
-    }
-
-    .card{
-        padding:18px;
-    }
-}
 </style>
+
 </head>
+
 
 <body>
 
-<header>
-    <div class="header-inner">
 
-        <div class="logo">
-            Sathi Pay
-            <span>Customer Support</span>
-        </div>
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-        <a href="dashboard.html" class="back-btn">
-            ← Dashboard
-        </a>
+<div class="header">
 
-    </div>
-</header>
+    <h1>🛟 Sathi Pay Support</h1>
 
-
-<div class="container">
-
-    <section class="hero">
-
-        <div class="hero-icon">
-            🎧
-        </div>
-
-        <h1>How can we help?</h1>
-
-        <p>
-            Welcome to Sathi Pay Support.
-            Choose an option below for app download,
-            customer support or Telegram assistance.
-        </p>
-
-    </section>
-
-
-    <div class="section-title">
-        Quick Help
-    </div>
-
-
-    <div class="cards">
-
-        <!-- APP DOWNLOAD -->
-
-        <div class="card download">
-
-            <div class="card-icon">
-                📱
-            </div>
-
-            <h3>
-                Download App
-            </h3>
-
-            <p>
-                Download the official Sathi Pay
-                application and access your account
-                easily from your mobile device.
-            </p>
-
-            <a
-                href="#"
-                class="btn"
-                onclick="openDownload(event)"
-            >
-                Download App
-            </a>
-
-        </div>
-
-
-        <!-- SUPPORT -->
-
-        <div class="card support">
-
-            <div class="card-icon">
-                🎧
-            </div>
-
-            <h3>
-                Customer Support
-            </h3>
-
-            <p>
-                Need help with your account,
-                deposit or any Sathi Pay service?
-                Contact our support team.
-            </p>
-
-            <a
-                href="#"
-                class="btn"
-                onclick="openSupport(event)"
-            >
-                Contact Support
-            </a>
-
-        </div>
-
-
-        <!-- TELEGRAM -->
-
-        <div class="card telegram">
-
-            <div class="card-icon">
-                ✈️
-            </div>
-
-            <h3>
-                Telegram
-            </h3>
-
-            <p>
-                Join the official Sathi Pay Telegram
-                channel for announcements, updates
-                and support information.
-            </p>
-
-            <a
-                href="#"
-                class="btn"
-                onclick="openTelegram(event)"
-            >
-                Open Telegram
-            </a>
-
-        </div>
-
-    </div>
-
-
-    <div class="section-title">
-        Help Center
-    </div>
-
-
-    <div class="info-box">
-
-        <div class="info-row">
-
-            <div class="info-number">
-                1
-            </div>
-
-            <div>
-                <h4>
-                    Deposit Related Help
-                </h4>
-
-                <p>
-                    If your deposit is pending,
-                    keep your UTR and payment proof
-                    ready when contacting support.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="info-row">
-
-            <div class="info-number">
-                2
-            </div>
-
-            <div>
-                <h4>
-                    Account Help
-                </h4>
-
-                <p>
-                    For login, UID, profile or account
-                    related issues, contact customer support
-                    with your registered UID.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="info-row">
-
-            <div class="info-number">
-                3
-            </div>
-
-            <div>
-                <h4>
-                    Earnings & Referral
-                </h4>
-
-                <p>
-                    Your commission and referral income
-                    are automatically recorded in your
-                    Sathi Pay account.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="info-row">
-
-            <div class="info-number">
-                4
-            </div>
-
-            <div>
-                <h4>
-                    Stay Updated
-                </h4>
-
-                <p>
-                    Follow the official Telegram channel
-                    for important Sathi Pay announcements
-                    and updates.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="footer">
-        © 2026 Sathi Pay · Customer Support
-    </div>
+    <p>
+        Need help? Choose an option below.
+    </p>
 
 </div>
 
 
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- =================================================
+         CUSTOMER SUPPORT
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="icon">
+            🎧
+        </div>
+
+        <h2>
+            Customer Support
+        </h2>
+
+        <p>
+            Agar aapko Sathi Pay account,
+            deposit, wallet ya kisi bhi
+            problem me help chahiye to
+            customer support se contact karein.
+        </p>
+
+        <button
+            id="supportBtn"
+            class="blue"
+            onclick="openSupport(event)"
+        >
+            Loading...
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TELEGRAM
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="icon">
+            ✈️
+        </div>
+
+        <h2>
+            Telegram Support
+        </h2>
+
+        <p>
+            Telegram ke through Sathi Pay
+            support team se contact karein.
+        </p>
+
+        <button
+            id="telegramBtn"
+            class="telegram"
+            onclick="openTelegram(event)"
+        >
+            Loading...
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         APK DOWNLOAD
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="icon">
+            📱
+        </div>
+
+        <h2>
+            Download App
+        </h2>
+
+        <p>
+            Sathi Pay Android application
+            download karein.
+        </p>
+
+        <button
+            id="downloadBtn"
+            class="green"
+            onclick="openDownload(event)"
+        >
+            Loading...
+        </button>
+
+    </div>
+
+
+    <div
+        id="pageStatus"
+        class="status"
+    >
+        Support settings load ho rahi hain...
+    </div>
+
+
+    <div class="footer">
+
+        Sathi Pay © 2026
+
+    </div>
+
+
+</div>
+
+
+
 <script>
 
-/*
-    IMPORTANT:
-    Replace the three placeholder links below
-    with your actual official links when available.
-*/
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
 
-const APP_DOWNLOAD_URL = "#";
-
-const SUPPORT_URL = "#";
-
-const TELEGRAM_URL = "#";
+const SUPABASE_URL =
+    "https://lozluohksmjxbxixkbmq.supabase.co";
 
 
-function openDownload(event){
+const SUPABASE_KEY =
+    "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
 
-    event.preventDefault();
 
-    if(APP_DOWNLOAD_URL === "#"){
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
-        alert(
-            "App download link will be added here."
-        );
 
-        return;
+
+/* =====================================================
+   SUPPORT URL VARIABLES
+===================================================== */
+
+let APP_DOWNLOAD_URL = "";
+
+let SUPPORT_URL = "";
+
+let TELEGRAM_URL = "";
+
+
+
+/* =====================================================
+   URL VALIDATION
+===================================================== */
+
+function isValidUrl(value){
+
+    if(!value){
+
+        return false;
 
     }
 
-    window.open(
-        APP_DOWNLOAD_URL,
-        "_blank"
-    );
+
+    try{
+
+        const url =
+            new URL(value);
+
+        return (
+            url.protocol === "http:" ||
+            url.protocol === "https:"
+        );
+
+    }
+
+    catch(error){
+
+        return false;
+
+    }
 
 }
 
+
+
+/* =====================================================
+   LOAD SUPPORT SETTINGS
+===================================================== */
+
+async function loadSupportSettings(){
+
+    const pageStatus =
+        document.getElementById(
+            "pageStatus"
+        );
+
+
+    pageStatus.textContent =
+        "Support settings load ho rahi hain...";
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("support_settings")
+            .select(
+                "customer_support_url,telegram_support_url,apk_download_url"
+            )
+            .eq("id",1)
+            .maybeSingle();
+
+
+        if(error){
+
+            console.error(
+                "Support settings error:",
+                error
+            );
+
+            setUnavailableButtons();
+
+            pageStatus.textContent =
+                "Support settings load nahi ho paayi.";
+
+            return;
+
+        }
+
+
+        if(!data){
+
+            setUnavailableButtons();
+
+            pageStatus.textContent =
+                "Support settings available nahi hain.";
+
+            return;
+
+        }
+
+
+        SUPPORT_URL =
+            (
+                data.customer_support_url ||
+                ""
+            ).trim();
+
+
+        TELEGRAM_URL =
+            (
+                data.telegram_support_url ||
+                ""
+            ).trim();
+
+
+        APP_DOWNLOAD_URL =
+            (
+                data.apk_download_url ||
+                ""
+            ).trim();
+
+
+        updateButtons();
+
+
+        pageStatus.textContent =
+            "Support options ready.";
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Support settings exception:",
+            error
+        );
+
+        setUnavailableButtons();
+
+        pageStatus.textContent =
+            "Support settings load nahi ho paayi.";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   UPDATE BUTTONS
+===================================================== */
+
+function updateButtons(){
+
+    const supportBtn =
+        document.getElementById(
+            "supportBtn"
+        );
+
+
+    const telegramBtn =
+        document.getElementById(
+            "telegramBtn"
+        );
+
+
+    const downloadBtn =
+        document.getElementById(
+            "downloadBtn"
+        );
+
+
+
+    /* CUSTOMER SUPPORT */
+
+    if(
+        isValidUrl(
+            SUPPORT_URL
+        )
+    ){
+
+        supportBtn.textContent =
+            "🎧 Contact Customer Support";
+
+        supportBtn.className =
+            "blue";
+
+        supportBtn.disabled =
+            false;
+
+    }
+
+    else{
+
+        supportBtn.textContent =
+            "Customer Support Coming Soon";
+
+        supportBtn.className =
+            "disabled";
+
+        supportBtn.disabled =
+            true;
+
+    }
+
+
+
+    /* TELEGRAM */
+
+    if(
+        isValidUrl(
+            TELEGRAM_URL
+        )
+    ){
+
+        telegramBtn.textContent =
+            "✈️ Open Telegram Support";
+
+        telegramBtn.className =
+            "telegram";
+
+        telegramBtn.disabled =
+            false;
+
+    }
+
+    else{
+
+        telegramBtn.textContent =
+            "Telegram Support Coming Soon";
+
+        telegramBtn.className =
+            "disabled";
+
+        telegramBtn.disabled =
+            true;
+
+    }
+
+
+
+    /* APK */
+
+    if(
+        isValidUrl(
+            APP_DOWNLOAD_URL
+        )
+    ){
+
+        downloadBtn.textContent =
+            "📱 Download Sathi Pay App";
+
+        downloadBtn.className =
+            "green";
+
+        downloadBtn.disabled =
+            false;
+
+    }
+
+    else{
+
+        downloadBtn.textContent =
+            "📱 App Coming Soon";
+
+        downloadBtn.className =
+            "disabled";
+
+        downloadBtn.disabled =
+            true;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   UNAVAILABLE BUTTONS
+===================================================== */
+
+function setUnavailableButtons(){
+
+    const supportBtn =
+        document.getElementById(
+            "supportBtn"
+        );
+
+
+    const telegramBtn =
+        document.getElementById(
+            "telegramBtn"
+        );
+
+
+    const downloadBtn =
+        document.getElementById(
+            "downloadBtn"
+        );
+
+
+    supportBtn.textContent =
+        "Customer Support Unavailable";
+
+    supportBtn.className =
+        "disabled";
+
+    supportBtn.disabled =
+        true;
+
+
+    telegramBtn.textContent =
+        "Telegram Support Unavailable";
+
+    telegramBtn.className =
+        "disabled";
+
+    telegramBtn.disabled =
+        true;
+
+
+    downloadBtn.textContent =
+        "App Coming Soon";
+
+    downloadBtn.className =
+        "disabled";
+
+    downloadBtn.disabled =
+        true;
+
+}
+
+
+
+/* =====================================================
+   OPEN CUSTOMER SUPPORT
+===================================================== */
 
 function openSupport(event){
 
-    event.preventDefault();
+    if(event){
 
-    if(SUPPORT_URL === "#"){
+        event.preventDefault();
+
+    }
+
+
+    if(
+        !isValidUrl(
+            SUPPORT_URL
+        )
+    ){
 
         alert(
-            "Customer support link will be added here."
+            "Customer Support link abhi available nahi hai."
         );
 
         return;
 
     }
+
 
     window.open(
         SUPPORT_URL,
-        "_blank"
+        "_blank",
+        "noopener,noreferrer"
     );
 
 }
 
 
+
+/* =====================================================
+   OPEN TELEGRAM
+===================================================== */
+
 function openTelegram(event){
 
-    event.preventDefault();
+    if(event){
 
-    if(TELEGRAM_URL === "#"){
+        event.preventDefault();
+
+    }
+
+
+    if(
+        !isValidUrl(
+            TELEGRAM_URL
+        )
+    ){
 
         alert(
-            "Telegram link will be added here."
+            "Telegram Support link abhi available nahi hai."
         );
 
         return;
 
     }
 
+
     window.open(
         TELEGRAM_URL,
-        "_blank"
+        "_blank",
+        "noopener,noreferrer"
     );
 
 }
 
+
+
+/* =====================================================
+   DOWNLOAD APP
+===================================================== */
+
+function openDownload(event){
+
+    if(event){
+
+        event.preventDefault();
+
+    }
+
+
+    if(
+        !isValidUrl(
+            APP_DOWNLOAD_URL
+        )
+    ){
+
+        alert(
+            "APK download link abhi available nahi hai."
+        );
+
+        return;
+
+    }
+
+
+    window.open(
+        APP_DOWNLOAD_URL,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadSupportSettings();
+
+    }
+);
+
 </script>
 
+
 </body>
-          </html>
+
+    </html>
