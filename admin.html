@@ -734,6 +734,125 @@ body.pageReady{
 
 
 <!-- =====================================================
+     SUPPORT SETTINGS
+===================================================== -->
+
+<div class="card">
+
+    <h2>🛟 Support Settings</h2>
+
+    <div class="item">
+
+        <div class="row">
+
+            <span class="label">
+                🎧 Customer Support
+            </span>
+
+            <span
+                id="currentSupportUrl"
+                class="value"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="row">
+
+            <span class="label">
+                ✈️ Telegram Support
+            </span>
+
+            <span
+                id="currentTelegramUrl"
+                class="value"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="row">
+
+            <span class="label">
+                📱 APK Download
+            </span>
+
+            <span
+                id="currentApkUrl"
+                class="value"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <h3 style="margin:18px 0 10px;">
+        ✏️ Update Support Links
+    </h3>
+
+
+    <input
+        id="supportCustomerUrl"
+        type="url"
+        placeholder="Customer Support URL"
+        autocomplete="off"
+    >
+
+
+    <input
+        id="supportTelegramUrl"
+        type="url"
+        placeholder="Telegram Support URL"
+        autocomplete="off"
+    >
+
+
+    <input
+        id="supportApkUrl"
+        type="url"
+        placeholder="APK Download URL (future)"
+        autocomplete="off"
+    >
+
+
+    <div
+        class="small"
+        style="margin-bottom:12px;"
+    >
+        Example:<br>
+        https://example.com/support<br>
+        https://t.me/yourchannel<br>
+        APK link baad me add kar sakte hain.
+    </div>
+
+
+    <button
+        id="saveSupportBtn"
+        class="green full"
+        onclick="saveSupportSettings()"
+    >
+        💾 Save Support Settings
+    </button>
+
+
+    <div
+        id="supportStatus"
+        class="status"
+    >
+        Support settings ready.
+    </div>
+
+</div>
+
+
+<!-- =====================================================
      SEARCH CUSTOMER
 ===================================================== -->
 
@@ -1780,7 +1899,6 @@ function readQrFile(file){
 
 /* =====================================================
    SHOW CURRENT QR
-   FIXED - NO INFINITE ONERROR LOOP
 ===================================================== */
 
 function showCurrentQr(url){
@@ -1789,12 +1907,6 @@ function showCurrentQr(url){
         document.getElementById(
             "currentQrBox"
         );
-
-    /*
-     * Purana content completely clear.
-     * Broken image ko innerHTML += se recreate
-     * nahi kiya jayega.
-     */
 
     box.innerHTML = "";
 
@@ -1834,7 +1946,6 @@ function showCurrentQr(url){
     img.src =
         url;
 
-
     img.onclick =
         function(){
 
@@ -1844,15 +1955,6 @@ function showCurrentQr(url){
 
         };
 
-
-    /*
-     * IMPORTANT:
-     * Agar image load fail hoti hai,
-     * sirf box ka content replace hoga.
-     *
-     * Broken image ko dobara create nahi kiya jayega.
-     * Isliye infinite loop nahi hoga.
-     */
 
     img.onerror =
         function(){
@@ -2178,10 +2280,6 @@ async function savePaymentSettings(){
 
     try{
 
-        /*
-         * Existing QR preserve karenge.
-         */
-
         const {
             data:currentData,
             error:currentError
@@ -2214,11 +2312,6 @@ async function savePaymentSettings(){
         let qrData =
             currentData.qr_url || "";
 
-
-        /*
-         * New QR selected hai to usko Data URL
-         * me convert karenge.
-         */
 
         if(
             qrInput.files &&
@@ -2281,10 +2374,6 @@ async function savePaymentSettings(){
         }
 
 
-        /*
-         * UPDATE ke baad verify.
-         */
-
         const {
             data:verifyData,
             error:verifyError
@@ -2335,10 +2424,6 @@ async function savePaymentSettings(){
 
         }
 
-
-        /*
-         * Verified database value se UI update.
-         */
 
         document.getElementById(
             "currentUpi"
@@ -2395,6 +2480,399 @@ async function savePaymentSettings(){
 
         button.textContent =
             "💾 Save Payment Settings";
+
+    }
+
+}
+
+
+/* =====================================================
+   SUPPORT SETTINGS
+===================================================== */
+
+async function loadSupportSettings(){
+
+    const status =
+        document.getElementById(
+            "supportStatus"
+        );
+
+    status.className =
+        "status";
+
+    status.textContent =
+        "Loading support settings...";
+
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("support_settings")
+        .select(
+            "id,customer_support_url,telegram_support_url,apk_download_url,updated_at"
+        )
+        .eq("id",1)
+        .maybeSingle();
+
+
+    if(error){
+
+        console.error(
+            "Support settings load error:",
+            error
+        );
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ " + error.message;
+
+        document.getElementById(
+            "currentSupportUrl"
+        ).textContent =
+            "-";
+
+        document.getElementById(
+            "currentTelegramUrl"
+        ).textContent =
+            "-";
+
+        document.getElementById(
+            "currentApkUrl"
+        ).textContent =
+            "-";
+
+        return;
+
+    }
+
+
+    if(!data){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ Support settings record not found.";
+
+        return;
+
+    }
+
+
+    const supportUrl =
+        data.customer_support_url || "";
+
+    const telegramUrl =
+        data.telegram_support_url || "";
+
+    const apkUrl =
+        data.apk_download_url || "";
+
+
+    document.getElementById(
+        "currentSupportUrl"
+    ).textContent =
+        supportUrl || "Not Set";
+
+
+    document.getElementById(
+        "currentTelegramUrl"
+    ).textContent =
+        telegramUrl || "Not Set";
+
+
+    document.getElementById(
+        "currentApkUrl"
+    ).textContent =
+        apkUrl || "Not Set";
+
+
+    document.getElementById(
+        "supportCustomerUrl"
+    ).value =
+        supportUrl;
+
+
+    document.getElementById(
+        "supportTelegramUrl"
+    ).value =
+        telegramUrl;
+
+
+    document.getElementById(
+        "supportApkUrl"
+    ).value =
+        apkUrl;
+
+
+    status.className =
+        "status success";
+
+    status.textContent =
+        "✅ Current support settings loaded.";
+
+}
+
+
+/* =====================================================
+   URL VALIDATION
+===================================================== */
+
+function validateSupportUrl(value){
+
+    if(!value){
+        return true;
+    }
+
+    try{
+
+        const url =
+            new URL(value);
+
+        return (
+            url.protocol === "http:" ||
+            url.protocol === "https:"
+        );
+
+    }
+
+    catch(error){
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE SUPPORT SETTINGS
+===================================================== */
+
+async function saveSupportSettings(){
+
+    const customerSupportUrl =
+        document
+        .getElementById(
+            "supportCustomerUrl"
+        )
+        .value
+        .trim();
+
+    const telegramUrl =
+        document
+        .getElementById(
+            "supportTelegramUrl"
+        )
+        .value
+        .trim();
+
+    const apkUrl =
+        document
+        .getElementById(
+            "supportApkUrl"
+        )
+        .value
+        .trim();
+
+
+    const status =
+        document.getElementById(
+            "supportStatus"
+        );
+
+    const button =
+        document.getElementById(
+            "saveSupportBtn"
+        );
+
+
+    if(
+        !validateSupportUrl(
+            customerSupportUrl
+        )
+    ){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ Customer Support URL invalid hai.";
+
+        return;
+
+    }
+
+
+    if(
+        !validateSupportUrl(
+            telegramUrl
+        )
+    ){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ Telegram URL invalid hai.";
+
+        return;
+
+    }
+
+
+    if(
+        !validateSupportUrl(
+            apkUrl
+        )
+    ){
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ APK Download URL invalid hai.";
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Saving...";
+
+    status.className =
+        "status";
+
+    status.textContent =
+        "Support settings database me save ho rahi hain...";
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("support_settings")
+            .update({
+
+                customer_support_url:
+                    customerSupportUrl,
+
+                telegram_support_url:
+                    telegramUrl,
+
+                apk_download_url:
+                    apkUrl,
+
+                updated_at:
+                    new Date().toISOString()
+
+            })
+            .eq("id",1)
+            .select(
+                "id,customer_support_url,telegram_support_url,apk_download_url,updated_at"
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        const {
+            data:verifyData,
+            error:verifyError
+        } =
+        await supabaseClient
+            .from("support_settings")
+            .select(
+                "id,customer_support_url,telegram_support_url,apk_download_url,updated_at"
+            )
+            .eq("id",1)
+            .maybeSingle();
+
+
+        if(verifyError){
+
+            throw verifyError;
+
+        }
+
+
+        if(!verifyData){
+
+            throw new Error(
+                "Save ke baad support settings verify nahi ho paayi."
+            );
+
+        }
+
+
+        document.getElementById(
+            "currentSupportUrl"
+        ).textContent =
+            verifyData.customer_support_url ||
+            "Not Set";
+
+
+        document.getElementById(
+            "currentTelegramUrl"
+        ).textContent =
+            verifyData.telegram_support_url ||
+            "Not Set";
+
+
+        document.getElementById(
+            "currentApkUrl"
+        ).textContent =
+            verifyData.apk_download_url ||
+            "Not Set";
+
+
+        status.className =
+            "status success";
+
+        status.textContent =
+            "✅ Support settings successfully saved. Ab customers ko latest links milenge.";
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Support settings save error:",
+            error
+        );
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "❌ " +
+            (
+                error.message ||
+                "Support settings save failed."
+            );
+
+    }
+
+    finally{
+
+        button.disabled = false;
+
+        button.textContent =
+            "💾 Save Support Settings";
 
     }
 
@@ -3482,6 +3960,8 @@ document.addEventListener(
         await loadAdminTotals();
 
         await loadPaymentSettings();
+
+        await loadSupportSettings();
 
         await loadDeposits();
 
