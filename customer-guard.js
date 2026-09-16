@@ -1,14 +1,15 @@
 /* =========================================
    SATHI PAY - CUSTOMER GUARD
-   FINAL SESSION GUARD
+   FINAL SESSION + SECURITY GUARD
 ========================================= */
 
 (function(){
 
     "use strict";
 
+
     /* =========================================
-       CONFIG
+       STORAGE KEYS
     ========================================= */
 
     const CUSTOMER_ID_KEY =
@@ -47,26 +48,24 @@
 
 
     /* =========================================
-       CHECK CUSTOMER SESSION
+       CUSTOMER SESSION CHECK
        
        IMPORTANT:
-       Do NOT automatically delete localStorage
-       when another page opens.
+       Never remove customer session
+       automatically.
     ========================================= */
 
     function hasCustomerSession(){
 
-        const customerId =
-            getCustomerId();
+        return !!getCustomerId();
 
-        return !!customerId;
     }
 
 
     /* =========================================
        CLEAR CUSTOMER SESSION
        
-       ONLY REAL LOGOUT SHOULD CALL THIS.
+       ONLY REAL LOGOUT USES THIS.
     ========================================= */
 
     function clearCustomerSession(){
@@ -83,9 +82,10 @@
             INVITATION_CODE_KEY
         );
 
-        sessionStorage.removeItem(
+        localStorage.removeItem(
             SECURITY_ALERT_KEY
         );
+
     }
 
 
@@ -100,62 +100,103 @@
 
             window.location.href =
                 "customer-login.html";
+
         };
 
 
     /* =========================================
-       SHOW LOGIN PAGE
+       REDIRECT LOGIN
     ========================================= */
 
     function redirectToLogin(){
 
         window.location.href =
             "customer-login.html";
+
     }
 
 
     /* =========================================
        SECURITY ALERT
        
-       Show only once per browser session.
+       SHOW ONLY ONCE FOR CURRENT LOGIN.
        
-       This prevents:
-       Deposit → Back
-       Team → Back
-       Wallet → Back
-       + → Back
-       
-       from showing the alert again.
+       localStorage is used instead of
+       sessionStorage so browser navigation,
+       Back button and page reload cannot
+       trigger it repeatedly.
     ========================================= */
 
     function showSecurityAlertOnce(){
 
-        const alreadyShown =
-            sessionStorage.getItem(
-                SECURITY_ALERT_KEY
-            );
+        const customerId =
+            getCustomerId();
 
-        if(alreadyShown === "true"){
+        if(!customerId){
             return;
         }
 
 
-        sessionStorage.setItem(
-            SECURITY_ALERT_KEY,
+        /*
+           Customer-specific alert key.
+           This means each customer login
+           can have its own one-time alert.
+        */
+
+        const customerAlertKey =
+            SECURITY_ALERT_KEY +
+            "_" +
+            customerId;
+
+
+        /*
+           Already shown?
+        */
+
+        const alreadyShown =
+            localStorage.getItem(
+                customerAlertKey
+            );
+
+
+        if(alreadyShown === "true"){
+
+            return;
+
+        }
+
+
+        /*
+           Lock immediately.
+           This prevents duplicate alerts
+           even if the page initializes twice.
+        */
+
+        localStorage.setItem(
+            customerAlertKey,
             "true"
         );
 
 
+        /*
+           Small delay so page UI loads first.
+        */
+
         setTimeout(
             function(){
 
-                const existing =
+                /*
+                   Prevent duplicate overlay.
+                */
+
+                if(
                     document.getElementById(
                         "sathiSecurityAlert"
-                    );
+                    )
+                ){
 
-                if(existing){
                     return;
+
                 }
 
 
@@ -163,6 +204,7 @@
                     document.createElement(
                         "div"
                     );
+
 
                 overlay.id =
                     "sathiSecurityAlert";
@@ -287,6 +329,7 @@
                                 your OTP.
                             </div>
 
+
                             <div>
                                 🔑
                                 Never share your
@@ -295,6 +338,7 @@
                                 </b>
                                 or PIN.
                             </div>
+
 
                             <div>
                                 🚨
@@ -367,11 +411,7 @@
 
 
     /* =========================================
-       CUSTOMER PAGE PROTECTION
-       
-       IMPORTANT:
-       Only check whether customer ID exists.
-       Never remove the ID automatically.
+       PROTECT CUSTOMER PAGE
     ========================================= */
 
     function protectPage(){
@@ -381,27 +421,33 @@
             redirectToLogin();
 
             return false;
+
         }
 
-
         return true;
+
     }
 
 
     /* =========================================
-       PAGE START
+       INITIALIZE
     ========================================= */
 
     function initializeGuard(){
 
+        /*
+           First check customer session.
+        */
+
         if(!protectPage()){
+
             return;
+
         }
 
 
         /*
-           Security alert only once
-           for the current browser session.
+           Show security alert only once.
         */
 
         showSecurityAlertOnce();
@@ -410,7 +456,7 @@
 
 
     /* =========================================
-       EXPOSE HELPERS
+       EXPOSE FUNCTIONS
     ========================================= */
 
     window.getCustomerId =
@@ -430,7 +476,7 @@
 
 
     /* =========================================
-       INITIALIZE
+       START
     ========================================= */
 
     if(
