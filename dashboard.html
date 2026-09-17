@@ -49,8 +49,8 @@ a{
 ========================================================= */
 
 header{
-    background:rgba(255,255,255,.97);
-    padding:12px 25px;
+    background:rgba(255,255,255,.98);
+    padding:10px 25px;
     border-bottom:1px solid #e4edf8;
     box-shadow:0 3px 18px rgba(20,60,100,.05);
     position:relative;
@@ -68,12 +68,13 @@ header{
 .brand{
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:10px;
+    min-width:0;
 }
 
 .brand-logo{
-    width:82px;
-    height:66px;
+    width:72px;
+    height:62px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -81,18 +82,23 @@ header{
 }
 
 .brand-logo svg{
-    width:78px;
-    height:64px;
+    width:68px;
+    height:58px;
     display:block;
+}
+
+.brand-text{
+    min-width:0;
 }
 
 .brand-text h1{
     margin:0;
     font-size:35px;
     color:#063b82;
-    letter-spacing:-1.2px;
+    letter-spacing:-1.5px;
     line-height:1;
     font-weight:900;
+    white-space:nowrap;
 }
 
 .brand-text h1 span{
@@ -100,62 +106,79 @@ header{
 }
 
 .brand-text p{
-    margin:7px 0 0;
+    margin:6px 0 0;
     color:#8190a8;
-    font-size:13px;
+    font-size:12px;
     font-weight:600;
     letter-spacing:.1px;
+    white-space:nowrap;
 }
 
 .header-right{
     display:flex;
     align-items:center;
-    gap:18px;
+    gap:13px;
 }
 
 .notification-btn{
-    width:52px;
-    height:52px;
+    width:48px;
+    height:48px;
     border:0;
     border-radius:50%;
     background:white;
-    box-shadow:none;
     position:relative;
-    font-size:29px;
     display:flex;
     align-items:center;
     justify-content:center;
+    padding:0;
+}
+
+.notification-btn svg{
+    width:31px;
+    height:31px;
+    display:block;
+    stroke:#16385f;
+    stroke-width:1.7;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
 }
 
 .notification-badge{
     position:absolute;
-    right:-3px;
-    top:-5px;
-    min-width:25px;
-    height:25px;
-    padding:0 6px;
+    right:-2px;
+    top:-3px;
+    min-width:21px;
+    height:21px;
+    padding:0 5px;
     background:#e51f43;
     color:white;
     border-radius:20px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:11px;
+    font-size:9px;
     font-weight:900;
     border:2px solid white;
 }
 
 .profile-btn{
-    width:56px;
-    height:56px;
+    width:52px;
+    height:52px;
     border-radius:50%;
-    background:linear-gradient(135deg,#124fba,#063d89);
+    background:linear-gradient(135deg,#145bc8,#063d91);
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:29px;
     box-shadow:0 5px 16px rgba(8,63,145,.16);
+}
+
+.profile-btn svg{
+    width:31px;
+    height:31px;
+    display:block;
+    fill:white;
 }
 
 
@@ -1206,26 +1229,26 @@ header{
 @media(max-width:900px){
 
     header{
-        padding:10px 14px;
+        padding:9px 14px;
     }
 
     .brand{
-        gap:8px;
+        gap:5px;
     }
 
     .brand-logo{
-        width:48px;
-        height:43px;
+        width:55px;
+        height:49px;
     }
 
     .brand-logo svg{
-        width:48px;
-        height:43px;
+        width:53px;
+        height:47px;
     }
 
     .brand-text h1{
-        font-size:22px;
-        letter-spacing:-.5px;
+        font-size:25px;
+        letter-spacing:-.8px;
     }
 
     .brand-text p{
@@ -1234,25 +1257,33 @@ header{
     }
 
     .header-right{
-        gap:5px;
+        gap:4px;
     }
 
     .notification-btn{
         width:40px;
         height:40px;
-        font-size:23px;
+    }
+
+    .notification-btn svg{
+        width:27px;
+        height:27px;
     }
 
     .profile-btn{
-        width:42px;
-        height:42px;
-        font-size:23px;
+        width:43px;
+        height:43px;
+    }
+
+    .profile-btn svg{
+        width:27px;
+        height:27px;
     }
 
     .notification-badge{
-        min-width:20px;
-        height:20px;
-        font-size:9px;
+        min-width:19px;
+        height:19px;
+        font-size:8px;
         top:-4px;
     }
 
@@ -1356,45 +1387,55 @@ header{
 @media(max-width:520px){
 
     header{
-        padding:8px 10px;
+        padding:7px 10px;
     }
 
     .brand{
-        gap:6px;
+        gap:4px;
     }
 
     .brand-logo{
-        width:42px;
-        height:38px;
+        width:53px;
+        height:47px;
     }
 
     .brand-logo svg{
-        width:42px;
-        height:38px;
+        width:51px;
+        height:45px;
     }
 
     .brand-text h1{
-        font-size:20px;
+        font-size:23px;
+        letter-spacing:-.7px;
     }
 
     .brand-text p{
         font-size:8px;
+        margin-top:3px;
     }
 
     .header-right{
-        gap:2px;
+        gap:1px;
     }
 
     .notification-btn{
         width:37px;
         height:37px;
-        font-size:21px;
+    }
+
+    .notification-btn svg{
+        width:25px;
+        height:25px;
     }
 
     .profile-btn{
         width:39px;
         height:39px;
-        font-size:21px;
+    }
+
+    .profile-btn svg{
+        width:25px;
+        height:25px;
     }
 
     .notification-badge{
@@ -1552,8 +1593,16 @@ header{
 
 @media(max-width:380px){
 
+    .brand-logo{
+        width:48px;
+    }
+
+    .brand-logo svg{
+        width:47px;
+    }
+
     .brand-text h1{
-        font-size:18px;
+        font-size:20px;
     }
 
     .brand-text p{
@@ -1608,6 +1657,7 @@ header{
 
             <div class="brand-logo">
 
+                <!-- SATHI PAY LOGO -->
                 <svg
                     viewBox="0 0 100 82"
                     xmlns="http://www.w3.org/2000/svg"
@@ -1616,71 +1666,100 @@ header{
                     <defs>
 
                         <linearGradient
-                            id="sathiGradient"
-                            x1="0"
-                            y1="0"
-                            x2="1"
-                            y2="1">
+                            id="sathiLogoGradient"
+                            x1="8"
+                            y1="10"
+                            x2="92"
+                            y2="72"
+                            gradientUnits="userSpaceOnUse">
 
                             <stop
                                 offset="0%"
                                 stop-color="#087ff5"/>
 
                             <stop
-                                offset="48%"
-                                stop-color="#163bd1"/>
+                                offset="32%"
+                                stop-color="#1457df"/>
+
+                            <stop
+                                offset="60%"
+                                stop-color="#5830dc"/>
+
+                            <stop
+                                offset="82%"
+                                stop-color="#0acb9d"/>
 
                             <stop
                                 offset="100%"
-                                stop-color="#0acb9d"/>
+                                stop-color="#08b985"/>
 
                         </linearGradient>
 
                     </defs>
 
-                    <path
-                        d="M78 8
-                           C66 1 45 1 31 9
-                           C18 16 16 29 26 35
-                           C33 40 43 40 53 38
-                           L69 34
-                           C79 31 86 36 84 44
-                           C82 54 68 64 55 69
-                           C40 75 22 73 12 65
-                           L5 73
-                           C17 83 39 85 57 78
-                           C76 71 92 58 94 44
-                           C96 29 85 19 72 20
-                           L43 25
-                           C37 26 34 23 37 20
-                           C41 15 54 12 65 14
-                           C71 15 76 17 81 20
-                           Z"
-                        fill="url(#sathiGradient)"/>
+
+                    <!-- Main S -->
 
                     <path
-                        d="M12 17
-                           C22 7 40 3 56 6
-                           C66 8 75 13 82 20
-                           L69 34
-                           C62 29 53 25 43 25
-                           C35 25 28 28 25 34
-                           C16 31 8 25 12 17Z"
-                        fill="#087ff5"
-                        opacity=".90"/>
+                        d="
+                        M78 12
+                        C67 5 49 4 35 9
+                        C23 13 16 21 17 29
+                        C18 37 26 41 38 42
+                        L62 43
+                        C74 44 80 48 79 55
+                        C78 62 68 68 57 71
+                        C42 75 27 72 17 65
+                        "
+                        fill="none"
+                        stroke="url(#sathiLogoGradient)"
+                        stroke-width="17"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"/>
+
+
+                    <!-- Top highlight -->
 
                     <path
-                        d="M83 44
-                           C86 51 78 59 68 64
-                           C57 70 45 73 34 71
-                           C25 70 18 67 12 62
-                           L5 73
-                           C17 83 39 85 57 78
-                           C76 71 92 58 94 44
-                           C95 38 93 34 89 31
-                           Z"
-                        fill="#0acb9d"
-                        opacity=".92"/>
+                        d="
+                        M77 12
+                        C65 6 49 6 36 10
+                        C26 13 20 19 19 25
+                        "
+                        fill="none"
+                        stroke="#087ff5"
+                        stroke-width="6"
+                        stroke-linecap="round"
+                        opacity=".9"/>
+
+
+                    <!-- Lower green/purple highlight -->
+
+                    <path
+                        d="
+                        M79 54
+                        C78 62 68 68 57 71
+                        C42 75 27 72 17 65
+                        "
+                        fill="none"
+                        stroke="#0acb9d"
+                        stroke-width="6"
+                        stroke-linecap="round"
+                        opacity=".95"/>
+
+
+                    <!-- Small purple lower accent -->
+
+                    <path
+                        d="
+                        M18 65
+                        C26 70 35 72 43 72
+                        "
+                        fill="none"
+                        stroke="#6630dc"
+                        stroke-width="5"
+                        stroke-linecap="round"
+                        opacity=".9"/>
 
                 </svg>
 
@@ -1709,7 +1788,23 @@ header{
                 onclick="toggleNotifications()"
                 aria-label="Notifications">
 
-                🔔
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true">
+
+                    <path
+                        d="M18 8
+                           A6 6 0 0 0 6 8
+                           C6 15 3 16 3 18
+                           H21
+                           C21 16 18 15 18 8Z"/>
+
+                    <path
+                        d="M10 21
+                           H14"/>
+
+                </svg>
+
 
                 <span
                     class="notification-badge"
@@ -1723,7 +1818,25 @@ header{
 
 
             <div class="profile-btn">
-                👤
+
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true">
+
+                    <circle
+                        cx="12"
+                        cy="8"
+                        r="3.7"/>
+
+                    <path
+                        d="
+                        M5 21
+                        C5 16.5 7.8 14 12 14
+                        C16.2 14 19 16.5 19 21
+                        Z"/>
+
+                </svg>
+
             </div>
 
         </div>
@@ -2168,10 +2281,6 @@ header{
     </section>
 
 
-    <!-- =====================================================
-         ACCOUNT STATUS
-    ====================================================== -->
-
     <section
         class="sell-control"
         id="sellControl">
@@ -2455,18 +2564,10 @@ const supabaseClient =
 </script>
 
 
-<!-- =========================================================
-     CUSTOMER SECURITY GUARD
-========================================================= -->
-
 <script src="customer-guard.js"></script>
 
 <script>
 
-
-/* =========================================================
-   CUSTOMER ID
-========================================================= */
 
 function getCustomerId(){
 
@@ -2489,10 +2590,6 @@ function getCustomerId(){
 }
 
 
-/* =========================================================
-   MONEY
-========================================================= */
-
 function formatMoney(value){
 
     return "₹" +
@@ -2508,10 +2605,6 @@ function formatMoney(value){
 
 }
 
-
-/* =========================================================
-   COPY UID
-========================================================= */
 
 async function copyUID(){
 
@@ -2568,10 +2661,6 @@ async function copyUID(){
 
 }
 
-
-/* =========================================================
-   REFERRAL LINK
-========================================================= */
 
 let currentReferralLink = "";
 
@@ -2666,10 +2755,6 @@ async function shareReferral(){
 }
 
 
-/* =========================================================
-   TELEGRAM
-========================================================= */
-
 function openTelegram(){
 
     window.open(
@@ -2680,10 +2765,6 @@ function openTelegram(){
 
 }
 
-
-/* =========================================================
-   TODAY RANGE
-========================================================= */
 
 function getTodayRange(){
 
@@ -2743,10 +2824,6 @@ function getTodayRange(){
 
 }
 
-
-/* =========================================================
-   TODAY EARNINGS
-========================================================= */
 
 async function loadTodayEarnings(
     customerId
@@ -2841,10 +2918,6 @@ async function loadTodayEarnings(
 }
 
 
-/* =========================================================
-   TOTAL EARNINGS
-========================================================= */
-
 async function loadTotalEarnings(
     customerId,
     customer
@@ -2935,10 +3008,6 @@ async function loadTotalEarnings(
 
 }
 
-
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
 
 async function loadNotifications(
     customerId
@@ -3107,10 +3176,6 @@ async function loadNotifications(
 }
 
 
-/* =========================================================
-   NOTIFICATION TOGGLE
-========================================================= */
-
 function toggleNotifications(){
 
     const panel =
@@ -3124,10 +3189,6 @@ function toggleNotifications(){
 
 }
 
-
-/* =========================================================
-   TRANSACTIONS
-========================================================= */
 
 async function loadTransactions(
     customerId
@@ -3405,10 +3466,6 @@ async function loadTransactions(
 }
 
 
-/* =========================================================
-   TRANSACTION TITLE
-========================================================= */
-
 function getTransactionTitle(
     row
 ){
@@ -3501,10 +3558,6 @@ function getTransactionTitle(
 }
 
 
-/* =========================================================
-   TRANSACTION ICON
-========================================================= */
-
 function getTransactionIcon(
     row
 ){
@@ -3596,10 +3649,6 @@ function getTransactionIcon(
 }
 
 
-/* =========================================================
-   DATE FORMAT
-========================================================= */
-
 function formatDateTime(
     value
 ){
@@ -3642,10 +3691,6 @@ function formatDateTime(
 
 }
 
-
-/* =========================================================
-   LOAD DASHBOARD
-========================================================= */
 
 async function loadDashboard(){
 
@@ -3858,10 +3903,6 @@ async function loadDashboard(){
 }
 
 
-/* =========================================================
-   SELL STATUS
-========================================================= */
-
 function updateSellStatus(
     isOn
 ){
@@ -3928,10 +3969,6 @@ function updateSellStatus(
 
 }
 
-
-/* =========================================================
-   CHANGE SELL
-========================================================= */
 
 async function changeSellStatus(){
 
@@ -4018,10 +4055,6 @@ async function changeSellStatus(){
 }
 
 
-/* =========================================================
-   SECURITY WARNING
-========================================================= */
-
 function openSecurityModal(){
 
     const modal =
@@ -4070,10 +4103,6 @@ function closeSecurityModal(){
 }
 
 
-/* =========================================================
-   APP MESSAGE
-========================================================= */
-
 function showAppMessage(){
 
     document.getElementById(
@@ -4083,10 +4112,6 @@ function showAppMessage(){
 
 }
 
-
-/* =========================================================
-   START
-========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -4120,10 +4145,6 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   AUTO REFRESH
-========================================================= */
-
 setInterval(
     function(){
 
@@ -4133,10 +4154,6 @@ setInterval(
     30000
 );
 
-
-/* =========================================================
-   CLOSE NOTIFICATION PANEL
-========================================================= */
 
 document.addEventListener(
     "click",
