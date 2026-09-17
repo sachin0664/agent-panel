@@ -43,6 +43,7 @@ a{
     -webkit-tap-highlight-color:transparent;
 }
 
+
 /* =========================================================
    HEADER
 ========================================================= */
@@ -149,6 +150,7 @@ header{
     font-size:25px;
 }
 
+
 /* =========================================================
    NOTIFICATIONS
 ========================================================= */
@@ -234,6 +236,7 @@ header{
     font-size:12px;
 }
 
+
 /* =========================================================
    MAIN
 ========================================================= */
@@ -243,6 +246,7 @@ header{
     margin:auto;
     padding:18px 22px;
 }
+
 
 /* =========================================================
    HERO
@@ -337,6 +341,7 @@ header{
     z-index:2;
 }
 
+
 /* =========================================================
    BALANCE
 ========================================================= */
@@ -387,6 +392,7 @@ header{
     font-size:10px;
     opacity:.85;
 }
+
 
 /* =========================================================
    REFERRAL LINK
@@ -458,6 +464,7 @@ header{
     font-size:13px;
 }
 
+
 /* =========================================================
    QUICK ACTIONS
 ========================================================= */
@@ -514,6 +521,7 @@ header{
 .download-icon{
     background:#e8f5ff;
 }
+
 
 /* =========================================================
    TELEGRAM COMMUNITY
@@ -592,6 +600,7 @@ header{
     box-shadow:0 5px 15px rgba(0,0,0,.12);
 }
 
+
 /* =========================================================
    INFORMATION GRID
 ========================================================= */
@@ -602,6 +611,7 @@ header{
     gap:15px;
     margin-top:15px;
 }
+
 
 /* =========================================================
    DEPOSIT COMMISSION
@@ -670,6 +680,7 @@ header{
     opacity:.8;
 }
 
+
 /* =========================================================
    REFERRAL COMMISSION
 ========================================================= */
@@ -731,56 +742,84 @@ header{
     color:#123e7a;
 }
 
+
 /* =========================================================
-   SELL CONTROL - UPDATED
+   ACCOUNT STATUS - SCREENSHOT STYLE
 ========================================================= */
 
 .sell-control{
     margin-top:15px;
+    min-height:190px;
     background:
-        linear-gradient(135deg,#ffffff 0%,#effff7 100%);
-    border:1px solid #c7efdc;
-    border-radius:23px;
-    padding:16px 18px;
+        linear-gradient(135deg,#cffff0 0%,#eafff7 46%,#bfe5ff 100%);
+    border:1px solid #9de5d1;
+    border-radius:24px;
+    padding:20px;
     display:flex;
     align-items:center;
-    gap:14px;
-    box-shadow:0 7px 22px rgba(8,160,105,.08);
+    gap:17px;
+    box-shadow:0 8px 25px rgba(20,110,120,.10);
     position:relative;
     overflow:hidden;
+}
+
+.sell-control:before{
+    content:"";
+    position:absolute;
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    left:-95px;
+    top:20px;
+    background:rgba(255,255,255,.35);
 }
 
 .sell-control:after{
     content:"";
     position:absolute;
-    width:130px;
-    height:130px;
+    width:250px;
+    height:110px;
+    right:-75px;
+    bottom:-55px;
     border-radius:50%;
-    right:-55px;
-    top:-65px;
-    background:rgba(9,189,117,.07);
+    background:rgba(52,145,235,.10);
 }
 
 .sell-power{
-    width:60px;
-    height:60px;
-    border-radius:18px;
-    background:linear-gradient(135deg,#10c978,#05a96a);
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    background:
+        linear-gradient(145deg,#13d08a,#08a96c);
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
     flex-shrink:0;
-    box-shadow:0 8px 18px rgba(5,169,106,.22);
+    box-shadow:
+        0 9px 20px rgba(7,166,106,.25),
+        inset 0 2px 3px rgba(255,255,255,.35);
     position:relative;
     z-index:2;
 }
 
+.sell-power:after{
+    content:"";
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    right:3px;
+    top:7px;
+    background:#25d58e;
+    border:4px solid white;
+}
+
 .sell-power svg{
-    width:31px;
-    height:31px;
+    width:52px;
+    height:52px;
     stroke:white;
-    stroke-width:2.2;
+    stroke-width:1.8;
     fill:none;
     stroke-linecap:round;
     stroke-linejoin:round;
@@ -801,39 +840,52 @@ header{
 }
 
 .sell-title{
-    font-size:17px;
+    font-size:23px;
+    line-height:1.05;
     font-weight:900;
-    color:#124478;
+    color:#063c85;
+    max-width:220px;
 }
 
 .sell-badge{
-    padding:4px 8px;
-    border-radius:20px;
-    background:#e8fff4;
-    color:#08a56c;
-    font-size:8px;
-    font-weight:900;
-    letter-spacing:.3px;
+    display:none;
 }
 
 .sell-status{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-top:10px;
+    padding:7px 16px;
+    border-radius:22px;
     font-size:16px;
     font-weight:900;
-    margin-top:5px;
+    width:max-content;
+}
+
+.sell-status:before{
+    content:"";
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:currentColor;
 }
 
 .sell-on{
-    color:#09a966;
+    background:#0fc276;
+    color:white;
 }
 
 .sell-off{
-    color:#dc3545;
+    background:#e35a69;
+    color:white;
 }
 
 .sell-subtitle{
-    margin-top:4px;
-    font-size:10px;
-    color:#6e8295;
+    margin-top:9px;
+    font-size:12px;
+    color:#5d7892;
+    font-weight:600;
 }
 
 .sell-switch{
@@ -851,7 +903,7 @@ header{
 .sell-slider{
     position:absolute;
     inset:0;
-    background:#ccd5df;
+    background:#b9c7d4;
     border-radius:30px;
     transition:.25s;
 }
@@ -876,6 +928,7 @@ header{
 .sell-switch input:checked + .sell-slider:before{
     transform:translateX(26px);
 }
+
 
 /* =========================================================
    TRANSACTIONS
@@ -925,7 +978,7 @@ header{
 .transaction-icon{
     width:42px;
     height:42px;
-    border-radius:12px;
+    border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -939,7 +992,7 @@ header{
 }
 
 .transaction-title{
-    font-size:12px;
+    font-size:13px;
     font-weight:900;
     color:#173d76;
 }
@@ -981,6 +1034,7 @@ header{
     margin-top:3px;
 }
 
+
 /* =========================================================
    MESSAGE
 ========================================================= */
@@ -991,6 +1045,7 @@ header{
     color:#7c8ba0;
     font-size:11px;
 }
+
 
 /* =========================================================
    SECURITY MODAL
@@ -1081,6 +1136,7 @@ header{
     font-weight:900;
 }
 
+
 /* =========================================================
    BOTTOM NAV
 ========================================================= */
@@ -1133,6 +1189,7 @@ header{
     border:5px solid #f3f8ff;
     box-shadow:0 7px 20px rgba(0,170,110,.28);
 }
+
 
 /* =========================================================
    RESPONSIVE
@@ -1230,11 +1287,41 @@ header{
         grid-template-columns:1fr;
     }
 
+    .sell-control{
+        min-height:175px;
+        padding:17px;
+        gap:13px;
+    }
+
+    .sell-power{
+        width:68px;
+        height:68px;
+    }
+
+    .sell-power svg{
+        width:42px;
+        height:42px;
+    }
+
+    .sell-title{
+        font-size:19px;
+    }
+
+    .sell-status{
+        font-size:14px;
+        padding:6px 13px;
+    }
+
+    .sell-subtitle{
+        font-size:10px;
+    }
+
     .bottom-nav{
         display:flex;
     }
 
 }
+
 
 @media(max-width:520px){
 
@@ -1326,31 +1413,45 @@ header{
     }
 
     .sell-control{
+        min-height:165px;
         padding:14px;
-        gap:11px;
+        gap:10px;
+        border-radius:21px;
     }
 
     .sell-power{
-        width:52px;
-        height:52px;
-        border-radius:16px;
+        width:55px;
+        height:55px;
+        border-radius:50%;
+    }
+
+    .sell-power:after{
+        width:13px;
+        height:13px;
+        right:1px;
+        top:4px;
+        border-width:3px;
     }
 
     .sell-power svg{
-        width:27px;
-        height:27px;
+        width:34px;
+        height:34px;
     }
 
     .sell-title{
-        font-size:15px;
+        font-size:16px;
+        max-width:150px;
     }
 
     .sell-status{
-        font-size:14px;
+        font-size:12px;
+        margin-top:7px;
+        padding:6px 11px;
     }
 
     .sell-subtitle{
-        font-size:9px;
+        font-size:8px;
+        margin-top:7px;
     }
 
     .sell-switch{
@@ -1370,6 +1471,7 @@ header{
     }
 
 }
+
 
 @media(max-width:380px){
 
@@ -1394,7 +1496,12 @@ header{
         height:34px;
     }
 
+    .sell-title{
+        font-size:15px;
+    }
+
 }
+
 
 .hidden{
     display:none !important;
@@ -1404,7 +1511,9 @@ header{
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -1459,6 +1568,7 @@ header{
 
 </header>
 
+
 <div
     class="notification-panel"
     id="notificationPanel">
@@ -1490,7 +1600,9 @@ header{
 
 </div>
 
+
 <main class="container">
+
 
     <section class="hero">
 
@@ -1541,7 +1653,9 @@ header{
 
         </div>
 
+
         <div class="balance-grid">
+
 
             <div class="balance-card">
 
@@ -1563,6 +1677,7 @@ header{
 
             </div>
 
+
             <div class="balance-card">
 
                 <div class="balance-icon">
@@ -1583,6 +1698,7 @@ header{
 
             </div>
 
+
             <div class="balance-card">
 
                 <div class="balance-icon">
@@ -1602,6 +1718,7 @@ header{
                 </div>
 
             </div>
+
 
             <div class="balance-card">
 
@@ -1631,9 +1748,11 @@ header{
 
             </div>
 
+
         </div>
 
     </section>
+
 
     <section class="referral-link-box">
 
@@ -1675,7 +1794,9 @@ header{
 
     </section>
 
+
     <section class="quick-actions">
+
 
         <a
             class="quick-action"
@@ -1689,6 +1810,7 @@ header{
 
         </a>
 
+
         <a
             class="quick-action"
             href="referral.html">
@@ -1700,6 +1822,7 @@ header{
             My Team
 
         </a>
+
 
         <a
             class="quick-action"
@@ -1713,6 +1836,7 @@ header{
 
         </a>
 
+
         <a
             class="quick-action"
             href="referral.html">
@@ -1724,6 +1848,7 @@ header{
             Referral
 
         </a>
+
 
         <a
             class="quick-action"
@@ -1738,7 +1863,9 @@ header{
 
         </a>
 
+
     </section>
+
 
     <!-- =====================================================
          TELEGRAM
@@ -1773,7 +1900,9 @@ header{
 
     </section>
 
+
     <section class="info-grid">
+
 
         <div class="deposit-commission">
 
@@ -1816,11 +1945,13 @@ header{
 
         </div>
 
+
         <div class="referral-commission">
 
             <div class="ref-title">
                 Referral Commission
             </div>
+
 
             <div class="ref-row">
 
@@ -1838,6 +1969,7 @@ header{
 
             </div>
 
+
             <div class="ref-row">
 
                 <div class="level-circle level-b">
@@ -1853,6 +1985,7 @@ header{
                 </div>
 
             </div>
+
 
             <div class="ref-row">
 
@@ -1874,23 +2007,32 @@ header{
 
     </section>
 
+
     <!-- =====================================================
-         SELL STATUS
+         ACCOUNT STATUS
     ====================================================== -->
 
-    <section class="sell-control">
+    <section
+        class="sell-control"
+        id="sellControl">
+
 
         <div class="sell-power">
 
-            <svg viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true">
 
                 <path d="M12 2v10"></path>
 
                 <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
 
+                <path d="M8 17l3 3 5-6"></path>
+
             </svg>
 
         </div>
+
 
         <div class="sell-info">
 
@@ -1910,6 +2052,7 @@ header{
 
             </div>
 
+
             <div
                 class="sell-status sell-off"
                 id="sellStatus">
@@ -1918,11 +2061,15 @@ header{
 
             </div>
 
+
             <div class="sell-subtitle">
-                Control your selling activity
+
+                Your account is safe &amp; secure
+
             </div>
 
         </div>
+
 
         <label class="sell-switch">
 
@@ -1935,9 +2082,12 @@ header{
 
         </label>
 
+
     </section>
 
+
     <section class="transactions-box">
+
 
         <div class="transactions-head">
 
@@ -1955,6 +2105,7 @@ header{
 
         </div>
 
+
         <div id="transactionList">
 
             <div class="no-notification">
@@ -1963,13 +2114,17 @@ header{
 
         </div>
 
+
     </section>
+
 
     <div id="message">
         Loading dashboard...
     </div>
 
+
 </main>
+
 
 <!-- =========================================================
      SECURITY MODAL
@@ -2000,6 +2155,7 @@ header{
 
         <div class="security-points">
 
+
             <div class="security-point">
 
                 🛡️
@@ -2010,6 +2166,7 @@ header{
 
             </div>
 
+
             <div class="security-point">
 
                 🔑
@@ -2019,6 +2176,7 @@ header{
                 </span>
 
             </div>
+
 
             <div class="security-point">
 
@@ -2031,7 +2189,9 @@ header{
 
             </div>
 
+
         </div>
+
 
         <button
             class="security-close"
@@ -2041,15 +2201,18 @@ header{
 
         </button>
 
+
     </div>
 
 </div>
+
 
 <!-- =========================================================
      BOTTOM NAV
 ========================================================= -->
 
 <nav class="bottom-nav">
+
 
     <a
         href="dashboard.html"
@@ -2063,6 +2226,7 @@ header{
 
     </a>
 
+
     <a href="deposit.html">
 
         <span>
@@ -2073,6 +2237,7 @@ header{
 
     </a>
 
+
     <a href="link-upi.html">
 
         <span class="plus">
@@ -2080,6 +2245,7 @@ header{
         </span>
 
     </a>
+
 
     <a href="referral.html">
 
@@ -2091,6 +2257,7 @@ header{
 
     </a>
 
+
     <a href="wallet.html">
 
         <span>
@@ -2101,7 +2268,9 @@ header{
 
     </a>
 
+
 </nav>
+
 
 <!-- =========================================================
      SUPABASE
@@ -2125,6 +2294,7 @@ const supabaseClient =
 
 </script>
 
+
 <!-- =========================================================
      CUSTOMER SECURITY GUARD
 ========================================================= -->
@@ -2132,6 +2302,7 @@ const supabaseClient =
 <script src="customer-guard.js"></script>
 
 <script>
+
 
 /* =========================================================
    CUSTOMER ID
@@ -2969,7 +3140,7 @@ async function loadTransactions(
 
             sub.innerText =
                 isSellTransaction
-                ? "Successful sell transaction"
+                ? "Approved customer sell"
                 : (
                     row.reason ||
                     row.reference ||
@@ -3097,6 +3268,7 @@ function getTransactionTitle(
             )
         ).toLowerCase();
 
+
     /*
      * Manual / Withdrawal / Sell
      * will always show as Sell Success
@@ -3112,6 +3284,7 @@ function getTransactionTitle(
 
     }
 
+
     if(
         text.includes("deposit")
     ){
@@ -3119,6 +3292,7 @@ function getTransactionTitle(
         return "Deposit Received";
 
     }
+
 
     if(
         text.includes("commission")
@@ -3128,6 +3302,7 @@ function getTransactionTitle(
 
     }
 
+
     if(
         text.includes("referral")
     ){
@@ -3135,6 +3310,7 @@ function getTransactionTitle(
         return "Referral Income";
 
     }
+
 
     if(
         text.includes("bonus")
@@ -3144,6 +3320,7 @@ function getTransactionTitle(
 
     }
 
+
     if(
         text.includes("top")
     ){
@@ -3151,6 +3328,7 @@ function getTransactionTitle(
         return "Wallet Top-up";
 
     }
+
 
     if(
         text.includes("upi") &&
@@ -3160,6 +3338,7 @@ function getTransactionTitle(
         return "UPI Payment";
 
     }
+
 
     return row.component ||
         "Wallet Transaction";
@@ -3190,15 +3369,17 @@ function getTransactionIcon(
             )
         ).toLowerCase();
 
+
     if(
         text.includes("manual") ||
         text.includes("withdraw") ||
         text.includes("sell")
     ){
 
-        return "✅";
+        return "📈";
 
     }
+
 
     if(
         text.includes("deposit")
@@ -3208,6 +3389,7 @@ function getTransactionIcon(
 
     }
 
+
     if(
         text.includes("commission")
     ){
@@ -3215,6 +3397,7 @@ function getTransactionIcon(
         return "🎁";
 
     }
+
 
     if(
         text.includes("referral")
@@ -3224,6 +3407,7 @@ function getTransactionIcon(
 
     }
 
+
     if(
         text.includes("bonus")
     ){
@@ -3231,6 +3415,7 @@ function getTransactionIcon(
         return "🎁";
 
     }
+
 
     if(
         text.includes("top")
@@ -3240,6 +3425,7 @@ function getTransactionIcon(
 
     }
 
+
     if(
         text.includes("upi") &&
         text.includes("payment")
@@ -3248,6 +3434,7 @@ function getTransactionIcon(
         return "📲";
 
     }
+
 
     return "₹";
 
@@ -3328,6 +3515,7 @@ async function loadDashboard(){
 
         }
 
+
         const {
             data:customer,
             error
@@ -3356,11 +3544,13 @@ async function loadDashboard(){
             )
             .maybeSingle();
 
+
         if(error){
 
             throw error;
 
         }
+
 
         if(
             !customer
@@ -3373,11 +3563,13 @@ async function loadDashboard(){
 
         }
 
+
         document.getElementById(
             "customerName"
         ).innerText =
             customer.name ||
             "Customer";
+
 
         document.getElementById(
             "customerUID"
@@ -3385,15 +3577,18 @@ async function loadDashboard(){
             customer.uid ||
             "Not available";
 
+
         const wallet =
             Number(
                 customer.wallet_balance || 0
             );
 
+
         const referral =
             Number(
                 customer.referral_balance || 0
             );
+
 
         document.getElementById(
             "walletBalance"
@@ -3402,6 +3597,7 @@ async function loadDashboard(){
                 wallet
             );
 
+
         document.getElementById(
             "referralBalance"
         ).innerText =
@@ -3409,24 +3605,30 @@ async function loadDashboard(){
                 referral
             );
 
+
         const sellToggle =
             document.getElementById(
                 "sellToggle"
             );
 
+
         const sellOn =
             customer.sell_on === true;
 
+
         sellToggle.checked =
             sellOn;
+
 
         updateSellStatus(
             sellOn
         );
 
+
         const code =
             customer.invitation_code ||
             "";
+
 
         if(
             code
@@ -3438,6 +3640,7 @@ async function loadDashboard(){
                 encodeURIComponent(
                     code
                 );
+
 
             document.getElementById(
                 "referralLink"
@@ -3456,6 +3659,7 @@ async function loadDashboard(){
                 "Referral link not available";
 
         }
+
 
         await Promise.all([
 
@@ -3477,6 +3681,7 @@ async function loadDashboard(){
             )
 
         ]);
+
 
         message.innerText =
             "Dashboard updated";
@@ -3516,15 +3721,17 @@ function updateSellStatus(
             "sellBadge"
         );
 
+
     if(
         isOn
     ){
 
         status.innerText =
-            "Sell ON";
+            "Active";
 
         status.className =
             "sell-status sell-on";
+
 
         if(badge){
 
@@ -3543,10 +3750,11 @@ function updateSellStatus(
     else{
 
         status.innerText =
-            "Sell OFF";
+            "Inactive";
 
         status.className =
             "sell-status sell-off";
+
 
         if(badge){
 
@@ -3575,6 +3783,7 @@ async function changeSellStatus(){
     const customerId =
         getCustomerId();
 
+
     if(
         !customerId
     ){
@@ -3586,17 +3795,21 @@ async function changeSellStatus(){
 
     }
 
+
     const toggle =
         document.getElementById(
             "sellToggle"
         );
 
+
     const newStatus =
         toggle.checked;
+
 
     updateSellStatus(
         newStatus
     );
+
 
     const {
         error
@@ -3613,19 +3826,23 @@ async function changeSellStatus(){
             customerId
         );
 
+
     if(error){
 
         toggle.checked =
             !newStatus;
 
+
         updateSellStatus(
             !newStatus
         );
+
 
         document.getElementById(
             "message"
         ).innerText =
             "Unable to update selling status.";
+
 
         console.error(
             error
@@ -3634,6 +3851,7 @@ async function changeSellStatus(){
         return;
 
     }
+
 
     document.getElementById(
         "message"
@@ -3656,6 +3874,7 @@ function openSecurityModal(){
             "securityModal"
         );
 
+
     if(
         modal
     ){
@@ -3676,6 +3895,7 @@ function closeSecurityModal(){
             "securityModal"
         );
 
+
     if(
         modal
     ){
@@ -3683,6 +3903,7 @@ function closeSecurityModal(){
         modal.classList.add(
             "hidden"
         );
+
 
         /*
          * Save permanently for this browser.
@@ -3723,6 +3944,7 @@ document.addEventListener(
 
         loadDashboard();
 
+
         /*
          * Security warning only once
          * in this browser.
@@ -3732,6 +3954,7 @@ document.addEventListener(
             localStorage.getItem(
                 "sathiPaySecuritySeen"
             );
+
 
         if(
             alreadySeen !== "1"
@@ -3779,10 +4002,12 @@ document.addEventListener(
                 "notificationPanel"
             );
 
+
         const button =
             document.querySelector(
                 ".notification-btn"
             );
+
 
         if(
             panel.classList.contains("show") &&
