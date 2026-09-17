@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -244,9 +245,12 @@ button:disabled{
 }
 
 </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -257,8 +261,15 @@ button:disabled{
         </div>
 
         <div class="logo-text">
-            <h1>Sathi <span>Pay</span></h1>
-            <p>Safe • Fast • Secure</p>
+
+            <h1>
+                Sathi <span>Pay</span>
+            </h1>
+
+            <p>
+                Safe • Fast • Secure
+            </p>
+
         </div>
 
     </div>
@@ -266,33 +277,45 @@ button:disabled{
 </header>
 
 
+
 <main class="container">
 
 <div class="card">
 
-    <h2>Create Your Account</h2>
+
+    <h2>
+        Create Your Account
+    </h2>
+
 
     <div class="subtitle">
         Join Sathi Pay and start your digital journey
     </div>
 
 
-    <!-- REFERRAL CODE -->
+
+    <!-- ========================================
+         AUTOMATIC REFERRAL CODE
+         ======================================== -->
 
     <div
         id="referralBox"
         class="referral-box"
         style="display:none;"
     >
+
         Referral Code:
         <span id="referralDisplay"></span>
+
     </div>
+
 
 
     <form id="customerRegisterForm">
 
 
-        <!-- NAME -->
+
+        <!-- FULL NAME -->
 
         <label for="customerName">
             Full Name
@@ -309,6 +332,7 @@ button:disabled{
             >
 
         </div>
+
 
 
         <!-- MOBILE -->
@@ -332,6 +356,7 @@ button:disabled{
         </div>
 
 
+
         <!-- EMAIL -->
 
         <label for="customerEmail">
@@ -349,6 +374,7 @@ button:disabled{
             >
 
         </div>
+
 
 
         <!-- PASSWORD -->
@@ -371,9 +397,12 @@ button:disabled{
             <span
                 class="password-toggle"
                 id="passwordToggle"
-            >👁</span>
+            >
+                👁
+            </span>
 
         </div>
+
 
 
         <!-- TERMS -->
@@ -387,17 +416,29 @@ button:disabled{
             >
 
             <div>
+
                 I agree to the
-                <a href="#" onclick="return false;">
+
+                <a
+                    href="#"
+                    onclick="return false;"
+                >
                     Terms & Conditions
                 </a>
+
                 and
-                <a href="#" onclick="return false;">
+
+                <a
+                    href="#"
+                    onclick="return false;"
+                >
                     Privacy Policy
                 </a>
+
             </div>
 
         </div>
+
 
 
         <!-- REGISTER -->
@@ -413,10 +454,12 @@ button:disabled{
     </form>
 
 
+
     <div
         id="customerRegisterMessage"
         class="message"
     ></div>
+
 
 
     <div class="login-area">
@@ -431,27 +474,49 @@ button:disabled{
 
     </div>
 
+
 </div>
 
 </main>
 
 
+
 <script>
 
+
+// ========================================
+// ELEMENTS
+// ========================================
+
 const registerForm =
-    document.getElementById("customerRegisterForm");
+    document.getElementById(
+        "customerRegisterForm"
+    );
+
 
 const message =
-    document.getElementById("customerRegisterMessage");
+    document.getElementById(
+        "customerRegisterMessage"
+    );
+
 
 const registerButton =
-    document.getElementById("registerButton");
+    document.getElementById(
+        "registerButton"
+    );
+
 
 const passwordInput =
-    document.getElementById("customerPassword");
+    document.getElementById(
+        "customerPassword"
+    );
+
 
 const passwordToggle =
-    document.getElementById("passwordToggle");
+    document.getElementById(
+        "passwordToggle"
+    );
+
 
 
 // ========================================
@@ -462,15 +527,24 @@ passwordToggle.addEventListener(
     "click",
     function(){
 
-        if(passwordInput.type === "password"){
+        if(
+            passwordInput.type ===
+            "password"
+        ){
 
-            passwordInput.type = "text";
-            passwordToggle.innerText = "🙈";
+            passwordInput.type =
+                "text";
+
+            passwordToggle.innerText =
+                "🙈";
 
         }else{
 
-            passwordInput.type = "password";
-            passwordToggle.innerText = "👁";
+            passwordInput.type =
+                "password";
+
+            passwordToggle.innerText =
+                "👁";
 
         }
 
@@ -478,74 +552,124 @@ passwordToggle.addEventListener(
 );
 
 
+
 // ========================================
-// REFERRAL CODE FROM URL
-// Example:
-// customer-registration.html?invite=INVXXXX
+// AUTOMATIC REFERRAL CODE
+//
+// Supported:
+//
+// ?invite=INVXXXX
+// ?ref=INVXXXX
+// ?referral=INVXXXX
 // ========================================
 
 const urlParams =
-    new URLSearchParams(window.location.search);
+    new URLSearchParams(
+        window.location.search
+    );
+
 
 const urlInvite =
-    urlParams.get("invite");
+    urlParams.get("invite") ||
+    urlParams.get("ref") ||
+    urlParams.get("referral");
+
 
 let referralCode = "";
+
+
 
 if(urlInvite){
 
     referralCode =
-        urlInvite.trim().toUpperCase();
+        urlInvite
+            .trim()
+            .toUpperCase();
 
-    document.getElementById(
-        "referralDisplay"
-    ).innerText = referralCode;
 
-    document.getElementById(
-        "referralBox"
-    ).style.display = "block";
+    sessionStorage.setItem(
+        "sathiPayReferralCode",
+        referralCode
+    );
+
+}else{
+
+    referralCode =
+        sessionStorage.getItem(
+            "sathiPayReferralCode"
+        ) || "";
 
 }
 
 
+
+if(referralCode){
+
+    document.getElementById(
+        "referralDisplay"
+    ).innerText =
+        referralCode;
+
+
+    document.getElementById(
+        "referralBox"
+    ).style.display =
+        "block";
+
+}
+
+
+
 // ========================================
-// UID
+// UID GENERATOR
 // ========================================
 
 function generateUID(){
 
     const randomPart =
         Math.random()
-        .toString(36)
-        .substring(2,10)
-        .toUpperCase();
+            .toString(36)
+            .substring(2,10)
+            .toUpperCase();
+
 
     const timePart =
         Date.now()
-        .toString(36)
-        .substring(2,8)
-        .toUpperCase();
+            .toString(36)
+            .substring(2,8)
+            .toUpperCase();
 
-    return "SP" + timePart + randomPart;
+
+    return (
+        "SP" +
+        timePart +
+        randomPart
+    );
 
 }
 
 
+
 // ========================================
-// INVITATION CODE
+// INVITATION CODE GENERATOR
 // ========================================
 
 function generateInvitationCode(){
 
     const randomPart =
         Math.random()
-        .toString(36)
-        .substring(2,10)
-        .toUpperCase();
+            .toString(36)
+            .substring(2,10)
+            .toUpperCase();
 
-    return "INV" + randomPart;
+
+    return (
+        "INV" +
+        randomPart
+    );
 
 }
+
 
 
 // ========================================
@@ -559,11 +683,17 @@ registerForm.addEventListener(
         event.preventDefault();
 
 
-        message.style.color = "#1e50ad";
+        message.style.color =
+            "#1e50ad";
+
+
         message.innerText =
             "Creating account...";
 
-        registerButton.disabled = true;
+
+        registerButton.disabled =
+            true;
+
 
 
         const name =
@@ -572,23 +702,28 @@ registerForm.addEventListener(
             ).value.trim();
 
 
+
         const mobile =
             document.getElementById(
                 "customerMobile"
             ).value.trim();
 
 
+
         const email =
             document.getElementById(
                 "customerEmail"
-            ).value.trim()
+            ).value
+            .trim()
             .toLowerCase();
+
 
 
         const password =
             document.getElementById(
                 "customerPassword"
             ).value;
+
 
 
         try{
@@ -598,7 +733,11 @@ registerForm.addEventListener(
             // MOBILE VALIDATION
             // ========================================
 
-            if(!/^[0-9]{10}$/.test(mobile)){
+            if(
+                !/^[0-9]{10}$/.test(
+                    mobile
+                )
+            ){
 
                 throw new Error(
                     "Please enter a valid 10 digit mobile number."
@@ -607,17 +746,21 @@ registerForm.addEventListener(
             }
 
 
+
             // ========================================
             // PASSWORD VALIDATION
             // ========================================
 
-            if(password.length < 6){
+            if(
+                password.length < 6
+            ){
 
                 throw new Error(
                     "Password must be at least 6 characters."
                 );
 
             }
+
 
 
             // ========================================
@@ -631,8 +774,12 @@ registerForm.addEventListener(
             await supabaseClient
                 .from("customers")
                 .select("id")
-                .eq("mobile",mobile)
+                .eq(
+                    "mobile",
+                    mobile
+                )
                 .maybeSingle();
+
 
 
             if(mobileError){
@@ -640,6 +787,7 @@ registerForm.addEventListener(
                 throw mobileError;
 
             }
+
 
 
             if(existingMobile){
@@ -651,11 +799,13 @@ registerForm.addEventListener(
             }
 
 
+
             // ========================================
             // CHECK REFERRAL
             // ========================================
 
             let validReferral = null;
+
 
 
             if(referralCode){
@@ -676,11 +826,13 @@ registerForm.addEventListener(
                     .maybeSingle();
 
 
+
                 if(referralError){
 
                     throw referralError;
 
                 }
+
 
 
                 if(!referralUser){
@@ -692,10 +844,13 @@ registerForm.addEventListener(
                 }
 
 
+
                 validReferral =
-                    referralUser.invitation_code;
+                    referralUser
+                        .invitation_code;
 
             }
+
 
 
             // ========================================
@@ -708,11 +863,14 @@ registerForm.addEventListener(
             } =
             await supabaseClient.auth.signUp({
 
-                email: email,
+                email:
+                    email,
 
-                password: password
+                password:
+                    password
 
             });
+
 
 
             if(error){
@@ -720,6 +878,7 @@ registerForm.addEventListener(
                 throw error;
 
             }
+
 
 
             if(!data.user){
@@ -731,6 +890,7 @@ registerForm.addEventListener(
             }
 
 
+
             // ========================================
             // GENERATE CUSTOMER DETAILS
             // ========================================
@@ -739,8 +899,10 @@ registerForm.addEventListener(
                 generateUID();
 
 
+
             const invitationCode =
                 generateInvitationCode();
+
 
 
             // ========================================
@@ -754,13 +916,17 @@ registerForm.addEventListener(
                 .from("customers")
                 .insert({
 
-                    id: data.user.id,
+                    id:
+                        data.user.id,
 
-                    name: name,
+                    name:
+                        name,
 
-                    mobile: mobile,
+                    mobile:
+                        mobile,
 
-                    uid: uid,
+                    uid:
+                        uid,
 
                     invitation_code:
                         invitationCode,
@@ -768,27 +934,38 @@ registerForm.addEventListener(
                     referred_by:
                         validReferral,
 
-                    wallet_balance: 99,
+                    wallet_balance:
+                        99,
 
-                    bonus_balance: 99,
+                    bonus_balance:
+                        99,
 
-                    deposit_balance: 0,
+                    deposit_balance:
+                        0,
 
-                    commission_balance: 0,
+                    commission_balance:
+                        0,
 
-                    referral_balance: 0,
+                    referral_balance:
+                        0,
 
-                    sell_on: false,
+                    sell_on:
+                        false,
 
-                    upi_id: null,
+                    upi_id:
+                        null,
 
-                    qr_code_url: null,
+                    qr_code_url:
+                        null,
 
-                    status: "Active",
+                    status:
+                        "Active",
 
-                    bonus_received: true
+                    bonus_received:
+                        true
 
                 });
+
 
 
             if(profileError){
@@ -801,6 +978,7 @@ registerForm.addEventListener(
                 throw profileError;
 
             }
+
 
 
             // ========================================
@@ -825,6 +1003,17 @@ registerForm.addEventListener(
             );
 
 
+
+            // ========================================
+            // CLEAR TEMP REFERRAL
+            // ========================================
+
+            sessionStorage.removeItem(
+                "sathiPayReferralCode"
+            );
+
+
+
             // ========================================
             // SUCCESS
             // ========================================
@@ -832,11 +1021,13 @@ registerForm.addEventListener(
             message.style.color =
                 "#0a9f62";
 
+
             message.innerText =
                 "Registration successful! ₹99 bonus added.";
 
 
             registerForm.reset();
+
 
 
             setTimeout(
@@ -852,16 +1043,23 @@ registerForm.addEventListener(
 
         }catch(error){
 
-            console.error(error);
+            console.error(
+                "Registration error:",
+                error
+            );
+
 
             message.style.color =
                 "#d62828";
+
 
             message.innerText =
                 "Registration failed: " +
                 error.message;
 
-            registerButton.disabled = false;
+
+            registerButton.disabled =
+                false;
 
         }
 
@@ -870,5 +1068,7 @@ registerForm.addEventListener(
 
 </script>
 
+
 </body>
+
     </html>
