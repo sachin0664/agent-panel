@@ -49,8 +49,8 @@ a{
 ========================================================= */
 
 header{
-    background:rgba(255,255,255,.96);
-    padding:18px 25px;
+    background:rgba(255,255,255,.97);
+    padding:12px 25px;
     border-bottom:1px solid #e4edf8;
     box-shadow:0 3px 18px rgba(20,60,100,.05);
     position:relative;
@@ -68,28 +68,32 @@ header{
 .brand{
     display:flex;
     align-items:center;
-    gap:13px;
+    gap:14px;
 }
 
 .brand-logo{
-    width:55px;
-    height:55px;
-    border-radius:17px;
-    background:linear-gradient(135deg,#087ff5,#0acb9d);
-    color:white;
+    width:82px;
+    height:66px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:32px;
-    font-weight:900;
-    box-shadow:0 8px 20px rgba(8,127,245,.22);
+    flex-shrink:0;
+}
+
+/* SATHI PAY LOGO */
+.brand-logo svg{
+    width:78px;
+    height:64px;
+    display:block;
 }
 
 .brand-text h1{
     margin:0;
-    font-size:29px;
+    font-size:35px;
     color:#063b82;
-    letter-spacing:-.5px;
+    letter-spacing:-1.2px;
+    line-height:1;
+    font-weight:900;
 }
 
 .brand-text h1 span{
@@ -97,35 +101,39 @@ header{
 }
 
 .brand-text p{
-    margin:3px 0 0;
+    margin:7px 0 0;
     color:#8190a8;
-    font-size:11px;
+    font-size:13px;
     font-weight:600;
+    letter-spacing:.1px;
 }
 
 .header-right{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:18px;
 }
 
 .notification-btn{
-    width:48px;
-    height:48px;
+    width:52px;
+    height:52px;
     border:0;
     border-radius:50%;
     background:white;
-    box-shadow:0 5px 18px rgba(20,60,100,.12);
+    box-shadow:none;
     position:relative;
-    font-size:25px;
+    font-size:29px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .notification-badge{
     position:absolute;
     right:-3px;
     top:-5px;
-    min-width:22px;
-    height:22px;
+    min-width:25px;
+    height:25px;
     padding:0 6px;
     background:#e51f43;
     color:white;
@@ -133,21 +141,22 @@ header{
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:10px;
+    font-size:11px;
     font-weight:900;
     border:2px solid white;
 }
 
 .profile-btn{
-    width:48px;
-    height:48px;
+    width:56px;
+    height:56px;
     border-radius:50%;
     background:linear-gradient(135deg,#124fba,#063d89);
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:25px;
+    font-size:29px;
+    box-shadow:0 5px 16px rgba(8,63,145,.16);
 }
 
 
@@ -761,7 +770,6 @@ header{
     box-shadow:0 8px 25px rgba(20,110,120,.10);
     position:relative;
     overflow:hidden;
-    transition:.25s;
 }
 
 .sell-control:before{
@@ -784,18 +792,6 @@ header{
     bottom:-55px;
     border-radius:50%;
     background:rgba(52,145,235,.10);
-}
-
-.sell-control.sell-active{
-    background:
-        linear-gradient(135deg,#c9ffec 0%,#e9fff7 48%,#c7eaff 100%);
-    border-color:#8fdfc5;
-}
-
-.sell-control.sell-inactive{
-    background:
-        linear-gradient(135deg,#eefcf7 0%,#f8fffc 48%,#eaf5ff 100%);
-    border-color:#b9e4d4;
 }
 
 .sell-power{
@@ -1211,32 +1207,54 @@ header{
 @media(max-width:900px){
 
     header{
-        padding:12px 14px;
+        padding:10px 14px;
+    }
+
+    .brand{
+        gap:8px;
     }
 
     .brand-logo{
-        width:44px;
-        height:44px;
-        border-radius:14px;
-        font-size:25px;
+        width:48px;
+        height:43px;
+    }
+
+    .brand-logo svg{
+        width:48px;
+        height:43px;
     }
 
     .brand-text h1{
         font-size:22px;
+        letter-spacing:-.5px;
     }
 
     .brand-text p{
         font-size:9px;
+        margin-top:4px;
     }
 
     .header-right{
-        gap:7px;
+        gap:5px;
     }
 
-    .notification-btn,
-    .profile-btn{
+    .notification-btn{
         width:40px;
         height:40px;
+        font-size:23px;
+    }
+
+    .profile-btn{
+        width:42px;
+        height:42px;
+        font-size:23px;
+    }
+
+    .notification-badge{
+        min-width:20px;
+        height:20px;
+        font-size:9px;
+        top:-4px;
     }
 
     .container{
@@ -1338,8 +1356,55 @@ header{
 
 @media(max-width:520px){
 
+    header{
+        padding:8px 10px;
+    }
+
+    .brand{
+        gap:6px;
+    }
+
+    .brand-logo{
+        width:42px;
+        height:38px;
+    }
+
+    .brand-logo svg{
+        width:42px;
+        height:38px;
+    }
+
+    .brand-text h1{
+        font-size:20px;
+    }
+
     .brand-text p{
-        display:none;
+        font-size:8px;
+    }
+
+    .header-right{
+        gap:2px;
+    }
+
+    .notification-btn{
+        width:37px;
+        height:37px;
+        font-size:21px;
+    }
+
+    .profile-btn{
+        width:39px;
+        height:39px;
+        font-size:21px;
+    }
+
+    .notification-badge{
+        min-width:18px;
+        height:18px;
+        padding:0 4px;
+        font-size:8px;
+        right:-2px;
+        top:-4px;
     }
 
     .hero-arrow{
@@ -1488,6 +1553,14 @@ header{
 
 @media(max-width:380px){
 
+    .brand-text h1{
+        font-size:18px;
+    }
+
+    .brand-text p{
+        font-size:7px;
+    }
+
     .balance-value{
         font-size:17px;
     }
@@ -1534,9 +1607,87 @@ header{
 
         <div class="brand">
 
+            <!-- SATHI PAY LOGO -->
             <div class="brand-logo">
-                S
+
+                <svg
+                    viewBox="0 0 100 82"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-label="Sathi Pay Logo">
+
+                    <defs>
+
+                        <linearGradient
+                            id="sathiGradient"
+                            x1="0"
+                            y1="0"
+                            x2="1"
+                            y2="1">
+
+                            <stop
+                                offset="0%"
+                                stop-color="#087ff5"/>
+
+                            <stop
+                                offset="48%"
+                                stop-color="#163bd1"/>
+
+                            <stop
+                                offset="100%"
+                                stop-color="#0acb9d"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <path
+                        d="M78 8
+                           C66 1 45 1 31 9
+                           C18 16 16 29 26 35
+                           C33 40 43 40 53 38
+                           L69 34
+                           C79 31 86 36 84 44
+                           C82 54 68 64 55 69
+                           C40 75 22 73 12 65
+                           L5 73
+                           C17 83 39 85 57 78
+                           C76 71 92 58 94 44
+                           C96 29 85 19 72 20
+                           L43 25
+                           C37 26 34 23 37 20
+                           C41 15 54 12 65 14
+                           C71 15 76 17 81 20
+                           Z"
+                        fill="url(#sathiGradient)"/>
+
+                    <path
+                        d="M12 17
+                           C22 7 40 3 56 6
+                           C66 8 75 13 82 20
+                           L69 34
+                           C62 29 53 25 43 25
+                           C35 25 28 28 25 34
+                           C16 31 8 25 12 17Z"
+                        fill="#087ff5"
+                        opacity=".90"/>
+
+                    <path
+                        d="M83 44
+                           C86 51 78 59 68 64
+                           C57 70 45 73 34 71
+                           C25 70 18 67 12 62
+                           L5 73
+                           C17 83 39 85 57 78
+                           C76 71 92 58 94 44
+                           C95 38 93 34 89 31
+                           Z"
+                        fill="#0acb9d"
+                        opacity=".92"/>
+
+                </svg>
+
             </div>
+
 
             <div class="brand-text">
 
@@ -1551,6 +1702,7 @@ header{
             </div>
 
         </div>
+
 
         <div class="header-right">
 
@@ -1570,6 +1722,7 @@ header{
                 </span>
 
             </button>
+
 
             <div class="profile-btn">
                 👤
@@ -2022,8 +2175,9 @@ header{
     ====================================================== -->
 
     <section
-        class="sell-control sell-inactive"
+        class="sell-control"
         id="sellControl">
+
 
         <div class="sell-power">
 
@@ -2163,6 +2317,7 @@ header{
 
         <div class="security-points">
 
+
             <div class="security-point">
 
                 🛡️
@@ -2195,6 +2350,7 @@ header{
                 </span>
 
             </div>
+
 
         </div>
 
@@ -3275,11 +3431,6 @@ function getTransactionTitle(
         ).toLowerCase();
 
 
-    /*
-     * Manual / Withdrawal / Sell
-     * will always show as Sell Success
-     */
-
     if(
         text.includes("manual") ||
         text.includes("withdraw") ||
@@ -3727,11 +3878,6 @@ function updateSellStatus(
             "sellBadge"
         );
 
-    const control =
-        document.getElementById(
-            "sellControl"
-        );
-
 
     if(
         isOn
@@ -3742,19 +3888,6 @@ function updateSellStatus(
 
         status.className =
             "sell-status sell-on";
-
-
-        if(control){
-
-            control.classList.remove(
-                "sell-inactive"
-            );
-
-            control.classList.add(
-                "sell-active"
-            );
-
-        }
 
 
         if(badge){
@@ -3778,19 +3911,6 @@ function updateSellStatus(
 
         status.className =
             "sell-status sell-off";
-
-
-        if(control){
-
-            control.classList.remove(
-                "sell-active"
-            );
-
-            control.classList.add(
-                "sell-inactive"
-            );
-
-        }
 
 
         if(badge){
