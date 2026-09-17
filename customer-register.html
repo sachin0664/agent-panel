@@ -2,182 +2,438 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<title>Sathi Pay - Customer Registration</title>
 
-    <title>Sathi Pay - Customer Registration</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js?v=5"></script>
 
-    <link rel="stylesheet"
-          href="css/style.css">
+<style>
 
-    <style>
-        body {
-            background: #f4f7fb;
-        }
+*{
+    box-sizing:border-box;
+}
 
-        .container {
-            max-width: 500px;
-            margin: 30px auto;
-        }
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f8ff;
+    color:#13264d;
+}
 
-        .bonus-box {
-            background: linear-gradient(135deg, #6c5ce7, #00b894);
-            color: white;
-            padding: 16px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+header{
+    text-align:center;
+    padding:30px 15px 15px;
+}
 
-        .bonus-box strong {
-            font-size: 24px;
-        }
+.logo{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+}
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 7px 0 15px;
-            box-sizing: border-box;
-        }
+.logo-icon{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#087df5,#2468e8);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:35px;
+    font-weight:bold;
+}
 
-        button {
-            width: 100%;
-            padding: 13px;
-            border: 0;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+.logo-text{
+    text-align:left;
+}
 
-        #customerRegisterMessage {
-            text-align: center;
-            margin-top: 15px;
-        }
+.logo-text h1{
+    margin:0;
+    font-size:38px;
+    color:#1265d8;
+}
 
-        .invite-info {
-            font-size: 13px;
-            color: #666;
-            margin-top: -8px;
-            margin-bottom: 15px;
-        }
-    </style>
+.logo-text h1 span{
+    color:#15264b;
+}
+
+.logo-text p{
+    margin:2px 0 0;
+    color:#687692;
+    font-size:16px;
+}
+
+.container{
+    max-width:650px;
+    margin:15px auto 40px;
+    padding:0 18px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 8px 30px rgba(30,80,150,.10);
+}
+
+h2{
+    margin:0;
+    font-size:38px;
+    color:#142852;
+}
+
+.subtitle{
+    margin:10px 0 25px;
+    font-size:20px;
+    color:#687692;
+}
+
+.referral-box{
+    background:#f3f7ff;
+    border:1px solid #dbe6fb;
+    border-radius:12px;
+    padding:14px;
+    margin-bottom:22px;
+    text-align:center;
+    color:#1e50ad;
+    font-weight:bold;
+    font-size:17px;
+}
+
+label{
+    display:block;
+    margin:17px 0 8px;
+    font-size:18px;
+    font-weight:bold;
+    color:#142852;
+}
+
+.input-box{
+    position:relative;
+}
+
+.input-box input{
+    width:100%;
+    height:58px;
+    border:1px solid #cbd9ef;
+    border-radius:13px;
+    padding:0 16px;
+    font-size:17px;
+    outline:none;
+    background:#fff;
+}
+
+.input-box input:focus{
+    border-color:#1769e8;
+    box-shadow:0 0 0 3px rgba(23,105,232,.10);
+}
+
+.password-toggle{
+    position:absolute;
+    right:16px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    font-size:20px;
+    color:#64748b;
+}
+
+.terms{
+    margin:20px 0;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    color:#263552;
+    font-size:15px;
+    line-height:1.5;
+}
+
+.terms input{
+    width:21px;
+    height:21px;
+    margin-top:2px;
+    accent-color:#1769e8;
+}
+
+.terms a{
+    color:#1769e8;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+button{
+    width:100%;
+    height:60px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(90deg,#1769e8,#2467e5);
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+.message{
+    text-align:center;
+    margin-top:18px;
+    font-weight:bold;
+    min-height:22px;
+}
+
+.login-area{
+    margin-top:25px;
+    text-align:center;
+    color:#687692;
+    font-size:17px;
+}
+
+.login-area a{
+    color:#1769e8;
+    font-weight:bold;
+    text-decoration:none;
+    font-size:20px;
+}
+
+@media(max-width:600px){
+
+    header{
+        padding-top:25px;
+    }
+
+    .logo-icon{
+        width:52px;
+        height:52px;
+        font-size:30px;
+    }
+
+    .logo-text h1{
+        font-size:31px;
+    }
+
+    .logo-text p{
+        font-size:13px;
+    }
+
+    .card{
+        padding:22px 18px;
+        border-radius:18px;
+    }
+
+    h2{
+        font-size:31px;
+    }
+
+    .subtitle{
+        font-size:17px;
+    }
+
+    label{
+        font-size:17px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
 <header>
-    <h1>Sathi Pay</h1>
 
-    <a href="customer-login.html">
-        Customer Login
-    </a>
+    <div class="logo">
+
+        <div class="logo-icon">
+            S
+        </div>
+
+        <div class="logo-text">
+            <h1>Sathi <span>Pay</span></h1>
+            <p>Safe • Fast • Secure</p>
+        </div>
+
+    </div>
+
 </header>
 
 
 <main class="container">
 
-    <h2>Customer Registration</h2>
+<div class="card">
 
-    <div class="bonus-box">
-        🎁 New User Bonus<br>
-        <strong>₹99</strong>
-        <br>
-        Register and get ₹99 bonus
+    <h2>Create Your Account</h2>
+
+    <div class="subtitle">
+        Join Sathi Pay and start your digital journey
+    </div>
+
+
+    <!-- REFERRAL CODE -->
+
+    <div
+        id="referralBox"
+        class="referral-box"
+        style="display:none;"
+    >
+        Referral Code:
+        <span id="referralDisplay"></span>
     </div>
 
 
     <form id="customerRegisterForm">
 
-        <label>
+
+        <!-- NAME -->
+
+        <label for="customerName">
             Full Name
         </label>
 
-        <input
-            type="text"
-            id="customerName"
-            placeholder="Enter your full name"
-            required
-        >
+        <div class="input-box">
 
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
 
-        <label>
-            Mobile Number
-        </label>
-
-        <input
-            type="tel"
-            id="customerMobile"
-            placeholder="10 digit mobile number"
-            maxlength="10"
-            inputmode="numeric"
-            required
-        >
-
-
-        <label>
-            Email Address
-        </label>
-
-        <input
-            type="email"
-            id="customerEmail"
-            placeholder="Enter email address"
-            required
-        >
-
-
-        <label>
-            Password
-        </label>
-
-        <input
-            type="password"
-            id="customerPassword"
-            placeholder="Create password"
-            minlength="6"
-            required
-        >
-
-
-        <label>
-            Invitation Code
-        </label>
-
-        <input
-            type="text"
-            id="invitationCode"
-            placeholder="Enter invitation code"
-        >
-
-        <div class="invite-info">
-            Invitation code is optional.
         </div>
 
 
-        <button type="submit">
-            Create Customer Account
+        <!-- MOBILE -->
+
+        <label for="customerMobile">
+            Mobile Number
+        </label>
+
+        <div class="input-box">
+
+            <input
+                type="tel"
+                id="customerMobile"
+                placeholder="10 digit mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                required
+            >
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <label for="customerEmail">
+            Email
+        </label>
+
+        <div class="input-box">
+
+            <input
+                type="email"
+                id="customerEmail"
+                placeholder="Enter email address"
+                autocomplete="email"
+                required
+            >
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <label for="customerPassword">
+            Password
+        </label>
+
+        <div class="input-box">
+
+            <input
+                type="password"
+                id="customerPassword"
+                placeholder="Create password"
+                minlength="6"
+                autocomplete="new-password"
+                required
+            >
+
+            <span
+                class="password-toggle"
+                id="passwordToggle"
+            >👁</span>
+
+        </div>
+
+
+        <!-- TERMS -->
+
+        <div class="terms">
+
+            <input
+                type="checkbox"
+                id="termsCheck"
+                required
+            >
+
+            <div>
+                I agree to the
+                <a href="#" onclick="return false;">
+                    Terms & Conditions
+                </a>
+                and
+                <a href="#" onclick="return false;">
+                    Privacy Policy
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <button
+            type="submit"
+            id="registerButton"
+        >
+            Register
         </button>
+
 
     </form>
 
 
-    <p id="customerRegisterMessage"></p>
+    <div
+        id="customerRegisterMessage"
+        class="message"
+    ></div>
 
 
-    <p>
+    <div class="login-area">
+
         Already have an account?
+
+        <br>
+
         <a href="customer-login.html">
-            Login here
+            Login
         </a>
-    </p>
+
+    </div>
+
+</div>
 
 </main>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="js/app.js?v=4"></script>
 
 
 <script>
@@ -188,12 +444,44 @@ const registerForm =
 const message =
     document.getElementById("customerRegisterMessage");
 
-const invitationInput =
-    document.getElementById("invitationCode");
+const registerButton =
+    document.getElementById("registerButton");
+
+const passwordInput =
+    document.getElementById("customerPassword");
+
+const passwordToggle =
+    document.getElementById("passwordToggle");
 
 
 // ========================================
-// AUTOMATIC INVITATION CODE FROM URL
+// PASSWORD SHOW / HIDE
+// ========================================
+
+passwordToggle.addEventListener(
+    "click",
+    function(){
+
+        if(passwordInput.type === "password"){
+
+            passwordInput.type = "text";
+            passwordToggle.innerText = "🙈";
+
+        }else{
+
+            passwordInput.type = "password";
+            passwordToggle.innerText = "👁";
+
+        }
+
+    }
+);
+
+
+// ========================================
+// REFERRAL CODE FROM URL
+// Example:
+// customer-registration.html?invite=INVXXXX
 // ========================================
 
 const urlParams =
@@ -202,50 +490,61 @@ const urlParams =
 const urlInvite =
     urlParams.get("invite");
 
-if (urlInvite) {
+let referralCode = "";
 
-    invitationInput.value =
+if(urlInvite){
+
+    referralCode =
         urlInvite.trim().toUpperCase();
 
-    invitationInput.readOnly = true;
+    document.getElementById(
+        "referralDisplay"
+    ).innerText = referralCode;
+
+    document.getElementById(
+        "referralBox"
+    ).style.display = "block";
+
 }
 
 
 // ========================================
-// GENERATE UNIQUE UID
+// UID
 // ========================================
 
-function generateUID() {
+function generateUID(){
 
     const randomPart =
         Math.random()
-            .toString(36)
-            .substring(2, 10)
-            .toUpperCase();
+        .toString(36)
+        .substring(2,10)
+        .toUpperCase();
 
     const timePart =
         Date.now()
-            .toString(36)
-            .substring(2, 8)
-            .toUpperCase();
+        .toString(36)
+        .substring(2,8)
+        .toUpperCase();
 
     return "SP" + timePart + randomPart;
+
 }
 
 
 // ========================================
-// GENERATE INVITATION CODE
+// INVITATION CODE
 // ========================================
 
-function generateInvitationCode() {
+function generateInvitationCode(){
 
     const randomPart =
         Math.random()
-            .toString(36)
-            .substring(2, 10)
-            .toUpperCase();
+        .toString(36)
+        .substring(2,10)
+        .toUpperCase();
 
     return "INV" + randomPart;
+
 }
 
 
@@ -255,12 +554,16 @@ function generateInvitationCode() {
 
 registerForm.addEventListener(
     "submit",
-    async function(event) {
+    async function(event){
 
         event.preventDefault();
 
+
+        message.style.color = "#1e50ad";
         message.innerText =
             "Creating account...";
+
+        registerButton.disabled = true;
 
 
         const name =
@@ -278,7 +581,8 @@ registerForm.addEventListener(
         const email =
             document.getElementById(
                 "customerEmail"
-            ).value.trim();
+            ).value.trim()
+            .toLowerCase();
 
 
         const password =
@@ -287,35 +591,34 @@ registerForm.addEventListener(
             ).value;
 
 
-        const referredBy =
-            invitationInput.value
-                .trim()
-                .toUpperCase();
+        try{
 
 
-        // ========================================
-        // VALIDATION
-        // ========================================
+            // ========================================
+            // MOBILE VALIDATION
+            // ========================================
 
-        if (!/^[0-9]{10}$/.test(mobile)) {
+            if(!/^[0-9]{10}$/.test(mobile)){
 
-            message.innerText =
-                "Please enter a valid 10 digit mobile number.";
+                throw new Error(
+                    "Please enter a valid 10 digit mobile number."
+                );
 
-            return;
-        }
-
-
-        if (password.length < 6) {
-
-            message.innerText =
-                "Password must be at least 6 characters.";
-
-            return;
-        }
+            }
 
 
-        try {
+            // ========================================
+            // PASSWORD VALIDATION
+            // ========================================
+
+            if(password.length < 6){
+
+                throw new Error(
+                    "Password must be at least 6 characters."
+                );
+
+            }
+
 
             // ========================================
             // CHECK MOBILE
@@ -325,112 +628,116 @@ registerForm.addEventListener(
                 data: existingMobile,
                 error: mobileError
             } =
-                await supabaseClient
-                    .from("customers")
-                    .select("id")
-                    .eq("mobile", mobile)
-                    .maybeSingle();
+            await supabaseClient
+                .from("customers")
+                .select("id")
+                .eq("mobile",mobile)
+                .maybeSingle();
 
 
-            if (mobileError) {
+            if(mobileError){
 
                 throw mobileError;
+
             }
 
 
-            if (existingMobile) {
+            if(existingMobile){
 
-                message.innerText =
-                    "This mobile number is already registered.";
+                throw new Error(
+                    "This mobile number is already registered."
+                );
 
-                return;
             }
 
 
             // ========================================
-            // CHECK INVITATION CODE
+            // CHECK REFERRAL
             // ========================================
 
             let validReferral = null;
 
-            if (referredBy) {
+
+            if(referralCode){
 
                 const {
                     data: referralUser,
                     error: referralError
                 } =
-                    await supabaseClient
-                        .from("customers")
-                        .select("id, invitation_code")
-                        .eq(
-                            "invitation_code",
-                            referredBy
-                        )
-                        .maybeSingle();
+                await supabaseClient
+                    .from("customers")
+                    .select(
+                        "id, invitation_code"
+                    )
+                    .eq(
+                        "invitation_code",
+                        referralCode
+                    )
+                    .maybeSingle();
 
 
-                if (referralError) {
+                if(referralError){
 
                     throw referralError;
+
                 }
 
 
-                if (!referralUser) {
+                if(!referralUser){
 
-                    message.innerText =
-                        "Invalid invitation code.";
+                    throw new Error(
+                        "Invalid referral code."
+                    );
 
-                    return;
                 }
 
 
                 validReferral =
                     referralUser.invitation_code;
+
             }
 
 
             // ========================================
-            // CREATE AUTH ACCOUNT
+            // CREATE SUPABASE AUTH ACCOUNT
             // ========================================
 
             const {
                 data,
                 error
             } =
-                await supabaseClient.auth.signUp({
+            await supabaseClient.auth.signUp({
 
-                    email: email,
+                email: email,
 
-                    password: password
+                password: password
 
-                });
+            });
 
 
-            if (error) {
+            if(error){
 
                 throw error;
+
             }
 
 
-            if (!data.user) {
+            if(!data.user){
 
                 throw new Error(
                     "Account creation failed."
                 );
+
             }
 
 
             // ========================================
-            // UNIQUE UID
+            // GENERATE CUSTOMER DETAILS
             // ========================================
 
             const uid =
                 generateUID();
 
-
-            // ========================================
-            // UNIQUE INVITATION CODE
-            // ========================================
 
             const invitationCode =
                 generateInvitationCode();
@@ -438,71 +745,73 @@ registerForm.addEventListener(
 
             // ========================================
             // CREATE CUSTOMER PROFILE
-            // ₹99 BONUS
             // ========================================
 
             const {
                 error: profileError
             } =
-                await supabaseClient
-                    .from("customers")
-                    .insert({
+            await supabaseClient
+                .from("customers")
+                .insert({
 
-                        id: data.user.id,
+                    id: data.user.id,
 
-                        name: name,
+                    name: name,
 
-                        mobile: mobile,
+                    mobile: mobile,
 
-                        uid: uid,
+                    uid: uid,
 
-                        invitation_code:
-                            invitationCode,
+                    invitation_code:
+                        invitationCode,
 
-                        referred_by:
-                            validReferral,
+                    referred_by:
+                        validReferral,
 
-                        wallet_balance: 99,
+                    wallet_balance: 99,
 
-                        bonus_balance: 99,
+                    bonus_balance: 99,
 
-                        deposit_balance: 0,
+                    deposit_balance: 0,
 
-                        commission_balance: 0,
+                    commission_balance: 0,
 
-                        referral_balance: 0,
+                    referral_balance: 0,
 
-                        withdrawal_balance: 0,
+                    sell_on: false,
 
-                        sell_on: false,
+                    upi_id: null,
 
-                        upi_id: null,
+                    qr_code_url: null,
 
-                        qr_code_url: null,
+                    status: "Active",
 
-                        status: "Active",
+                    bonus_received: true
 
-                        bonus_received: true
-
-                    });
+                });
 
 
-            if (profileError) {
+            if(profileError){
 
-                console.error(profileError);
+                console.error(
+                    "Profile error:",
+                    profileError
+                );
 
                 throw profileError;
+
             }
 
 
             // ========================================
-            // SAVE CUSTOMER SESSION INFO
+            // SAVE CUSTOMER INFO
             // ========================================
 
             localStorage.setItem(
                 "sathiPayCustomerId",
                 data.user.id
             );
+
 
             localStorage.setItem(
                 "sathiPayUID",
@@ -520,27 +829,40 @@ registerForm.addEventListener(
             // SUCCESS
             // ========================================
 
+            message.style.color =
+                "#0a9f62";
+
             message.innerText =
                 "Registration successful! ₹99 bonus added.";
+
 
             registerForm.reset();
 
 
-            setTimeout(function() {
+            setTimeout(
+                function(){
 
-                window.location.href =
-                    "customer-login.html";
+                    window.location.href =
+                        "customer-login.html";
 
-            }, 1500);
+                },
+                1500
+            );
 
 
-        } catch (error) {
+        }catch(error){
 
             console.error(error);
+
+            message.style.color =
+                "#d62828";
 
             message.innerText =
                 "Registration failed: " +
                 error.message;
+
+            registerButton.disabled = false;
+
         }
 
     }
@@ -549,4 +871,4 @@ registerForm.addEventListener(
 </script>
 
 </body>
-</html>
+    </html>
