@@ -17,7 +17,7 @@
 
 body{
     margin:0;
-    font-family:Arial,sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     background:#f4f7fb;
     color:#172033;
 }
@@ -286,6 +286,245 @@ button:disabled{
     gap:10px;
 }
 
+/* =====================================================
+   CLICKABLE SETTINGS BOXES
+===================================================== */
+
+.settingsLauncher{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.settingsBox{
+    background:linear-gradient(135deg,#f8fafc,#eef2ff);
+    border:1px solid #dbe3ef;
+    border-radius:18px;
+    padding:18px;
+    cursor:pointer;
+    transition:.18s;
+}
+
+.settingsBox:hover{
+    transform:translateY(-2px);
+    box-shadow:0 7px 20px rgba(0,0,0,.08);
+}
+
+.settingsIcon{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.settingsTitle{
+    font-size:17px;
+    font-weight:bold;
+}
+
+.settingsDescription{
+    font-size:13px;
+    color:#64748b;
+    margin-top:6px;
+    line-height:1.4;
+}
+
+.settingsArrow{
+    margin-top:13px;
+    font-size:13px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+/* =====================================================
+   SETTINGS MODAL
+===================================================== */
+
+.settingsModal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1500000;
+    background:rgba(0,0,0,.65);
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.settingsModalBox{
+    width:100%;
+    max-width:600px;
+    max-height:92vh;
+    overflow-y:auto;
+    background:white;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+
+.settingsModalHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.settingsModalHeader h2{
+    margin:0;
+    font-size:21px;
+}
+
+.settingsClose{
+    width:40px;
+    height:40px;
+    padding:0;
+    border-radius:50%;
+    background:#e2e8f0;
+    color:#111827;
+    font-size:20px;
+}
+
+/* =====================================================
+   PAYMENT SCREENSHOT
+===================================================== */
+
+.paymentProofBox{
+    margin-top:12px;
+    padding:12px;
+    background:#fff;
+    border:1px solid #dbe3ef;
+    border-radius:12px;
+}
+
+.paymentProofTitle{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.paymentProofImage{
+    width:120px;
+    height:150px;
+    object-fit:cover;
+    display:block;
+    margin:8px auto;
+    border-radius:9px;
+    border:1px solid #cbd5e1;
+    background:#f8fafc;
+    padding:3px;
+    cursor:pointer;
+}
+
+.paymentProofImage:hover{
+    opacity:.9;
+}
+
+/* =====================================================
+   PAYMENT QR
+===================================================== */
+
+.qrAdminPreview{
+    width:100%;
+    max-width:280px;
+    max-height:320px;
+    object-fit:contain;
+    display:block;
+    margin:15px auto;
+    border-radius:15px;
+    border:1px solid #dbe3ef;
+    background:white;
+    padding:8px;
+    cursor:pointer;
+}
+
+.qrSelectBox{
+    background:#f8fafc;
+    border:1px dashed #94a3b8;
+    border-radius:14px;
+    padding:15px;
+    margin:10px 0;
+}
+
+.qrSelectTitle{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.qrCurrentBox{
+    margin-top:12px;
+    padding:15px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+}
+
+/* =====================================================
+   DEPOSIT FOLDERS
+===================================================== */
+
+.depositFolders{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+.depositFolder{
+    border:1px solid #dbe3ef;
+    background:#f8fafc;
+    border-radius:15px;
+    padding:15px 10px;
+    text-align:center;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.depositFolder.active{
+    box-shadow:0 0 0 2px #2563eb;
+}
+
+.depositFolder.pendingFolder{
+    background:#fffbeb;
+}
+
+.depositFolder.approvedFolder{
+    background:#f0fdf4;
+}
+
+.depositFolder.rejectedFolder{
+    background:#fef2f2;
+}
+
+.folderIcon{
+    display:block;
+    font-size:25px;
+    margin-bottom:5px;
+}
+
+.folderCount{
+    font-size:13px;
+    margin-top:5px;
+    color:#64748b;
+}
+
+.depositSection{
+    display:none;
+    margin-top:15px;
+}
+
+.depositSection.active{
+    display:block;
+}
+
+.sectionTitle{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
 .approvedToast{
     position:fixed;
     top:18px;
@@ -326,84 +565,7 @@ button:disabled{
 }
 
 /* =====================================================
-   PAYMENT SCREENSHOT
-===================================================== */
-
-.paymentProofBox{
-    margin-top:12px;
-    padding:12px;
-    background:#fff;
-    border:1px solid #dbe3ef;
-    border-radius:12px;
-}
-
-.paymentProofTitle{
-    font-size:14px;
-    font-weight:bold;
-    margin-bottom:8px;
-}
-
-.paymentProofImage{
-    width:120px;
-    height:150px;
-    object-fit:cover;
-    display:block;
-    margin:8px auto;
-    border-radius:9px;
-    border:1px solid #cbd5e1;
-    background:#f8fafc;
-    padding:3px;
-    cursor:pointer;
-}
-
-.paymentProofImage:hover{
-    opacity:.9;
-}
-
-.viewProofBtn{
-    display:none;
-}
-
-/* =====================================================
-   PAYMENT QR
-===================================================== */
-
-.qrAdminPreview{
-    width:100%;
-    max-width:280px;
-    max-height:320px;
-    object-fit:contain;
-    display:block;
-    margin:15px auto;
-    border-radius:15px;
-    border:1px solid #dbe3ef;
-    background:white;
-    padding:8px;
-}
-
-.qrSelectBox{
-    background:#f8fafc;
-    border:1px dashed #94a3b8;
-    border-radius:14px;
-    padding:15px;
-    margin:10px 0;
-}
-
-.qrSelectTitle{
-    font-weight:bold;
-    margin-bottom:8px;
-}
-
-.qrCurrentBox{
-    margin-top:12px;
-    padding:15px;
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:14px;
-}
-
-/* =====================================================
-   FULL SCREEN SCREENSHOT VIEWER
+   FULL SCREEN PROOF
 ===================================================== */
 
 .proofModal{
@@ -535,6 +697,23 @@ body.pageReady{
         grid-template-columns:1fr;
     }
 
+    .settingsLauncher{
+        grid-template-columns:1fr;
+    }
+
+    .depositFolders{
+        grid-template-columns:1fr 1fr 1fr;
+    }
+
+    .depositFolder{
+        padding:12px 5px;
+        font-size:13px;
+    }
+
+    .folderIcon{
+        font-size:22px;
+    }
+
     .headerActions{
         flex-direction:column;
         max-width:300px;
@@ -553,6 +732,10 @@ body.pageReady{
 
 <body class="pageLocked">
 
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <div class="header">
 
     <h1>🛡️ Sathi Pay Admin</h1>
@@ -561,6 +744,7 @@ body.pageReady{
 
     <div class="headerActions">
 
+        <!-- ADMIN WALLET UNCHANGED -->
         <a
             href="admin-wallet.html"
             class="headerBtn"
@@ -586,7 +770,12 @@ body.pageReady{
 
 </div>
 
+
 <div class="container">
+
+<!-- =====================================================
+     STATS
+===================================================== -->
 
 <div class="stats">
 
@@ -642,212 +831,64 @@ body.pageReady{
 
 
 <!-- =====================================================
-     PAYMENT SETTINGS
+     SYSTEM SETTINGS
 ===================================================== -->
 
 <div class="card">
 
-    <h2>🏦 Payment Settings</h2>
+    <h2>⚙️ System Settings</h2>
 
-    <div class="item">
-
-        <div class="row">
-
-            <span class="label">
-                Current UPI ID
-            </span>
-
-            <span id="currentUpi" class="value">
-                Loading...
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <div class="qrCurrentBox">
-
-        <div class="qrSelectTitle">
-            📷 Current Payment QR
-        </div>
+    <div class="settingsLauncher">
 
         <div
-            id="currentQrBox"
-            style="text-align:center;"
-        >
-            Loading QR...
-        </div>
-
-    </div>
-
-
-    <h3>
-        ✏️ Update Payment Details
-    </h3>
-
-
-    <input
-        id="paymentUpi"
-        type="text"
-        placeholder="Enter UPI ID"
-        autocomplete="off"
-    >
-
-
-    <div class="qrSelectBox">
-
-        <div class="qrSelectTitle">
-            📷 Select New QR Code
-        </div>
-
-        <input
-            id="paymentQr"
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
+            class="settingsBox"
+            onclick="openPaymentSettings()"
         >
 
-        <div class="small">
-            Gallery se QR image select karein.
-            QR URL paste karne ki zarurat nahi hai.
-        </div>
+            <div class="settingsIcon">
+                🏦
+            </div>
 
-    </div>
+            <div class="settingsTitle">
+                Payment Settings
+            </div>
 
+            <div class="settingsDescription">
+                UPI ID aur Payment QR ko yahan
+                view/update kar sakte hain.
+            </div>
 
-    <div id="newQrPreviewBox"></div>
-
-
-    <button
-        id="savePaymentBtn"
-        class="green full"
-        onclick="savePaymentSettings()"
-    >
-        💾 Save Payment Settings
-    </button>
-
-
-    <div id="paymentStatus" class="status">
-        Payment settings ready.
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     SUPPORT SETTINGS
-===================================================== -->
-
-<div class="card">
-
-    <h2>🛟 Support Settings</h2>
-
-    <div class="item">
-
-        <div class="row">
-
-            <span class="label">
-                🎧 Customer Support
-            </span>
-
-            <span
-                id="currentSupportUrl"
-                class="value"
-            >
-                Loading...
-            </span>
+            <div class="settingsArrow">
+                Open Payment Settings →
+            </div>
 
         </div>
 
 
-        <div class="row">
+        <div
+            class="settingsBox"
+            onclick="openSupportSettings()"
+        >
 
-            <span class="label">
-                ✈️ Telegram Support
-            </span>
+            <div class="settingsIcon">
+                🛟
+            </div>
 
-            <span
-                id="currentTelegramUrl"
-                class="value"
-            >
-                Loading...
-            </span>
+            <div class="settingsTitle">
+                Support Settings
+            </div>
 
-        </div>
+            <div class="settingsDescription">
+                Customer Support, Telegram aur
+                APK links ko yahan manage karein.
+            </div>
 
-
-        <div class="row">
-
-            <span class="label">
-                📱 APK Download
-            </span>
-
-            <span
-                id="currentApkUrl"
-                class="value"
-            >
-                Loading...
-            </span>
+            <div class="settingsArrow">
+                Open Support Settings →
+            </div>
 
         </div>
 
-    </div>
-
-
-    <h3 style="margin:18px 0 10px;">
-        ✏️ Update Support Links
-    </h3>
-
-
-    <input
-        id="supportCustomerUrl"
-        type="url"
-        placeholder="Customer Support URL"
-        autocomplete="off"
-    >
-
-
-    <input
-        id="supportTelegramUrl"
-        type="url"
-        placeholder="Telegram Support URL"
-        autocomplete="off"
-    >
-
-
-    <input
-        id="supportApkUrl"
-        type="url"
-        placeholder="APK Download URL (future)"
-        autocomplete="off"
-    >
-
-
-    <div
-        class="small"
-        style="margin-bottom:12px;"
-    >
-        Example:<br>
-        https://example.com/support<br>
-        https://t.me/yourchannel<br>
-        APK link baad me add kar sakte hain.
-    </div>
-
-
-    <button
-        id="saveSupportBtn"
-        class="green full"
-        onclick="saveSupportSettings()"
-    >
-        💾 Save Support Settings
-    </button>
-
-
-    <div
-        id="supportStatus"
-        class="status"
-    >
-        Support settings ready.
     </div>
 
 </div>
@@ -896,21 +937,137 @@ body.pageReady{
 
 
 <!-- =====================================================
-     DEPOSIT REQUESTS
+     DEPOSIT MANAGEMENT
 ===================================================== -->
 
 <div class="card">
 
-    <h2>💰 Deposit Requests</h2>
+    <h2>💰 Deposit Management</h2>
 
     <button
         class="blue full"
         onclick="loadDeposits()"
     >
-        🔄 Refresh Deposit Requests
+        🔄 Refresh Deposits
     </button>
 
-    <div id="depositList"></div>
+
+    <div class="depositFolders">
+
+        <div
+            id="folderPending"
+            class="depositFolder pendingFolder active"
+            onclick="showDepositFolder('pending')"
+        >
+
+            <span class="folderIcon">
+                ⏳
+            </span>
+
+            Pending
+
+            <div
+                id="pendingFolderCount"
+                class="folderCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div
+            id="folderApproved"
+            class="depositFolder approvedFolder"
+            onclick="showDepositFolder('approved')"
+        >
+
+            <span class="folderIcon">
+                ✅
+            </span>
+
+            Approved
+
+            <div
+                id="approvedFolderCount"
+                class="folderCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div
+            id="folderRejected"
+            class="depositFolder rejectedFolder"
+            onclick="showDepositFolder('rejected')"
+        >
+
+            <span class="folderIcon">
+                ❌
+            </span>
+
+            Rejected
+
+            <div
+                id="rejectedFolderCount"
+                class="folderCount"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PENDING -->
+
+    <div
+        id="pendingDepositSection"
+        class="depositSection active"
+    >
+
+        <div class="sectionTitle">
+            ⏳ Pending Deposit Requests
+        </div>
+
+        <div id="pendingDepositList"></div>
+
+    </div>
+
+
+    <!-- APPROVED -->
+
+    <div
+        id="approvedDepositSection"
+        class="depositSection"
+    >
+
+        <div class="sectionTitle">
+            ✅ Approved Deposits
+        </div>
+
+        <div id="approvedDepositList"></div>
+
+    </div>
+
+
+    <!-- REJECTED -->
+
+    <div
+        id="rejectedDepositSection"
+        class="depositSection"
+    >
+
+        <div class="sectionTitle">
+            ❌ Rejected Deposits
+        </div>
+
+        <div id="rejectedDepositList"></div>
+
+    </div>
 
 </div>
 
@@ -1011,6 +1168,274 @@ body.pageReady{
     </div>
 
 </div>
+
+</div>
+
+
+<!-- =====================================================
+     PAYMENT SETTINGS MODAL
+===================================================== -->
+
+<div
+    id="paymentSettingsModal"
+    class="settingsModal"
+    onclick="closeSettingsModal(event,'paymentSettingsModal')"
+>
+
+    <div
+        class="settingsModalBox"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="settingsModalHeader">
+
+            <h2>
+                🏦 Payment Settings
+            </h2>
+
+            <button
+                class="settingsClose"
+                onclick="closeSettingsModal(null,'paymentSettingsModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <div class="row">
+
+                <span class="label">
+                    Current UPI ID
+                </span>
+
+                <span
+                    id="currentUpi"
+                    class="value"
+                >
+                    Loading...
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="qrCurrentBox">
+
+            <div class="qrSelectTitle">
+                📷 Current Payment QR
+            </div>
+
+            <div
+                id="currentQrBox"
+                style="text-align:center;"
+            >
+                Loading QR...
+            </div>
+
+        </div>
+
+
+        <h3>
+            ✏️ Update Payment Details
+        </h3>
+
+
+        <input
+            id="paymentUpi"
+            type="text"
+            placeholder="Enter UPI ID"
+            autocomplete="off"
+        >
+
+
+        <div class="qrSelectBox">
+
+            <div class="qrSelectTitle">
+                📷 Select New QR Code
+            </div>
+
+            <input
+                id="paymentQr"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+            >
+
+            <div class="small">
+                Gallery se QR image select karein.
+                QR URL paste karne ki zarurat nahi hai.
+            </div>
+
+        </div>
+
+
+        <div id="newQrPreviewBox"></div>
+
+
+        <button
+            id="savePaymentBtn"
+            class="green full"
+            onclick="savePaymentSettings()"
+        >
+            💾 Save Payment Settings
+        </button>
+
+
+        <div
+            id="paymentStatus"
+            class="status"
+        >
+            Payment settings ready.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUPPORT SETTINGS MODAL
+===================================================== -->
+
+<div
+    id="supportSettingsModal"
+    class="settingsModal"
+    onclick="closeSettingsModal(event,'supportSettingsModal')"
+>
+
+    <div
+        class="settingsModalBox"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="settingsModalHeader">
+
+            <h2>
+                🛟 Support Settings
+            </h2>
+
+            <button
+                class="settingsClose"
+                onclick="closeSettingsModal(null,'supportSettingsModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <div class="row">
+
+                <span class="label">
+                    🎧 Customer Support
+                </span>
+
+                <span
+                    id="currentSupportUrl"
+                    class="value"
+                >
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    ✈️ Telegram Support
+                </span>
+
+                <span
+                    id="currentTelegramUrl"
+                    class="value"
+                >
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    📱 APK Download
+                </span>
+
+                <span
+                    id="currentApkUrl"
+                    class="value"
+                >
+                    Loading...
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <h3 style="margin:18px 0 10px;">
+            ✏️ Update Support Links
+        </h3>
+
+
+        <input
+            id="supportCustomerUrl"
+            type="url"
+            placeholder="Customer Support URL"
+            autocomplete="off"
+        >
+
+
+        <input
+            id="supportTelegramUrl"
+            type="url"
+            placeholder="Telegram Support URL"
+            autocomplete="off"
+        >
+
+
+        <input
+            id="supportApkUrl"
+            type="url"
+            placeholder="APK Download URL (future)"
+            autocomplete="off"
+        >
+
+
+        <div
+            class="small"
+            style="margin-bottom:12px;"
+        >
+            Example:<br>
+            https://example.com/support<br>
+            https://t.me/yourchannel<br>
+            APK link baad me add kar sakte hain.
+        </div>
+
+
+        <button
+            id="saveSupportBtn"
+            class="green full"
+            onclick="saveSupportSettings()"
+        >
+            💾 Save Support Settings
+        </button>
+
+
+        <div
+            id="supportStatus"
+            class="status"
+        >
+            Support settings ready.
+        </div>
+
+    </div>
 
 </div>
 
@@ -1158,10 +1583,11 @@ supabase.createClient(
 
 
 /* =====================================================
-   ADMIN SECURITY GUARD
+   ADMIN SECURITY
 ===================================================== */
 
 let currentAdminUser = null;
+
 
 async function verifyAdminAccess(){
 
@@ -1172,6 +1598,7 @@ async function verifyAdminAccess(){
             error
         } =
         await supabaseClient.auth.getUser();
+
 
         if(
             error ||
@@ -1187,8 +1614,10 @@ async function verifyAdminAccess(){
 
         }
 
+
         currentAdminUser =
             data.user;
+
 
         const {
             data:isAdmin,
@@ -1197,6 +1626,7 @@ async function verifyAdminAccess(){
         await supabaseClient.rpc(
             "is_admin"
         );
+
 
         if(
             adminError ||
@@ -1213,10 +1643,12 @@ async function verifyAdminAccess(){
 
         }
 
+
         const emailBox =
             document.getElementById(
                 "adminEmail"
             );
+
 
         if(emailBox){
 
@@ -1229,6 +1661,7 @@ async function verifyAdminAccess(){
 
         }
 
+
         document.body.classList.remove(
             "pageLocked"
         );
@@ -1236,6 +1669,7 @@ async function verifyAdminAccess(){
         document.body.classList.add(
             "pageReady"
         );
+
 
         return true;
 
@@ -1277,9 +1711,72 @@ async function logoutAdmin(){
 
     }
 
+
     window.location.replace(
         "admin-login.html"
     );
+
+}
+
+
+/* =====================================================
+   SETTINGS BOXES
+===================================================== */
+
+function openPaymentSettings(){
+
+    const modal =
+        document.getElementById(
+            "paymentSettingsModal"
+        );
+
+    modal.style.display =
+        "flex";
+
+}
+
+
+function openSupportSettings(){
+
+    const modal =
+        document.getElementById(
+            "supportSettingsModal"
+        );
+
+    modal.style.display =
+        "flex";
+
+}
+
+
+function closeSettingsModal(
+    event,
+    modalId
+){
+
+    if(
+        event &&
+        event.target &&
+        event.target.id !== modalId
+    ){
+
+        return;
+
+    }
+
+
+    const modal =
+        document.getElementById(
+            modalId
+        );
+
+
+    if(modal){
+
+        modal.style.display =
+            "none";
+
+    }
 
 }
 
@@ -1295,6 +1792,7 @@ function openSecurity(){
             "securityModal"
         );
 
+
     if(currentAdminUser){
 
         document.getElementById(
@@ -1308,15 +1806,18 @@ function openSecurity(){
 
     }
 
+
     document.getElementById(
         "securityStatus"
     ).className =
         "status";
 
+
     document.getElementById(
         "securityStatus"
     ).textContent =
         "Keep your admin password private.";
+
 
     modal.style.display =
         "flex";
@@ -1331,8 +1832,11 @@ function closeSecurity(event){
         event.target &&
         event.target.id !== "securityModal"
     ){
+
         return;
+
     }
+
 
     document.getElementById(
         "securityModal"
@@ -1358,12 +1862,14 @@ async function changeAdminPassword(){
 
     }
 
+
     const currentPassword =
         document
         .getElementById(
             "currentPassword"
         )
         .value;
+
 
     const newPassword =
         document
@@ -1372,6 +1878,7 @@ async function changeAdminPassword(){
         )
         .value;
 
+
     const confirmPassword =
         document
         .getElementById(
@@ -1379,15 +1886,18 @@ async function changeAdminPassword(){
         )
         .value;
 
+
     const status =
         document.getElementById(
             "securityStatus"
         );
 
+
     const button =
         document.getElementById(
             "changePasswordBtn"
         );
+
 
     if(!currentPassword){
 
@@ -1401,6 +1911,7 @@ async function changeAdminPassword(){
 
     }
 
+
     if(!newPassword){
 
         status.className =
@@ -1412,6 +1923,7 @@ async function changeAdminPassword(){
         return;
 
     }
+
 
     if(newPassword.length < 8){
 
@@ -1425,6 +1937,7 @@ async function changeAdminPassword(){
 
     }
 
+
     if(newPassword !== confirmPassword){
 
         status.className =
@@ -1436,6 +1949,7 @@ async function changeAdminPassword(){
         return;
 
     }
+
 
     if(
         currentPassword === newPassword
@@ -1451,10 +1965,12 @@ async function changeAdminPassword(){
 
     }
 
+
     button.disabled = true;
 
     button.textContent =
         "Verifying...";
+
 
     status.className =
         "status";
@@ -1462,15 +1978,22 @@ async function changeAdminPassword(){
     status.textContent =
         "Verifying current password...";
 
+
     try{
 
         const {
             error:loginError
         } =
         await supabaseClient.auth.signInWithPassword({
-            email:currentAdminUser.email,
-            password:currentPassword
+
+            email:
+                currentAdminUser.email,
+
+            password:
+                currentPassword
+
         });
+
 
         if(loginError){
 
@@ -1480,15 +2003,21 @@ async function changeAdminPassword(){
 
         }
 
+
         status.textContent =
             "Updating password...";
+
 
         const {
             error:updateError
         } =
         await supabaseClient.auth.updateUser({
-            password:newPassword
+
+            password:
+                newPassword
+
         });
+
 
         if(updateError){
 
@@ -1496,28 +2025,28 @@ async function changeAdminPassword(){
 
         }
 
+
         status.className =
             "status success";
 
         status.textContent =
             "✅ Password changed successfully.";
 
+
         document.getElementById(
             "currentPassword"
         ).value = "";
+
 
         document.getElementById(
             "newPassword"
         ).value = "";
 
+
         document.getElementById(
             "confirmPassword"
         ).value = "";
 
-        button.disabled = false;
-
-        button.textContent =
-            "🔑 Change Password";
 
     }
 
@@ -1535,12 +2064,13 @@ async function changeAdminPassword(){
                 "Password change failed."
             );
 
-        button.disabled = false;
-
-        button.textContent =
-            "🔑 Change Password";
-
     }
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "🔑 Change Password";
 
 }
 
@@ -1562,13 +2092,20 @@ function commissionRate(amount){
     const n =
         Number(amount || 0);
 
+
     if(n >= 20000){
+
         return 0.10;
+
     }
 
+
     if(n >= 10000){
+
         return 0.08;
+
     }
+
 
     return 0.06;
 
@@ -1589,22 +2126,33 @@ function statusBadge(status){
         String(status || "pending")
         .toLowerCase();
 
-    let cls = "pending";
+
+    let cls =
+        "pending";
+
 
     if(
         s === "approved" ||
         s === "success" ||
         s === "successful"
     ){
-        cls = "approved";
+
+        cls =
+            "approved";
+
     }
+
 
     if(
         s === "rejected" ||
         s === "failed"
     ){
-        cls = "rejected";
+
+        cls =
+            "rejected";
+
     }
+
 
     return `
         <span class="badge ${cls}">
@@ -1632,7 +2180,7 @@ function escapeHtml(value){
 
 
 /* =====================================================
-   FULL SCREEN PAYMENT PROOF
+   PROOF VIEWER
 ===================================================== */
 
 function openProof(url){
@@ -1642,15 +2190,20 @@ function openProof(url){
             "proofModal"
         );
 
+
     const image =
         document.getElementById(
             "proofModalImage"
         );
 
-    image.src = url;
+
+    image.src =
+        url;
+
 
     modal.style.display =
         "flex";
+
 
     document.body.style.overflow =
         "hidden";
@@ -1665,15 +2218,20 @@ function closeProof(){
             "proofModal"
         );
 
+
     const image =
         document.getElementById(
             "proofModalImage"
         );
 
+
     modal.style.display =
         "none";
 
-    image.src = "";
+
+    image.src =
+        "";
+
 
     document.body.style.overflow =
         "";
@@ -1692,17 +2250,23 @@ function showApprovedToast(amount){
             ".approvedToast"
         );
 
+
     if(old){
+
         old.remove();
+
     }
+
 
     const toast =
         document.createElement(
             "div"
         );
 
+
     toast.className =
         "approvedToast";
+
 
     toast.innerHTML = `
 
@@ -1716,18 +2280,16 @@ function showApprovedToast(amount){
 
     `;
 
+
     document.body.appendChild(
         toast
     );
 
+
     setTimeout(
         function(){
 
-            if(toast){
-
-                toast.remove();
-
-            }
+            toast.remove();
 
         },
         2500
@@ -1737,7 +2299,7 @@ function showApprovedToast(amount){
 
 
 /* =====================================================
-   QR IMAGE -> DATA URL
+   QR FILE READER
 ===================================================== */
 
 function readQrFile(file){
@@ -1757,6 +2319,7 @@ function readQrFile(file){
 
             }
 
+
             if(
                 !file.type ||
                 !file.type.startsWith("image/")
@@ -1772,8 +2335,10 @@ function readQrFile(file){
 
             }
 
+
             const reader =
                 new FileReader();
+
 
             reader.onload =
                 function(event){
@@ -1781,17 +2346,21 @@ function readQrFile(file){
                     const img =
                         new Image();
 
+
                     img.onload =
                         function(){
 
                             let width =
                                 img.width;
 
+
                             let height =
                                 img.height;
 
+
                             const maxSize =
                                 1200;
+
 
                             if(
                                 width > maxSize ||
@@ -1804,10 +2373,12 @@ function readQrFile(file){
                                         maxSize / height
                                     );
 
+
                                 width =
                                     Math.round(
                                         width * scale
                                     );
+
 
                                 height =
                                     Math.round(
@@ -1816,24 +2387,30 @@ function readQrFile(file){
 
                             }
 
+
                             const canvas =
                                 document.createElement(
                                     "canvas"
                                 );
 
+
                             canvas.width =
                                 width;
 
+
                             canvas.height =
                                 height;
+
 
                             const ctx =
                                 canvas.getContext(
                                     "2d"
                                 );
 
+
                             ctx.fillStyle =
                                 "#ffffff";
+
 
                             ctx.fillRect(
                                 0,
@@ -1841,6 +2418,7 @@ function readQrFile(file){
                                 width,
                                 height
                             );
+
 
                             ctx.drawImage(
                                 img,
@@ -1850,16 +2428,15 @@ function readQrFile(file){
                                 height
                             );
 
-                            const dataUrl =
-                                canvas.toDataURL(
-                                    "image/png"
-                                );
 
                             resolve(
-                                dataUrl
+                                canvas.toDataURL(
+                                    "image/png"
+                                )
                             );
 
                         };
+
 
                     img.onerror =
                         function(){
@@ -1872,10 +2449,12 @@ function readQrFile(file){
 
                         };
 
+
                     img.src =
                         event.target.result;
 
                 };
+
 
             reader.onerror =
                 function(){
@@ -1888,6 +2467,7 @@ function readQrFile(file){
 
                 };
 
+
             reader.readAsDataURL(
                 file
             );
@@ -1899,7 +2479,7 @@ function readQrFile(file){
 
 
 /* =====================================================
-   SHOW CURRENT QR
+   CURRENT QR
 ===================================================== */
 
 function showCurrentQr(url){
@@ -1909,24 +2489,17 @@ function showCurrentQr(url){
             "currentQrBox"
         );
 
+
     box.innerHTML = "";
+
 
     if(!url){
 
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-        empty.className =
-            "small";
-
-        empty.textContent =
-            "❌ QR code available nahi hai.";
-
-        box.appendChild(
-            empty
-        );
+        box.innerHTML = `
+            <div class="small">
+                ❌ QR code available nahi hai.
+            </div>
+        `;
 
         return;
 
@@ -1938,21 +2511,23 @@ function showCurrentQr(url){
             "img"
         );
 
+
     img.className =
         "qrAdminPreview";
+
 
     img.alt =
         "Current Payment QR";
 
+
     img.src =
         url;
+
 
     img.onclick =
         function(){
 
-            openProof(
-                url
-            );
+            openProof(url);
 
         };
 
@@ -1960,22 +2535,11 @@ function showCurrentQr(url){
     img.onerror =
         function(){
 
-            box.innerHTML = "";
-
-            const errorBox =
-                document.createElement(
-                    "div"
-                );
-
-            errorBox.className =
-                "status error";
-
-            errorBox.textContent =
-                "❌ QR image load nahi ho paayi.";
-
-            box.appendChild(
-                errorBox
-            );
+            box.innerHTML = `
+                <div class="status error">
+                    ❌ QR image load nahi ho paayi.
+                </div>
+            `;
 
         };
 
@@ -1990,14 +2554,18 @@ function showCurrentQr(url){
             "div"
         );
 
+
     text.className =
         "small";
+
 
     text.style.textAlign =
         "center";
 
+
     text.textContent =
         "Current QR Code";
+
 
     box.appendChild(
         text
@@ -2017,13 +2585,16 @@ function showNewQrPreview(url){
             "newQrPreviewBox"
         );
 
+
     if(!url){
 
-        box.innerHTML = "";
+        box.innerHTML =
+            "";
 
         return;
 
     }
+
 
     box.innerHTML = `
 
@@ -2044,7 +2615,7 @@ function showNewQrPreview(url){
                 style="text-align:center;"
             >
                 Ye QR Save karne ke baad
-                Payment Settings me current QR ban jayega.
+                Current Payment QR ban jayega.
             </div>
 
         </div>
@@ -2055,7 +2626,7 @@ function showNewQrPreview(url){
 
 
 /* =====================================================
-   PAYMENT SETTINGS
+   LOAD PAYMENT SETTINGS
 ===================================================== */
 
 async function loadPaymentSettings(){
@@ -2065,11 +2636,14 @@ async function loadPaymentSettings(){
             "paymentStatus"
         );
 
+
     status.className =
         "status";
 
+
     status.textContent =
         "Loading payment settings...";
+
 
     const {
         data,
@@ -2089,22 +2663,26 @@ async function loadPaymentSettings(){
         status.className =
             "status error";
 
+
         status.textContent =
-            "❌ " + error.message;
+            "❌ " +
+            error.message;
+
 
         document.getElementById(
             "currentUpi"
         ).textContent =
             "-";
 
+
         document.getElementById(
             "currentQrBox"
-        ).innerHTML =
-            `
+        ).innerHTML = `
             <div class="small">
                 QR load nahi ho paaya.
             </div>
-            `;
+        `;
+
 
         return;
 
@@ -2116,8 +2694,10 @@ async function loadPaymentSettings(){
         status.className =
             "status error";
 
+
         status.textContent =
             "❌ Payment settings record not found.";
+
 
         return;
 
@@ -2144,6 +2724,7 @@ async function loadPaymentSettings(){
     status.className =
         "status success";
 
+
     status.textContent =
         "✅ Current payment settings loaded.";
 
@@ -2151,7 +2732,7 @@ async function loadPaymentSettings(){
 
 
 /* =====================================================
-   QR FILE SELECT PREVIEW
+   QR FILE SELECT
 ===================================================== */
 
 document.addEventListener(
@@ -2163,9 +2744,13 @@ document.addEventListener(
                 "paymentQr"
             );
 
+
         if(!qrInput){
+
             return;
+
         }
+
 
         qrInput.addEventListener(
             "change",
@@ -2175,6 +2760,7 @@ document.addEventListener(
                     this.files &&
                     this.files[0];
 
+
                 if(!file){
 
                     showNewQrPreview("");
@@ -2183,12 +2769,14 @@ document.addEventListener(
 
                 }
 
+
                 try{
 
                     const dataUrl =
                         await readQrFile(
                             file
                         );
+
 
                     showNewQrPreview(
                         dataUrl
@@ -2200,13 +2788,16 @@ document.addEventListener(
 
                     showNewQrPreview("");
 
+
                     const status =
                         document.getElementById(
                             "paymentStatus"
                         );
 
+
                     status.className =
                         "status error";
+
 
                     status.textContent =
                         "❌ " +
@@ -2238,15 +2829,18 @@ async function savePaymentSettings(){
         .value
         .trim();
 
+
     const qrInput =
         document.getElementById(
             "paymentQr"
         );
 
+
     const status =
         document.getElementById(
             "paymentStatus"
         );
+
 
     const button =
         document.getElementById(
@@ -2259,21 +2853,27 @@ async function savePaymentSettings(){
         status.className =
             "status error";
 
+
         status.textContent =
             "❌ Please enter UPI ID.";
+
 
         return;
 
     }
 
 
-    button.disabled = true;
+    button.disabled =
+        true;
+
 
     button.textContent =
         "Checking...";
 
+
     status.className =
         "status";
+
 
     status.textContent =
         "Payment settings check ho rahi hain...";
@@ -2322,6 +2922,7 @@ async function savePaymentSettings(){
             button.textContent =
                 "Preparing QR...";
 
+
             status.textContent =
                 "QR image prepare ho rahi hai...";
 
@@ -2346,26 +2947,29 @@ async function savePaymentSettings(){
         button.textContent =
             "Saving...";
 
+
         status.textContent =
             "UPI aur QR database me save ho rahe hain...";
 
 
         const {
-            data:updatedRows,
             error:updateError
         } =
         await supabaseClient
             .from("payment_settings")
             .update({
-                upi_id:upi,
-                qr_url:qrData,
+
+                upi_id:
+                    upi,
+
+                qr_url:
+                    qrData,
+
                 updated_at:
                     new Date().toISOString()
+
             })
-            .eq("id",1)
-            .select(
-                "id,upi_id,qr_url,updated_at"
-            );
+            .eq("id",1);
 
 
         if(updateError){
@@ -2443,7 +3047,9 @@ async function savePaymentSettings(){
         );
 
 
-        qrInput.value = "";
+        qrInput.value =
+            "";
+
 
         showNewQrPreview("");
 
@@ -2451,8 +3057,9 @@ async function savePaymentSettings(){
         status.className =
             "status success";
 
+
         status.textContent =
-            "✅ Payment settings successfully saved. Refresh ke baad bhi ye settings rahengi.";
+            "✅ Payment settings successfully saved.";
 
     }
 
@@ -2463,8 +3070,10 @@ async function savePaymentSettings(){
             error
         );
 
+
         status.className =
             "status error";
+
 
         status.textContent =
             "❌ " +
@@ -2475,20 +3084,19 @@ async function savePaymentSettings(){
 
     }
 
-    finally{
 
-        button.disabled = false;
+    button.disabled =
+        false;
 
-        button.textContent =
-            "💾 Save Payment Settings";
 
-    }
+    button.textContent =
+        "💾 Save Payment Settings";
 
 }
 
 
 /* =====================================================
-   SUPPORT SETTINGS
+   LOAD SUPPORT SETTINGS
 ===================================================== */
 
 async function loadSupportSettings(){
@@ -2498,8 +3106,10 @@ async function loadSupportSettings(){
             "supportStatus"
         );
 
+
     status.className =
         "status";
+
 
     status.textContent =
         "Loading support settings...";
@@ -2525,26 +3135,33 @@ async function loadSupportSettings(){
             error
         );
 
+
         status.className =
             "status error";
 
+
         status.textContent =
-            "❌ " + error.message;
+            "❌ " +
+            error.message;
+
 
         document.getElementById(
             "currentSupportUrl"
         ).textContent =
             "-";
 
+
         document.getElementById(
             "currentTelegramUrl"
         ).textContent =
             "-";
 
+
         document.getElementById(
             "currentApkUrl"
         ).textContent =
             "-";
+
 
         return;
 
@@ -2556,8 +3173,10 @@ async function loadSupportSettings(){
         status.className =
             "status error";
 
+
         status.textContent =
             "❌ Support settings record not found.";
+
 
         return;
 
@@ -2567,8 +3186,10 @@ async function loadSupportSettings(){
     const supportUrl =
         data.customer_support_url || "";
 
+
     const telegramUrl =
         data.telegram_support_url || "";
+
 
     const apkUrl =
         data.apk_download_url || "";
@@ -2613,6 +3234,7 @@ async function loadSupportSettings(){
     status.className =
         "status success";
 
+
     status.textContent =
         "✅ Current support settings loaded.";
 
@@ -2626,13 +3248,17 @@ async function loadSupportSettings(){
 function validateSupportUrl(value){
 
     if(!value){
+
         return true;
+
     }
+
 
     try{
 
         const url =
             new URL(value);
+
 
         return (
             url.protocol === "http:" ||
@@ -2664,6 +3290,7 @@ async function saveSupportSettings(){
         .value
         .trim();
 
+
     const telegramUrl =
         document
         .getElementById(
@@ -2671,6 +3298,7 @@ async function saveSupportSettings(){
         )
         .value
         .trim();
+
 
     const apkUrl =
         document
@@ -2685,6 +3313,7 @@ async function saveSupportSettings(){
         document.getElementById(
             "supportStatus"
         );
+
 
     const button =
         document.getElementById(
@@ -2701,8 +3330,10 @@ async function saveSupportSettings(){
         status.className =
             "status error";
 
+
         status.textContent =
             "❌ Customer Support URL invalid hai.";
+
 
         return;
 
@@ -2718,8 +3349,10 @@ async function saveSupportSettings(){
         status.className =
             "status error";
 
+
         status.textContent =
             "❌ Telegram URL invalid hai.";
+
 
         return;
 
@@ -2735,21 +3368,27 @@ async function saveSupportSettings(){
         status.className =
             "status error";
 
+
         status.textContent =
             "❌ APK Download URL invalid hai.";
+
 
         return;
 
     }
 
 
-    button.disabled = true;
+    button.disabled =
+        true;
+
 
     button.textContent =
         "Saving...";
 
+
     status.className =
         "status";
+
 
     status.textContent =
         "Support settings database me save ho rahi hain...";
@@ -2758,7 +3397,6 @@ async function saveSupportSettings(){
     try{
 
         const {
-            data,
             error
         } =
         await supabaseClient
@@ -2778,10 +3416,7 @@ async function saveSupportSettings(){
                     new Date().toISOString()
 
             })
-            .eq("id",1)
-            .select(
-                "id,customer_support_url,telegram_support_url,apk_download_url,updated_at"
-            );
+            .eq("id",1);
 
 
         if(error){
@@ -2844,8 +3479,9 @@ async function saveSupportSettings(){
         status.className =
             "status success";
 
+
         status.textContent =
-            "✅ Support settings successfully saved. Ab customers ko latest links milenge.";
+            "✅ Support settings successfully saved.";
 
     }
 
@@ -2856,8 +3492,10 @@ async function saveSupportSettings(){
             error
         );
 
+
         status.className =
             "status error";
+
 
         status.textContent =
             "❌ " +
@@ -2868,14 +3506,13 @@ async function saveSupportSettings(){
 
     }
 
-    finally{
 
-        button.disabled = false;
+    button.disabled =
+        false;
 
-        button.textContent =
-            "💾 Save Support Settings";
 
-    }
+    button.textContent =
+        "💾 Save Support Settings";
 
 }
 
@@ -2894,10 +3531,12 @@ async function searchCustomer(){
         .value
         .trim();
 
+
     const status =
         document.getElementById(
             "searchStatus"
         );
+
 
     const box =
         document.getElementById(
@@ -2905,7 +3544,8 @@ async function searchCustomer(){
         );
 
 
-    box.innerHTML = "";
+    box.innerHTML =
+        "";
 
 
     if(!search){
@@ -2913,8 +3553,10 @@ async function searchCustomer(){
         status.className =
             "status error";
 
+
         status.textContent =
             "Please enter UID, Mobile or Name.";
+
 
         return;
 
@@ -2924,12 +3566,14 @@ async function searchCustomer(){
     status.className =
         "status";
 
+
     status.textContent =
         "Searching customer...";
 
 
     const upperSearch =
         search.toUpperCase();
+
 
     let result;
 
@@ -2966,6 +3610,7 @@ async function searchCustomer(){
     const customer =
         result.data;
 
+
     const error =
         result.error;
 
@@ -2975,8 +3620,10 @@ async function searchCustomer(){
         status.className =
             "status error";
 
+
         status.textContent =
             error.message;
+
 
         return;
 
@@ -2988,8 +3635,10 @@ async function searchCustomer(){
         status.className =
             "status error";
 
+
         status.textContent =
             "Customer not found.";
+
 
         return;
 
@@ -3003,6 +3652,7 @@ async function searchCustomer(){
 
     status.className =
         "status success";
+
 
     status.textContent =
         "✅ Customer found successfully.";
@@ -3061,110 +3711,77 @@ function renderCustomer(customer){
             </h3>
 
             <div class="row">
-                <span class="label">
-                    UID
-                </span>
-
+                <span class="label">UID</span>
                 <span class="value">
                     ${escapeHtml(customer.uid || "-")}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Mobile
-                </span>
-
+                <span class="label">Mobile</span>
                 <span class="value">
                     ${escapeHtml(customer.mobile || "-")}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Invitation Code
-                </span>
-
+                <span class="label">Invitation Code</span>
                 <span class="value">
                     ${escapeHtml(customer.invitation_code || "-")}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Referred By
-                </span>
-
+                <span class="label">Referred By</span>
                 <span class="value">
                     ${escapeHtml(customer.referred_by || "-")}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Account Status
-                </span>
-
+                <span class="label">Account Status</span>
                 <span class="value">
                     ${escapeHtml(customer.status || "Active")}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Wallet Balance
-                </span>
-
+                <span class="label">Wallet Balance</span>
                 <span class="value">
                     ${money(wallet)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    ₹99 Bonus
-                </span>
-
+                <span class="label">₹99 Bonus</span>
                 <span class="value">
                     ${money(bonus)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Deposit Balance
-                </span>
-
+                <span class="label">Deposit Balance</span>
                 <span class="value">
                     ${money(depositBalance)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Commission Balance
-                </span>
-
+                <span class="label">Commission Balance</span>
                 <span class="value">
                     ${money(commission)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Referral Income
-                </span>
-
+                <span class="label">Referral Income</span>
                 <span class="value">
                     ${money(referral)}
                 </span>
             </div>
 
             <div class="row">
-                <span class="label">
-                    Sell Status
-                </span>
-
+                <span class="label">Sell Status</span>
                 <span class="value">
                     ${
                         customer.sell_on
@@ -3175,10 +3792,7 @@ function renderCustomer(customer){
             </div>
 
             <div class="row">
-                <span class="label">
-                    UPI ID
-                </span>
-
+                <span class="label">UPI ID</span>
                 <span class="value">
                     ${escapeHtml(customer.upi_id || "-")}
                 </span>
@@ -3210,12 +3824,14 @@ function clearCustomerSearch(){
 
     document.getElementById(
         "customerSearch"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "customerDetails"
-    ).innerHTML = "";
+    ).innerHTML =
+        "";
 
 
     const status =
@@ -3273,7 +3889,8 @@ async function deleteCustomer(customerId){
         await supabaseClient.rpc(
             "admin_delete_customer",
             {
-                p_customer_id:customerId
+                p_customer_id:
+                    customerId
             }
         );
 
@@ -3308,12 +3925,14 @@ async function deleteCustomer(customerId){
 
         document.getElementById(
             "customerDetails"
-        ).innerHTML = "";
+        ).innerHTML =
+            "";
 
 
         document.getElementById(
             "customerSearch"
-        ).value = "";
+        ).value =
+            "";
 
 
         document.getElementById(
@@ -3340,6 +3959,7 @@ async function deleteCustomer(customerId){
             "Delete customer error:",
             error
         );
+
 
         alert(
             "❌ " +
@@ -3387,11 +4007,16 @@ async function loadAdminTotals(){
         );
 
 
-    let totalDeposit = 0;
+    let totalDeposit =
+        0;
 
-    let totalCommission = 0;
 
-    let pendingCount = 0;
+    let totalCommission =
+        0;
+
+
+    let pendingCount =
+        0;
 
 
     (deposits || []).forEach(
@@ -3403,11 +4028,13 @@ async function loadAdminTotals(){
                 );
 
 
-            if(
-                String(d.status)
-                .toLowerCase()
-                === "approved"
-            ){
+            const s =
+                String(
+                    d.status || ""
+                ).toLowerCase();
+
+
+            if(s === "approved"){
 
                 totalDeposit +=
                     amount;
@@ -3437,11 +4064,7 @@ async function loadAdminTotals(){
             }
 
 
-            if(
-                String(d.status)
-                .toLowerCase()
-                === "pending"
-            ){
+            if(s === "pending"){
 
                 pendingCount++;
 
@@ -3472,19 +4095,334 @@ async function loadAdminTotals(){
 
 
 /* =====================================================
+   DEPOSIT FOLDER SWITCH
+===================================================== */
+
+function showDepositFolder(folder){
+
+    const folders = [
+        "pending",
+        "approved",
+        "rejected"
+    ];
+
+
+    folders.forEach(
+        name => {
+
+            const section =
+                document.getElementById(
+                    name +
+                    "DepositSection"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "folder" +
+                    name.charAt(0).toUpperCase() +
+                    name.slice(1)
+                );
+
+
+            if(name === folder){
+
+                section.classList.add(
+                    "active"
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+            else{
+
+                section.classList.remove(
+                    "active"
+                );
+
+
+                button.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   RENDER SINGLE DEPOSIT
+===================================================== */
+
+function renderDeposit(d){
+
+    const rate =
+        commissionRate(
+            d.amount
+        ) * 100;
+
+
+    const calculatedCommission =
+        Number(
+            d.commission ??
+            commissionAmount(
+                d.amount
+            )
+        );
+
+
+    const screenshot =
+        d.payment_proof || "";
+
+
+    const created =
+        d.created_at
+        ?
+        new Date(
+            d.created_at
+        ).toLocaleString(
+            "en-IN"
+        )
+        :
+        "-";
+
+
+    const currentStatus =
+        String(
+            d.status || "pending"
+        ).toLowerCase();
+
+
+    return `
+
+        <div class="item">
+
+            <h3>
+                💰 Deposit #${escapeHtml(d.id)}
+            </h3>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Amount
+                </span>
+
+                <span class="value">
+                    ${money(d.amount)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Status
+                </span>
+
+                <span class="value">
+                    ${statusBadge(d.status)}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Commission Rate
+                </span>
+
+                <span class="value">
+                    ${rate}%
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Commission
+                </span>
+
+                <span class="value">
+                    ${money(
+                        calculatedCommission
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Customer ID
+                </span>
+
+                <span class="value">
+                    ${escapeHtml(
+                        d.customer_id || "-"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    UTR
+                </span>
+
+                <span class="value">
+                    ${escapeHtml(
+                        d.utr || "-"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="paymentProofBox">
+
+                <div class="paymentProofTitle">
+                    📸 Payment Screenshot
+                </div>
+
+                ${
+                    screenshot
+                    ?
+                    `
+                    <img
+                        src="${escapeHtml(screenshot)}"
+                        class="paymentProofImage"
+                        alt="Customer Payment Screenshot"
+                        onclick="openProof('${escapeHtml(screenshot)}')"
+                    >
+                    `
+                    :
+                    `
+                    <div class="small">
+                        ❌ Customer did not upload a payment screenshot.
+                    </div>
+                    `
+                }
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Created
+                </span>
+
+                <span class="value">
+                    ${created}
+                </span>
+
+            </div>
+
+
+            ${
+                currentStatus === "pending"
+                ?
+                `
+                <div class="actions">
+
+                    <button
+                        class="green"
+                        onclick="updateDeposit(
+                            ${Number(d.id)},
+                            'approved'
+                        )"
+                    >
+                        ✅ Approve
+                    </button>
+
+                    <button
+                        class="red"
+                        onclick="updateDeposit(
+                            ${Number(d.id)},
+                            'rejected'
+                        )"
+                    >
+                        ❌ Reject
+                    </button>
+
+                </div>
+                `
+                :
+                `
+                <div class="actions">
+
+                    <button
+                        class="gray"
+                        disabled
+                    >
+                        ${
+                            currentStatus === "approved"
+                            ? "✅ Approved"
+                            : "❌ Rejected"
+                        }
+                    </button>
+
+                </div>
+                `
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
    LOAD DEPOSITS
+   PENDING / APPROVED / REJECTED SEPARATE
 ===================================================== */
 
 async function loadDeposits(){
 
-    const box =
+    const pendingBox =
         document.getElementById(
-            "depositList"
+            "pendingDepositList"
         );
 
 
-    box.innerHTML =
-        "<p>Loading deposits...</p>";
+    const approvedBox =
+        document.getElementById(
+            "approvedDepositList"
+        );
+
+
+    const rejectedBox =
+        document.getElementById(
+            "rejectedDepositList"
+        );
+
+
+    pendingBox.innerHTML =
+        "<p>Loading...</p>";
+
+
+    approvedBox.innerHTML =
+        "<p>Loading...</p>";
+
+
+    rejectedBox.innerHTML =
+        "<p>Loading...</p>";
 
 
     const {
@@ -3504,240 +4442,166 @@ async function loadDeposits(){
 
     if(error){
 
-        box.innerHTML =
-        `
-        <div class="status error">
-            ${escapeHtml(error.message)}
-        </div>
+        const html = `
+            <div class="status error">
+                ${escapeHtml(error.message)}
+            </div>
         `;
+
+
+        pendingBox.innerHTML =
+            html;
+
+
+        approvedBox.innerHTML =
+            html;
+
+
+        rejectedBox.innerHTML =
+            html;
+
 
         return;
 
     }
 
 
-    if(
-        !data ||
-        !data.length
-    ){
-
-        box.innerHTML =
-        `
-        <div class="empty">
-            No deposit requests found.
-        </div>
-        `;
-
-        return;
-
-    }
+    const pending =
+        [];
 
 
-    box.innerHTML =
-    data.map(
+    const approved =
+        [];
+
+
+    const rejected =
+        [];
+
+
+    (data || []).forEach(
         d => {
 
-            const rate =
-                commissionRate(
-                    d.amount
-                ) * 100;
+            const s =
+                String(
+                    d.status || "pending"
+                ).toLowerCase();
 
 
-            const calculatedCommission =
-                Number(
-                    d.commission ??
-                    commissionAmount(
-                        d.amount
-                    )
-                );
+            if(s === "approved"){
 
+                approved.push(d);
 
-            const screenshot =
-                d.payment_proof || "";
+            }
 
+            else if(
+                s === "rejected" ||
+                s === "failed"
+            ){
 
-            return `
+                rejected.push(d);
 
-            <div class="item">
+            }
 
-                <h3>
-                    💰 Deposit #${escapeHtml(d.id)}
-                </h3>
+            else{
 
-                <div class="row">
+                pending.push(d);
 
-                    <span class="label">
-                        Amount
-                    </span>
-
-                    <span class="value">
-                        ${money(d.amount)}
-                    </span>
-
-                </div>
-
-                <div class="row">
-
-                    <span class="label">
-                        Status
-                    </span>
-
-                    <span class="value">
-                        ${statusBadge(d.status)}
-                    </span>
-
-                </div>
-
-                <div class="row">
-
-                    <span class="label">
-                        Commission Rate
-                    </span>
-
-                    <span class="value">
-                        ${rate}%
-                    </span>
-
-                </div>
-
-                <div class="row">
-
-                    <span class="label">
-                        Commission
-                    </span>
-
-                    <span class="value">
-                        ${money(
-                            calculatedCommission
-                        )}
-                    </span>
-
-                </div>
-
-                <div class="row">
-
-                    <span class="label">
-                        Customer ID
-                    </span>
-
-                    <span class="value">
-                        ${escapeHtml(d.customer_id || "-")}
-                    </span>
-
-                </div>
-
-                <div class="row">
-
-                    <span class="label">
-                        UTR
-                    </span>
-
-                    <span class="value">
-                        ${escapeHtml(d.utr || "-")}
-                    </span>
-
-                </div>
-
-                <div class="paymentProofBox">
-
-                    <div class="paymentProofTitle">
-                        📸 Payment Screenshot
-                    </div>
-
-                    ${
-                        screenshot
-                        ?
-                        `
-                        <img
-                            src="${escapeHtml(screenshot)}"
-                            class="paymentProofImage"
-                            alt="Customer Payment Screenshot"
-                            onclick="openProof('${escapeHtml(screenshot)}')"
-                        >
-                        `
-                        :
-                        `
-                        <div class="small">
-                            ❌ Customer did not upload a payment screenshot.
-                        </div>
-                        `
-                    }
-
-                </div>
-
-                <div class="row">
-
-                    <span class="label">
-                        Created
-                    </span>
-
-                    <span class="value">
-                        ${
-                            d.created_at
-                            ?
-                            new Date(
-                                d.created_at
-                            ).toLocaleString(
-                                "en-IN"
-                            )
-                            :
-                            "-"
-                        }
-                    </span>
-
-                </div>
-
-                <div class="actions">
-
-                    ${
-                        String(d.status)
-                        .toLowerCase()
-                        === "pending"
-
-                        ?
-
-                        `
-                        <button
-                            class="green"
-                            onclick="updateDeposit(
-                                ${d.id},
-                                'approved'
-                            )"
-                        >
-                            ✅ Approve
-                        </button>
-
-                        <button
-                            class="red"
-                            onclick="updateDeposit(
-                                ${d.id},
-                                'rejected'
-                            )"
-                        >
-                            ❌ Reject
-                        </button>
-                        `
-
-                        :
-
-                        `
-                        <button
-                            class="gray"
-                            disabled
-                        >
-                            ${escapeHtml(d.status || "Processed")}
-                        </button>
-                        `
-                    }
-
-                </div>
-
-            </div>
-
-            `;
+            }
 
         }
-    ).join("");
+    );
+
+
+    /* COUNTS */
+
+    document.getElementById(
+        "pendingFolderCount"
+    ).textContent =
+        pending.length;
+
+
+    document.getElementById(
+        "approvedFolderCount"
+    ).textContent =
+        approved.length;
+
+
+    document.getElementById(
+        "rejectedFolderCount"
+    ).textContent =
+        rejected.length;
+
+
+    /* PENDING */
+
+    if(!pending.length){
+
+        pendingBox.innerHTML = `
+            <div class="empty">
+                ⏳ No pending deposit requests.
+            </div>
+        `;
+
+    }
+
+    else{
+
+        pendingBox.innerHTML =
+            pending
+            .map(
+                renderDeposit
+            )
+            .join("");
+
+    }
+
+
+    /* APPROVED */
+
+    if(!approved.length){
+
+        approvedBox.innerHTML = `
+            <div class="empty">
+                ✅ No approved deposits yet.
+            </div>
+        `;
+
+    }
+
+    else{
+
+        approvedBox.innerHTML =
+            approved
+            .map(
+                renderDeposit
+            )
+            .join("");
+
+    }
+
+
+    /* REJECTED */
+
+    if(!rejected.length){
+
+        rejectedBox.innerHTML = `
+            <div class="empty">
+                ❌ No rejected deposits yet.
+            </div>
+        `;
+
+    }
+
+    else{
+
+        rejectedBox.innerHTML =
+            rejected
+            .map(
+                renderDeposit
+            )
+            .join("");
+
+    }
 
 }
 
@@ -3764,9 +4628,13 @@ async function updateDeposit(
 
 
     if(!confirmed){
+
         return;
+
     }
 
+
+    /* APPROVE */
 
     if(status === "approved"){
 
@@ -3777,7 +4645,8 @@ async function updateDeposit(
         await supabaseClient.rpc(
             "admin_approve_customer_deposit",
             {
-                p_deposit_id:id
+                p_deposit_id:
+                    id
             }
         );
 
@@ -3822,15 +4691,21 @@ async function updateDeposit(
     }
 
 
+    /* REJECT */
+
     const {
         error
     } =
     await supabaseClient
         .from("customer_deposits")
         .update({
-            status:"rejected"
+            status:
+                "rejected"
         })
-        .eq("id",id);
+        .eq(
+            "id",
+            id
+        );
 
 
     if(error){
@@ -3892,11 +4767,10 @@ async function loadCustomers(){
 
     if(error){
 
-        box.innerHTML =
-        `
-        <div class="status error">
-            ${escapeHtml(error.message)}
-        </div>
+        box.innerHTML = `
+            <div class="status error">
+                ${escapeHtml(error.message)}
+            </div>
         `;
 
         return;
@@ -3909,11 +4783,10 @@ async function loadCustomers(){
         !data.length
     ){
 
-        box.innerHTML =
-        `
-        <div class="empty">
-            No customers found.
-        </div>
+        box.innerHTML = `
+            <div class="empty">
+                No customers found.
+            </div>
         `;
 
         return;
@@ -3932,7 +4805,6 @@ async function loadCustomers(){
             </h3>
 
             <div class="row">
-
                 <span class="label">
                     UID
                 </span>
@@ -3940,11 +4812,9 @@ async function loadCustomers(){
                 <span class="value">
                     ${escapeHtml(c.uid || "-")}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Mobile
                 </span>
@@ -3952,11 +4822,9 @@ async function loadCustomers(){
                 <span class="value">
                     ${escapeHtml(c.mobile || "-")}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Invitation Code
                 </span>
@@ -3964,81 +4832,59 @@ async function loadCustomers(){
                 <span class="value">
                     ${escapeHtml(c.invitation_code || "-")}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Wallet
                 </span>
 
                 <span class="value">
-                    ${money(
-                        c.wallet_balance
-                    )}
+                    ${money(c.wallet_balance)}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Deposit Balance
                 </span>
 
                 <span class="value">
-                    ${money(
-                        c.deposit_balance
-                    )}
+                    ${money(c.deposit_balance)}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Commission
                 </span>
 
                 <span class="value">
-                    ${money(
-                        c.commission_balance
-                    )}
+                    ${money(c.commission_balance)}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Referral
                 </span>
 
                 <span class="value">
-                    ${money(
-                        c.referral_balance
-                    )}
+                    ${money(c.referral_balance)}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Bonus
                 </span>
 
                 <span class="value">
-                    ${money(
-                        c.bonus_balance
-                    )}
+                    ${money(c.bonus_balance)}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Status
                 </span>
@@ -4046,11 +4892,9 @@ async function loadCustomers(){
                 <span class="value">
                     ${escapeHtml(c.status || "Active")}
                 </span>
-
             </div>
 
             <div class="row">
-
                 <span class="label">
                     Sell
                 </span>
@@ -4062,7 +4906,6 @@ async function loadCustomers(){
                         : "🔴 OFF"
                     }
                 </span>
-
             </div>
 
             <div class="actions">
@@ -4078,7 +4921,7 @@ async function loadCustomers(){
 
         </div>
 
-    `
+        `
     ).join("");
 
 }
@@ -4095,8 +4938,11 @@ document.addEventListener(
         const allowed =
             await verifyAdminAccess();
 
+
         if(!allowed){
+
             return;
+
         }
 
 
@@ -4120,8 +4966,11 @@ setInterval(
     async function(){
 
         if(!currentAdminUser){
+
             return;
+
         }
+
 
         await loadAdminTotals();
 
@@ -4138,8 +4987,11 @@ setInterval(
     async function(){
 
         if(!currentAdminUser){
+
             return;
+
         }
+
 
         await loadDeposits();
 
