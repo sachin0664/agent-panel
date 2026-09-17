@@ -29,8 +29,7 @@ body{
     padding-bottom:100px;
 }
 
-button,
-input{
+button,input{
     font-family:inherit;
 }
 
@@ -151,7 +150,7 @@ header{
 }
 
 /* =========================================================
-   NOTIFICATION PANEL
+   NOTIFICATIONS
 ========================================================= */
 
 .notification-panel{
@@ -246,7 +245,7 @@ header{
 }
 
 /* =========================================================
-   HERO PROFILE
+   HERO
 ========================================================= */
 
 .hero{
@@ -339,7 +338,7 @@ header{
 }
 
 /* =========================================================
-   TOP BALANCE CARDS
+   BALANCE
 ========================================================= */
 
 .balance-grid{
@@ -514,6 +513,83 @@ header{
 
 .download-icon{
     background:#e8f5ff;
+}
+
+/* =========================================================
+   TELEGRAM COMMUNITY
+========================================================= */
+
+.telegram-card{
+    margin-top:15px;
+    background:
+        linear-gradient(135deg,#0787f5 0%,#087ff5 45%,#12cda2 100%);
+    border-radius:22px;
+    padding:18px 20px;
+    color:white;
+    box-shadow:0 9px 25px rgba(8,127,245,.18);
+    display:flex;
+    align-items:center;
+    gap:15px;
+    position:relative;
+    overflow:hidden;
+}
+
+.telegram-card:after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    right:-70px;
+    top:-80px;
+    background:rgba(255,255,255,.10);
+}
+
+.telegram-icon{
+    width:62px;
+    height:62px;
+    border-radius:19px;
+    background:rgba(255,255,255,.20);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    flex-shrink:0;
+    position:relative;
+    z-index:2;
+}
+
+.telegram-info{
+    flex:1;
+    min-width:0;
+    position:relative;
+    z-index:2;
+}
+
+.telegram-title{
+    font-size:18px;
+    font-weight:900;
+}
+
+.telegram-subtitle{
+    margin-top:5px;
+    font-size:11px;
+    line-height:1.5;
+    opacity:.92;
+}
+
+.telegram-button{
+    position:relative;
+    z-index:2;
+    border:0;
+    border-radius:14px;
+    padding:13px 19px;
+    background:white;
+    color:#087ff5;
+    font-size:12px;
+    font-weight:900;
+    white-space:nowrap;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
 }
 
 /* =========================================================
@@ -751,7 +827,7 @@ header{
 }
 
 /* =========================================================
-   RECENT TRANSACTIONS
+   TRANSACTIONS
 ========================================================= */
 
 .transactions-box{
@@ -1173,6 +1249,31 @@ header{
         right:10px;
     }
 
+    .telegram-card{
+        padding:15px;
+        gap:10px;
+    }
+
+    .telegram-icon{
+        width:50px;
+        height:50px;
+        border-radius:15px;
+        font-size:27px;
+    }
+
+    .telegram-title{
+        font-size:14px;
+    }
+
+    .telegram-subtitle{
+        font-size:9px;
+    }
+
+    .telegram-button{
+        padding:11px 13px;
+        font-size:10px;
+    }
+
 }
 
 @media(max-width:380px){
@@ -1199,10 +1300,6 @@ header{
     }
 
 }
-
-/* =========================================================
-   UTILITY
-========================================================= */
 
 .hidden{
     display:none !important;
@@ -1548,6 +1645,39 @@ header{
 
     </section>
 
+    <!-- =====================================================
+         TELEGRAM
+    ====================================================== -->
+
+    <section class="telegram-card">
+
+        <div class="telegram-icon">
+            📢
+        </div>
+
+        <div class="telegram-info">
+
+            <div class="telegram-title">
+                Join Official Telegram
+            </div>
+
+            <div class="telegram-subtitle">
+                Latest updates, rewards and important
+                Sathi Pay announcements directly on Telegram.
+            </div>
+
+        </div>
+
+        <button
+            class="telegram-button"
+            onclick="openTelegram()">
+
+            JOIN NOW
+
+        </button>
+
+    </section>
+
     <section class="info-grid">
 
         <div class="deposit-commission">
@@ -1722,8 +1852,12 @@ header{
 
 </main>
 
+<!-- =========================================================
+     SECURITY MODAL
+========================================================= -->
+
 <div
-    class="security-modal"
+    class="security-modal hidden"
     id="securityModal">
 
     <div class="security-modal-box">
@@ -1791,6 +1925,10 @@ header{
     </div>
 
 </div>
+
+<!-- =========================================================
+     BOTTOM NAV
+========================================================= -->
 
 <nav class="bottom-nav">
 
@@ -1870,7 +2008,6 @@ const supabaseClient =
 
 <!-- =========================================================
      CUSTOMER SECURITY GUARD
-     IMPORTANT: MUST LOAD AFTER SUPABASE CLIENT
 ========================================================= -->
 
 <script src="customer-guard.js"></script>
@@ -1888,11 +2025,17 @@ function getCustomerId(){
             "sathiPayCustomerId"
         );
 
-    if(id && id.trim() !== ""){
+    if(
+        id &&
+        id.trim() !== ""
+    ){
+
         return id.trim();
+
     }
 
     return null;
+
 }
 
 
@@ -1903,7 +2046,9 @@ function getCustomerId(){
 function formatMoney(value){
 
     return "₹" +
-        Number(value || 0).toLocaleString(
+        Number(
+            value || 0
+        ).toLocaleString(
             "en-IN",
             {
                 minimumFractionDigits:2,
@@ -1930,7 +2075,9 @@ async function copyUID(){
         uid === "Loading..." ||
         uid === "Not available"
     ){
+
         return;
+
     }
 
     try{
@@ -1950,11 +2097,15 @@ async function copyUID(){
 
         textarea.value = uid;
 
-        document.body.appendChild(textarea);
+        document.body.appendChild(
+            textarea
+        );
 
         textarea.select();
 
-        document.execCommand("copy");
+        document.execCommand(
+            "copy"
+        );
 
         textarea.remove();
 
@@ -1977,8 +2128,12 @@ let currentReferralLink = "";
 
 async function copyReferralLink(){
 
-    if(!currentReferralLink){
+    if(
+        !currentReferralLink
+    ){
+
         return;
+
     }
 
     try{
@@ -2007,21 +2162,26 @@ async function copyReferralLink(){
 
 async function shareReferral(){
 
-    if(!currentReferralLink){
+    if(
+        !currentReferralLink
+    ){
+
         return;
+
     }
 
     const shareData = {
 
-        title:"Sathi Pay",
+        title:
+            "Sathi Pay",
 
         text:
             "Join me on Sathi Pay using my referral link:",
 
-        url:currentReferralLink
+        url:
+            currentReferralLink
 
     };
-
 
     if(
         navigator.share
@@ -2057,12 +2217,28 @@ async function shareReferral(){
 
 
 /* =========================================================
+   TELEGRAM
+========================================================= */
+
+function openTelegram(){
+
+    window.open(
+        "https://t.me/SathiPay_Official",
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+/* =========================================================
    TODAY RANGE
 ========================================================= */
 
 function getTodayRange(){
 
-    const now = new Date();
+    const now =
+        new Date();
 
     const parts =
         new Intl.DateTimeFormat(
@@ -2073,7 +2249,9 @@ function getTodayRange(){
                 month:"2-digit",
                 day:"2-digit"
             }
-        ).formatToParts(now);
+        ).formatToParts(
+            now
+        );
 
     const map = {};
 
@@ -2092,7 +2270,6 @@ function getTodayRange(){
         }
     );
 
-
     const start =
         new Date(
             `${map.year}-${map.month}-${map.day}T00:00:00+05:30`
@@ -2104,12 +2281,13 @@ function getTodayRange(){
             86400000
         );
 
-
     return {
 
-        start:start.toISOString(),
+        start:
+            start.toISOString(),
 
-        end:end.toISOString()
+        end:
+            end.toISOString()
 
     };
 
@@ -2129,13 +2307,14 @@ async function loadTodayEarnings(
 
     let total = 0;
 
-
     const {
         data,
         error
     } =
         await supabaseClient
-        .from("wallet_ledger")
+        .from(
+            "wallet_ledger"
+        )
         .select(`
             component,
             direction,
@@ -2161,7 +2340,6 @@ async function loadTodayEarnings(
             range.end
         );
 
-
     if(
         !error &&
         data
@@ -2184,7 +2362,6 @@ async function loadTodayEarnings(
                     String(
                         row.reference || ""
                     ).toLowerCase();
-
 
                 if(
                     component.includes("commission") ||
@@ -2204,11 +2381,12 @@ async function loadTodayEarnings(
 
     }
 
-
     document.getElementById(
         "todayEarnings"
     ).innerText =
-        formatMoney(total);
+        formatMoney(
+            total
+        );
 
 }
 
@@ -2224,13 +2402,14 @@ async function loadTotalEarnings(
 
     let total = 0;
 
-
     const {
         data,
         error
     } =
         await supabaseClient
-        .from("wallet_ledger")
+        .from(
+            "wallet_ledger"
+        )
         .select(`
             component,
             direction,
@@ -2246,7 +2425,6 @@ async function loadTotalEarnings(
             "direction",
             "credit"
         );
-
 
     if(
         !error &&
@@ -2271,18 +2449,15 @@ async function loadTotalEarnings(
                         row.reference || ""
                     ).toLowerCase();
 
-
                 const commission =
                     component.includes("commission") ||
                     reason.includes("commission") ||
                     reference.includes("commission");
 
-
                 const referral =
                     component.includes("referral") ||
                     reason.includes("referral") ||
                     reference.includes("referral");
-
 
                 if(
                     commission ||
@@ -2301,11 +2476,12 @@ async function loadTotalEarnings(
 
     }
 
-
     document.getElementById(
         "totalEarnings"
     ).innerText =
-        formatMoney(total);
+        formatMoney(
+            total
+        );
 
 }
 
@@ -2328,13 +2504,14 @@ async function loadNotifications(
             Loading notifications...
         </div>`;
 
-
     const {
         data,
         error
     } =
         await supabaseClient
-        .from("notifications")
+        .from(
+            "notifications"
+        )
         .select(`
             id,
             customer_id,
@@ -2357,8 +2534,9 @@ async function loadNotifications(
                 ascending:false
             }
         )
-        .limit(30);
-
+        .limit(
+            30
+        );
 
     if(error){
 
@@ -2374,12 +2552,12 @@ async function loadNotifications(
 
         document.getElementById(
             "notificationCount"
-        ).innerText = "0";
+        ).innerText =
+            "0";
 
         return;
 
     }
-
 
     if(
         !data ||
@@ -2393,12 +2571,12 @@ async function loadNotifications(
 
         document.getElementById(
             "notificationCount"
-        ).innerText = "0";
+        ).innerText =
+            "0";
 
         return;
 
     }
-
 
     document.getElementById(
         "notificationCount"
@@ -2407,22 +2585,23 @@ async function loadNotifications(
         ? "99+"
         : data.length;
 
-
     list.innerHTML = "";
-
 
     data.forEach(
         function(row){
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             item.className =
                 "notification-item";
 
-
             const title =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             title.className =
                 "notification-item-title";
@@ -2431,9 +2610,10 @@ async function loadNotifications(
                 row.title ||
                 "Sathi Pay Update";
 
-
             const message =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             message.className =
                 "notification-item-message";
@@ -2442,9 +2622,10 @@ async function loadNotifications(
                 row.message ||
                 "";
 
-
             const time =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             time.className =
                 "notification-item-time";
@@ -2454,12 +2635,21 @@ async function loadNotifications(
                     row.created_at
                 );
 
+            item.appendChild(
+                title
+            );
 
-            item.appendChild(title);
-            item.appendChild(message);
-            item.appendChild(time);
+            item.appendChild(
+                message
+            );
 
-            list.appendChild(item);
+            item.appendChild(
+                time
+            );
+
+            list.appendChild(
+                item
+            );
 
         }
     );
@@ -2486,7 +2676,7 @@ function toggleNotifications(){
 
 
 /* =========================================================
-   RECENT TRANSACTIONS
+   TRANSACTIONS
 ========================================================= */
 
 async function loadTransactions(
@@ -2498,13 +2688,14 @@ async function loadTransactions(
             "transactionList"
         );
 
-
     const {
         data,
         error
     } =
         await supabaseClient
-        .from("wallet_ledger")
+        .from(
+            "wallet_ledger"
+        )
         .select(`
             id,
             component,
@@ -2524,8 +2715,9 @@ async function loadTransactions(
                 ascending:false
             }
         )
-        .limit(5);
-
+        .limit(
+            5
+        );
 
     if(error){
 
@@ -2543,7 +2735,6 @@ async function loadTransactions(
 
     }
 
-
     if(
         !data ||
         data.length === 0
@@ -2558,9 +2749,7 @@ async function loadTransactions(
 
     }
 
-
     list.innerHTML = "";
-
 
     data.forEach(
         function(row){
@@ -2570,38 +2759,36 @@ async function loadTransactions(
                     row.direction || ""
                 ).toLowerCase();
 
-
             const isCredit =
                 direction === "credit";
-
 
             const title =
                 getTransactionTitle(
                     row
                 );
 
-
             const icon =
                 getTransactionIcon(
                     row
                 );
-
 
             const amount =
                 formatMoney(
                     row.amount
                 );
 
-
             const div =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             div.className =
                 "transaction";
 
-
             const iconDiv =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             iconDiv.className =
                 "transaction-icon " +
@@ -2614,16 +2801,18 @@ async function loadTransactions(
             iconDiv.innerText =
                 icon;
 
-
             const main =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             main.className =
                 "transaction-main";
 
-
             const titleDiv =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             titleDiv.className =
                 "transaction-title";
@@ -2631,9 +2820,10 @@ async function loadTransactions(
             titleDiv.innerText =
                 title;
 
-
             const sub =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             sub.className =
                 "transaction-sub";
@@ -2647,20 +2837,26 @@ async function loadTransactions(
                     : "Debit"
                 );
 
+            main.appendChild(
+                titleDiv
+            );
 
-            main.appendChild(titleDiv);
-            main.appendChild(sub);
-
+            main.appendChild(
+                sub
+            );
 
             const right =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             right.className =
                 "transaction-amount";
 
-
             const amountDiv =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             amountDiv.className =
                 isCredit
@@ -2672,11 +2868,13 @@ async function loadTransactions(
                     isCredit
                     ? "+ "
                     : "- "
-                ) + amount;
-
+                ) +
+                amount;
 
             const status =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
 
             status.className =
                 "transaction-status";
@@ -2686,9 +2884,10 @@ async function loadTransactions(
                 ? "Completed"
                 : "Processed";
 
-
             const time =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             time.className =
                 "transaction-time";
@@ -2698,18 +2897,33 @@ async function loadTransactions(
                     row.created_at
                 );
 
+            right.appendChild(
+                amountDiv
+            );
 
-            right.appendChild(amountDiv);
-            right.appendChild(status);
-            right.appendChild(time);
+            right.appendChild(
+                status
+            );
 
+            right.appendChild(
+                time
+            );
 
-            div.appendChild(iconDiv);
-            div.appendChild(main);
-            div.appendChild(right);
+            div.appendChild(
+                iconDiv
+            );
 
+            div.appendChild(
+                main
+            );
 
-            list.appendChild(div);
+            div.appendChild(
+                right
+            );
+
+            list.appendChild(
+                div
+            );
 
         }
     );
@@ -2721,7 +2935,9 @@ async function loadTransactions(
    TRANSACTION TITLE
 ========================================================= */
 
-function getTransactionTitle(row){
+function getTransactionTitle(
+    row
+){
 
     const text =
         (
@@ -2738,25 +2954,53 @@ function getTransactionTitle(row){
             )
         ).toLowerCase();
 
+    if(
+        text.includes("deposit")
+    ){
 
-    if(text.includes("deposit")){
         return "Deposit Received";
+
     }
 
-    if(text.includes("commission")){
+    if(
+        text.includes("commission")
+    ){
+
         return "Commission Credit";
+
     }
 
-    if(text.includes("referral")){
+    if(
+        text.includes("referral")
+    ){
+
         return "Referral Income";
+
     }
 
-    if(text.includes("bonus")){
+    if(
+        text.includes("bonus")
+    ){
+
         return "Welcome Bonus";
+
     }
 
-    if(text.includes("top")){
+    if(
+        text.includes("top")
+    ){
+
         return "Wallet Top-up";
+
+    }
+
+    if(
+        text.includes("upi") &&
+        text.includes("payment")
+    ){
+
+        return "UPI Payment";
+
     }
 
     return row.component ||
@@ -2769,36 +3013,72 @@ function getTransactionTitle(row){
    TRANSACTION ICON
 ========================================================= */
 
-function getTransactionIcon(row){
+function getTransactionIcon(
+    row
+){
 
     const text =
         (
-            String(row.component || "") +
+            String(
+                row.component || ""
+            ) +
             " " +
-            String(row.reason || "") +
+            String(
+                row.reason || ""
+            ) +
             " " +
-            String(row.reference || "")
+            String(
+                row.reference || ""
+            )
         ).toLowerCase();
 
+    if(
+        text.includes("deposit")
+    ){
 
-    if(text.includes("deposit")){
         return "💰";
+
     }
 
-    if(text.includes("commission")){
+    if(
+        text.includes("commission")
+    ){
+
         return "🎁";
+
     }
 
-    if(text.includes("referral")){
+    if(
+        text.includes("referral")
+    ){
+
         return "🔗";
+
     }
 
-    if(text.includes("bonus")){
+    if(
+        text.includes("bonus")
+    ){
+
         return "🎁";
+
     }
 
-    if(text.includes("top")){
+    if(
+        text.includes("top")
+    ){
+
         return "💼";
+
+    }
+
+    if(
+        text.includes("upi") &&
+        text.includes("payment")
+    ){
+
+        return "📲";
+
     }
 
     return "₹";
@@ -2814,14 +3094,18 @@ function formatDateTime(
     value
 ){
 
-    if(!value){
+    if(
+        !value
+    ){
+
         return "";
+
     }
 
-
     const date =
-        new Date(value);
-
+        new Date(
+            value
+        );
 
     if(
         isNaN(
@@ -2832,7 +3116,6 @@ function formatDateTime(
         return "";
 
     }
-
 
     return date.toLocaleString(
         "en-IN",
@@ -2861,14 +3144,14 @@ async function loadDashboard(){
             "message"
         );
 
-
     try{
 
         const customerId =
             getCustomerId();
 
-
-        if(!customerId){
+        if(
+            !customerId
+        ){
 
             window.location.href =
                 "customer-login.html";
@@ -2877,13 +3160,14 @@ async function loadDashboard(){
 
         }
 
-
         const {
             data:customer,
             error
         } =
             await supabaseClient
-            .from("customers")
+            .from(
+                "customers"
+            )
             .select(`
                 id,
                 name,
@@ -2904,13 +3188,15 @@ async function loadDashboard(){
             )
             .maybeSingle();
 
-
         if(error){
+
             throw error;
+
         }
 
-
-        if(!customer){
+        if(
+            !customer
+        ){
 
             message.innerText =
                 "Customer account not found.";
@@ -2919,20 +3205,17 @@ async function loadDashboard(){
 
         }
 
-
         document.getElementById(
             "customerName"
         ).innerText =
             customer.name ||
             "Customer";
 
-
         document.getElementById(
             "customerUID"
         ).innerText =
             customer.uid ||
             "Not available";
-
 
         const wallet =
             Number(
@@ -2944,50 +3227,49 @@ async function loadDashboard(){
                 customer.referral_balance || 0
             );
 
-
         document.getElementById(
             "walletBalance"
         ).innerText =
-            formatMoney(wallet);
-
+            formatMoney(
+                wallet
+            );
 
         document.getElementById(
             "referralBalance"
         ).innerText =
-            formatMoney(referral);
-
+            formatMoney(
+                referral
+            );
 
         const sellToggle =
             document.getElementById(
                 "sellToggle"
             );
 
-
         const sellOn =
             customer.sell_on === true;
 
-
         sellToggle.checked =
             sellOn;
-
 
         updateSellStatus(
             sellOn
         );
 
-
         const code =
             customer.invitation_code ||
             "";
 
-
-        if(code){
+        if(
+            code
+        ){
 
             currentReferralLink =
                 window.location.origin +
                 "/?invite=" +
-                encodeURIComponent(code);
-
+                encodeURIComponent(
+                    code
+                );
 
             document.getElementById(
                 "referralLink"
@@ -2997,7 +3279,8 @@ async function loadDashboard(){
         }
         else{
 
-            currentReferralLink = "";
+            currentReferralLink =
+                "";
 
             document.getElementById(
                 "referralLink"
@@ -3005,7 +3288,6 @@ async function loadDashboard(){
                 "Referral link not available";
 
         }
-
 
         await Promise.all([
 
@@ -3027,7 +3309,6 @@ async function loadDashboard(){
             )
 
         ]);
-
 
         message.innerText =
             "Dashboard updated";
@@ -3062,8 +3343,9 @@ function updateSellStatus(
             "sellStatus"
         );
 
-
-    if(isOn){
+    if(
+        isOn
+    ){
 
         status.innerText =
             "Sell ON";
@@ -3094,8 +3376,9 @@ async function changeSellStatus(){
     const customerId =
         getCustomerId();
 
-
-    if(!customerId){
+    if(
+        !customerId
+    ){
 
         window.location.href =
             "customer-login.html";
@@ -3104,27 +3387,25 @@ async function changeSellStatus(){
 
     }
 
-
     const toggle =
         document.getElementById(
             "sellToggle"
         );
 
-
     const newStatus =
         toggle.checked;
-
 
     updateSellStatus(
         newStatus
     );
 
-
     const {
         error
     } =
         await supabaseClient
-        .from("customers")
+        .from(
+            "customers"
+        )
         .update({
             sell_on:newStatus
         })
@@ -3132,7 +3413,6 @@ async function changeSellStatus(){
             "id",
             customerId
         );
-
 
     if(error){
 
@@ -3156,7 +3436,6 @@ async function changeSellStatus(){
 
     }
 
-
     document.getElementById(
         "message"
     ).innerText =
@@ -3178,8 +3457,9 @@ function openSecurityModal(){
             "securityModal"
         );
 
-
-    if(modal){
+    if(
+        modal
+    ){
 
         modal.classList.remove(
             "hidden"
@@ -3197,11 +3477,17 @@ function closeSecurityModal(){
             "securityModal"
         );
 
-
-    if(modal){
+    if(
+        modal
+    ){
 
         modal.classList.add(
             "hidden"
+        );
+
+        sessionStorage.setItem(
+            "sathiPaySecuritySeen",
+            "1"
         );
 
     }
@@ -3233,15 +3519,30 @@ document.addEventListener(
 
         loadDashboard();
 
+        /*
+         * Security warning only once
+         * per browser tab/session.
+         */
 
-        setTimeout(
-            function(){
+        const alreadySeen =
+            sessionStorage.getItem(
+                "sathiPaySecuritySeen"
+            );
 
-                openSecurityModal();
+        if(
+            alreadySeen !== "1"
+        ){
 
-            },
-            500
-        );
+            setTimeout(
+                function(){
+
+                    openSecurityModal();
+
+                },
+                500
+            );
+
+        }
 
     }
 );
@@ -3278,7 +3579,6 @@ document.addEventListener(
             document.querySelector(
                 ".notification-btn"
             );
-
 
         if(
             panel.classList.contains("show") &&
