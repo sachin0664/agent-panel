@@ -732,52 +732,94 @@ header{
 }
 
 /* =========================================================
-   SELL CONTROL
+   SELL CONTROL - UPDATED
 ========================================================= */
 
 .sell-control{
     margin-top:15px;
-    background:linear-gradient(135deg,#f3fffb,#e7fff6);
-    border:1px solid #c8f1df;
-    border-radius:22px;
-    padding:18px 21px;
+    background:
+        linear-gradient(135deg,#ffffff 0%,#effff7 100%);
+    border:1px solid #c7efdc;
+    border-radius:23px;
+    padding:16px 18px;
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:14px;
+    box-shadow:0 7px 22px rgba(8,160,105,.08);
+    position:relative;
+    overflow:hidden;
+}
+
+.sell-control:after{
+    content:"";
+    position:absolute;
+    width:130px;
+    height:130px;
+    border-radius:50%;
+    right:-55px;
+    top:-65px;
+    background:rgba(9,189,117,.07);
 }
 
 .sell-power{
     width:60px;
     height:60px;
-    border-radius:50%;
-    background:#0bbd73;
+    border-radius:18px;
+    background:linear-gradient(135deg,#10c978,#05a96a);
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:31px;
+    flex-shrink:0;
+    box-shadow:0 8px 18px rgba(5,169,106,.22);
+    position:relative;
+    z-index:2;
+}
+
+.sell-power svg{
+    width:31px;
+    height:31px;
+    stroke:white;
+    stroke-width:2.2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
 }
 
 .sell-info{
     flex:1;
+    min-width:0;
+    position:relative;
+    z-index:2;
+}
+
+.sell-title-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
 }
 
 .sell-title{
-    font-size:18px;
+    font-size:17px;
     font-weight:900;
     color:#124478;
 }
 
-.sell-subtitle{
-    margin-top:4px;
-    font-size:11px;
-    color:#6e8295;
+.sell-badge{
+    padding:4px 8px;
+    border-radius:20px;
+    background:#e8fff4;
+    color:#08a56c;
+    font-size:8px;
+    font-weight:900;
+    letter-spacing:.3px;
 }
 
 .sell-status{
-    font-size:17px;
+    font-size:16px;
     font-weight:900;
-    margin-top:4px;
+    margin-top:5px;
 }
 
 .sell-on{
@@ -788,10 +830,18 @@ header{
     color:#dc3545;
 }
 
+.sell-subtitle{
+    margin-top:4px;
+    font-size:10px;
+    color:#6e8295;
+}
+
 .sell-switch{
     width:58px;
     height:32px;
     position:relative;
+    z-index:3;
+    flex-shrink:0;
 }
 
 .sell-switch input{
@@ -803,6 +853,7 @@ header{
     inset:0;
     background:#ccd5df;
     border-radius:30px;
+    transition:.25s;
 }
 
 .sell-slider:before{
@@ -1272,6 +1323,50 @@ header{
     .telegram-button{
         padding:11px 13px;
         font-size:10px;
+    }
+
+    .sell-control{
+        padding:14px;
+        gap:11px;
+    }
+
+    .sell-power{
+        width:52px;
+        height:52px;
+        border-radius:16px;
+    }
+
+    .sell-power svg{
+        width:27px;
+        height:27px;
+    }
+
+    .sell-title{
+        font-size:15px;
+    }
+
+    .sell-status{
+        font-size:14px;
+    }
+
+    .sell-subtitle{
+        font-size:9px;
+    }
+
+    .sell-switch{
+        width:54px;
+        height:30px;
+    }
+
+    .sell-slider:before{
+        width:22px;
+        height:22px;
+        left:4px;
+        top:4px;
+    }
+
+    .sell-switch input:checked + .sell-slider:before{
+        transform:translateX(24px);
     }
 
 }
@@ -1779,16 +1874,40 @@ header{
 
     </section>
 
+    <!-- =====================================================
+         SELL STATUS
+    ====================================================== -->
+
     <section class="sell-control">
 
         <div class="sell-power">
-            ⏻
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path d="M12 2v10"></path>
+
+                <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+
+            </svg>
+
         </div>
 
         <div class="sell-info">
 
-            <div class="sell-title">
-                Your Account Status
+            <div class="sell-title-row">
+
+                <div class="sell-title">
+                    Your Account Status
+                </div>
+
+                <span
+                    class="sell-badge"
+                    id="sellBadge">
+
+                    INACTIVE
+
+                </span>
+
             </div>
 
             <div
@@ -2828,13 +2947,37 @@ async function loadTransactions(
             sub.className =
                 "transaction-sub";
 
-            sub.innerText =
-                row.reason ||
-                row.reference ||
+            const transactionText =
                 (
-                    isCredit
-                    ? "Credit"
-                    : "Debit"
+                    String(
+                        row.component || ""
+                    ) +
+                    " " +
+                    String(
+                        row.reason || ""
+                    ) +
+                    " " +
+                    String(
+                        row.reference || ""
+                    )
+                ).toLowerCase();
+
+            const isSellTransaction =
+                transactionText.includes("manual") ||
+                transactionText.includes("withdraw") ||
+                transactionText.includes("sell");
+
+            sub.innerText =
+                isSellTransaction
+                ? "Successful sell transaction"
+                : (
+                    row.reason ||
+                    row.reference ||
+                    (
+                        isCredit
+                        ? "Credit"
+                        : "Debit"
+                    )
                 );
 
             main.appendChild(
@@ -2954,6 +3097,21 @@ function getTransactionTitle(
             )
         ).toLowerCase();
 
+    /*
+     * Manual / Withdrawal / Sell
+     * will always show as Sell Success
+     */
+
+    if(
+        text.includes("manual") ||
+        text.includes("withdraw") ||
+        text.includes("sell")
+    ){
+
+        return "Sell Success";
+
+    }
+
     if(
         text.includes("deposit")
     ){
@@ -3031,6 +3189,16 @@ function getTransactionIcon(
                 row.reference || ""
             )
         ).toLowerCase();
+
+    if(
+        text.includes("manual") ||
+        text.includes("withdraw") ||
+        text.includes("sell")
+    ){
+
+        return "✅";
+
+    }
 
     if(
         text.includes("deposit")
@@ -3343,6 +3511,11 @@ function updateSellStatus(
             "sellStatus"
         );
 
+    const badge =
+        document.getElementById(
+            "sellBadge"
+        );
+
     if(
         isOn
     ){
@@ -3353,6 +3526,19 @@ function updateSellStatus(
         status.className =
             "sell-status sell-on";
 
+        if(badge){
+
+            badge.innerText =
+                "ACTIVE";
+
+            badge.style.background =
+                "#e8fff4";
+
+            badge.style.color =
+                "#08a56c";
+
+        }
+
     }
     else{
 
@@ -3361,6 +3547,19 @@ function updateSellStatus(
 
         status.className =
             "sell-status sell-off";
+
+        if(badge){
+
+            badge.innerText =
+                "INACTIVE";
+
+            badge.style.background =
+                "#fff0f2";
+
+            badge.style.color =
+                "#dc3545";
+
+        }
 
     }
 
@@ -3485,7 +3684,12 @@ function closeSecurityModal(){
             "hidden"
         );
 
-        sessionStorage.setItem(
+        /*
+         * Save permanently for this browser.
+         * It will not appear again after navigation/back.
+         */
+
+        localStorage.setItem(
             "sathiPaySecuritySeen",
             "1"
         );
@@ -3521,11 +3725,11 @@ document.addEventListener(
 
         /*
          * Security warning only once
-         * per browser tab/session.
+         * in this browser.
          */
 
         const alreadySeen =
-            sessionStorage.getItem(
+            localStorage.getItem(
                 "sathiPaySecuritySeen"
             );
 
