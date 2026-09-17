@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sathi Pay - Admin Wallet Management</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -325,8 +327,8 @@ header{
     margin-top:10px;
     padding:10px;
     border-radius:11px;
-    background:#fff7ed;
-    color:#9a3412;
+    background:#eff6ff;
+    color:#1d4ed8;
     font-size:11px;
     font-weight:700;
 }
@@ -531,7 +533,7 @@ header{
     flex-wrap:wrap;
 }
 
-.withdraw-section{
+.payment-section{
     margin-top:18px;
     padding:18px;
     background:#f8faff;
@@ -539,7 +541,7 @@ header{
     border-radius:16px;
 }
 
-.withdraw-form{
+.payment-form{
     display:grid;
     grid-template-columns:1fr 1fr auto;
     gap:10px;
@@ -571,7 +573,7 @@ header{
     resize:vertical;
 }
 
-.withdraw-note{
+.payment-note{
     margin-top:10px;
 }
 
@@ -648,6 +650,11 @@ td{
     color:#3730a3;
 }
 
+.payment-badge{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
 .approved{
     color:#15803d;
     font-weight:800;
@@ -699,31 +706,6 @@ td{
     margin-bottom:15px;
 }
 
-.modal-field{
-    margin-top:13px;
-}
-
-.modal-field label{
-    display:block;
-    margin-bottom:6px;
-    font-size:12px;
-    font-weight:700;
-    color:#374151;
-}
-
-.modal-field input{
-    width:100%;
-    padding:12px;
-    border:1px solid #dce2ef;
-    border-radius:11px;
-    outline:none;
-    font-size:13px;
-}
-
-.modal-field input:focus{
-    border-color:#6366f1;
-}
-
 .modal-actions{
     display:flex;
     gap:10px;
@@ -766,6 +748,7 @@ td{
 }
 
 @media(max-width:1050px){
+
     .stats{
         grid-template-columns:repeat(2,1fr);
     }
@@ -785,9 +768,11 @@ td{
     .upi-grid{
         grid-template-columns:repeat(2,1fr);
     }
+
 }
 
 @media(max-width:700px){
+
     header{
         padding:15px;
     }
@@ -844,7 +829,7 @@ td{
         grid-template-columns:1fr;
     }
 
-    .withdraw-form{
+    .payment-form{
         grid-template-columns:1fr;
     }
 
@@ -867,13 +852,18 @@ td{
     .modal-actions{
         flex-direction:column;
     }
+
 }
+
 </style>
 </head>
 
+
 <body class="pageLocked">
 
+
 <header>
+
     <div class="header-inner">
 
         <div class="logo">
@@ -883,35 +873,52 @@ td{
 
         <div class="header-actions">
 
-            <a href="admin.html" class="back-btn">
+            <a
+                href="admin.html"
+                class="back-btn">
+
                 ← Admin Panel
+
             </a>
 
             <button
                 type="button"
                 class="security-btn"
                 onclick="openSecurity()">
+
                 🔐 Security
+
             </button>
 
             <button
                 type="button"
                 class="logout-btn"
                 onclick="logoutAdmin()">
+
                 🚪 Logout
+
             </button>
 
         </div>
 
     </div>
+
 </header>
 
 
 <div class="container">
 
+
     <div class="title">
-        <h1>Customer Wallet Management</h1>
-        <p>All customers, complete wallet history, UPI management and customer payments.</p>
+
+        <h1>
+            Customer Wallet Management
+        </h1>
+
+        <p>
+            Manage customer wallet, UPI IDs, manual UPI payments and complete wallet ledger.
+        </p>
+
     </div>
 
 
@@ -919,29 +926,74 @@ td{
 
     <div class="stats">
 
-        <div class="stat">
-            <div class="stat-icon">👥</div>
-            <h3>Total Customers</h3>
-            <strong id="totalCustomers">0</strong>
-        </div>
 
         <div class="stat">
-            <div class="stat-icon">💰</div>
-            <h3>Total Wallet Balance</h3>
-            <strong id="totalWallet">₹0.00</strong>
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <h3>
+                Total Customers
+            </h3>
+
+            <strong id="totalCustomers">
+                0
+            </strong>
+
         </div>
 
-        <div class="stat">
-            <div class="stat-icon">📥</div>
-            <h3>Total Deposit Balance</h3>
-            <strong id="totalDeposit">₹0.00</strong>
-        </div>
 
         <div class="stat">
-            <div class="stat-icon">📤</div>
-            <h3>Total Payment Given</h3>
-            <strong id="totalPayments">₹0.00</strong>
+
+            <div class="stat-icon">
+                💰
+            </div>
+
+            <h3>
+                Total Wallet Balance
+            </h3>
+
+            <strong id="totalWallet">
+                ₹0.00
+            </strong>
+
         </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📥
+            </div>
+
+            <h3>
+                Total Deposit Balance
+            </h3>
+
+            <strong id="totalDeposit">
+                ₹0.00
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                💳
+            </div>
+
+            <h3>
+                Total UPI Payments
+            </h3>
+
+            <strong id="totalPayments">
+                ₹0.00
+            </strong>
+
+        </div>
+
 
     </div>
 
@@ -954,6 +1006,7 @@ td{
             🔎 Customer UID Search
         </div>
 
+
         <div class="search-row">
 
             <input
@@ -963,16 +1016,23 @@ td{
                 autocomplete="off"
             >
 
+
             <button
                 class="btn"
                 id="searchBtn"
                 onclick="searchCustomer()">
+
                 Search
+
             </button>
 
         </div>
 
-        <div id="searchMessage" class="message"></div>
+
+        <div
+            id="searchMessage"
+            class="message">
+        </div>
 
     </div>
 
@@ -985,7 +1045,10 @@ td{
             👥 All Customers
         </div>
 
-        <div id="customersGrid" class="customers-grid">
+
+        <div
+            id="customersGrid"
+            class="customers-grid">
 
             <div class="loading">
                 Loading customers...
@@ -998,33 +1061,49 @@ td{
 
     <!-- CUSTOMER DETAILS -->
 
-    <div class="details-card" id="detailsCard">
+    <div
+        class="details-card"
+        id="detailsCard">
+
 
         <div class="customer-header">
 
             <div class="customer-header-top">
 
+
                 <div>
-                    <h2 id="detailName">Customer</h2>
+
+                    <h2 id="detailName">
+                        Customer
+                    </h2>
+
 
                     <p>
+
                         UID:
                         <b id="detailUid">-</b>
+
                         <br>
 
                         Mobile:
                         <b id="detailMobile">-</b>
+
                         <br>
 
                         Status:
                         <b id="detailStatus">-</b>
+
                     </p>
+
                 </div>
+
 
                 <button
                     class="btn btn-small"
                     onclick="closeDetails()">
+
                     Close
+
                 </button>
 
             </div>
@@ -1043,14 +1122,20 @@ td{
                 Current Wallet Balance
             </div>
 
+
             <div
                 class="wallet-total"
                 id="detailWallet">
+
                 ₹0.00
+
             </div>
 
+
             <div class="wallet-sub">
+
                 Deposit + Commission + Referral Income + Bonus
+
             </div>
 
         </div>
@@ -1058,41 +1143,82 @@ td{
 
         <div class="balance-grid">
 
+
             <div class="balance deposit">
-                <small>Current Deposit Balance</small>
-                <strong id="detailDeposit">₹0.00</strong>
+
+                <small>
+                    Current Deposit Balance
+                </small>
+
+                <strong id="detailDeposit">
+                    ₹0.00
+                </strong>
+
             </div>
+
 
             <div class="balance commission">
-                <small>Commission Balance</small>
-                <strong id="detailCommission">₹0.00</strong>
+
+                <small>
+                    Commission Balance
+                </small>
+
+                <strong id="detailCommission">
+                    ₹0.00
+                </strong>
+
             </div>
+
 
             <div class="balance referral">
-                <small>Referral Income</small>
-                <strong id="detailReferral">₹0.00</strong>
+
+                <small>
+                    Referral Income
+                </small>
+
+                <strong id="detailReferral">
+                    ₹0.00
+                </strong>
+
             </div>
+
 
             <div class="balance bonus">
-                <small>Bonus Balance</small>
-                <strong id="detailBonus">₹0.00</strong>
+
+                <small>
+                    Bonus Balance
+                </small>
+
+                <strong id="detailBonus">
+                    ₹0.00
+                </strong>
+
             </div>
 
+
             <div class="balance payment">
-                <small>Total Payment Given</small>
-                <strong id="detailPayments">₹0.00</strong>
+
+                <small>
+                    Total UPI Payment
+                </small>
+
+                <strong id="detailPayments">
+                    ₹0.00
+                </strong>
+
             </div>
 
         </div>
 
 
-        <!-- UPI -->
+        <!-- CUSTOMER UPI -->
 
         <div class="upi-section">
 
             <div class="section-heading">
                 💳 Customer UPI IDs
             </div>
+
 
             <div
                 id="upiGrid"
@@ -1107,30 +1233,52 @@ td{
         </div>
 
 
-        <!-- WITHDRAWAL -->
+        <!-- UPI PAYMENT -->
 
-        <div class="withdraw-section">
-
-            <div class="section-heading" style="margin-top:0;">
-                📤 Approve Customer Payment
-            </div>
+        <div class="payment-section">
 
             <div
-                id="withdrawMessage"
+                class="section-heading"
+                style="margin-top:0;">
+
+                💳 Manual UPI Payment
+
+            </div>
+
+
+            <p
+                style="
+                    color:#64748b;
+                    font-size:12px;
+                    line-height:1.5;
+                    margin-bottom:15px;
+                ">
+
+                Admin sends the payment externally and records the exact amount here.
+                After confirmation, the amount is debited from the customer's wallet
+                and a wallet ledger entry is created.
+
+            </p>
+
+
+            <div
+                id="paymentMessage"
                 class="message">
             </div>
 
-            <div class="withdraw-form">
+
+            <div class="payment-form">
+
 
                 <div class="field">
 
                     <label>
-                        Amount
+                        Payment Amount
                     </label>
 
                     <input
                         type="number"
-                        id="withdrawAmount"
+                        id="paymentAmount"
                         min="1"
                         step="0.01"
                         placeholder="₹ Amount">
@@ -1144,7 +1292,7 @@ td{
                         Enabled UPI
                     </label>
 
-                    <select id="withdrawUpi">
+                    <select id="paymentUpi">
 
                         <option value="">
                             Select enabled UPI
@@ -1157,27 +1305,28 @@ td{
 
                 <button
                     class="btn btn-success"
-                    id="approveBtn"
-                    onclick="approveWithdrawal()">
+                    id="paymentBtn"
+                    onclick="startPayment()">
 
-                    Approve & Debit
+                    Record UPI Payment
 
                 </button>
+
 
             </div>
 
 
-            <div class="withdraw-note">
+            <div class="payment-note">
 
                 <div class="field">
 
                     <label>
-                        Payment Note (optional)
+                        Payment Note
                     </label>
 
                     <textarea
-                        id="withdrawNote"
-                        placeholder="Example: Customer payment approved"></textarea>
+                        id="paymentNote"
+                        placeholder="Example: UPI payment sent to customer"></textarea>
 
                 </div>
 
@@ -1189,8 +1338,11 @@ td{
         <!-- PAYMENT HISTORY -->
 
         <div class="section-heading">
-            📤 Payment / Withdrawal History
+
+            💳 UPI Payment History
+
         </div>
+
 
         <div class="table-wrap">
 
@@ -1199,21 +1351,44 @@ td{
                 <thead>
 
                     <tr>
-                        <th>Date</th>
-                        <th>UPI</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Note</th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            UPI
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Note
+                        </th>
+
                     </tr>
 
                 </thead>
 
-                <tbody id="withdrawalBody">
+
+                <tbody id="paymentBody">
 
                     <tr>
-                        <td colspan="5" class="empty">
+
+                        <td
+                            colspan="5"
+                            class="empty">
+
                             Loading payment history...
+
                         </td>
+
                     </tr>
 
                 </tbody>
@@ -1226,8 +1401,11 @@ td{
         <!-- COMPLETE LEDGER -->
 
         <div class="section-heading">
+
             📊 Complete Wallet Ledger
+
         </div>
+
 
         <div class="table-wrap">
 
@@ -1236,23 +1414,52 @@ td{
                 <thead>
 
                     <tr>
-                        <th>Date</th>
-                        <th>Component</th>
-                        <th>Direction</th>
-                        <th>Amount</th>
-                        <th>Balance After</th>
-                        <th>Reason</th>
-                        <th>Reference</th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Component
+                        </th>
+
+                        <th>
+                            Direction
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Balance After
+                        </th>
+
+                        <th>
+                            Reason
+                        </th>
+
+                        <th>
+                            Reference
+                        </th>
+
                     </tr>
 
                 </thead>
 
+
                 <tbody id="ledgerBody">
 
                     <tr>
-                        <td colspan="7" class="empty">
+
+                        <td
+                            colspan="7"
+                            class="empty">
+
                             Loading wallet ledger...
+
                         </td>
+
                     </tr>
 
                 </tbody>
@@ -1265,8 +1472,11 @@ td{
         <!-- DEPOSIT HISTORY -->
 
         <div class="section-heading">
+
             📥 Complete Deposit History
+
         </div>
+
 
         <div class="table-wrap">
 
@@ -1275,21 +1485,44 @@ td{
                 <thead>
 
                     <tr>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Commission</th>
-                        <th>UTR</th>
-                        <th>Status</th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Commission
+                        </th>
+
+                        <th>
+                            UTR
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
                     </tr>
 
                 </thead>
 
+
                 <tbody id="depositBody">
 
                     <tr>
-                        <td colspan="5" class="empty">
+
+                        <td
+                            colspan="5"
+                            class="empty">
+
                             Loading deposit history...
+
                         </td>
+
                     </tr>
 
                 </tbody>
@@ -1298,26 +1531,34 @@ td{
 
         </div>
 
+
     </div>
 
 </div>
 
 
-<!-- CONFIRM PAYMENT MODAL -->
+<!-- CONFIRM PAYMENT -->
 
-<div class="modal" id="confirmModal">
+<div
+    class="modal"
+    id="confirmModal">
+
 
     <div class="modal-box">
 
+
         <h3>
-            Confirm Customer Payment
+            Confirm UPI Payment
         </h3>
+
 
         <p id="confirmText">
             Are you sure?
         </p>
 
+
         <div class="modal-actions">
+
 
             <button
                 class="btn"
@@ -1326,6 +1567,7 @@ td{
                 Cancel
 
             </button>
+
 
             <button
                 class="btn btn-success"
@@ -1345,27 +1587,35 @@ td{
 
 <!-- SECURITY MODAL -->
 
-<div class="modal" id="securityModal">
+<div
+    class="modal"
+    id="securityModal">
+
 
     <div class="modal-box">
+
 
         <h3>
             🔐 Admin Security
         </h3>
 
+
         <p>
             Change your admin password or securely logout from this device.
         </p>
 
+
         <div class="security-email">
+
             Logged in as:
             <b id="securityEmail">-</b>
+
         </div>
 
 
         <div class="modal-field">
 
-            <label for="currentAdminPassword">
+            <label>
                 Current Password
             </label>
 
@@ -1380,7 +1630,7 @@ td{
 
         <div class="modal-field">
 
-            <label for="newAdminPassword">
+            <label>
                 New Password
             </label>
 
@@ -1396,7 +1646,7 @@ td{
 
         <div class="modal-field">
 
-            <label for="confirmAdminPassword">
+            <label>
                 Confirm New Password
             </label>
 
@@ -1426,6 +1676,7 @@ td{
                 Close
 
             </button>
+
 
             <button
                 type="button"
@@ -1458,9 +1709,8 @@ td{
 </div>
 
 
-<!-- SUPABASE -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
@@ -1488,11 +1738,15 @@ const supabaseClient =
 let currentAdminUser = null;
 
 let customers = [];
+
 let upis = [];
+
 let currentCustomer = null;
+
 let pendingPayment = null;
 
 let pageInitialized = false;
+
 let redirecting = false;
 
 
@@ -1549,11 +1803,14 @@ async function verifyAdminAccess(){
                 adminError
             );
 
+
             await supabaseClient.auth.signOut();
+
 
             window.location.replace(
                 "admin-login.html"
             );
+
 
             return false;
 
@@ -1571,6 +1828,7 @@ async function verifyAdminAccess(){
             "pageLocked"
         );
 
+
         document.body.classList.add(
             "pageReady"
         );
@@ -1587,9 +1845,11 @@ async function verifyAdminAccess(){
             error
         );
 
+
         window.location.replace(
             "admin-login.html"
         );
+
 
         return false;
 
@@ -1608,6 +1868,7 @@ async function logoutAdmin(){
 
     redirecting = true;
 
+
     try{
 
         await supabaseClient.auth.signOut();
@@ -1622,6 +1883,7 @@ async function logoutAdmin(){
         );
 
     }
+
 
     window.location.replace(
         "admin-login.html"
@@ -1720,6 +1982,7 @@ function hideSecurityMessage(){
 
 
     el.textContent = "";
+
 
     el.className =
         "security-message";
@@ -1838,11 +2101,13 @@ async function changeAdminPassword(){
             error:loginError
         } =
         await supabaseClient.auth.signInWithPassword({
+
             email:
                 currentAdminUser.email,
 
             password:
                 currentPassword
+
         });
 
 
@@ -1859,8 +2124,10 @@ async function changeAdminPassword(){
             error:updateError
         } =
         await supabaseClient.auth.updateUser({
+
             password:
                 newPassword
+
         });
 
 
@@ -1884,6 +2151,7 @@ async function changeAdminPassword(){
             async function(){
 
                 await supabaseClient.auth.signOut();
+
 
                 window.location.replace(
                     "admin-login.html"
@@ -1915,6 +2183,7 @@ async function changeAdminPassword(){
 
         button.disabled =
             false;
+
 
         button.textContent =
             "🔑 Change Password";
@@ -1950,9 +2219,13 @@ function formatDate(value){
 
     if(!value) return "-";
 
-    const d = new Date(value);
+
+    const d =
+        new Date(value);
+
 
     if(isNaN(d.getTime())) return "-";
+
 
     return d.toLocaleString(
         "en-IN",
@@ -2000,7 +2273,8 @@ function showMessage(
         );
 
 
-    el.textContent = text;
+    el.textContent =
+        text;
 
 
     el.className =
@@ -2054,27 +2328,27 @@ async function loadCustomers(){
         data,
         error
     } =
-        await supabaseClient
-        .from("customers")
-        .select(`
-            id,
-            name,
-            mobile,
-            uid,
-            status,
-            wallet_balance,
-            deposit_balance,
-            commission_balance,
-            referral_balance,
-            bonus_balance,
-            sell_on
-        `)
-        .order(
-            "wallet_balance",
-            {
-                ascending:false
-            }
-        );
+    await supabaseClient
+    .from("customers")
+    .select(`
+        id,
+        name,
+        mobile,
+        uid,
+        status,
+        wallet_balance,
+        deposit_balance,
+        commission_balance,
+        referral_balance,
+        bonus_balance,
+        sell_on
+    `)
+    .order(
+        "wallet_balance",
+        {
+            ascending:false
+        }
+    );
 
 
     if(error){
@@ -2106,6 +2380,7 @@ async function loadCustomers(){
 
     renderCustomers();
 
+
     calculateGlobalStats();
 
 }
@@ -2121,23 +2396,23 @@ async function loadAllUpis(){
         data,
         error
     } =
-        await supabaseClient
-        .from("customer_upis")
-        .select(`
-            id,
-            customer_id,
-            upi_id,
-            provider,
-            enabled,
-            min_amount,
-            max_amount
-        `)
-        .order(
-            "created_at",
-            {
-                ascending:true
-            }
-        );
+    await supabaseClient
+    .from("customer_upis")
+    .select(`
+        id,
+        customer_id,
+        upi_id,
+        provider,
+        enabled,
+        min_amount,
+        max_amount
+    `)
+    .order(
+        "created_at",
+        {
+            ascending:true
+        }
+    );
 
 
     if(error){
@@ -2190,13 +2465,14 @@ async function calculateGlobalStats(){
         data,
         error
     } =
-        await supabaseClient
-        .from("withdrawal_requests")
-        .select("amount")
-        .eq(
-            "status",
-            "approved"
-        );
+    await supabaseClient
+    .from("wallet_ledger")
+    .select(`
+        amount,
+        direction,
+        reason,
+        component
+    `);
 
 
     let payments = 0;
@@ -2207,10 +2483,39 @@ async function calculateGlobalStats(){
         (data || []).forEach(
             row => {
 
-                payments +=
-                    Number(
-                        row.amount || 0
-                    );
+                const reason =
+                    String(
+                        row.reason || ""
+                    ).toLowerCase();
+
+
+                const component =
+                    String(
+                        row.component || ""
+                    ).toLowerCase();
+
+
+                const direction =
+                    String(
+                        row.direction || ""
+                    ).toLowerCase();
+
+
+                if(
+                    direction === "debit" &&
+                    (
+                        component === "payment" ||
+                        component === "manual" ||
+                        reason.includes("upi payment")
+                    )
+                ){
+
+                    payments +=
+                        Number(
+                            row.amount || 0
+                        );
+
+                }
 
             }
         );
@@ -2272,8 +2577,12 @@ function renderCustomers(
                 const customerUpis =
                     upis.filter(
                         u =>
-                            u.customer_id ===
-                            customer.id
+                            String(
+                                u.customer_id
+                            ) ===
+                            String(
+                                customer.id
+                            )
                     );
 
 
@@ -2282,9 +2591,11 @@ function renderCustomers(
 
 
                 return `
+
                     <div
                         class="customer-card"
                         onclick="openCustomer('${esc(customer.id)}')">
+
 
                         <div class="customer-top">
 
@@ -2300,14 +2611,21 @@ function renderCustomers(
 
                             </div>
 
+
                             <div class="status">
-                                ${esc(String(customer.status || "ACTIVE").toUpperCase())}
+                                ${esc(
+                                    String(
+                                        customer.status ||
+                                        "ACTIVE"
+                                    ).toUpperCase()
+                                )}
                             </div>
 
                         </div>
 
 
                         <div class="customer-money">
+
 
                             <div class="money-box">
 
@@ -2334,6 +2652,7 @@ function renderCustomers(
 
                             </div>
 
+
                         </div>
 
 
@@ -2359,7 +2678,9 @@ function renderCustomers(
 
                         </div>
 
+
                     </div>
+
                 `;
 
             }
@@ -2405,8 +2726,9 @@ async function searchCustomer(){
     const found =
         customers.find(
             c =>
-                String(c.uid || "")
-                .toLowerCase()
+                String(
+                    c.uid || ""
+                ).toLowerCase()
                 ===
                 uid.toLowerCase()
         );
@@ -2511,10 +2833,11 @@ async function openCustomer(
 
     updateCustomerBalances();
 
+
     renderCustomerUpis();
 
 
-    loadWithdrawalHistory(
+    loadPaymentHistory(
         customer.id
     );
 
@@ -2592,17 +2915,18 @@ async function updateCustomerBalances(){
         data,
         error
     } =
-        await supabaseClient
-        .from("withdrawal_requests")
-        .select("amount")
-        .eq(
-            "customer_id",
-            currentCustomer.id
-        )
-        .eq(
-            "status",
-            "approved"
-        );
+    await supabaseClient
+    .from("wallet_ledger")
+    .select(`
+        amount,
+        direction,
+        reason,
+        component
+    `)
+    .eq(
+        "customer_id",
+        currentCustomer.id
+    );
 
 
     let total = 0;
@@ -2613,10 +2937,38 @@ async function updateCustomerBalances(){
         (data || []).forEach(
             row => {
 
-                total +=
-                    Number(
-                        row.amount || 0
-                    );
+                const reason =
+                    String(
+                        row.reason || ""
+                    ).toLowerCase();
+
+
+                const component =
+                    String(
+                        row.component || ""
+                    ).toLowerCase();
+
+
+                const direction =
+                    String(
+                        row.direction || ""
+                    ).toLowerCase();
+
+
+                if(
+                    direction === "debit" &&
+                    (
+                        component === "payment" ||
+                        reason.includes("upi payment")
+                    )
+                ){
+
+                    total +=
+                        Number(
+                            row.amount || 0
+                        );
+
+                }
 
             }
         );
@@ -2650,8 +3002,12 @@ function renderCustomerUpis(){
     const customerUpis =
         upis.filter(
             u =>
-                u.customer_id ===
-                currentCustomer.id
+                String(
+                    u.customer_id
+                ) ===
+                String(
+                    currentCustomer.id
+                )
         );
 
 
@@ -2664,7 +3020,7 @@ function renderCustomerUpis(){
         `;
 
 
-        populateWithdrawalUpis();
+        populatePaymentUpis();
 
         return;
 
@@ -2680,7 +3036,9 @@ function renderCustomerUpis(){
 
 
                 return `
+
                     <div class="upi-card">
+
 
                         <div class="upi-head">
 
@@ -2692,10 +3050,14 @@ function renderCustomerUpis(){
 
                                 <div class="upi-provider">
                                     Provider:
-                                    ${esc(u.provider || "Other")}
+                                    ${esc(
+                                        u.provider ||
+                                        "Other"
+                                    )}
                                 </div>
 
                             </div>
+
 
                             <span class="${
                                 enabled
@@ -2714,7 +3076,11 @@ function renderCustomerUpis(){
                         </div>
 
 
-                        <div style="font-size:11px;color:#64748b;">
+                        <div
+                            style="
+                                font-size:11px;
+                                color:#64748b;
+                            ">
 
                             Limit:
                             ${money(u.min_amount)}
@@ -2726,16 +3092,20 @@ function renderCustomerUpis(){
 
                         <div class="upi-actions">
 
+
                             <button
                                 class="btn btn-small ${
                                     enabled
                                     ? "btn-warning"
                                     : "btn-success"
                                 }"
-                                onclick="toggleUpi(
-                                    '${esc(u.id)}',
-                                    ${!enabled}
-                                ); event.stopPropagation();">
+                                onclick="
+                                    toggleUpi(
+                                        '${esc(u.id)}',
+                                        ${!enabled}
+                                    );
+                                    event.stopPropagation();
+                                ">
 
                                 ${
                                     enabled
@@ -2748,24 +3118,30 @@ function renderCustomerUpis(){
 
                             <button
                                 class="btn btn-danger btn-small"
-                                onclick="deleteUpi(
-                                    '${esc(u.id)}'
-                                ); event.stopPropagation();">
+                                onclick="
+                                    deleteUpi(
+                                        '${esc(u.id)}'
+                                    );
+                                    event.stopPropagation();
+                                ">
 
                                 Delete
 
                             </button>
 
+
                         </div>
 
+
                     </div>
+
                 `;
 
             }
         ).join("");
 
 
-    populateWithdrawalUpis();
+    populatePaymentUpis();
 
 }
 
@@ -2785,19 +3161,21 @@ async function toggleUpi(
     const {
         error
     } =
-        await supabaseClient
-        .from("customer_upis")
-        .update({
-            enabled:
-                enabled,
+    await supabaseClient
+    .from("customer_upis")
+    .update({
 
-            updated_at:
-                new Date().toISOString()
-        })
-        .eq(
-            "id",
-            upiId
-        );
+        enabled:
+            enabled,
+
+        updated_at:
+            new Date().toISOString()
+
+    })
+    .eq(
+        "id",
+        upiId
+    );
 
 
     if(error){
@@ -2806,7 +3184,7 @@ async function toggleUpi(
 
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Unable to update UPI.",
             "error"
         );
@@ -2818,7 +3196,7 @@ async function toggleUpi(
 
 
     showMessage(
-        "withdrawMessage",
+        "paymentMessage",
         enabled
         ? "UPI enabled successfully."
         : "UPI disabled successfully.",
@@ -2827,6 +3205,7 @@ async function toggleUpi(
 
 
     await loadAllUpis();
+
 
     renderCustomerUpis();
 
@@ -2869,13 +3248,13 @@ async function deleteUpi(
     const {
         error
     } =
-        await supabaseClient
-        .from("customer_upis")
-        .delete()
-        .eq(
-            "id",
-            upiId
-        );
+    await supabaseClient
+    .from("customer_upis")
+    .delete()
+    .eq(
+        "id",
+        upiId
+    );
 
 
     if(error){
@@ -2884,8 +3263,8 @@ async function deleteUpi(
 
 
         showMessage(
-            "withdrawMessage",
-            "Unable to delete UPI. It may be linked with payment history.",
+            "paymentMessage",
+            "Unable to delete UPI.",
             "error"
         );
 
@@ -2896,7 +3275,7 @@ async function deleteUpi(
 
 
     showMessage(
-        "withdrawMessage",
+        "paymentMessage",
         "UPI deleted successfully.",
         "success"
     );
@@ -2904,27 +3283,30 @@ async function deleteUpi(
 
     await loadAllUpis();
 
+
     renderCustomerUpis();
 
 }
 
 
 /* =====================================================
-   WITHDRAWAL UPI OPTIONS
+   PAYMENT UPI OPTIONS
 ===================================================== */
 
-function populateWithdrawalUpis(){
+function populatePaymentUpis(){
 
     const select =
         document.getElementById(
-            "withdrawUpi"
+            "paymentUpi"
         );
 
 
     select.innerHTML = `
+
         <option value="">
             Select enabled UPI
         </option>
+
     `;
 
 
@@ -2934,8 +3316,12 @@ function populateWithdrawalUpis(){
     const enabledUpis =
         upis.filter(
             u =>
-                u.customer_id ===
-                currentCustomer.id &&
+                String(
+                    u.customer_id
+                ) ===
+                String(
+                    currentCustomer.id
+                ) &&
                 u.enabled === true
         );
 
@@ -2981,6 +3367,7 @@ function populateWithdrawalUpis(){
 
         option.value = "";
 
+
         option.textContent =
             "No enabled UPI available";
 
@@ -2995,15 +3382,15 @@ function populateWithdrawalUpis(){
 
 
 /* =====================================================
-   APPROVE WITHDRAWAL
+   START PAYMENT
 ===================================================== */
 
-function approveWithdrawal(){
+function startPayment(){
 
     if(!currentCustomer){
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Please select a customer first.",
             "error"
         );
@@ -3016,20 +3403,20 @@ function approveWithdrawal(){
     const amount =
         Number(
             document.getElementById(
-                "withdrawAmount"
+                "paymentAmount"
             ).value
         );
 
 
     const upiId =
         document.getElementById(
-            "withdrawUpi"
+            "paymentUpi"
         ).value;
 
 
     const note =
         document.getElementById(
-            "withdrawNote"
+            "paymentNote"
         ).value.trim();
 
 
@@ -3039,7 +3426,7 @@ function approveWithdrawal(){
     ){
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Enter a valid payment amount.",
             "error"
         );
@@ -3058,7 +3445,7 @@ function approveWithdrawal(){
     ){
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Payment amount is greater than current wallet balance.",
             "error"
         );
@@ -3071,7 +3458,7 @@ function approveWithdrawal(){
     if(!upiId){
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Select an enabled UPI.",
             "error"
         );
@@ -3095,7 +3482,7 @@ function approveWithdrawal(){
     ){
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Selected UPI is disabled or unavailable.",
             "error"
         );
@@ -3114,7 +3501,7 @@ function approveWithdrawal(){
     ){
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Amount is below the selected UPI minimum limit.",
             "error"
         );
@@ -3133,7 +3520,7 @@ function approveWithdrawal(){
     ){
 
         showMessage(
-            "withdrawMessage",
+            "paymentMessage",
             "Amount exceeds the selected UPI maximum limit.",
             "error"
         );
@@ -3197,7 +3584,7 @@ function approveWithdrawal(){
         ) +
         "</b><br><br>" +
 
-        "Wallet will be debited immediately after approval.";
+        "Wallet will be debited and a UPI Payment ledger entry will be created.";
 
 
     document.getElementById(
@@ -3231,13 +3618,16 @@ async function confirmPayment(){
         "Processing...";
 
 
-    const {
-        data,
-        error
-    } =
+    try{
+
+        const {
+            data,
+            error
+        } =
         await supabaseClient.rpc(
-            "admin_approve_customer_withdrawal",
+            "admin_debit_customer_wallet",
             {
+
                 p_customer_id:
                     pendingPayment.customerId,
 
@@ -3250,8 +3640,90 @@ async function confirmPayment(){
                 p_note:
                     pendingPayment.note ||
                     null
+
             }
         );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        closeConfirm();
+
+
+        showMessage(
+            "paymentMessage",
+            "UPI Payment recorded successfully. Wallet debited by " +
+            money(
+                pendingPayment.amount
+            ) +
+            ".",
+            "success"
+        );
+
+
+        pendingPayment =
+            null;
+
+
+        document.getElementById(
+            "paymentAmount"
+        ).value = "";
+
+
+        document.getElementById(
+            "paymentNote"
+        ).value = "";
+
+
+        document.getElementById(
+            "paymentUpi"
+        ).value = "";
+
+
+        await refreshCustomerData();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "UPI payment error:",
+            error
+        );
+
+
+        closeConfirm();
+
+
+        let message =
+            error.message ||
+            "UPI payment failed.";
+
+
+        if(
+            message.toLowerCase().includes(
+                "insufficient"
+            )
+        ){
+
+            message =
+                "Insufficient wallet balance.";
+
+        }
+
+
+        showMessage(
+            "paymentMessage",
+            message,
+            "error"
+        );
+
+    }
 
 
     button.disabled =
@@ -3260,63 +3732,6 @@ async function confirmPayment(){
 
     button.textContent =
         "Confirm Payment";
-
-
-    if(error){
-
-        console.error(error);
-
-
-        closeConfirm();
-
-
-        showMessage(
-            "withdrawMessage",
-            error.message ||
-            "Payment approval failed.",
-            "error"
-        );
-
-
-        return;
-
-    }
-
-
-    closeConfirm();
-
-
-    showMessage(
-        "withdrawMessage",
-        "Payment approved successfully. Wallet debited by " +
-        money(
-            pendingPayment.amount
-        ) +
-        ".",
-        "success"
-    );
-
-
-    pendingPayment =
-        null;
-
-
-    document.getElementById(
-        "withdrawAmount"
-    ).value = "";
-
-
-    document.getElementById(
-        "withdrawNote"
-    ).value = "";
-
-
-    document.getElementById(
-        "withdrawUpi"
-    ).value = "";
-
-
-    await refreshCustomerData();
 
 }
 
@@ -3338,26 +3753,26 @@ async function refreshCustomerData(){
         data,
         error
     } =
-        await supabaseClient
-        .from("customers")
-        .select(`
-            id,
-            name,
-            mobile,
-            uid,
-            status,
-            wallet_balance,
-            deposit_balance,
-            commission_balance,
-            referral_balance,
-            bonus_balance,
-            sell_on
-        `)
-        .eq(
-            "id",
-            customerId
-        )
-        .maybeSingle();
+    await supabaseClient
+    .from("customers")
+    .select(`
+        id,
+        name,
+        mobile,
+        uid,
+        status,
+        wallet_balance,
+        deposit_balance,
+        commission_balance,
+        referral_balance,
+        bonus_balance,
+        sell_on
+    `)
+    .eq(
+        "id",
+        customerId
+    )
+    .maybeSingle();
 
 
     if(error){
@@ -3398,13 +3813,13 @@ async function refreshCustomerData(){
     renderCustomers();
 
 
-    updateCustomerBalances();
+    await updateCustomerBalances();
 
 
     renderCustomerUpis();
 
 
-    loadWithdrawalHistory(
+    loadPaymentHistory(
         data.id
     );
 
@@ -3425,25 +3840,33 @@ async function refreshCustomerData(){
 
 
 /* =====================================================
-   WITHDRAWAL HISTORY
+   UPI PAYMENT HISTORY
 ===================================================== */
 
-async function loadWithdrawalHistory(
+async function loadPaymentHistory(
     customerId
 ){
 
     const body =
         document.getElementById(
-            "withdrawalBody"
+            "paymentBody"
         );
 
 
     body.innerHTML = `
+
         <tr>
-            <td colspan="5" class="empty">
+
+            <td
+                colspan="5"
+                class="empty">
+
                 Loading payment history...
+
             </td>
+
         </tr>
+
     `;
 
 
@@ -3451,28 +3874,32 @@ async function loadWithdrawalHistory(
         data,
         error
     } =
-        await supabaseClient
-        .from("withdrawal_requests")
-        .select(`
-            id,
-            customer_upi_id,
-            amount,
-            status,
-            processed_at,
-            requested_at,
-            note
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        )
-        .limit(300);
+    await supabaseClient
+    .from("wallet_ledger")
+    .select(`
+        id,
+        component,
+        direction,
+        amount,
+        reason,
+        reference,
+        created_at
+    `)
+    .eq(
+        "customer_id",
+        customerId
+    )
+    .eq(
+        "direction",
+        "debit"
+    )
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    )
+    .limit(300);
 
 
     if(error){
@@ -3481,11 +3908,19 @@ async function loadWithdrawalHistory(
 
 
         body.innerHTML = `
+
             <tr>
-                <td colspan="5" class="empty">
+
+                <td
+                    colspan="5"
+                    class="empty">
+
                     Unable to load payment history.
+
                 </td>
+
             </tr>
+
         `;
 
 
@@ -3494,17 +3929,47 @@ async function loadWithdrawalHistory(
     }
 
 
-    if(
-        !data ||
-        !data.length
-    ){
+    const payments =
+        (data || []).filter(
+            row => {
+
+                const reason =
+                    String(
+                        row.reason || ""
+                    ).toLowerCase();
+
+
+                const component =
+                    String(
+                        row.component || ""
+                    ).toLowerCase();
+
+
+                return (
+                    component === "payment" ||
+                    reason.includes("upi payment")
+                );
+
+            }
+        );
+
+
+    if(!payments.length){
 
         body.innerHTML = `
+
             <tr>
-                <td colspan="5" class="empty">
-                    No payment history found.
+
+                <td
+                    colspan="5"
+                    class="empty">
+
+                    No UPI payment history found.
+
                 </td>
+
             </tr>
+
         `;
 
 
@@ -3514,42 +3979,21 @@ async function loadWithdrawalHistory(
 
 
     body.innerHTML =
-        data.map(
+        payments.map(
             row => {
 
-                const upi =
-                    upis.find(
-                        u =>
-                            String(u.id) ===
-                            String(
-                                row.customer_upi_id
-                            )
-                    );
-
-
-                const status =
-                    String(
-                        row.status ||
-                        "-"
-                    ).toLowerCase();
-
-
                 return `
+
                     <tr>
 
                         <td>
                             ${formatDate(
-                                row.processed_at ||
-                                row.requested_at
+                                row.created_at
                             )}
                         </td>
 
                         <td>
-                            ${esc(
-                                upi
-                                ? upi.upi_id
-                                : "-"
-                            )}
+                            UPI Payment
                         </td>
 
                         <td>
@@ -3559,33 +4003,20 @@ async function loadWithdrawalHistory(
                         </td>
 
                         <td>
-                            <span class="${
-                                status === "approved"
-                                ? "approved"
-                                : status === "pending"
-                                ? "pending"
-                                : status === "rejected"
-                                ? "rejected"
-                                : status === "failed"
-                                ? "failed"
-                                : ""
-                            }">
-
-                                ${esc(
-                                    status.toUpperCase()
-                                )}
-
+                            <span class="approved">
+                                SUCCESS
                             </span>
                         </td>
 
                         <td>
                             ${esc(
-                                row.note ||
+                                row.reason ||
                                 "-"
                             )}
                         </td>
 
                     </tr>
+
                 `;
 
             }
@@ -3609,11 +4040,19 @@ async function loadLedger(
 
 
     body.innerHTML = `
+
         <tr>
-            <td colspan="7" class="empty">
+
+            <td
+                colspan="7"
+                class="empty">
+
                 Loading wallet ledger...
+
             </td>
+
         </tr>
+
     `;
 
 
@@ -3621,29 +4060,29 @@ async function loadLedger(
         data,
         error
     } =
-        await supabaseClient
-        .from("wallet_ledger")
-        .select(`
-            id,
-            component,
-            direction,
-            amount,
-            balance_after,
-            reason,
-            reference,
-            created_at
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        )
-        .limit(500);
+    await supabaseClient
+    .from("wallet_ledger")
+    .select(`
+        id,
+        component,
+        direction,
+        amount,
+        balance_after,
+        reason,
+        reference,
+        created_at
+    `)
+    .eq(
+        "customer_id",
+        customerId
+    )
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    )
+    .limit(500);
 
 
     if(error){
@@ -3652,11 +4091,19 @@ async function loadLedger(
 
 
         body.innerHTML = `
+
             <tr>
-                <td colspan="7" class="empty">
+
+                <td
+                    colspan="7"
+                    class="empty">
+
                     Unable to load wallet ledger.
+
                 </td>
+
             </tr>
+
         `;
 
 
@@ -3671,11 +4118,19 @@ async function loadLedger(
     ){
 
         body.innerHTML = `
+
             <tr>
-                <td colspan="7" class="empty">
+
+                <td
+                    colspan="7"
+                    class="empty">
+
                     No wallet ledger found.
+
                 </td>
+
             </tr>
+
         `;
 
 
@@ -3750,7 +4205,19 @@ async function loadLedger(
                 }
 
 
+                if(
+                    component ===
+                    "payment"
+                ){
+
+                    badge =
+                        "payment-badge";
+
+                }
+
+
                 return `
+
                     <tr>
 
                         <td>
@@ -3759,15 +4226,22 @@ async function loadLedger(
                             )}
                         </td>
 
+
                         <td>
+
                             <span class="badge ${badge}">
+
                                 ${esc(
                                     component.toUpperCase()
                                 )}
+
                             </span>
+
                         </td>
 
+
                         <td>
+
                             <span class="badge ${
                                 direction === "credit"
                                 ? "credit-badge"
@@ -3779,21 +4253,29 @@ async function loadLedger(
                                 )}
 
                             </span>
+
                         </td>
 
+
                         <td>
+
                             <b>
                                 ${money(row.amount)}
                             </b>
+
                         </td>
 
+
                         <td>
+
                             <b>
                                 ${money(
                                     row.balance_after
                                 )}
                             </b>
+
                         </td>
+
 
                         <td>
                             ${esc(
@@ -3801,6 +4283,7 @@ async function loadLedger(
                                 "-"
                             )}
                         </td>
+
 
                         <td>
                             ${esc(
@@ -3810,6 +4293,7 @@ async function loadLedger(
                         </td>
 
                     </tr>
+
                 `;
 
             }
@@ -3833,11 +4317,19 @@ async function loadDepositHistory(
 
 
     body.innerHTML = `
+
         <tr>
-            <td colspan="5" class="empty">
+
+            <td
+                colspan="5"
+                class="empty">
+
                 Loading deposit history...
+
             </td>
+
         </tr>
+
     `;
 
 
@@ -3845,27 +4337,27 @@ async function loadDepositHistory(
         data,
         error
     } =
-        await supabaseClient
-        .from("customer_deposits")
-        .select(`
-            id,
-            amount,
-            commission,
-            utr,
-            status,
-            created_at
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        )
-        .limit(500);
+    await supabaseClient
+    .from("customer_deposits")
+    .select(`
+        id,
+        amount,
+        commission,
+        utr,
+        status,
+        created_at
+    `)
+    .eq(
+        "customer_id",
+        customerId
+    )
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    )
+    .limit(500);
 
 
     if(error){
@@ -3874,11 +4366,19 @@ async function loadDepositHistory(
 
 
         body.innerHTML = `
+
             <tr>
-                <td colspan="5" class="empty">
+
+                <td
+                    colspan="5"
+                    class="empty">
+
                     Unable to load deposit history.
+
                 </td>
+
             </tr>
+
         `;
 
 
@@ -3893,11 +4393,19 @@ async function loadDepositHistory(
     ){
 
         body.innerHTML = `
+
             <tr>
-                <td colspan="5" class="empty">
+
+                <td
+                    colspan="5"
+                    class="empty">
+
                     No deposit history found.
+
                 </td>
+
             </tr>
+
         `;
 
 
@@ -3918,6 +4426,7 @@ async function loadDepositHistory(
 
 
                 return `
+
                     <tr>
 
                         <td>
@@ -3926,24 +4435,34 @@ async function loadDepositHistory(
                             )}
                         </td>
 
+
                         <td>
+
                             <b>
                                 ${money(row.amount)}
                             </b>
+
                         </td>
 
+
                         <td>
+
                             ${money(
                                 row.commission
                             )}
+
                         </td>
 
+
                         <td>
+
                             ${esc(
                                 row.utr ||
                                 "-"
                             )}
+
                         </td>
+
 
                         <td>
 
@@ -3966,6 +4485,7 @@ async function loadDepositHistory(
                         </td>
 
                     </tr>
+
                 `;
 
             }
@@ -4037,6 +4557,7 @@ async function init(){
 
     if(pageInitialized) return;
 
+
     pageInitialized = true;
 
 
@@ -4055,6 +4576,7 @@ async function init(){
 
 
     await loadAllUpis();
+
 
     await loadCustomers();
 
@@ -4104,6 +4626,7 @@ setInterval(
 
         await loadAllUpis();
 
+
         await loadCustomers();
 
 
@@ -4140,11 +4663,13 @@ supabaseClient.auth.onAuthStateChange(
                 redirecting =
                     true;
 
+
                 window.location.replace(
                     "admin-login.html"
                 );
 
             }
+
 
             return;
 
