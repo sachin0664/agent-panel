@@ -744,7 +744,7 @@ header{
 
 
 /* =========================================================
-   ACCOUNT STATUS - SCREENSHOT STYLE
+   ACCOUNT STATUS
 ========================================================= */
 
 .sell-control{
@@ -761,6 +761,7 @@ header{
     box-shadow:0 8px 25px rgba(20,110,120,.10);
     position:relative;
     overflow:hidden;
+    transition:.25s;
 }
 
 .sell-control:before{
@@ -783,6 +784,18 @@ header{
     bottom:-55px;
     border-radius:50%;
     background:rgba(52,145,235,.10);
+}
+
+.sell-control.sell-active{
+    background:
+        linear-gradient(135deg,#c9ffec 0%,#e9fff7 48%,#c7eaff 100%);
+    border-color:#8fdfc5;
+}
+
+.sell-control.sell-inactive{
+    background:
+        linear-gradient(135deg,#eefcf7 0%,#f8fffc 48%,#eaf5ff 100%);
+    border-color:#b9e4d4;
 }
 
 .sell-power{
@@ -1867,10 +1880,6 @@ header{
     </section>
 
 
-    <!-- =====================================================
-         TELEGRAM
-    ====================================================== -->
-
     <section class="telegram-card">
 
         <div class="telegram-icon">
@@ -2013,9 +2022,8 @@ header{
     ====================================================== -->
 
     <section
-        class="sell-control"
+        class="sell-control sell-inactive"
         id="sellControl">
-
 
         <div class="sell-power">
 
@@ -2057,7 +2065,7 @@ header{
                 class="sell-status sell-off"
                 id="sellStatus">
 
-                Sell OFF
+                Inactive
 
             </div>
 
@@ -2155,7 +2163,6 @@ header{
 
         <div class="security-points">
 
-
             <div class="security-point">
 
                 🛡️
@@ -2188,7 +2195,6 @@ header{
                 </span>
 
             </div>
-
 
         </div>
 
@@ -3721,6 +3727,11 @@ function updateSellStatus(
             "sellBadge"
         );
 
+    const control =
+        document.getElementById(
+            "sellControl"
+        );
+
 
     if(
         isOn
@@ -3731,6 +3742,19 @@ function updateSellStatus(
 
         status.className =
             "sell-status sell-on";
+
+
+        if(control){
+
+            control.classList.remove(
+                "sell-inactive"
+            );
+
+            control.classList.add(
+                "sell-active"
+            );
+
+        }
 
 
         if(badge){
@@ -3754,6 +3778,19 @@ function updateSellStatus(
 
         status.className =
             "sell-status sell-off";
+
+
+        if(control){
+
+            control.classList.remove(
+                "sell-active"
+            );
+
+            control.classList.add(
+                "sell-inactive"
+            );
+
+        }
 
 
         if(badge){
@@ -3905,11 +3942,6 @@ function closeSecurityModal(){
         );
 
 
-        /*
-         * Save permanently for this browser.
-         * It will not appear again after navigation/back.
-         */
-
         localStorage.setItem(
             "sathiPaySecuritySeen",
             "1"
@@ -3944,11 +3976,6 @@ document.addEventListener(
 
         loadDashboard();
 
-
-        /*
-         * Security warning only once
-         * in this browser.
-         */
 
         const alreadySeen =
             localStorage.getItem(
