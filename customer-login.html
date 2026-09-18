@@ -232,6 +232,19 @@ loginForm.addEventListener(
 
                 if (
                     error.message &&
+                    (
+                        error.message.toLowerCase().includes("user is banned") ||
+                        error.message.toLowerCase().includes("banned")
+                    )
+                ) {
+
+                    message.innerText =
+                        "🚫 This customer account is blocked. Please contact admin support.";
+
+                }
+
+                else if (
+                    error.message &&
                     error.message
                         .toLowerCase()
                         .includes("invalid login credentials")
