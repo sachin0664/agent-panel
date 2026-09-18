@@ -4107,29 +4107,29 @@ async function loadArchivedCustomers(){
         .order("archived_at", { ascending:false });
 
     if(error){
-        box.innerHTML = \`<div class="status error">❌ \${escapeHtml(error.message)}</div>\`;
+        box.innerHTML = `<div class="status error">❌ ${escapeHtml(error.message)}</div>`;
         return;
     }
 
     if(!data || !data.length){
-        box.innerHTML = \`<div class="empty">🗄️ Deleted Customers folder empty.</div>\`;
+        box.innerHTML = `<div class="empty">🗄️ Deleted Customers folder empty.</div>`;
         return;
     }
 
     box.innerHTML = data.map(row => {
         const c = row.customer_snapshot || {};
-        return \`
+        return `
             <div class="item">
-                <h3>🗄️ \${escapeHtml(c.name || "-")}</h3>
-                <div class="row"><span class="label">UID</span><span class="value">\${escapeHtml(c.uid || "-")}</span></div>
-                <div class="row"><span class="label">Mobile</span><span class="value">\${escapeHtml(c.mobile || "-")}</span></div>
-                <div class="row"><span class="label">Deleted At</span><span class="value">\${formatReferralDate(row.archived_at)}</span></div>
+                <h3>🗄️ ${escapeHtml(c.name || "-")}</h3>
+                <div class="row"><span class="label">UID</span><span class="value">${escapeHtml(c.uid || "-")}</span></div>
+                <div class="row"><span class="label">Mobile</span><span class="value">${escapeHtml(c.mobile || "-")}</span></div>
+                <div class="row"><span class="label">Deleted At</span><span class="value">${formatReferralDate(row.archived_at)}</span></div>
                 <div class="row"><span class="label">Status</span><span class="value">🔒 BLOCKED</span></div>
                 <div class="actions">
-                    <button class="green full" onclick="restoreCustomer('\${row.customer_id}')">♻️ Restore & Unblock</button>
+                    <button class="green full" onclick="restoreCustomer('${row.customer_id}')">♻️ Restore & Unblock</button>
                 </div>
             </div>
-        \`;
+        `;
     }).join("");
 }
 
