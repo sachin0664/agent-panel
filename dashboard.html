@@ -962,6 +962,118 @@ header{
 
 
 /* =========================================================
+   PAY IN / PAY OUT
+========================================================= */
+
+.pay-flow-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:15px;
+}
+
+.pay-flow-box{
+    background:white;
+    border:1px solid #e6edf6;
+    border-radius:21px;
+    box-shadow:0 6px 20px rgba(20,60,100,.07);
+    overflow:hidden;
+}
+
+.pay-flow-head{
+    padding:16px 18px;
+    border-bottom:1px solid #edf2f7;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.pay-flow-icon{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
+.pay-in-icon{background:#e8fff4;}
+.pay-out-icon{background:#fff0f2;}
+
+.pay-flow-title{
+    font-size:17px;
+    font-weight:900;
+    color:#123e7a;
+}
+
+.pay-flow-subtitle{
+    margin-top:3px;
+    color:#8190a4;
+    font-size:9px;
+}
+
+.pay-flow-list{
+    max-height:330px;
+    overflow-y:auto;
+}
+
+.pay-flow-row{
+    padding:13px 17px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.pay-flow-row:last-child{border-bottom:0;}
+
+.pay-flow-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.pay-flow-amount{
+    font-size:14px;
+    font-weight:900;
+}
+
+.pay-flow-credit{color:#08a96d;}
+.pay-flow-debit{color:#dc3545;}
+
+.pay-flow-status{
+    font-size:9px;
+    font-weight:900;
+    padding:4px 8px;
+    border-radius:20px;
+    background:#e8fff4;
+    color:#08a56c;
+}
+
+.pay-flow-meta{
+    margin-top:5px;
+    color:#68788f;
+    font-size:10px;
+    line-height:1.5;
+}
+
+.pay-flow-time{
+    margin-top:4px;
+    color:#9aa7b8;
+    font-size:9px;
+}
+
+.pay-flow-empty{
+    padding:25px 15px;
+    text-align:center;
+    color:#8290a4;
+    font-size:11px;
+}
+
+@media(max-width:900px){
+    .pay-flow-grid{grid-template-columns:1fr;}
+}
+
+/* =========================================================
    TRANSACTIONS
 ========================================================= */
 
@@ -2144,6 +2256,50 @@ header{
     </section>
 
 
+    <section class="pay-flow-grid">
+
+        <div class="pay-flow-box">
+
+            <div class="pay-flow-head">
+
+                <div class="pay-flow-icon pay-in-icon">💰</div>
+
+                <div>
+                    <div class="pay-flow-title">Pay In</div>
+                    <div class="pay-flow-subtitle">Deposit payment records only</div>
+                </div>
+
+            </div>
+
+            <div id="payInList" class="pay-flow-list">
+                <div class="pay-flow-empty">Loading Pay In...</div>
+            </div>
+
+        </div>
+
+
+        <div class="pay-flow-box">
+
+            <div class="pay-flow-head">
+
+                <div class="pay-flow-icon pay-out-icon">📲</div>
+
+                <div>
+                    <div class="pay-flow-title">Pay Out</div>
+                    <div class="pay-flow-subtitle">Payment amount &amp; UPI ID</div>
+                </div>
+
+            </div>
+
+            <div id="payOutList" class="pay-flow-list">
+                <div class="pay-flow-empty">Loading Pay Out...</div>
+            </div>
+
+        </div>
+
+    </section>
+
+
     <section class="telegram-card">
 
         <div class="telegram-icon">
@@ -3190,6 +3346,121 @@ function toggleNotifications(){
 }
 
 
+async function loadPayInOut(customerId){
+
+    const payInList = document.getElementById("payInList");
+    const payOutList = document.getElementById("payOutList");
+
+    if(!payInList || !payOutList) return;
+
+    try{
+
+        const [depositResult, payoutResult] = await Promise.all([
+
+            supabaseClient
+                .from("customer_deposits")
+                .select("id,amount,status,utr,created_at")
+                .eq("customer_id", customerId)
+                .order("created_at", {ascending:false})
+                .limit(5),
+
+            supabaseClient
+                .from("wallet_ledger")
+                .select("id,amount,reason,reference,created_at,upi_id")
+                .eq("customer_id", customerId)
+                .eq("component", "manual")
+                .eq("direction", "debit")
+                .order("created_at", {ascending:false})
+                .limit(5)
+
+        ]);
+
+        if(depositResult.error) throw depositResult.error;
+        if(payoutResult.error) throw payoutResult.error;
+
+        const deposits = depositResult.data || [];
+        const payouts = payoutResult.data || [];
+
+        if(!deposits.length){
+            payInList.innerHTML =
+                '<div class="pay-flow-empty">No deposit payment records.</div>';
+        }else{
+            payInList.innerHTML = deposits.map(row => {
+
+                const status = String(row.status || "pending").toLowerCase();
+                const statusLabel =
+                    status.charAt(0).toUpperCase() + status.slice(1);
+
+                return `
+                    <div class="pay-flow-row">
+                        <div class="pay-flow-top">
+                            <div class="pay-flow-amount pay-flow-credit">
+                                + ${formatMoney(row.amount)}
+                            </div>
+                            <span class="pay-flow-status">${statusLabel}</span>
+                        </div>
+                        <div class="pay-flow-meta">
+                            UTR: ${escapeHtml(row.utr || "Not provided")}
+                        </div>
+                        <div class="pay-flow-time">
+                            ${formatDateTime(row.created_at)}
+                        </div>
+                    </div>
+                `;
+
+            }).join("");
+        }
+
+        if(!payouts.length){
+            payOutList.innerHTML =
+                '<div class="pay-flow-empty">No Pay Out records.</div>';
+        }else{
+            payOutList.innerHTML = payouts.map(row => {
+
+                const reference = String(row.reference || "");
+                let upiId = row.upi_id || "";
+
+                if(!upiId){
+                    const match = reference.match(/UPI_ID:([^|]+)/i);
+                    if(match) upiId = match[1].trim();
+                }
+
+                return `
+                    <div class="pay-flow-row">
+                        <div class="pay-flow-top">
+                            <div class="pay-flow-amount pay-flow-debit">
+                                - ${formatMoney(row.amount)}
+                            </div>
+                            <span class="pay-flow-status">Success</span>
+                        </div>
+                        <div class="pay-flow-meta">
+                            UPI ID: ${escapeHtml(upiId || "Not recorded")}
+                        </div>
+                        <div class="pay-flow-time">
+                            ${formatDateTime(row.created_at)}
+                        </div>
+                    </div>
+                `;
+
+            }).join("");
+        }
+
+    }
+    catch(error){
+
+        console.error("Pay In / Pay Out error:", error);
+
+        payInList.innerHTML =
+            '<div class="pay-flow-empty">Unable to load Pay In.</div>';
+
+        payOutList.innerHTML =
+            '<div class="pay-flow-empty">Unable to load Pay Out.</div>';
+
+    }
+
+}
+
+
 async function loadTransactions(
     customerId
 ){
@@ -3874,6 +4145,10 @@ async function loadDashboard(){
             ),
 
             loadTransactions(
+                customerId
+            ),
+
+            loadPayInOut(
                 customerId
             )
 
