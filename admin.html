@@ -258,6 +258,18 @@ button:disabled{
     padding:16px;
 }
 
+.commissionGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.commissionHeading{
+    font-size:15px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
 .rate{
     display:flex;
     justify-content:space-between;
@@ -787,6 +799,10 @@ body.pageReady{
         grid-template-columns:1fr;
     }
 
+    .commissionGrid{
+        grid-template-columns:1fr;
+    }
+
     .depositFolders{
         grid-template-columns:1fr 1fr 1fr;
     }
@@ -1133,54 +1149,57 @@ body.pageReady{
 
 <div class="card">
 
-    <h2>💵 Deposit Commission</h2>
+    <h2>💰 Commission Rules</h2>
 
-    <div class="commissionBox">
+    <div class="commissionGrid">
 
-        <div class="rate">
-            <span>₹1 – ₹9,999</span>
-            <b>6%</b>
+        <div class="commissionBox">
+
+            <div class="commissionHeading">
+                💵 Deposit Commission
+            </div>
+
+            <div class="rate">
+                <span>₹1 – ₹9,999</span>
+                <b>6%</b>
+            </div>
+
+            <div class="rate">
+                <span>₹10,000 – ₹19,999</span>
+                <b>8%</b>
+            </div>
+
+            <div class="rate">
+                <span>₹20,000+</span>
+                <b>10%</b>
+            </div>
+
         </div>
 
-        <div class="rate">
-            <span>₹10,000 – ₹19,999</span>
-            <b>8%</b>
+
+        <div class="commissionBox">
+
+            <div class="commissionHeading">
+                👥 Referral Commission
+            </div>
+
+            <div class="rate">
+                <span>Level A</span>
+                <b>1%</b>
+            </div>
+
+            <div class="rate">
+                <span>Level B</span>
+                <b>0.5%</b>
+            </div>
+
+            <div class="rate">
+                <span>Level C</span>
+                <b>0.2%</b>
+            </div>
+
         </div>
 
-        <div class="rate">
-            <span>₹20,000+</span>
-            <b>10%</b>
-        </div>
-
-        <br>
-
-        <div class="small">
-            Commission is automatically calculated
-            on each approved customer deposit.
-        </div>
-
-    </div>
-
-</div>
-
-
-<div class="card">
-
-    <h2>👥 Referral Commission</h2>
-
-    <div class="item">
-        <b>Level A</b>
-        <span style="float:right">1%</span>
-    </div>
-
-    <div class="item">
-        <b>Level B</b>
-        <span style="float:right">0.5%</span>
-    </div>
-
-    <div class="item">
-        <b>Level C</b>
-        <span style="float:right">0.2%</span>
     </div>
 
 </div>
