@@ -2549,7 +2549,13 @@ header{
     <section class="transactions-box">
 
 
-        <div class="transactions-head">
+        <div
+            class="transactions-head"
+            role="button"
+            tabindex="0"
+            onclick="window.location.href='transactions.html'"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='transactions.html';}"
+            style="cursor:pointer;">
 
             <h3>
                 Recent Transactions
@@ -3246,144 +3252,184 @@ function toggleNotifications(){
 
 async function loadPayInOut(customerId){
 
-    const payInList = document.getElementById("payInList");
-    const payOutList = document.getElementById("payOutList");
+    const payInList =
+        document.getElementById("payInList");
+
+    const payOutList =
+        document.getElementById("payOutList");
 
     if(!payInList || !payOutList) return;
 
-    /* PAY IN: deposits only */
-    try{
 
-        const { data: deposits, error } =
-            await supabaseClient
-                .from("customer_deposits")
-                .select("id,amount,status,utr,created_at")
-                .eq("customer_id", customerId)
-                .order("created_at", {ascending:false})
-                .limit(5);
+    const {data, error} =
+        await supabaseClient.rpc(
+            "get_my_pay_flows",
+            {p_limit:20}
+        );
 
-        if(error) throw error;
+    if(error){
 
-        if(!deposits || !deposits.length){
+        console.error("Pay In/Out error:", error);
 
-            payInList.innerHTML =
-                '<div class="pay-flow-empty">No deposit payment records.</div>';
+        payInList.innerHTML =
+            '<div class="pay-flow-empty">Unable to load Pay In.</div>';
 
-        }else{
+        payOutList.innerHTML =
+            '<div class="pay-flow-empty">Unable to load Pay Out.</div>';
 
-            payInList.innerHTML = deposits.map(row => {
+        return;
+    }
 
-                const status = String(row.status || "pending").toLowerCase();
+
+    const rows = Array.isArray(data)
+        ? data
+        : [];
+
+
+    const payIns =
+        rows.filter(row =>
+            String(row.flow || "").toLowerCase() === "pay in"
+        );
+
+    const payOuts =
+        rows.filter(row =>
+            String(row.flow || "").toLowerCase() === "pay out"
+        );
+
+
+    /* PAY IN */
+
+    if(!payIns.length){
+
+        payInList.innerHTML =
+            '<div class="pay-flow-empty">No deposit payment records.</div>';
+
+    }else{
+
+        payInList.innerHTML =
+            payIns.map(row => {
+
+                const status =
+                    String(
+                        row.status || "pending"
+                    ).toLowerCase();
+
                 const statusLabel =
-                    status.charAt(0).toUpperCase() + status.slice(1);
+                    status.charAt(0).toUpperCase() +
+                    status.slice(1);
 
                 return `
                     <div class="pay-flow-row">
+
                         <div class="pay-flow-top">
+
                             <div class="pay-flow-amount pay-flow-credit">
                                 + ${formatMoney(row.amount)}
                             </div>
-                            <span class="pay-flow-status">${statusLabel}</span>
+
+                            <span class="pay-flow-status">
+                                ${escapeHtml(statusLabel)}
+                            </span>
+
                         </div>
+
                         <div class="pay-flow-meta">
+                            Deposit<br>
                             UTR: ${escapeHtml(row.utr || "Not provided")}
                         </div>
+
                         <div class="pay-flow-time">
                             ${formatDateTime(row.created_at)}
                         </div>
+
                     </div>
                 `;
 
             }).join("");
 
-        }
-
-    }catch(error){
-
-        console.error("Pay In error:", error);
-
-        payInList.innerHTML =
-            '<div class="pay-flow-empty">Unable to load Pay In.</div>';
-
     }
 
 
-    /* PAY OUT: successful sell/withdrawal + admin UPI payments */
-    try{
+    /* PAY OUT */
 
-        const { data: payouts, error } =
-            await supabaseClient
-                .from("wallet_ledger")
-                .select("id,amount,reason,reference,created_at,upi_id,component,direction")
-                .eq("customer_id", customerId)
-                .eq("direction", "debit")
-                .or("component.eq.manual,component.eq.withdrawal")
-                .order("created_at", {ascending:false})
-                .limit(5);
+    if(!payOuts.length){
 
-        if(error) throw error;
+        payOutList.innerHTML =
+            '<div class="pay-flow-empty">No Pay Out records.</div>';
 
-        if(!payouts || !payouts.length){
+    }else{
 
-            payOutList.innerHTML =
-                '<div class="pay-flow-empty">No Pay Out records.</div>';
+        payOutList.innerHTML =
+            payOuts.map(row => {
 
-        }else{
-
-            payOutList.innerHTML = payouts.map(row => {
-
-                const text = (
-                    String(row.component || "") + " " +
-                    String(row.reason || "") + " " +
-                    String(row.reference || "")
-                ).toLowerCase();
+                const description =
+                    String(
+                        row.description ||
+                        "UPI Payment"
+                    );
 
                 const isSell =
-                    text.includes("sell") ||
-                    text.includes("withdraw");
+                    /sell|withdraw/i.test(
+                        description + " " +
+                        String(row.reference || "")
+                    );
 
-                const reference = String(row.reference || "");
-                let upiId = row.upi_id || "";
+                let upiId =
+                    row.upi_id || "";
 
                 if(!upiId){
 
-                    const match =
-                        reference.match(/UPI_ID:([^|]+)/i);
+                    const reference =
+                        String(
+                            row.reference || ""
+                        );
 
-                    if(match) upiId = match[1].trim();
+                    const match =
+                        reference.match(
+                            /UPI_ID:([^|]+)/i
+                        );
+
+                    if(match){
+                        upiId =
+                            match[1].trim();
+                    }
 
                 }
 
                 return `
                     <div class="pay-flow-row">
+
                         <div class="pay-flow-top">
+
                             <div class="pay-flow-amount pay-flow-debit">
                                 - ${formatMoney(row.amount)}
                             </div>
+
                             <span class="pay-flow-status">
                                 ${isSell ? "Sell Success" : "Success"}
                             </span>
+
                         </div>
+
                         <div class="pay-flow-meta">
-                            ${isSell ? "Sell Payment" : "UPI Payment"}<br>
-                            UPI ID: ${escapeHtml(upiId || "Not recorded")}
+                            ${escapeHtml(
+                                isSell
+                                    ? "Sell Payment"
+                                    : "UPI Payment"
+                            )}<br>
+                            UPI ID: ${escapeHtml(
+                                upiId || "Not recorded"
+                            )}
                         </div>
+
                         <div class="pay-flow-time">
                             ${formatDateTime(row.created_at)}
                         </div>
+
                     </div>
                 `;
 
             }).join("");
-
-        }
-
-    }catch(error){
-
-        console.error("Pay Out error:", error);
-
-        payOutList.innerHTML =
-            '<div class="pay-flow-empty">Unable to load Pay Out.</div>';
 
     }
 
