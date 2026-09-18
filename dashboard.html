@@ -3264,35 +3264,44 @@ async function loadPayInOut(customerId){
     try{
 
         /*
-         * Use the same transaction RPC that already powers
-         * Transaction History. This keeps Pay In / Pay Out
-         * in sync and avoids a second loading path.
+         * Load Pay In / Pay Out directly from the customer-owned
+         * tables. This avoids depending on auth.uid() inside the
+         * transaction RPC and uses the same customerId already
+         * verified by the dashboard.
          */
-        const {data, error} =
-            await supabaseClient.rpc(
-                "get_my_transaction_history",
-                {p_limit:500}
-            );
 
-        if(error){
-            throw error;
+        const [depositResult, ledgerResult] =
+            await Promise.all([
+
+                supabaseClient
+                .from("customer_deposits")
+                .select("id, amount, status, created_at")
+                .eq("customer_id", customerId)
+                .eq("status", "approved")
+                .order("created_at", {ascending:false})
+                .limit(500),
+
+                supabaseClient
+                .from("wallet_ledger")
+                .select("id, component, direction, amount, reason, reference, upi_id, created_at")
+                .eq("customer_id", customerId)
+                .eq("component", "manual")
+                .eq("direction", "debit")
+                .order("created_at", {ascending:false})
+                .limit(500)
+
+            ]);
+
+        if(depositResult.error){
+            throw depositResult.error;
         }
 
-        const rows = Array.isArray(data) ? data : [];
+        if(ledgerResult.error){
+            throw ledgerResult.error;
+        }
 
-
-        /* PAY IN = approved deposits only */
-        const payIns = rows.filter(function(row){
-            return String(row.event_type || "").toLowerCase() === "deposit"
-                && String(row.status || "").toLowerCase() === "approved";
-        });
-
-
-        /* PAY OUT = every customer sell/debit transaction */
-        const payOuts = rows.filter(function(row){
-            return String(row.event_type || "").toLowerCase() === "sell"
-                && String(row.direction || "").toLowerCase() === "debit";
-        });
+        const payIns = depositResult.data || [];
+        const payOuts = ledgerResult.data || [];
 
 
         if(!payIns.length){
@@ -3300,7 +3309,8 @@ async function loadPayInOut(customerId){
             payInList.innerHTML =
                 '<div class="pay-flow-empty">No deposit records.</div>';
 
-        }else{
+        }
+        else{
 
             payInList.innerHTML =
                 payIns.map(function(row){
@@ -3339,7 +3349,8 @@ async function loadPayInOut(customerId){
             payOutList.innerHTML =
                 '<div class="pay-flow-empty">No sell records.</div>';
 
-        }else{
+        }
+        else{
 
             payOutList.innerHTML =
                 payOuts.map(function(row){
