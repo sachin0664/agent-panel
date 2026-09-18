@@ -8,10 +8,8 @@
 
 <title>Sathi Pay - Referral</title>
 
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- CUSTOMER GUARD -->
 <script src="customer-guard.js"></script>
 
 <style>
@@ -638,9 +636,7 @@ td{
             </h3>
 
             <div class="big">
-                ₹<span id="referralEarnings">
-                    0.00
-                </span>
+                ₹<span id="referralEarnings">0.00</span>
             </div>
 
         </div>
@@ -1055,28 +1051,37 @@ async function loadCustomer(){
 
 async function loadTeam(){
 
+    const directElement =
+        document.getElementById("directTeam");
+
+    const totalElement =
+        document.getElementById("totalTeam");
+
+
     if(
         !currentCustomer ||
         !currentCustomer.invitation_code
     ){
 
-        document.getElementById(
-            "directTeam"
-        ).textContent =
-            "0";
-
-        document.getElementById(
-            "totalTeam"
-        ).textContent =
-            "0";
+        directElement.textContent = "0";
+        totalElement.textContent = "0";
 
         return;
 
     }
 
 
+    const invitationCode =
+        String(
+            currentCustomer.invitation_code
+        ).trim();
+
+
     /*
-     * LEVEL A
+     * LEVEL A / DIRECT TEAM
+     *
+     * Parent invitation_code
+     * = Child referred_by
      */
 
     const {
@@ -1085,23 +1090,29 @@ async function loadTeam(){
     } =
         await supabaseClient
         .from("customers")
-        .select(`
-            id,
-            invitation_code,
-            referred_by
-        `)
+        .select(
+            "id, invitation_code, referred_by"
+        )
         .eq(
             "referred_by",
-            currentCustomer.invitation_code
+            invitationCode
         );
 
 
     if(levelAError){
 
         console.error(
-            "Level A Error:",
+            "Direct Team Error:",
             levelAError
         );
+
+        /*
+         * Keep current value instead of
+         * silently showing a wrong 0.
+         */
+
+        directElement.textContent = "—";
+        totalElement.textContent = "—";
 
         return;
 
@@ -1109,7 +1120,30 @@ async function loadTeam(){
 
 
     const direct =
-        levelA || [];
+        Array.isArray(levelA)
+            ? levelA
+            : [];
+
+
+    /*
+     * UNIQUE NETWORK
+     */
+
+    const networkIds =
+        new Set();
+
+
+    direct.forEach(function(customer){
+
+        if(customer && customer.id){
+
+            networkIds.add(
+                customer.id
+            );
+
+        }
+
+    });
 
 
     /*
@@ -1123,9 +1157,13 @@ async function loadTeam(){
         const customer of direct
     ){
 
-        if(
-            !customer.invitation_code
-        ){
+        const childInvitationCode =
+            String(
+                customer.invitation_code || ""
+            ).trim();
+
+
+        if(!childInvitationCode){
 
             continue;
 
@@ -1138,14 +1176,12 @@ async function loadTeam(){
         } =
             await supabaseClient
             .from("customers")
-            .select(`
-                id,
-                invitation_code,
-                referred_by
-            `)
+            .select(
+                "id, invitation_code, referred_by"
+            )
             .eq(
                 "referred_by",
-                customer.invitation_code
+                childInvitationCode
             );
 
 
@@ -1161,7 +1197,9 @@ async function loadTeam(){
         }
 
 
-        if(data){
+        if(
+            Array.isArray(data)
+        ){
 
             levelB =
                 levelB.concat(data);
@@ -1169,6 +1207,19 @@ async function loadTeam(){
         }
 
     }
+
+
+    levelB.forEach(function(customer){
+
+        if(customer && customer.id){
+
+            networkIds.add(
+                customer.id
+            );
+
+        }
+
+    });
 
 
     /*
@@ -1182,9 +1233,13 @@ async function loadTeam(){
         const customer of levelB
     ){
 
-        if(
-            !customer.invitation_code
-        ){
+        const childInvitationCode =
+            String(
+                customer.invitation_code || ""
+            ).trim();
+
+
+        if(!childInvitationCode){
 
             continue;
 
@@ -1197,14 +1252,12 @@ async function loadTeam(){
         } =
             await supabaseClient
             .from("customers")
-            .select(`
-                id,
-                invitation_code,
-                referred_by
-            `)
+            .select(
+                "id, invitation_code, referred_by"
+            )
             .eq(
                 "referred_by",
-                customer.invitation_code
+                childInvitationCode
             );
 
 
@@ -1220,7 +1273,9 @@ async function loadTeam(){
         }
 
 
-        if(data){
+        if(
+            Array.isArray(data)
+        ){
 
             levelC =
                 levelC.concat(data);
@@ -1230,24 +1285,11 @@ async function loadTeam(){
     }
 
 
-    /*
-     * UNIQUE NETWORK
-     */
+    levelC.forEach(function(customer){
 
-    const ids =
-        new Set();
+        if(customer && customer.id){
 
-
-    [
-        ...direct,
-        ...levelB,
-        ...levelC
-    ]
-    .forEach(function(customer){
-
-        if(customer.id){
-
-            ids.add(
+            networkIds.add(
                 customer.id
             );
 
@@ -1256,16 +1298,20 @@ async function loadTeam(){
     });
 
 
-    document.getElementById(
-        "directTeam"
-    ).textContent =
-        direct.length;
+    /*
+     * DISPLAY COUNTS
+     */
+
+    directElement.textContent =
+        String(
+            direct.length
+        );
 
 
-    document.getElementById(
-        "totalTeam"
-    ).textContent =
-        ids.size;
+    totalElement.textContent =
+        String(
+            networkIds.size
+        );
 
 }
 
@@ -1355,29 +1401,12 @@ async function loadReferralHistory(){
 
                 <tr>
 
-                    <th>
-                        Level
-                    </th>
-
-                    <th>
-                        Deposit
-                    </th>
-
-                    <th>
-                        Rate
-                    </th>
-
-                    <th>
-                        Earned
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th>
-                        Date
-                    </th>
+                    <th>Level</th>
+                    <th>Deposit</th>
+                    <th>Rate</th>
+                    <th>Earned</th>
+                    <th>Status</th>
+                    <th>Date</th>
 
                 </tr>
 
@@ -1616,26 +1645,11 @@ async function copyLink(){
 function escapeHtml(value){
 
     return String(value)
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 
 }
 
