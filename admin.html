@@ -4156,7 +4156,6 @@ window.addEventListener("popstate", function(){
 async function loadArchivedCustomers(){
 
     const box = document.getElementById("archivedCustomerList");
-    box.classList.add("open");
     box.innerHTML = "<p>Loading deleted customers...</p>";
 
     const { data, error } = await supabaseClient
