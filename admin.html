@@ -280,6 +280,16 @@ button:disabled{
     color:#64748b;
 }
 
+#customerList,
+#archivedCustomerList{
+    display:none;
+}
+
+#customerList.open,
+#archivedCustomerList.open{
+    display:block;
+}
+
 .customerSearchButtons{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -1098,7 +1108,7 @@ body.pageReady{
 
     <button
         class="blue full"
-        onclick="loadCustomers()"
+        onclick="openCustomerFunction('customers')"
     >
         👥 View All Customers
     </button>
@@ -1114,7 +1124,7 @@ body.pageReady{
 
     <p class="small">Admin se delete kiye gaye accounts yahan rahenge. Restore karne par account dobara login kar sakega.</p>
 
-    <button class="gray full" onclick="loadArchivedCustomers()">
+    <button class="gray full" onclick="openCustomerFunction('archived')">
         🗄️ Open Deleted Customers
     </button>
 
@@ -4093,12 +4103,60 @@ async function deleteCustomer(customerId){
 
 
 /* =====================================================
+   ADMIN FUNCTION HISTORY
+===================================================== */
+
+let activeAdminFunction = null;
+
+function openCustomerFunction(type){
+
+    const customerBox = document.getElementById("customerList");
+    const archivedBox = document.getElementById("archivedCustomerList");
+
+    customerBox.classList.remove("open");
+    archivedBox.classList.remove("open");
+
+    if(type === "customers"){
+        activeAdminFunction = "customers";
+        customerBox.classList.add("open");
+        history.pushState({adminFunction:"customers"}, "", "#customers");
+        loadCustomers(0);
+        return;
+    }
+
+    if(type === "archived"){
+        activeAdminFunction = "archived";
+        archivedBox.classList.add("open");
+        history.pushState({adminFunction:"archived"}, "", "#archived");
+        loadArchivedCustomers();
+    }
+}
+
+function closeAdminFunction(){
+
+    const customerBox = document.getElementById("customerList");
+    const archivedBox = document.getElementById("archivedCustomerList");
+
+    customerBox.classList.remove("open");
+    archivedBox.classList.remove("open");
+    activeAdminFunction = null;
+}
+
+window.addEventListener("popstate", function(){
+    if(activeAdminFunction){
+        closeAdminFunction();
+    }
+});
+
+
+/* =====================================================
    DELETED / BLOCKED CUSTOMERS
 ===================================================== */
 
 async function loadArchivedCustomers(){
 
     const box = document.getElementById("archivedCustomerList");
+    box.classList.add("open");
     box.innerHTML = "<p>Loading deleted customers...</p>";
 
     const { data, error } = await supabaseClient
