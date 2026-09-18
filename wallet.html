@@ -1341,25 +1341,16 @@ async function loadWalletActivity(
                     ).toLowerCase();
 
 
-                /* WITHDRAWAL */
+                /* LEGACY WITHDRAWAL */
 
                 const isWithdrawal =
                     direction === "debit" &&
                     (
-                        component === "manual" ||
                         component === "withdrawal" ||
-                        reason.includes(
-                            "withdrawal"
-                        ) ||
-                        reason.includes(
-                            "withdraw"
-                        ) ||
-                        reference.includes(
-                            "withdrawal"
-                        ) ||
-                        reference.includes(
-                            "withdraw"
-                        )
+                        reason.includes("withdrawal") ||
+                        reason.includes("withdraw") ||
+                        reference.includes("withdrawal") ||
+                        reference.includes("withdraw")
                     );
 
 
@@ -1371,7 +1362,7 @@ async function loadWalletActivity(
                             item.created_at,
 
                         title:
-                            "Withdrawal Approved",
+                            "Legacy Withdrawal",
 
                         icon:
                             "💸",
