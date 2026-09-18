@@ -4164,106 +4164,29 @@ async function restoreCustomer(customerId){
 
 async function loadAdminTotals(){
 
-    const {
-        count:customerCount
-    } =
-    await supabaseClient
-        .from("customers")
-        .select("*",{
-            count:"exact",
-            head:true
-        });
+    try{
+        const {data,error} = await supabaseClient.rpc("get_admin_dashboard_totals");
+        if(error) throw error;
 
-    document.getElementById(
-        "totalCustomers"
-    ).textContent =
-        customerCount || 0;
+        const row = data || {};
 
-    const {
-        data:deposits
-    } =
-    await supabaseClient
-        .from("customer_deposits")
-        .select(
-            "amount,status,commission"
-        );
+        document.getElementById("totalCustomers").textContent =
+            Number(row.total_customers || 0);
 
-    let totalDeposit =
-        0;
+        document.getElementById("totalDeposits").textContent =
+            money(row.total_deposits || 0);
 
-    let totalCommission =
-        0;
+        document.getElementById("totalCommission").textContent =
+            money(row.total_commission || 0);
 
-    let pendingCount =
-        0;
-
-    (deposits || []).forEach(
-        d => {
-
-            const amount =
-                Number(
-                    d.amount || 0
-                );
-
-            const s =
-                String(
-                    d.status || ""
-                ).toLowerCase();
-
-            if(s === "approved"){
-
-                totalDeposit +=
-                    amount;
-
-                if(
-                    d.commission !== null &&
-                    d.commission !== undefined
-                ){
-
-                    totalCommission +=
-                        Number(
-                            d.commission || 0
-                        );
-
-                }
-
-                else{
-
-                    totalCommission +=
-                        commissionAmount(
-                            amount
-                        );
-
-                }
-
-            }
-
-            if(s === "pending"){
-
-                pendingCount++;
-
-            }
-
-        }
-    );
-
-    document.getElementById(
-        "totalDeposits"
-    ).textContent =
-        money(totalDeposit);
-
-    document.getElementById(
-        "totalCommission"
-    ).textContent =
-        money(totalCommission);
-
-    document.getElementById(
-        "pendingDeposits"
-    ).textContent =
-        pendingCount;
+        document.getElementById("pendingDeposits").textContent =
+            Number(row.pending_deposits || 0);
+    }
+    catch(error){
+        console.error("Admin totals error:", error);
+    }
 
 }
-
 
 /* =====================================================
    DEPOSIT FOLDER
@@ -4546,186 +4469,76 @@ function renderDeposit(d){
 
 async function loadDeposits(){
 
-    const pendingBox =
-        document.getElementById(
-            "pendingDepositList"
+    const pendingBox = document.getElementById("pendingDepositList");
+    const approvedBox = document.getElementById("approvedDepositList");
+    const rejectedBox = document.getElementById("rejectedDepositList");
+
+    pendingBox.innerHTML = "<p>Loading...</p>";
+    approvedBox.innerHTML = "<p>Loading...</p>";
+    rejectedBox.innerHTML = "<p>Loading...</p>";
+
+    try{
+        const statuses = ["pending","approved","rejected"];
+
+        const results = await Promise.all(
+            statuses.map(status =>
+                supabaseClient
+                    .from("customer_deposits")
+                    .select("*",{count:"exact"})
+                    .eq("status",status)
+                    .order("id",{ascending:false})
+                    .limit(50)
+            )
         );
 
-    const approvedBox =
-        document.getElementById(
-            "approvedDepositList"
-        );
-
-    const rejectedBox =
-        document.getElementById(
-            "rejectedDepositList"
-        );
-
-    pendingBox.innerHTML =
-        "<p>Loading...</p>";
-
-    approvedBox.innerHTML =
-        "<p>Loading...</p>";
-
-    rejectedBox.innerHTML =
-        "<p>Loading...</p>";
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("customer_deposits")
-        .select("*")
-        .order(
-            "id",
-            {
-                ascending:false
-            }
-        );
-
-    if(error){
-
-        const html = `
-            <div class="status error">
-                ${escapeHtml(error.message)}
-            </div>
-        `;
-
-        pendingBox.innerHTML =
-            html;
-
-        approvedBox.innerHTML =
-            html;
-
-        rejectedBox.innerHTML =
-            html;
-
-        return;
-
-    }
-
-    const pending =
-        [];
-
-    const approved =
-        [];
-
-    const rejected =
-        [];
-
-    (data || []).forEach(
-        d => {
-
-            const s =
-                String(
-                    d.status || "pending"
-                ).toLowerCase();
-
-            if(s === "approved"){
-
-                approved.push(d);
-
-            }
-
-            else if(
-                s === "rejected" ||
-                s === "failed"
-            ){
-
-                rejected.push(d);
-
-            }
-
-            else{
-
-                pending.push(d);
-
-            }
-
+        const [pendingResult,approvedResult,rejectedResult] = results;
+        for(const result of results){
+            if(result.error) throw result.error;
         }
-    );
 
-    document.getElementById(
-        "pendingFolderCount"
-    ).textContent =
-        pending.length;
+        const pending = pendingResult.data || [];
+        const approved = approvedResult.data || [];
+        const rejected = rejectedResult.data || [];
 
-    document.getElementById(
-        "approvedFolderCount"
-    ).textContent =
-        approved.length;
+        document.getElementById("pendingFolderCount").textContent =
+            pendingResult.count || 0;
+        document.getElementById("approvedFolderCount").textContent =
+            approvedResult.count || 0;
+        document.getElementById("rejectedFolderCount").textContent =
+            rejectedResult.count || 0;
 
-    document.getElementById(
-        "rejectedFolderCount"
-    ).textContent =
-        rejected.length;
+        pendingBox.innerHTML = pending.length
+            ? pending.map(renderDeposit).join("")
+            : '<div class="empty">⏳ No pending deposit requests.</div>';
 
-    if(!pending.length){
+        approvedBox.innerHTML = approved.length
+            ? approved.map(renderDeposit).join("")
+            : '<div class="empty">✅ No approved deposits yet.</div>';
 
-        pendingBox.innerHTML = `
-            <div class="empty">
-                ⏳ No pending deposit requests.
-            </div>
-        `;
+        rejectedBox.innerHTML = rejected.length
+            ? rejected.map(renderDeposit).join("")
+            : '<div class="empty">❌ No rejected deposits yet.</div>';
 
+        if(
+            (pendingResult.count || 0) > 50 ||
+            (approvedResult.count || 0) > 50 ||
+            (rejectedResult.count || 0) > 50
+        ){
+            const note = '<div class="small" style="padding:10px;text-align:center;">Showing latest 50 records in this folder.</div>';
+            if((pendingResult.count || 0) > 50) pendingBox.insertAdjacentHTML("afterbegin",note);
+            if((approvedResult.count || 0) > 50) approvedBox.insertAdjacentHTML("afterbegin",note);
+            if((rejectedResult.count || 0) > 50) rejectedBox.insertAdjacentHTML("afterbegin",note);
+        }
     }
-
-    else{
-
-        pendingBox.innerHTML =
-            pending
-            .map(
-                renderDeposit
-            )
-            .join("");
-
-    }
-
-    if(!approved.length){
-
-        approvedBox.innerHTML = `
-            <div class="empty">
-                ✅ No approved deposits yet.
-            </div>
-        `;
-
-    }
-
-    else{
-
-        approvedBox.innerHTML =
-            approved
-            .map(
-                renderDeposit
-            )
-            .join("");
-
-    }
-
-    if(!rejected.length){
-
-        rejectedBox.innerHTML = `
-            <div class="empty">
-                ❌ No rejected deposits yet.
-            </div>
-        `;
-
-    }
-
-    else{
-
-        rejectedBox.innerHTML =
-            rejected
-            .map(
-                renderDeposit
-            )
-            .join("");
-
+    catch(error){
+        console.error("Load deposits error:",error);
+        const html = '<div class="status error">Unable to load deposits.</div>';
+        pendingBox.innerHTML = html;
+        approvedBox.innerHTML = html;
+        rejectedBox.innerHTML = html;
     }
 
 }
-
 
 /* =====================================================
    UPDATE DEPOSIT
@@ -4842,192 +4655,76 @@ async function updateDeposit(
    ALL CUSTOMERS
 ===================================================== */
 
-async function loadCustomers(){
+let customerPage = 0;
+const CUSTOMERS_PER_PAGE = 50;
 
-    const box =
-        document.getElementById(
-            "customerList"
-        );
+async function loadCustomers(page = customerPage){
 
-    box.innerHTML =
-        "<p>Loading customers...</p>";
+    const box = document.getElementById("customerList");
+    customerPage = Math.max(0,Number(page) || 0);
+    box.innerHTML = "<p>Loading customers...</p>";
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("customers")
-        .select(
-            "id,name,mobile,uid,invitation_code,referred_by,wallet_balance,bonus_balance,deposit_balance,commission_balance,referral_balance,sell_on,status,created_at"
-        )
-        .neq("status","Deleted")
-        .order(
-            "created_at",
-            {
-                ascending:false
+    try{
+        const from = customerPage * CUSTOMERS_PER_PAGE;
+        const to = from + CUSTOMERS_PER_PAGE - 1;
+
+        const {data,error,count} = await supabaseClient
+            .from("customers")
+            .select(
+                "id,name,mobile,uid,invitation_code,referred_by,wallet_balance,bonus_balance,deposit_balance,commission_balance,referral_balance,sell_on,status,created_at",
+                {count:"exact"}
+            )
+            .neq("status","Deleted")
+            .order("created_at",{ascending:false})
+            .range(from,to);
+
+        if(error) throw error;
+
+        if(!data || !data.length){
+            box.innerHTML = customerPage === 0
+                ? '<div class="empty">No customers found.</div>'
+                : '<div class="empty">No more customers.</div>';
+            if(customerPage > 0){
+                box.insertAdjacentHTML("beforeend",
+                    '<div class="actions"><button class="gray" onclick="loadCustomers('+(customerPage-1)+')">⬅ Previous</button></div>');
             }
-        );
+            return;
+        }
 
-    if(error){
-
-        box.innerHTML = `
-            <div class="status error">
-                ${escapeHtml(error.message)}
+        box.innerHTML = data.map(c => `
+            <div class="item">
+                <h3>👤 ${escapeHtml(c.name || "-")}</h3>
+                <div class="row"><span class="label">UID</span><span class="value">${escapeHtml(c.uid || "-")}</span></div>
+                <div class="row"><span class="label">Mobile</span><span class="value">${escapeHtml(c.mobile || "-")}</span></div>
+                <div class="row"><span class="label">Invitation Code</span><span class="value">${escapeHtml(c.invitation_code || "-")}</span></div>
+                <div class="row"><span class="label">Wallet</span><span class="value">${money(c.wallet_balance)}</span></div>
+                <div class="row"><span class="label">Deposit Balance</span><span class="value">${money(c.deposit_balance)}</span></div>
+                <div class="row"><span class="label">Commission</span><span class="value">${money(c.commission_balance)}</span></div>
+                <div class="row"><span class="label">Referral</span><span class="value">${money(c.referral_balance)}</span></div>
+                <div class="row"><span class="label">Bonus</span><span class="value">${money(c.bonus_balance)}</span></div>
+                <div class="row"><span class="label">Status</span><span class="value">${escapeHtml(c.status || "Active")}</span></div>
+                <div class="row"><span class="label">Sell</span><span class="value">${c.sell_on ? "🟢 ON" : "🔴 OFF"}</span></div>
+                <div class="actions">
+                    <button class="red full" onclick="deleteCustomer('${c.id}')">🗑️ Delete Customer</button>
+                </div>
             </div>
-        `;
+        `).join("");
 
-        return;
-
+        const totalPages = Math.max(1,Math.ceil((count || 0) / CUSTOMERS_PER_PAGE));
+        box.insertAdjacentHTML("beforeend", `
+            <div class="actions" style="align-items:center;justify-content:space-between;gap:10px;">
+                <button class="gray" ${customerPage === 0 ? "disabled" : ""} onclick="loadCustomers(${customerPage-1})">⬅ Previous</button>
+                <span class="small">Page ${customerPage+1} / ${totalPages}</span>
+                <button class="blue" ${customerPage >= totalPages-1 ? "disabled" : ""} onclick="loadCustomers(${customerPage+1})">Next ➡</button>
+            </div>
+        `);
     }
-
-    if(
-        !data ||
-        !data.length
-    ){
-
-        box.innerHTML = `
-            <div class="empty">
-                No customers found.
-            </div>
-        `;
-
-        return;
-
+    catch(error){
+        console.error("Load customers error:",error);
+        box.innerHTML = '<div class="status error">Unable to load customers.</div>';
     }
-
-    box.innerHTML =
-    data.map(
-        c => `
-
-        <div class="item">
-
-            <h3>
-                👤 ${escapeHtml(c.name || "-")}
-            </h3>
-
-            <div class="row">
-                <span class="label">
-                    UID
-                </span>
-
-                <span class="value">
-                    ${escapeHtml(c.uid || "-")}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Mobile
-                </span>
-
-                <span class="value">
-                    ${escapeHtml(c.mobile || "-")}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Invitation Code
-                </span>
-
-                <span class="value">
-                    ${escapeHtml(c.invitation_code || "-")}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Wallet
-                </span>
-
-                <span class="value">
-                    ${money(c.wallet_balance)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Deposit Balance
-                </span>
-
-                <span class="value">
-                    ${money(c.deposit_balance)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Commission
-                </span>
-
-                <span class="value">
-                    ${money(c.commission_balance)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Referral
-                </span>
-
-                <span class="value">
-                    ${money(c.referral_balance)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Bonus
-                </span>
-
-                <span class="value">
-                    ${money(c.bonus_balance)}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Status
-                </span>
-
-                <span class="value">
-                    ${escapeHtml(c.status || "Active")}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">
-                    Sell
-                </span>
-
-                <span class="value">
-                    ${
-                        c.sell_on
-                        ? "🟢 ON"
-                        : "🔴 OFF"
-                    }
-                </span>
-            </div>
-
-            <div class="actions">
-
-                <button
-                    class="red full"
-                    onclick="deleteCustomer('${c.id}')"
-                >
-                    🗑️ Delete Customer
-                </button>
-
-            </div>
-
-        </div>
-
-        `
-    ).join("");
 
 }
-
 
 /* =====================================================
    PAGE LOAD
@@ -5046,54 +4743,42 @@ document.addEventListener(
 
         }
 
-        await loadAdminTotals();
-
-        await loadPaymentSettings();
-
-        await loadSupportSettings();
-
-        await loadDeposits();
-
-        await loadArchivedCustomers();
+        await Promise.allSettled([
+            loadAdminTotals(),
+            loadPaymentSettings(),
+            loadSupportSettings(),
+            loadDeposits(),
+            loadArchivedCustomers()
+        ]);
 
     }
 );
 
 
 /* =====================================================
-   AUTO REFRESH TOTALS
+   AUTO REFRESH DASHBOARD DATA
 ===================================================== */
+
+let adminRefreshRunning = false;
 
 setInterval(
     async function(){
 
-        if(!currentAdminUser){
-
+        if(!currentAdminUser || adminRefreshRunning){
             return;
-
         }
 
-        await loadAdminTotals();
+        adminRefreshRunning = true;
 
-    },
-    30000
-);
-
-
-/* =====================================================
-   AUTO REFRESH DEPOSITS
-===================================================== */
-
-setInterval(
-    async function(){
-
-        if(!currentAdminUser){
-
-            return;
-
+        try{
+            await Promise.allSettled([
+                loadAdminTotals(),
+                loadDeposits()
+            ]);
         }
-
-        await loadDeposits();
+        finally{
+            adminRefreshRunning = false;
+        }
 
     },
     30000
