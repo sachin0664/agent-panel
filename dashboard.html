@@ -3261,13 +3261,136 @@ async function loadPayInOut(customerId){
     if(!payInList || !payOutList) return;
 
 
-    const {data, error} =
-        await supabaseClient.rpc(
-            "get_my_pay_flows",
-            {p_limit:20}
-        );
+    try{
 
-    if(error){
+        /*
+         * Use the same transaction RPC that already powers
+         * Transaction History. This keeps Pay In / Pay Out
+         * in sync and avoids a second loading path.
+         */
+        const {data, error} =
+            await supabaseClient.rpc(
+                "get_my_transaction_history",
+                {p_limit:500}
+            );
+
+        if(error){
+            throw error;
+        }
+
+        const rows = Array.isArray(data) ? data : [];
+
+
+        /* PAY IN = approved deposits only */
+        const payIns = rows.filter(function(row){
+            return String(row.event_type || "").toLowerCase() === "deposit"
+                && String(row.status || "").toLowerCase() === "approved";
+        });
+
+
+        /* PAY OUT = every customer sell/debit transaction */
+        const payOuts = rows.filter(function(row){
+            return String(row.event_type || "").toLowerCase() === "sell"
+                && String(row.direction || "").toLowerCase() === "debit";
+        });
+
+
+        if(!payIns.length){
+
+            payInList.innerHTML =
+                '<div class="pay-flow-empty">No deposit records.</div>';
+
+        }else{
+
+            payInList.innerHTML =
+                payIns.map(function(row){
+
+                    return `
+                        <div class="pay-flow-row">
+
+                            <div class="pay-flow-top">
+                                <div class="pay-flow-amount pay-flow-credit">
+                                    + ${formatMoney(row.amount)}
+                                </div>
+
+                                <span class="pay-flow-status">
+                                    Approved
+                                </span>
+                            </div>
+
+                            <div class="pay-flow-meta">
+                                Deposit
+                            </div>
+
+                            <div class="pay-flow-time">
+                                ${formatDateTime(row.created_at)}
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join("");
+
+        }
+
+
+        if(!payOuts.length){
+
+            payOutList.innerHTML =
+                '<div class="pay-flow-empty">No sell records.</div>';
+
+        }else{
+
+            payOutList.innerHTML =
+                payOuts.map(function(row){
+
+                    let upiId = row.upi_id || "";
+
+                    if(!upiId){
+
+                        const reference =
+                            String(row.reference || "");
+
+                        const match =
+                            reference.match(/UPI_ID:([^|]+)/i);
+
+                        if(match){
+                            upiId = match[1].trim();
+                        }
+
+                    }
+
+                    return `
+                        <div class="pay-flow-row">
+
+                            <div class="pay-flow-top">
+                                <div class="pay-flow-amount pay-flow-debit">
+                                    - ${formatMoney(row.amount)}
+                                </div>
+
+                                <span class="pay-flow-status">
+                                    Sell Success
+                                </span>
+                            </div>
+
+                            <div class="pay-flow-meta">
+                                Sell Success<br>
+                                UPI ID: ${escapeHtml(upiId || "Not recorded")}
+                            </div>
+
+                            <div class="pay-flow-time">
+                                ${formatDateTime(row.created_at)}
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join("");
+
+        }
+
+    }
+    catch(error){
 
         console.error("Pay In/Out error:", error);
 
@@ -3277,164 +3400,9 @@ async function loadPayInOut(customerId){
         payOutList.innerHTML =
             '<div class="pay-flow-empty">Unable to load Pay Out.</div>';
 
-        return;
-    }
-
-
-    const rows = Array.isArray(data)
-        ? data
-        : [];
-
-
-    const payIns =
-        rows.filter(row =>
-            String(row.flow || "").toLowerCase() === "pay in"
-        );
-
-    const payOuts =
-        rows.filter(row =>
-            String(row.flow || "").toLowerCase() === "pay out"
-        );
-
-
-    /* PAY IN */
-
-    if(!payIns.length){
-
-        payInList.innerHTML =
-            '<div class="pay-flow-empty">No deposit payment records.</div>';
-
-    }else{
-
-        payInList.innerHTML =
-            payIns.map(row => {
-
-                const status =
-                    String(
-                        row.status || "pending"
-                    ).toLowerCase();
-
-                const statusLabel =
-                    status.charAt(0).toUpperCase() +
-                    status.slice(1);
-
-                return `
-                    <div class="pay-flow-row">
-
-                        <div class="pay-flow-top">
-
-                            <div class="pay-flow-amount pay-flow-credit">
-                                + ${formatMoney(row.amount)}
-                            </div>
-
-                            <span class="pay-flow-status">
-                                ${escapeHtml(statusLabel)}
-                            </span>
-
-                        </div>
-
-                        <div class="pay-flow-meta">
-                            Deposit<br>
-                            UTR: ${escapeHtml(row.utr || "Not provided")}
-                        </div>
-
-                        <div class="pay-flow-time">
-                            ${formatDateTime(row.created_at)}
-                        </div>
-
-                    </div>
-                `;
-
-            }).join("");
-
-    }
-
-
-    /* PAY OUT */
-
-    if(!payOuts.length){
-
-        payOutList.innerHTML =
-            '<div class="pay-flow-empty">No Pay Out records.</div>';
-
-    }else{
-
-        payOutList.innerHTML =
-            payOuts.map(row => {
-
-                const description =
-                    String(
-                        row.description ||
-                        "UPI Payment"
-                    );
-
-                const isSell =
-                    /sell|withdraw/i.test(
-                        description + " " +
-                        String(row.reference || "")
-                    );
-
-                let upiId =
-                    row.upi_id || "";
-
-                if(!upiId){
-
-                    const reference =
-                        String(
-                            row.reference || ""
-                        );
-
-                    const match =
-                        reference.match(
-                            /UPI_ID:([^|]+)/i
-                        );
-
-                    if(match){
-                        upiId =
-                            match[1].trim();
-                    }
-
-                }
-
-                return `
-                    <div class="pay-flow-row">
-
-                        <div class="pay-flow-top">
-
-                            <div class="pay-flow-amount pay-flow-debit">
-                                - ${formatMoney(row.amount)}
-                            </div>
-
-                            <span class="pay-flow-status">
-                                ${isSell ? "Sell Success" : "Success"}
-                            </span>
-
-                        </div>
-
-                        <div class="pay-flow-meta">
-                            ${escapeHtml(
-                                isSell
-                                    ? "Sell Payment"
-                                    : "UPI Payment"
-                            )}<br>
-                            UPI ID: ${escapeHtml(
-                                upiId || "Not recorded"
-                            )}
-                        </div>
-
-                        <div class="pay-flow-time">
-                            ${formatDateTime(row.created_at)}
-                        </div>
-
-                    </div>
-                `;
-
-            }).join("");
-
     }
 
 }
-
 
 async function loadTransactions(
     customerId
