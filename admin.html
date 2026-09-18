@@ -1110,6 +1110,21 @@ body.pageReady{
 
 <div class="card">
 
+    <h2>🗄️ Deleted / Blocked Customers</h2>
+
+    <p class="small">Admin se delete kiye gaye accounts yahan rahenge. Restore karne par account dobara login kar sakega.</p>
+
+    <button class="gray full" onclick="loadArchivedCustomers()">
+        🗄️ Open Deleted Customers
+    </button>
+
+    <div id="archivedCustomerList"></div>
+
+</div>
+
+
+<div class="card">
+
     <h2>💵 Deposit Commission</h2>
 
     <div class="commissionBox">
@@ -3983,7 +3998,7 @@ async function deleteCustomer(customerId){
 
     const confirmed =
         confirm(
-            "⚠️ Kya aap is customer ko permanently delete karna chahte hain?\n\nSirf ye customer delete hoga.\n\nYe action undo nahi kiya ja sakta."
+            "⚠️ Kya aap is customer ko delete/block karna chahte hain?\n\nAccount admin ke Deleted Customers folder me chala jayega.\n\nCustomer login nahi kar payega. Aap baad me Restore karke unblock kar sakte hain."
         );
 
     if(!confirmed){
@@ -4028,7 +4043,7 @@ async function deleteCustomer(customerId){
         }
 
         alert(
-            "✅ Customer successfully deleted."
+            "✅ Customer deleted & blocked. Deleted Customers folder me move ho gaya."
         );
 
         document.getElementById(
@@ -4049,7 +4064,7 @@ async function deleteCustomer(customerId){
         document.getElementById(
             "searchStatus"
         ).textContent =
-            "✅ Customer deleted successfully.";
+            "✅ Customer deleted & blocked. Deleted Customers folder me move ho gaya.";
 
         await loadCustomers();
 
@@ -4074,6 +4089,72 @@ async function deleteCustomer(customerId){
 
     }
 
+}
+
+
+/* =====================================================
+   DELETED / BLOCKED CUSTOMERS
+===================================================== */
+
+async function loadArchivedCustomers(){
+
+    const box = document.getElementById("archivedCustomerList");
+    box.innerHTML = "<p>Loading deleted customers...</p>";
+
+    const { data, error } = await supabaseClient
+        .from("customer_archives")
+        .select("customer_id,archived_at,reason,customer_snapshot")
+        .order("archived_at", { ascending:false });
+
+    if(error){
+        box.innerHTML = \`<div class="status error">❌ \${escapeHtml(error.message)}</div>\`;
+        return;
+    }
+
+    if(!data || !data.length){
+        box.innerHTML = \`<div class="empty">🗄️ Deleted Customers folder empty.</div>\`;
+        return;
+    }
+
+    box.innerHTML = data.map(row => {
+        const c = row.customer_snapshot || {};
+        return \`
+            <div class="item">
+                <h3>🗄️ \${escapeHtml(c.name || "-")}</h3>
+                <div class="row"><span class="label">UID</span><span class="value">\${escapeHtml(c.uid || "-")}</span></div>
+                <div class="row"><span class="label">Mobile</span><span class="value">\${escapeHtml(c.mobile || "-")}</span></div>
+                <div class="row"><span class="label">Deleted At</span><span class="value">\${formatReferralDate(row.archived_at)}</span></div>
+                <div class="row"><span class="label">Status</span><span class="value">🔒 BLOCKED</span></div>
+                <div class="actions">
+                    <button class="green full" onclick="restoreCustomer('\${row.customer_id}')">♻️ Restore & Unblock</button>
+                </div>
+            </div>
+        \`;
+    }).join("");
+}
+
+async function restoreCustomer(customerId){
+
+    if(!customerId){
+        alert("❌ Customer ID missing.");
+        return;
+    }
+
+    if(!confirm("♻️ Is customer ko Restore karna hai?\n\nAccount Active hoga aur login dobara allow ho jayega.")) return;
+
+    try{
+        const { data, error } = await supabaseClient.rpc("admin_restore_customer", { p_customer_id: customerId });
+        if(error) throw error;
+        if(data !== true) throw new Error("Customer restore failed.");
+        alert("✅ Customer restored & unblocked successfully.");
+        await loadArchivedCustomers();
+        await loadCustomers();
+        await loadAdminTotals();
+    }
+    catch(error){
+        console.error("Restore customer error:", error);
+        alert("❌ " + (error.message || "Customer restore failed."));
+    }
 }
 
 
@@ -4780,6 +4861,7 @@ async function loadCustomers(){
         .select(
             "id,name,mobile,uid,invitation_code,referred_by,wallet_balance,bonus_balance,deposit_balance,commission_balance,referral_balance,sell_on,status,created_at"
         )
+        .neq("status","Deleted")
         .order(
             "created_at",
             {
@@ -4971,6 +5053,8 @@ document.addEventListener(
         await loadSupportSettings();
 
         await loadDeposits();
+
+        await loadArchivedCustomers();
 
     }
 );
