@@ -1047,271 +1047,91 @@ async function loadCustomer(){
 
 /* =========================
    LOAD TEAM
+   SECURE RPC
 ========================= */
 
 async function loadTeam(){
 
     const directElement =
-        document.getElementById("directTeam");
+        document.getElementById(
+            "directTeam"
+        );
 
     const totalElement =
-        document.getElementById("totalTeam");
+        document.getElementById(
+            "totalTeam"
+        );
 
 
-    if(
-        !currentCustomer ||
-        !currentCustomer.invitation_code
-    ){
+    directElement.textContent = "…";
+    totalElement.textContent = "…";
 
-        directElement.textContent = "0";
-        totalElement.textContent = "0";
 
-        return;
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "get_referral_team_counts"
+            );
+
+
+        if(error){
+
+            console.error(
+                "Referral Team RPC Error:",
+                error
+            );
+
+            directElement.textContent = "—";
+            totalElement.textContent = "—";
+
+            return;
+
+        }
+
+
+        const result =
+            Array.isArray(data)
+                ? data[0]
+                : data;
+
+
+        if(!result){
+
+            directElement.textContent = "0";
+            totalElement.textContent = "0";
+
+            return;
+
+        }
+
+
+        directElement.textContent =
+            String(
+                result.direct_count || 0
+            );
+
+
+        totalElement.textContent =
+            String(
+                result.total_count || 0
+            );
 
     }
-
-
-    const invitationCode =
-        String(
-            currentCustomer.invitation_code
-        ).trim();
-
-
-    /*
-     * LEVEL A / DIRECT TEAM
-     *
-     * Parent invitation_code
-     * = Child referred_by
-     */
-
-    const {
-        data: levelA,
-        error: levelAError
-    } =
-        await supabaseClient
-        .from("customers")
-        .select(
-            "id, invitation_code, referred_by"
-        )
-        .eq(
-            "referred_by",
-            invitationCode
-        );
-
-
-    if(levelAError){
+    catch(error){
 
         console.error(
-            "Direct Team Error:",
-            levelAError
+            "Referral Team Error:",
+            error
         );
-
-        /*
-         * Keep current value instead of
-         * silently showing a wrong 0.
-         */
 
         directElement.textContent = "—";
         totalElement.textContent = "—";
 
-        return;
-
     }
-
-
-    const direct =
-        Array.isArray(levelA)
-            ? levelA
-            : [];
-
-
-    /*
-     * UNIQUE NETWORK
-     */
-
-    const networkIds =
-        new Set();
-
-
-    direct.forEach(function(customer){
-
-        if(customer && customer.id){
-
-            networkIds.add(
-                customer.id
-            );
-
-        }
-
-    });
-
-
-    /*
-     * LEVEL B
-     */
-
-    let levelB = [];
-
-
-    for(
-        const customer of direct
-    ){
-
-        const childInvitationCode =
-            String(
-                customer.invitation_code || ""
-            ).trim();
-
-
-        if(!childInvitationCode){
-
-            continue;
-
-        }
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-            .from("customers")
-            .select(
-                "id, invitation_code, referred_by"
-            )
-            .eq(
-                "referred_by",
-                childInvitationCode
-            );
-
-
-        if(error){
-
-            console.error(
-                "Level B Error:",
-                error
-            );
-
-            continue;
-
-        }
-
-
-        if(
-            Array.isArray(data)
-        ){
-
-            levelB =
-                levelB.concat(data);
-
-        }
-
-    }
-
-
-    levelB.forEach(function(customer){
-
-        if(customer && customer.id){
-
-            networkIds.add(
-                customer.id
-            );
-
-        }
-
-    });
-
-
-    /*
-     * LEVEL C
-     */
-
-    let levelC = [];
-
-
-    for(
-        const customer of levelB
-    ){
-
-        const childInvitationCode =
-            String(
-                customer.invitation_code || ""
-            ).trim();
-
-
-        if(!childInvitationCode){
-
-            continue;
-
-        }
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-            .from("customers")
-            .select(
-                "id, invitation_code, referred_by"
-            )
-            .eq(
-                "referred_by",
-                childInvitationCode
-            );
-
-
-        if(error){
-
-            console.error(
-                "Level C Error:",
-                error
-            );
-
-            continue;
-
-        }
-
-
-        if(
-            Array.isArray(data)
-        ){
-
-            levelC =
-                levelC.concat(data);
-
-        }
-
-    }
-
-
-    levelC.forEach(function(customer){
-
-        if(customer && customer.id){
-
-            networkIds.add(
-                customer.id
-            );
-
-        }
-
-    });
-
-
-    /*
-     * DISPLAY COUNTS
-     */
-
-    directElement.textContent =
-        String(
-            direct.length
-        );
-
-
-    totalElement.textContent =
-        String(
-            networkIds.size
-        );
 
 }
 
