@@ -968,58 +968,70 @@ header{
 .pay-flow-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-top:15px;
+    gap:9px;
+    margin-top:12px;
 }
 
 .pay-flow-box{
     background:white;
     border:1px solid #e6edf6;
-    border-radius:21px;
+    border-radius:18px;
     box-shadow:0 6px 20px rgba(20,60,100,.07);
     overflow:hidden;
+    min-width:0;
 }
 
 .pay-flow-head{
-    padding:16px 18px;
-    border-bottom:1px solid #edf2f7;
+    padding:12px 11px;
+    border-bottom:0;
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:8px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
 }
 
 .pay-flow-icon{
-    width:40px;
-    height:40px;
-    border-radius:12px;
+    width:34px;
+    height:34px;
+    border-radius:10px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:21px;
+    font-size:18px;
+    flex-shrink:0;
 }
 
 .pay-in-icon{background:#e8fff4;}
 .pay-out-icon{background:#fff0f2;}
 
 .pay-flow-title{
-    font-size:17px;
+    font-size:15px;
     font-weight:900;
     color:#123e7a;
+    line-height:1.1;
 }
 
 .pay-flow-subtitle{
     margin-top:3px;
     color:#8190a4;
-    font-size:9px;
+    font-size:8px;
+    line-height:1.25;
 }
 
 .pay-flow-list{
-    max-height:330px;
+    display:none;
+    max-height:300px;
     overflow-y:auto;
+    border-top:1px solid #edf2f7;
+}
+
+.pay-flow-box.open .pay-flow-list{
+    display:block;
 }
 
 .pay-flow-row{
-    padding:13px 17px;
+    padding:10px 11px;
     border-bottom:1px solid #edf2f7;
 }
 
@@ -1029,11 +1041,11 @@ header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
+    gap:7px;
 }
 
 .pay-flow-amount{
-    font-size:14px;
+    font-size:12px;
     font-weight:900;
 }
 
@@ -1041,36 +1053,47 @@ header{
 .pay-flow-debit{color:#dc3545;}
 
 .pay-flow-status{
-    font-size:9px;
+    font-size:8px;
     font-weight:900;
-    padding:4px 8px;
+    padding:3px 6px;
     border-radius:20px;
     background:#e8fff4;
     color:#08a56c;
 }
 
 .pay-flow-meta{
-    margin-top:5px;
+    margin-top:4px;
     color:#68788f;
-    font-size:10px;
-    line-height:1.5;
+    font-size:9px;
+    line-height:1.45;
+    word-break:break-word;
 }
 
 .pay-flow-time{
-    margin-top:4px;
+    margin-top:3px;
     color:#9aa7b8;
-    font-size:9px;
+    font-size:8px;
 }
 
 .pay-flow-empty{
-    padding:25px 15px;
+    padding:20px 10px;
     text-align:center;
     color:#8290a4;
-    font-size:11px;
+    font-size:10px;
 }
 
-@media(max-width:900px){
-    .pay-flow-grid{grid-template-columns:1fr;}
+.pay-flow-box.open .pay-flow-head{
+    border-bottom:1px solid #edf2f7;
+}
+
+/* Recent Transactions stays collapsed on the dashboard.
+   The existing View All link opens the full transactions page. */
+.transactions-box #transactionList{
+    display:none;
+}
+
+.transactions-head{
+    border-bottom:0;
 }
 
 /* =========================================================
@@ -2260,7 +2283,13 @@ header{
 
         <div class="pay-flow-box">
 
-            <div class="pay-flow-head">
+            <div
+                class="pay-flow-head"
+                role="button"
+                tabindex="0"
+                aria-expanded="false"
+                onclick="togglePayFlow(this.parentElement)"
+                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePayFlow(this.parentElement);}">
 
                 <div class="pay-flow-icon pay-in-icon">💰</div>
 
@@ -2280,7 +2309,13 @@ header{
 
         <div class="pay-flow-box">
 
-            <div class="pay-flow-head">
+            <div
+                class="pay-flow-head"
+                role="button"
+                tabindex="0"
+                aria-expanded="false"
+                onclick="togglePayFlow(this.parentElement)"
+                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePayFlow(this.parentElement);}">
 
                 <div class="pay-flow-icon pay-out-icon">📲</div>
 
@@ -2723,6 +2758,32 @@ const supabaseClient =
 <script src="customer-guard.js"></script>
 
 <script>
+
+
+function togglePayFlow(box){
+
+    if(!box) return;
+
+    const wasOpen =
+        box.classList.contains("open");
+
+    box.classList.toggle("open");
+
+    const head =
+        box.querySelector(".pay-flow-head");
+
+    if(head){
+        head.setAttribute(
+            "aria-expanded",
+            box.classList.contains("open")
+                ? "true"
+                : "false"
+        );
+    }
+
+    /* Keep the two panels independent. */
+    if(wasOpen) return;
+}
 
 
 function getCustomerId(){
