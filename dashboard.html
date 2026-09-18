@@ -3355,7 +3355,6 @@ async function loadTransactions(
                 ).toLowerCase();
 
             const isSellTransaction =
-                transactionText.includes("manual") ||
                 transactionText.includes("withdraw") ||
                 transactionText.includes("sell");
 
@@ -3487,7 +3486,6 @@ function getTransactionTitle(
 
 
     if(
-        text.includes("manual") ||
         text.includes("withdraw") ||
         text.includes("sell")
     ){
@@ -3579,7 +3577,6 @@ function getTransactionIcon(
 
 
     if(
-        text.includes("manual") ||
         text.includes("withdraw") ||
         text.includes("sell")
     ){
