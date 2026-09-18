@@ -36,7 +36,9 @@ a{
     display:flex;
 }
 
-/* SIDEBAR */
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar{
     width:245px;
@@ -92,7 +94,9 @@ a{
     font-size:18px;
 }
 
-/* MAIN */
+/* =========================
+   MAIN
+========================= */
 
 .main{
     width:100%;
@@ -129,7 +133,9 @@ a{
     cursor:pointer;
 }
 
-/* HERO */
+/* =========================
+   HERO
+========================= */
 
 .hero{
     border-radius:25px;
@@ -173,7 +179,9 @@ a{
     z-index:2;
 }
 
-/* STATS */
+/* =========================
+   STATS
+========================= */
 
 .grid{
     display:grid;
@@ -223,7 +231,9 @@ a{
     font-weight:800;
 }
 
-/* REFERRAL CODE */
+/* =========================
+   REFERRAL CODE
+========================= */
 
 .code-card{
     background:white;
@@ -280,7 +290,9 @@ a{
     cursor:pointer;
 }
 
-/* LEVELS */
+/* =========================
+   LEVELS
+========================= */
 
 .section-title{
     font-size:20px;
@@ -328,7 +340,9 @@ a{
     font-size:13px;
 }
 
-/* HISTORY */
+/* =========================
+   HISTORY
+========================= */
 
 .history{
     background:white;
@@ -346,6 +360,13 @@ a{
     font-weight:800;
 }
 
+.history-subtitle{
+    margin-top:6px;
+    color:#7c879d;
+    font-size:13px;
+    line-height:1.5;
+}
+
 .table-wrap{
     overflow-x:auto;
 }
@@ -353,7 +374,7 @@ a{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:650px;
+    min-width:760px;
 }
 
 th{
@@ -368,6 +389,7 @@ td{
     padding:13px 12px;
     border-bottom:1px solid #edf0f6;
     font-size:13px;
+    vertical-align:top;
 }
 
 .amount{
@@ -380,6 +402,27 @@ td{
     font-weight:700;
 }
 
+.member-name{
+    font-weight:800;
+    color:#17213b;
+}
+
+.member-uid{
+    color:#7c879d;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.level-badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:9px;
+    background:#eef4ff;
+    color:#2455c3;
+    font-weight:800;
+    font-size:12px;
+}
+
 .empty,
 .loading{
     text-align:center;
@@ -387,13 +430,17 @@ td{
     color:#8a94a8;
 }
 
-/* MOBILE NAV */
+/* =========================
+   MOBILE NAV
+========================= */
 
 .mobile-nav{
     display:none;
 }
 
-/* RESPONSIVE */
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media(max-width:900px){
 
@@ -485,7 +532,9 @@ td{
 
 <div class="app">
 
-<!-- SIDEBAR -->
+<!-- =========================
+     SIDEBAR
+========================= -->
 
 <aside class="sidebar">
 
@@ -535,7 +584,9 @@ td{
 </aside>
 
 
-<!-- MAIN -->
+<!-- =========================
+     MAIN
+========================= -->
 
 <main class="main">
 
@@ -562,7 +613,9 @@ td{
     </div>
 
 
-    <!-- HERO -->
+    <!-- =========================
+         HERO
+    ========================= -->
 
     <section class="hero">
 
@@ -579,7 +632,9 @@ td{
     </section>
 
 
-    <!-- STATS -->
+    <!-- =========================
+         STATS
+    ========================= -->
 
     <section class="grid">
 
@@ -644,7 +699,9 @@ td{
     </section>
 
 
-    <!-- REFERRAL CODE -->
+    <!-- =========================
+         REFERRAL CODE
+    ========================= -->
 
     <section class="code-card">
 
@@ -694,7 +751,9 @@ td{
     </section>
 
 
-    <!-- LEVELS -->
+    <!-- =========================
+         LEVELS
+    ========================= -->
 
     <div class="section-title">
         Referral Commission
@@ -755,14 +814,21 @@ td{
     </section>
 
 
-    <!-- HISTORY -->
+    <!-- =========================
+         REFERRAL EARNINGS HISTORY
+    ========================= -->
 
     <section class="history">
 
         <div class="history-head">
 
             <div class="history-title">
-                Referral Earnings History
+                💵 Referral Earnings History
+            </div>
+
+            <div class="history-subtitle">
+                Aapke referred members ke approved deposits
+                par mili referral commission ki complete history.
             </div>
 
         </div>
@@ -771,7 +837,7 @@ td{
             id="historyContent"
             class="loading">
 
-            Loading...
+            Loading referral earnings...
 
         </div>
 
@@ -782,37 +848,56 @@ td{
 </div>
 
 
-<!-- MOBILE NAV -->
+<!-- =========================
+     MOBILE NAV
+========================= -->
 
 <nav class="mobile-nav">
 
     <a href="dashboard.html">
+
         <span>🏠</span>
+
         Home
+
     </a>
+
 
     <a href="deposit.html">
+
         <span>💳</span>
+
         Deposit
+
     </a>
 
+
     <a href="commission.html">
+
         <span>💰</span>
+
         Earnings
+
     </a>
+
 
     <a
         href="referral.html"
         class="active">
 
         <span>👥</span>
+
         Referral
 
     </a>
 
+
     <a href="profile.html">
+
         <span>👤</span>
+
         Profile
+
     </a>
 
 </nav>
@@ -843,6 +928,7 @@ const supabaseClient =
 
 
 let customerId = null;
+
 let currentCustomer = null;
 
 
@@ -998,7 +1084,7 @@ async function loadCustomer(){
 
 
         /* =========================
-           REFERRAL EARNINGS
+           REFERRAL EARNINGS BALANCE
         ========================= */
 
         document.getElementById(
@@ -1064,6 +1150,7 @@ async function loadTeam(){
 
 
     directElement.textContent = "…";
+
     totalElement.textContent = "…";
 
 
@@ -1086,6 +1173,7 @@ async function loadTeam(){
             );
 
             directElement.textContent = "—";
+
             totalElement.textContent = "—";
 
             return;
@@ -1102,6 +1190,7 @@ async function loadTeam(){
         if(!result){
 
             directElement.textContent = "0";
+
             totalElement.textContent = "0";
 
             return;
@@ -1129,6 +1218,7 @@ async function loadTeam(){
         );
 
         directElement.textContent = "—";
+
         totalElement.textContent = "—";
 
     }
@@ -1138,6 +1228,7 @@ async function loadTeam(){
 
 /* =========================
    REFERRAL HISTORY
+   SECURE RPC
 ========================= */
 
 async function loadReferralHistory(){
@@ -1148,36 +1239,342 @@ async function loadReferralHistory(){
         );
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-        .from(
-            "customer_referral_commissions"
-        )
-        .select(`
-            level,
-            percentage,
-            transaction_amount,
-            commission_amount,
-            status,
-            created_at
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
+    container.innerHTML = `
+        <div class="loading">
+            Loading referral earnings...
+        </div>
+    `;
+
+
+    try{
+
+        /*
+         * IMPORTANT:
+         * Direct table SELECT hata diya gaya hai.
+         *
+         * Ab secure RPC:
+         *
+         * get_my_referral_data()
+         *
+         * use ho raha hai.
+         */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "get_my_referral_data"
+            );
+
+
+        if(error){
+
+            console.error(
+                "Referral History RPC Error:",
+                error
+            );
+
+            container.innerHTML = `
+                <div class="empty">
+                    Referral history could not be loaded.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        console.log(
+            "Referral Data:",
+            data
+        );
+
+
+        const referrals =
+            data &&
+            Array.isArray(
+                data.earnings
+            )
+                ? data.earnings
+                : [];
+
+
+        if(
+            referrals.length === 0
+        ){
+
+            container.innerHTML = `
+                <div class="empty">
+                    No referral earnings yet.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        let html = `
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Level
+                            </th>
+
+                            <th>
+                                Member
+                            </th>
+
+                            <th>
+                                Deposit
+                            </th>
+
+                            <th>
+                                Rate
+                            </th>
+
+                            <th>
+                                Earned
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+        `;
+
+
+        referrals.forEach(
+            function(item){
+
+                /* =========================
+                   LEVEL CONVERSION
+                ========================= */
+
+                const rawLevel =
+                    String(
+                        item.level || ""
+                    )
+                    .trim()
+                    .toUpperCase();
+
+
+                let level =
+                    rawLevel;
+
+
+                if(
+                    rawLevel === "1" ||
+                    rawLevel === "A" ||
+                    rawLevel === "LEVEL A"
+                ){
+
+                    level = "A";
+
+                }
+                else if(
+                    rawLevel === "2" ||
+                    rawLevel === "B" ||
+                    rawLevel === "LEVEL B"
+                ){
+
+                    level = "B";
+
+                }
+                else if(
+                    rawLevel === "3" ||
+                    rawLevel === "C" ||
+                    rawLevel === "LEVEL C"
+                ){
+
+                    level = "C";
+
+                }
+
+
+                /* =========================
+                   DATE + TIME
+                ========================= */
+
+                const date =
+                    item.created_at
+                        ? new Date(
+                            item.created_at
+                        ).toLocaleString(
+                            "en-IN",
+                            {
+                                day:"2-digit",
+                                month:"short",
+                                year:"numeric",
+                                hour:"2-digit",
+                                minute:"2-digit"
+                            }
+                        )
+                        : "-";
+
+
+                /* =========================
+                   AMOUNTS
+                ========================= */
+
+                const deposit =
+                    Number(
+                        item.deposit_amount || 0
+                    );
+
+
+                const commission =
+                    Number(
+                        item.commission_amount || 0
+                    );
+
+
+                const percentage =
+                    Number(
+                        item.percentage || 0
+                    );
+
+
+                /* =========================
+                   MEMBER
+                ========================= */
+
+                const memberName =
+                    item.member_name ||
+                    "Customer";
+
+
+                const memberUid =
+                    item.member_uid ||
+                    "-";
+
+
+                /* =========================
+                   STATUS
+                ========================= */
+
+                const status =
+                    String(
+                        item.status ||
+                        "approved"
+                    );
+
+
+                html += `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(date)}
+                        </td>
+
+
+                        <td>
+
+                            <span class="level-badge">
+
+                                Level
+                                ${escapeHtml(level)}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="member-name">
+
+                                ${escapeHtml(
+                                    memberName
+                                )}
+
+                            </div>
+
+                            <div class="member-uid">
+
+                                UID:
+                                ${escapeHtml(
+                                    memberUid
+                                )}
+
+                            </div>
+
+                        </td>
+
+
+                        <td class="amount">
+
+                            ₹${deposit.toFixed(2)}
+
+                        </td>
+
+
+                        <td>
+
+                            ${percentage}%
+
+                        </td>
+
+
+                        <td class="amount">
+
+                            +₹${commission.toFixed(2)}
+
+                        </td>
+
+
+                        <td class="status">
+
+                            ${escapeHtml(
+                                status
+                            )}
+
+                        </td>
+
+                    </tr>
+
+                `;
+
             }
-        )
-        .limit(50);
+        );
 
 
-    if(error){
+        html += `
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+
+        container.innerHTML =
+            html;
+
+    }
+    catch(error){
 
         console.error(
             "Referral History Error:",
@@ -1190,143 +1587,7 @@ async function loadReferralHistory(){
             </div>
         `;
 
-        return;
-
     }
-
-
-    if(
-        !data ||
-        data.length === 0
-    ){
-
-        container.innerHTML = `
-            <div class="empty">
-                No referral earnings yet.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    let html = `
-
-        <div class="table-wrap">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>Level</th>
-                    <th>Deposit</th>
-                    <th>Rate</th>
-                    <th>Earned</th>
-                    <th>Status</th>
-                    <th>Date</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-    `;
-
-
-    data.forEach(function(item){
-
-        const level =
-            String(
-                item.level || ""
-            ).toUpperCase();
-
-
-        const date =
-            item.created_at
-                ? new Date(
-                    item.created_at
-                ).toLocaleDateString(
-                    "en-IN"
-                )
-                : "-";
-
-
-        const deposit =
-            Number(
-                item.transaction_amount || 0
-            );
-
-
-        const commission =
-            Number(
-                item.commission_amount || 0
-            );
-
-
-        const percentage =
-            Number(
-                item.percentage || 0
-            );
-
-
-        const status =
-            String(
-                item.status || "approved"
-            );
-
-
-        html += `
-
-            <tr>
-
-                <td>
-                    Level ${escapeHtml(level)}
-                </td>
-
-                <td>
-                    ₹${deposit.toFixed(2)}
-                </td>
-
-                <td>
-                    ${percentage}%
-                </td>
-
-                <td class="amount">
-                    +₹${commission.toFixed(2)}
-                </td>
-
-                <td class="status">
-                    ${escapeHtml(status)}
-                </td>
-
-                <td>
-                    ${date}
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-
-    html += `
-
-            </tbody>
-
-        </table>
-
-        </div>
-
-    `;
-
-
-    container.innerHTML =
-        html;
 
 }
 
@@ -1369,7 +1630,9 @@ async function copyCode(){
     catch(error){
 
         const textarea =
-            document.createElement("textarea");
+            document.createElement(
+                "textarea"
+            );
 
         textarea.value =
             code;
@@ -1465,11 +1728,31 @@ async function copyLink(){
 function escapeHtml(value){
 
     return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
