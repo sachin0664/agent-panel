@@ -2818,6 +2818,8 @@ async function copyUID(){
 }
 
 
+let dashboardLoading = false;
+
 let currentReferralLink = "";
 
 
@@ -2981,187 +2983,22 @@ function getTodayRange(){
 }
 
 
-async function loadTodayEarnings(
-    customerId
-){
+async function loadEarningsSummary(customerId){
+    const todayEl = document.getElementById("todayEarnings");
+    const totalEl = document.getElementById("totalEarnings");
 
-    const range =
-        getTodayRange();
-
-    let total = 0;
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-        .from(
-            "wallet_ledger"
-        )
-        .select(`
-            component,
-            direction,
-            amount,
-            reason,
-            reference,
-            created_at
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .eq(
-            "direction",
-            "credit"
-        )
-        .gte(
-            "created_at",
-            range.start
-        )
-        .lt(
-            "created_at",
-            range.end
-        );
-
-    if(
-        !error &&
-        data
-    ){
-
-        data.forEach(
-            function(row){
-
-                const component =
-                    String(
-                        row.component || ""
-                    ).toLowerCase();
-
-                const reason =
-                    String(
-                        row.reason || ""
-                    ).toLowerCase();
-
-                const reference =
-                    String(
-                        row.reference || ""
-                    ).toLowerCase();
-
-                if(
-                    component.includes("commission") ||
-                    reason.includes("commission") ||
-                    reference.includes("commission")
-                ){
-
-                    total +=
-                        Number(
-                            row.amount || 0
-                        );
-
-                }
-
-            }
-        );
-
+    try{
+        const {data,error} = await supabaseClient.rpc("get_my_earnings_summary");
+        if(error) throw error;
+        const row = Array.isArray(data) ? (data[0] || {}) : (data || {});
+        todayEl.innerText = formatMoney(row.today_earnings || 0);
+        totalEl.innerText = formatMoney(row.total_earnings || 0);
     }
-
-    document.getElementById(
-        "todayEarnings"
-    ).innerText =
-        formatMoney(
-            total
-        );
-
-}
-
-
-async function loadTotalEarnings(
-    customerId,
-    customer
-){
-
-    let total = 0;
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-        .from(
-            "wallet_ledger"
-        )
-        .select(`
-            component,
-            direction,
-            amount,
-            reason,
-            reference
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .eq(
-            "direction",
-            "credit"
-        );
-
-    if(
-        !error &&
-        data
-    ){
-
-        data.forEach(
-            function(row){
-
-                const component =
-                    String(
-                        row.component || ""
-                    ).toLowerCase();
-
-                const reason =
-                    String(
-                        row.reason || ""
-                    ).toLowerCase();
-
-                const reference =
-                    String(
-                        row.reference || ""
-                    ).toLowerCase();
-
-                const commission =
-                    component.includes("commission") ||
-                    reason.includes("commission") ||
-                    reference.includes("commission");
-
-                const referral =
-                    component.includes("referral") ||
-                    reason.includes("referral") ||
-                    reference.includes("referral");
-
-                if(
-                    commission ||
-                    referral
-                ){
-
-                    total +=
-                        Number(
-                            row.amount || 0
-                        );
-
-                }
-
-            }
-        );
-
+    catch(error){
+        console.error("Earnings summary error:", error);
+        todayEl.innerText = formatMoney(0);
+        totalEl.innerText = formatMoney(0);
     }
-
-    document.getElementById(
-        "totalEarnings"
-    ).innerText =
-        formatMoney(
-            total
-        );
-
 }
 
 
@@ -3961,6 +3798,8 @@ function formatDateTime(
 
 
 async function loadDashboard(){
+    if(dashboardLoading) return;
+    dashboardLoading = true;
 
     const message =
         document.getElementById(
@@ -4129,31 +3968,12 @@ async function loadDashboard(){
         }
 
 
-        await Promise.all([
-
-            loadTodayEarnings(
-                customerId
-            ),
-
-            loadTotalEarnings(
-                customerId,
-                customer
-            ),
-
-            loadNotifications(
-                customerId
-            ),
-
-            loadTransactions(
-                customerId
-            ),
-
-            loadPayInOut(
-                customerId
-            )
-
+        await Promise.allSettled([
+            loadEarningsSummary(customerId),
+            loadNotifications(customerId),
+            loadTransactions(customerId),
+            loadPayInOut(customerId)
         ]);
-
 
         message.innerText =
             "Dashboard updated";
