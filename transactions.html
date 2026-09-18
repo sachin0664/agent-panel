@@ -4,259 +4,298 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Sathi Pay - Transactions</title>
+<title>Sathi Pay - Transaction History</title>
 
 <script src="customer-guard.js"></script>
 
 <style>
 
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #eef4ff, #f8fbff);
-    color: #172033;
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at 10% 5%,rgba(8,127,245,.08),transparent 25%),
+        radial-gradient(circle at 90% 20%,rgba(10,203,157,.08),transparent 25%),
+        #f3f8ff;
+    color:#173d76;
 }
 
-.header {
-    background: linear-gradient(135deg, #2563eb, #4f46e5);
-    color: white;
-    padding: 18px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(37,99,235,.18);
+.header{
+    background:linear-gradient(135deg,#173ed1,#087ff5,#0acb9d);
+    color:white;
+    padding:15px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 5px 18px rgba(20,70,150,.16);
 }
 
-.header h1 {
-    margin: 0;
-    font-size: 21px;
+.header h1{
+    margin:0;
+    font-size:20px;
+    font-weight:900;
 }
 
-.header a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
+.header a{
+    color:white;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:900;
+    background:rgba(255,255,255,.16);
+    padding:9px 13px;
+    border-radius:12px;
 }
 
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 18px 14px 35px;
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:18px 13px 35px;
 }
 
-.page-title {
-    margin-bottom: 15px;
+.page-title{
+    margin-bottom:14px;
 }
 
-.page-title h2 {
-    margin: 0 0 5px;
-    font-size: 23px;
+.page-title h2{
+    margin:0 0 5px;
+    font-size:23px;
+    color:#123e7a;
 }
 
-.page-title p {
-    margin: 0;
-    color: #64748b;
-    font-size: 14px;
+.page-title p{
+    margin:0;
+    color:#718199;
+    font-size:12px;
 }
 
-.summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 18px;
+.summary{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:9px;
+    margin-bottom:15px;
 }
 
-.summary-card {
-    background: white;
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 7px 20px rgba(30,64,175,.08);
+.summary-card{
+    background:white;
+    border:1px solid #e6edf6;
+    border-radius:16px;
+    padding:13px;
+    box-shadow:0 6px 18px rgba(20,60,100,.06);
+    min-width:0;
 }
 
-.summary-label {
-    color: #64748b;
-    font-size: 12px;
-    margin-bottom: 7px;
+.summary-label{
+    color:#74839a;
+    font-size:10px;
+    font-weight:800;
+    line-height:1.3;
 }
 
-.summary-value {
-    font-size: 21px;
-    font-weight: bold;
+.summary-value{
+    margin-top:6px;
+    font-size:18px;
+    font-weight:900;
+    word-break:break-word;
 }
 
-.blue {
-    color: #2563eb;
+.blue{color:#2563eb;}
+.green{color:#08a96d;}
+.orange{color:#d97706;}
+.purple{color:#7c3aed;}
+.red{color:#dc3545;}
+
+.card{
+    background:white;
+    border:1px solid #e6edf6;
+    border-radius:19px;
+    padding:10px;
+    box-shadow:0 7px 22px rgba(20,60,100,.07);
+    overflow:hidden;
 }
 
-.green {
-    color: #15803d;
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
 }
 
-.orange {
-    color: #b45309;
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:720px;
 }
 
-.card {
-    background: white;
-    border-radius: 18px;
-    padding: 16px;
-    box-shadow: 0 7px 22px rgba(30,64,175,.08);
-    overflow: hidden;
+th{
+    background:#f1f6ff;
+    color:#334f73;
+    font-size:11px;
+    text-align:left;
+    padding:12px 9px;
 }
 
-.table-wrap {
-    width: 100%;
-    overflow-x: auto;
+td{
+    border-bottom:1px solid #edf2f7;
+    padding:12px 9px;
+    font-size:11px;
+    vertical-align:middle;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 650px;
+tr:last-child td{
+    border-bottom:none;
 }
 
-th {
-    background: #f1f5ff;
-    color: #334155;
-    font-size: 13px;
-    text-align: left;
-    padding: 13px 10px;
+.type{
+    font-weight:900;
+    color:#173d76;
 }
 
-td {
-    border-bottom: 1px solid #edf0f5;
-    padding: 14px 10px;
-    font-size: 13px;
-    vertical-align: middle;
+.details{
+    color:#75849a;
+    margin-top:3px;
+    font-size:9px;
+    max-width:250px;
+    word-break:break-word;
 }
 
-tr:last-child td {
-    border-bottom: none;
+.amount{
+    font-weight:900;
+    white-space:nowrap;
 }
 
-.amount {
-    font-weight: bold;
-    color: #172033;
+.credit{
+    color:#08a96d;
 }
 
-.commission {
-    color: #15803d;
-    font-weight: bold;
+.debit{
+    color:#dc3545;
 }
 
-.utr {
-    color: #475569;
-    font-family: monospace;
+.info{
+    color:#d97706;
 }
 
-.status {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: capitalize;
+.status{
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:20px;
+    font-size:9px;
+    font-weight:900;
+    text-transform:capitalize;
 }
 
-.status-approved {
-    background: #dcfce7;
-    color: #15803d;
+.status-approved,
+.status-success{
+    background:#e8fff4;
+    color:#08a56c;
 }
 
-.status-pending {
-    background: #fef3c7;
-    color: #b45309;
+.status-pending{
+    background:#fff7df;
+    color:#b45309;
 }
 
-.status-rejected {
-    background: #fee2e2;
-    color: #dc2626;
+.status-rejected,
+.status-failed{
+    background:#fff0f2;
+    color:#dc3545;
 }
 
-.status-default {
-    background: #e2e8f0;
-    color: #475569;
+.status-default{
+    background:#edf2f7;
+    color:#607086;
 }
 
-.empty {
-    text-align: center;
-    padding: 35px 15px;
-    color: #64748b;
+.date{
+    white-space:nowrap;
+    color:#65758c;
+    font-size:10px;
 }
 
-.message {
-    text-align: center;
-    margin-top: 14px;
-    color: #64748b;
-    font-size: 13px;
+.empty{
+    text-align:center;
+    padding:35px 15px !important;
+    color:#718199;
 }
 
-.actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    margin-top: 18px;
+.message{
+    text-align:center;
+    margin-top:12px;
+    color:#718199;
+    font-size:11px;
 }
 
-.action-btn {
-    text-decoration: none;
-    text-align: center;
-    padding: 13px 10px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 13px;
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:9px;
+    margin-top:14px;
 }
 
-.deposit-btn {
-    background: #dbeafe;
-    color: #1d4ed8;
+.action-btn{
+    text-decoration:none;
+    text-align:center;
+    padding:12px 9px;
+    border-radius:13px;
+    font-weight:900;
+    font-size:11px;
 }
 
-.wallet-btn {
-    background: #dcfce7;
-    color: #15803d;
+.deposit-btn{
+    background:#e5f1ff;
+    color:#1d4ed8;
 }
 
-.dashboard-btn {
-    background: #ede9fe;
-    color: #6d28d9;
+.wallet-btn{
+    background:#e8fff4;
+    color:#087a52;
 }
 
-@media (max-width: 650px) {
+.dashboard-btn{
+    background:#f0e9ff;
+    color:#6d28d9;
+}
 
-    .header {
-        padding: 16px;
+@media(max-width:850px){
+
+    .summary{
+        grid-template-columns:repeat(3,1fr);
     }
 
-    .header h1 {
-        font-size: 18px;
+}
+
+@media(max-width:560px){
+
+    .header{
+        padding:13px 12px;
     }
 
-    .summary {
-        grid-template-columns: 1fr;
+    .header h1{
+        font-size:17px;
     }
 
-    .container {
-        padding: 15px 10px 30px;
+    .container{
+        padding:14px 10px 30px;
     }
 
-    .card {
-        padding: 10px;
+    .summary{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .actions {
-        grid-template-columns: 1fr;
+    .summary-card{
+        padding:11px;
+    }
+
+    .summary-value{
+        font-size:17px;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
     }
 
 }
@@ -283,32 +322,46 @@ tr:last-child td {
 <main class="container">
 
 
-<div class="page-title">
+<section class="page-title">
 
     <h2>
         Transaction History
     </h2>
 
     <p>
-        Your deposit transactions and commission details
+        Welcome bonus, deposits, commission, referral income and payment transactions
     </p>
 
-</div>
+</section>
 
 
-<div class="summary">
+<section class="summary">
 
 
     <div class="summary-card">
 
         <div class="summary-label">
-            Total Deposits
+            Welcome Bonus
+        </div>
+
+        <div
+            class="summary-value purple"
+            id="totalBonus">
+            ₹0.00
+        </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <div class="summary-label">
+            Deposit
         </div>
 
         <div
             class="summary-value blue"
-            id="totalDeposits"
-        >
+            id="totalDeposits">
             ₹0.00
         </div>
 
@@ -318,38 +371,52 @@ tr:last-child td {
     <div class="summary-card">
 
         <div class="summary-label">
-            Approved Deposits
-        </div>
-
-        <div
-            class="summary-value green"
-            id="approvedDeposits"
-        >
-            ₹0.00
-        </div>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <div class="summary-label">
-            Total Commission
+            Commission
         </div>
 
         <div
             class="summary-value orange"
-            id="totalCommission"
-        >
+            id="totalCommission">
             ₹0.00
         </div>
 
     </div>
 
-</div>
+
+    <div class="summary-card">
+
+        <div class="summary-label">
+            Refer Commission
+        </div>
+
+        <div
+            class="summary-value green"
+            id="totalReferral">
+            ₹0.00
+        </div>
+
+    </div>
 
 
-<div class="card">
+    <div class="summary-card">
+
+        <div class="summary-label">
+            Total Transaction
+        </div>
+
+        <div
+            class="summary-value red"
+            id="totalTransactions">
+            0
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<section class="card">
 
     <div class="table-wrap">
 
@@ -359,25 +426,15 @@ tr:last-child td {
 
                 <tr>
 
-                    <th>
-                        Date
-                    </th>
+                    <th>Date</th>
 
-                    <th>
-                        UTR
-                    </th>
+                    <th>Type</th>
 
-                    <th>
-                        Amount
-                    </th>
+                    <th>Amount</th>
 
-                    <th>
-                        Commission
-                    </th>
+                    <th>Status</th>
 
-                    <th>
-                        Status
-                    </th>
+                    <th>Details</th>
 
                 </tr>
 
@@ -388,7 +445,9 @@ tr:last-child td {
 
                 <tr>
 
-                    <td colspan="5" class="empty">
+                    <td
+                        colspan="5"
+                        class="empty">
                         Loading transactions...
                     </td>
 
@@ -400,35 +459,32 @@ tr:last-child td {
 
     </div>
 
-</div>
+</section>
 
 
 <div
     id="transactionMessage"
-    class="message"
-></div>
+    class="message">
+</div>
 
 
 <div class="actions">
 
     <a
         class="action-btn deposit-btn"
-        href="deposit.html"
-    >
+        href="deposit.html">
         💳 New Deposit
     </a>
 
     <a
         class="action-btn wallet-btn"
-        href="wallet.html"
-    >
+        href="wallet.html">
         💰 Wallet
     </a>
 
     <a
         class="action-btn dashboard-btn"
-        href="dashboard.html"
-    >
+        href="dashboard.html">
         🏠 Dashboard
     </a>
 
@@ -440,12 +496,139 @@ tr:last-child td {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="js/app.js?v=6"></script>
-
-
 <script>
 
-async function loadTransactions() {
+const SUPABASE_URL =
+    "https://lozluohksmjxbxixkbmq.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+function money(value){
+
+    return "₹" +
+        Number(value || 0).toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function formatDateTime(value){
+
+    if(!value) return "";
+
+    const date =
+        new Date(value);
+
+    if(isNaN(date.getTime())){
+        return "";
+    }
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            hour12:true,
+            timeZone:"Asia/Kolkata"
+        }
+    );
+
+}
+
+
+function statusClass(status){
+
+    const value =
+        String(status || "")
+            .toLowerCase();
+
+    if(value === "approved"){
+        return "status-approved";
+    }
+
+    if(value === "success" ||
+       value === "successful"){
+        return "status-success";
+    }
+
+    if(value === "pending"){
+        return "status-pending";
+    }
+
+    if(value === "rejected" ||
+       value === "failed"){
+        return "status-rejected";
+    }
+
+    return "status-default";
+
+}
+
+
+function typeIcon(type){
+
+    const value =
+        String(type || "")
+            .toLowerCase();
+
+    if(value.includes("welcome")){
+        return "🎁";
+    }
+
+    if(value === "deposit"){
+        return "💰";
+    }
+
+    if(value === "commission"){
+        return "📈";
+    }
+
+    if(value.includes("referral")){
+        return "👥";
+    }
+
+    if(value === "sell"){
+        return "📤";
+    }
+
+    if(value.includes("upi")){
+        return "📲";
+    }
+
+    return "₹";
+
+}
+
+
+async function loadTransactions(){
 
     const table =
         document.getElementById(
@@ -458,124 +641,94 @@ async function loadTransactions() {
         );
 
 
-    const customerId =
-        localStorage.getItem(
-            "sathiPayCustomerId"
-        );
-
-
-    if (!customerId) {
-
-        window.location.href =
-            "customer-login.html";
-
-        return;
-
-    }
-
-
     table.innerHTML = `
         <tr>
-            <td colspan="5" class="empty">
+            <td
+                colspan="5"
+                class="empty">
                 Loading transactions...
             </td>
         </tr>
     `;
 
 
-    try {
-
+    try{
 
         const {
-            data: deposits,
+            data,
             error
-        } = await supabaseClient
-
-            .from("customer_deposits")
-
-            .select(`
-                id,
-                amount,
-                status,
-                utr,
-                commission,
-                created_at
-            `)
-
-            .eq(
-                "customer_id",
-                customerId
-            )
-
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
+        } =
+            await supabaseClient.rpc(
+                "get_my_transaction_history",
+                {p_limit:500}
             );
 
 
-        if (error) {
+        if(error){
 
             console.error(
-                "Transaction Error:",
+                "Transaction RPC error:",
                 error
             );
 
-            table.innerHTML = `
-                <tr>
-                    <td colspan="5" class="empty">
-                        Unable to load transactions.
-                    </td>
-                </tr>
-            `;
-
-            message.innerText =
-                error.message;
-
-            return;
+            throw error;
 
         }
 
 
         const records =
-            deposits || [];
+            Array.isArray(data)
+                ? data
+                : [];
 
 
-        let totalDeposits = 0;
-        let approvedDeposits = 0;
-        let totalCommission = 0;
+        let bonus = 0;
+        let deposits = 0;
+        let commission = 0;
+        let referral = 0;
 
 
         records.forEach(
-            function (deposit) {
+            function(row){
+
+                const type =
+                    String(
+                        row.event_type || ""
+                    ).toLowerCase();
 
                 const amount =
                     Number(
-                        deposit.amount
-                    ) || 0;
-
-                const commission =
-                    Number(
-                        deposit.commission
-                    ) || 0;
+                        row.amount || 0
+                    );
 
 
-                totalDeposits += amount;
+                if(type === "welcome bonus"){
 
-                totalCommission +=
-                    commission;
+                    bonus += amount;
 
+                }
+                else if(type === "deposit"){
 
-                if (
-                    String(
-                        deposit.status || ""
-                    ).toLowerCase() ===
-                    "approved"
-                ) {
+                    if(
+                        String(
+                            row.status || ""
+                        ).toLowerCase() ===
+                        "approved"
+                    ){
+                        deposits += amount;
+                    }
 
-                    approvedDeposits +=
-                        amount;
+                }
+                else if(type === "commission"){
+
+                    commission += amount;
+
+                }
+                else if(
+                    type === "referral commission"
+                ){
+
+                    referral += amount;
 
                 }
 
@@ -584,32 +737,41 @@ async function loadTransactions() {
 
 
         document.getElementById(
-            "totalDeposits"
+            "totalBonus"
         ).innerText =
-            "₹" +
-            totalDeposits.toFixed(2);
-
+            money(bonus);
 
         document.getElementById(
-            "approvedDeposits"
+            "totalDeposits"
         ).innerText =
-            "₹" +
-            approvedDeposits.toFixed(2);
-
+            money(deposits);
 
         document.getElementById(
             "totalCommission"
         ).innerText =
-            "₹" +
-            totalCommission.toFixed(2);
+            money(commission);
+
+        document.getElementById(
+            "totalReferral"
+        ).innerText =
+            money(referral);
+
+        document.getElementById(
+            "totalTransactions"
+        ).innerText =
+            records.length.toLocaleString(
+                "en-IN"
+            );
 
 
-        if (records.length === 0) {
+        if(!records.length){
 
             table.innerHTML = `
                 <tr>
-                    <td colspan="5" class="empty">
-                        No deposit transactions found.
+                    <td
+                        colspan="5"
+                        class="empty">
+                        No transactions found.
                     </td>
                 </tr>
             `;
@@ -626,98 +788,123 @@ async function loadTransactions() {
 
 
         records.forEach(
-            function (deposit) {
+            function(row){
+
+                const type =
+                    row.event_type ||
+                    "Transaction";
+
+                const direction =
+                    String(
+                        row.direction || ""
+                    ).toLowerCase();
 
                 const amount =
                     Number(
-                        deposit.amount
-                    ) || 0;
+                        row.amount || 0
+                    );
 
 
-                const commission =
-                    Number(
-                        deposit.commission
-                    ) || 0;
+                let amountClass =
+                    "info";
+
+                let prefix = "";
 
 
-                const date =
-                    deposit.created_at
-                        ? new Date(
-                            deposit.created_at
-                        ).toLocaleString(
-                            "en-IN"
-                        )
-                        : "N/A";
+                if(direction === "credit"){
 
+                    amountClass =
+                        "credit";
 
-                const status =
-                    String(
-                        deposit.status ||
-                        "pending"
-                    ).toLowerCase();
-
-
-                let statusClass =
-                    "status-default";
-
-
-                if (
-                    status === "approved"
-                ) {
-
-                    statusClass =
-                        "status-approved";
+                    prefix = "+ ";
 
                 }
-                else if (
-                    status === "pending"
-                ) {
+                else if(direction === "debit"){
 
-                    statusClass =
-                        "status-pending";
+                    amountClass =
+                        "debit";
 
-                }
-                else if (
-                    status === "rejected"
-                ) {
-
-                    statusClass =
-                        "status-rejected";
+                    prefix = "- ";
 
                 }
 
 
-                table.innerHTML += `
+                const detailsParts = [];
 
-                    <tr>
 
-                        <td>
-                            ${date}
-                        </td>
+                if(row.description){
+                    detailsParts.push(
+                        row.description
+                    );
+                }
 
-                        <td class="utr">
-                            ${deposit.utr || "N/A"}
-                        </td>
+                if(row.utr){
+                    detailsParts.push(
+                        "UTR: " + row.utr
+                    );
+                }
 
-                        <td class="amount">
-                            ₹${amount.toFixed(2)}
-                        </td>
+                if(row.upi_id){
+                    detailsParts.push(
+                        "UPI: " + row.upi_id
+                    );
+                }
 
-                        <td class="commission">
-                            ₹${commission.toFixed(2)}
-                        </td>
+                if(row.reference){
+                    detailsParts.push(
+                        "Ref: " + row.reference
+                    );
+                }
 
-                        <td>
-                            <span
-                                class="status ${statusClass}"
-                            >
-                                ${status}
-                            </span>
-                        </td>
 
-                    </tr>
+                const details =
+                    detailsParts.join(" • ");
 
+
+                const tr =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                tr.innerHTML = `
+                    <td class="date">
+                        ${escapeHtml(
+                            formatDateTime(
+                                row.created_at
+                            )
+                        )}
+                    </td>
+
+                    <td class="type">
+                        ${typeIcon(type)}
+                        ${escapeHtml(type)}
+                    </td>
+
+                    <td class="amount ${amountClass}">
+                        ${prefix}${money(amount)}
+                    </td>
+
+                    <td>
+                        <span
+                            class="status ${statusClass(row.status)}">
+                            ${escapeHtml(
+                                row.status || "Recorded"
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="details">
+                            ${escapeHtml(
+                                details || "—"
+                            )}
+                        </div>
+                    </td>
                 `;
+
+
+                table.appendChild(tr);
 
             }
         );
@@ -729,8 +916,7 @@ async function loadTransactions() {
 
 
     }
-
-    catch (error) {
+    catch(error){
 
         console.error(
             "Transaction Exception:",
@@ -739,14 +925,16 @@ async function loadTransactions() {
 
         table.innerHTML = `
             <tr>
-                <td colspan="5" class="empty">
-                    Something went wrong.
+                <td
+                    colspan="5"
+                    class="empty">
+                    Unable to load transaction history.
                 </td>
             </tr>
         `;
 
         message.innerText =
-            "Unable to load transaction history.";
+            "Please refresh and try again.";
 
     }
 
@@ -760,4 +948,4 @@ loadTransactions();
 
 </body>
 
-        </html>
+</html>
