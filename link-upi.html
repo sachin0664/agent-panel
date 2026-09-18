@@ -559,22 +559,21 @@ let currentUPIs = [];
 
 
 /* =====================================
-   GET AUTH CUSTOMER ID
+   GET CUSTOMER ID
+   USE SAVED SATHI PAY CUSTOMER ID
 ===================================== */
 
 async function getCustomerId(){
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getUser();
+  const id =
+    localStorage.getItem(
+      'sathiPayCustomerId'
+    );
 
 
   if(
-    error ||
-    !data ||
-    !data.user
+    !id ||
+    id.trim() === ''
   ){
 
     window.location.href =
@@ -586,13 +585,7 @@ async function getCustomerId(){
 
 
   customerId =
-    data.user.id;
-
-
-  localStorage.setItem(
-    'sathiPayCustomerId',
-    customerId
-  );
+    id.trim();
 
 
   return customerId;
@@ -1403,32 +1396,18 @@ document.getElementById(
 
 
   /* =================================
-     GET REAL AUTH USER
+     GET SAVED CUSTOMER ID
   ================================= */
 
-  const {
-    data: authData,
-    error: authError
-  } =
-    await supabaseClient.auth.getUser();
+  customerId =
+    await getCustomerId();
 
 
-  if(
-    authError ||
-    !authData ||
-    !authData.user
-  ){
-
-    window.location.href =
-      'customer-login.html';
+  if(!customerId){
 
     return;
 
   }
-
-
-  customerId =
-    authData.user.id;
 
 
   /* =================================
@@ -1549,7 +1528,7 @@ document.getElementById(
 
   /* =================================
      INSERT
-     
+
      GLOBAL DUPLICATE IS ENFORCED
      BY SUPABASE DATABASE TRIGGER
   ================================= */
@@ -1780,4 +1759,4 @@ loadUPI();
 
 </body>
 
-  </html>
+            </html>
