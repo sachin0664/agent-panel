@@ -434,8 +434,6 @@ tr:last-child td{
 
                     <th>Status</th>
 
-                    <th>Details</th>
-
                 </tr>
 
             </thead>
@@ -446,7 +444,7 @@ tr:last-child td{
                 <tr>
 
                     <td
-                        colspan="5"
+                        colspan="4"
                         class="empty">
                         Loading transactions...
                     </td>
@@ -894,13 +892,6 @@ async function loadTransactions(){
                         </span>
                     </td>
 
-                    <td>
-                        <div class="details">
-                            ${escapeHtml(
-                                details || "—"
-                            )}
-                        </div>
-                    </td>
                 `;
 
 
