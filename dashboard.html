@@ -3987,8 +3987,12 @@ async function loadDashboard(){
         );
 
         message.innerText =
-            "Dashboard error: " +
-            error.message;
+            "Dashboard temporarily unavailable. Please refresh.";
+
+    }
+    finally{
+
+        dashboardLoading = false;
 
     }
 
