@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -150,6 +152,74 @@
             margin-top: 5px;
         }
 
+        /* TEAM */
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .team-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .level-a {
+            border-top: 4px solid #2563eb;
+        }
+
+        .level-b {
+            border-top: 4px solid #7c3aed;
+        }
+
+        .level-c {
+            border-top: 4px solid #16a34a;
+        }
+
+        .team-card h3 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .team-count {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 10px 0 15px;
+        }
+
+        .team-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .member {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .member-name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .member-uid {
+            margin-top: 4px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .member-date {
+            margin-top: 4px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
         .table-box {
             overflow-x: auto;
         }
@@ -157,7 +227,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 650px;
+            min-width: 700px;
         }
 
         th,
@@ -174,6 +244,11 @@
 
         .approved {
             color: #15803d;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #b45309;
             font-weight: bold;
         }
 
@@ -214,7 +289,8 @@
 
             .cards,
             .rules,
-            .referral-rules {
+            .referral-rules,
+            .team-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -230,69 +306,145 @@
                 font-size: 27px;
             }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <header>
+
     <h1>💰 Sathi Pay Earnings</h1>
 
     <a href="dashboard.html">
         Dashboard
     </a>
+
 </header>
+
 
 <main class="container">
 
+
+    <!-- TOTAL EARNINGS -->
+
     <div class="hero">
-        <small>My Total Commission Earnings</small>
-        <h2 id="totalEarnings">₹0.00</h2>
-        <div id="customerInfo">Loading customer...</div>
+
+        <small>
+            My Total Commission Earnings
+        </small>
+
+        <h2 id="totalEarnings">
+            ₹0.00
+        </h2>
+
+        <div id="customerInfo">
+            Loading customer...
+        </div>
+
     </div>
+
+
+    <!-- EARNING CARDS -->
 
     <div class="cards">
 
         <div class="card">
-            <div class="icon">💰</div>
-            <h3>Deposit Commission</h3>
-            <strong id="depositCommission">₹0.00</strong>
+
+            <div class="icon">
+                💰
+            </div>
+
+            <h3>
+                Deposit Commission
+            </h3>
+
+            <strong id="depositCommission">
+                ₹0.00
+            </strong>
+
         </div>
 
-        <div class="card">
-            <div class="icon">👥</div>
-            <h3>Referral Income</h3>
-            <strong id="referralCommission">₹0.00</strong>
-        </div>
 
         <div class="card">
-            <div class="icon">🎁</div>
-            <h3>Bonus</h3>
-            <strong id="bonusBalance">₹0.00</strong>
+
+            <div class="icon">
+                👥
+            </div>
+
+            <h3>
+                Referral Income
+            </h3>
+
+            <strong id="referralCommission">
+                ₹0.00
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🎁
+            </div>
+
+            <h3>
+                Bonus
+            </h3>
+
+            <strong id="bonusBalance">
+                ₹0.00
+            </strong>
+
         </div>
 
     </div>
 
 
+    <!-- DEPOSIT COMMISSION RULES -->
+
     <div class="section">
 
-        <h2>📊 Deposit Commission Rules</h2>
+        <h2>
+            📊 Deposit Commission Rules
+        </h2>
 
         <div class="rules">
 
             <div class="rule">
+
                 ₹1 – ₹9,999
-                <strong>6%</strong>
+
+                <strong>
+                    6%
+                </strong>
+
             </div>
 
+
             <div class="rule">
+
                 ₹10,000 – ₹19,999
-                <strong>8%</strong>
+
+                <strong>
+                    8%
+                </strong>
+
             </div>
 
+
             <div class="rule">
+
                 ₹20,000+
-                <strong>10%</strong>
+
+                <strong>
+                    10%
+                </strong>
+
             </div>
 
         </div>
@@ -300,59 +452,218 @@
     </div>
 
 
+    <!-- REFERRAL COMMISSION RULES -->
+
     <div class="section">
 
-        <h2>🔗 Referral Commission</h2>
+        <h2>
+            🔗 Referral Commission
+        </h2>
 
         <div class="referral-rules">
 
+
             <div class="ref-card">
+
                 Level A
-                <strong>1%</strong>
+
+                <strong>
+                    1%
+                </strong>
+
                 Direct Referral
+
             </div>
 
+
             <div class="ref-card">
+
                 Level B
-                <strong>0.5%</strong>
+
+                <strong>
+                    0.5%
+                </strong>
+
                 Second Level
+
             </div>
 
+
             <div class="ref-card">
+
                 Level C
-                <strong>0.2%</strong>
+
+                <strong>
+                    0.2%
+                </strong>
+
                 Third Level
+
             </div>
+
 
         </div>
 
     </div>
 
 
+    <!-- REFERRAL TEAM -->
+
     <div class="section">
 
-        <h2>💳 My Approved Deposits</h2>
+        <h2>
+            👥 My Referral Team
+        </h2>
+
+        <p style="color:#64748b;margin-top:-8px;">
+            Aapki referral link se register hue customers yahan dikhेंगे.
+        </p>
+
+
+        <div class="team-grid">
+
+
+            <!-- LEVEL A -->
+
+            <div class="team-card level-a">
+
+                <h3>
+                    🔵 Level A — Direct Team
+                </h3>
+
+                <div
+                    class="team-count"
+                    id="levelACount">
+                    0
+                </div>
+
+                <div
+                    class="team-list"
+                    id="levelAList">
+
+                    <div class="empty">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEVEL B -->
+
+            <div class="team-card level-b">
+
+                <h3>
+                    🟣 Level B
+                </h3>
+
+                <div
+                    class="team-count"
+                    id="levelBCount">
+                    0
+                </div>
+
+                <div
+                    class="team-list"
+                    id="levelBList">
+
+                    <div class="empty">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEVEL C -->
+
+            <div class="team-card level-c">
+
+                <h3>
+                    🟢 Level C
+                </h3>
+
+                <div
+                    class="team-count"
+                    id="levelCCount">
+                    0
+                </div>
+
+                <div
+                    class="team-list"
+                    id="levelCList">
+
+                    <div class="empty">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- APPROVED DEPOSITS -->
+
+    <div class="section">
+
+        <h2>
+            💳 My Approved Deposits
+        </h2>
 
         <div class="table-box">
 
             <table>
 
                 <thead>
+
                     <tr>
-                        <th>Date</th>
-                        <th>Deposit</th>
-                        <th>Rate</th>
-                        <th>Commission</th>
-                        <th>Status</th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Deposit
+                        </th>
+
+                        <th>
+                            Rate
+                        </th>
+
+                        <th>
+                            Commission
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
                     </tr>
+
                 </thead>
+
 
                 <tbody id="depositTable">
+
                     <tr>
-                        <td colspan="5" class="empty">
+
+                        <td
+                            colspan="5"
+                            class="empty">
+
                             Loading...
+
                         </td>
+
                     </tr>
+
                 </tbody>
 
             </table>
@@ -362,30 +673,70 @@
     </div>
 
 
+    <!-- REFERRAL EARNINGS HISTORY -->
+
     <div class="section">
 
-        <h2>👥 Referral Earnings</h2>
+        <h2>
+            💵 Referral Earnings History
+        </h2>
+
+        <p style="color:#64748b;margin-top:-8px;">
+            Aapke referred members ke approved deposits par mili referral commission.
+        </p>
+
 
         <div class="table-box">
 
             <table>
 
                 <thead>
+
                     <tr>
-                        <th>Date</th>
-                        <th>Level</th>
-                        <th>Deposit Amount</th>
-                        <th>Commission</th>
-                        <th>Status</th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Level
+                        </th>
+
+                        <th>
+                            Member
+                        </th>
+
+                        <th>
+                            Deposit Amount
+                        </th>
+
+                        <th>
+                            Commission
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
                     </tr>
+
                 </thead>
 
+
                 <tbody id="referralTable">
+
                     <tr>
-                        <td colspan="5" class="empty">
+
+                        <td
+                            colspan="6"
+                            class="empty">
+
                             Loading...
+
                         </td>
+
                     </tr>
+
                 </tbody>
 
             </table>
@@ -395,36 +746,68 @@
     </div>
 
 
-    <div id="message" class="message">
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message">
+
         Loading earnings...
+
     </div>
 
 
+    <!-- QUICK ACTIONS -->
+
     <div class="section">
 
-        <h2>⚡ Quick Actions</h2>
+        <h2>
+            ⚡ Quick Actions
+        </h2>
 
         <div class="actions">
 
-            <a class="action" href="deposit.html">
+
+            <a
+                class="action"
+                href="deposit.html">
+
                 💳 Deposit
+
             </a>
 
-            <a class="action" href="referral.html">
+
+            <a
+                class="action"
+                href="referral.html">
+
                 👥 Referral
+
             </a>
 
-            <a class="action" href="wallet.html">
+
+            <a
+                class="action"
+                href="wallet.html">
+
                 💰 Wallet
+
             </a>
 
-            <a class="action" href="transactions.html">
+
+            <a
+                class="action"
+                href="transactions.html">
+
                 📜 Transactions
+
             </a>
+
 
         </div>
 
     </div>
+
 
 </main>
 
@@ -436,20 +819,37 @@
 
 <script>
 
+
+/* =====================================================
+   LOAD EARNINGS
+===================================================== */
+
 async function loadEarnings() {
 
+
     const customerId =
-        localStorage.getItem("sathiPayCustomerId");
+        localStorage.getItem(
+            "sathiPayCustomerId"
+        );
+
 
     if (!customerId) {
+
+        document.getElementById("message")
+            .innerText =
+            "Customer session not found.";
+
         return;
+
     }
+
 
     try {
 
-        /*
-         * CUSTOMER DATA
-         */
+
+        /* =================================================
+           CUSTOMER DATA
+        ================================================= */
 
         const customerResult =
             await supabaseClient
@@ -463,57 +863,88 @@ async function loadEarnings() {
                     commission_balance,
                     referral_balance
                 `)
-                .eq("id", customerId)
+                .eq(
+                    "id",
+                    customerId
+                )
                 .single();
 
+
         if (customerResult.error) {
+
             throw customerResult.error;
+
         }
+
 
         const customer =
             customerResult.data;
 
 
         const depositCommission =
-            Number(customer.commission_balance || 0);
+            Number(
+                customer.commission_balance || 0
+            );
+
 
         const referralCommission =
-            Number(customer.referral_balance || 0);
+            Number(
+                customer.referral_balance || 0
+            );
+
 
         const bonus =
-            Number(customer.bonus_balance || 0);
+            Number(
+                customer.bonus_balance || 0
+            );
 
 
-        document.getElementById("depositCommission")
-            .innerText =
-            "₹" + depositCommission.toFixed(2);
-
-        document.getElementById("referralCommission")
-            .innerText =
-            "₹" + referralCommission.toFixed(2);
-
-        document.getElementById("bonusBalance")
-            .innerText =
-            "₹" + bonus.toFixed(2);
-
-
-        document.getElementById("totalEarnings")
-            .innerText =
+        document.getElementById(
+            "depositCommission"
+        ).innerText =
             "₹" +
-            (depositCommission + referralCommission)
-                .toFixed(2);
+            depositCommission.toFixed(2);
 
 
-        document.getElementById("customerInfo")
-            .innerText =
-            customer.name +
+        document.getElementById(
+            "referralCommission"
+        ).innerText =
+            "₹" +
+            referralCommission.toFixed(2);
+
+
+        document.getElementById(
+            "bonusBalance"
+        ).innerText =
+            "₹" +
+            bonus.toFixed(2);
+
+
+        document.getElementById(
+            "totalEarnings"
+        ).innerText =
+            "₹" +
+            (
+                depositCommission +
+                referralCommission
+            ).toFixed(2);
+
+
+        document.getElementById(
+            "customerInfo"
+        ).innerText =
+            (
+                customer.name || "Customer"
+            ) +
             " • UID: " +
-            customer.uid;
+            (
+                customer.uid || "-"
+            );
 
 
-        /*
-         * APPROVED CUSTOMER DEPOSITS
-         */
+        /* =================================================
+           APPROVED CUSTOMER DEPOSITS
+        ================================================= */
 
         const depositResult =
             await supabaseClient
@@ -525,239 +956,673 @@ async function loadEarnings() {
                     commission,
                     created_at
                 `)
-                .eq("customer_id", customerId)
-                .eq("status", "approved")
-                .order("created_at", {
-                    ascending: false
-                });
+                .eq(
+                    "customer_id",
+                    customerId
+                )
+                .eq(
+                    "status",
+                    "approved"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
 
 
         if (depositResult.error) {
+
             throw depositResult.error;
+
         }
 
 
         const deposits =
             depositResult.data || [];
 
+
         const depositTable =
-            document.getElementById("depositTable");
+            document.getElementById(
+                "depositTable"
+            );
 
 
         if (deposits.length === 0) {
 
+
             depositTable.innerHTML = `
+
                 <tr>
-                    <td colspan="5" class="empty">
+
+                    <td
+                        colspan="5"
+                        class="empty">
+
                         Abhi koi approved deposit nahi hai.
+
                     </td>
+
                 </tr>
+
             `;
+
 
         } else {
 
+
             depositTable.innerHTML = "";
 
-            deposits.forEach(function(deposit) {
 
-                const amount =
-                    Number(deposit.amount || 0);
+            deposits.forEach(
+                function(deposit) {
 
-                let commission =
-                    Number(deposit.commission || 0);
 
-                let rate = 0;
+                    const amount =
+                        Number(
+                            deposit.amount || 0
+                        );
 
-                if (amount >= 20000) {
-                    rate = 10;
-                } else if (amount >= 10000) {
-                    rate = 8;
-                } else {
-                    rate = 6;
+
+                    let commission =
+                        Number(
+                            deposit.commission || 0
+                        );
+
+
+                    let rate = 0;
+
+
+                    if (amount >= 20000) {
+
+                        rate = 10;
+
+                    } else if (amount >= 10000) {
+
+                        rate = 8;
+
+                    } else {
+
+                        rate = 6;
+
+                    }
+
+
+                    /*
+                     * Database commission available
+                     * nahi ho to display calculation.
+                     */
+
+                    if (!commission) {
+
+                        commission =
+                            amount *
+                            (
+                                rate / 100
+                            );
+
+                    }
+
+
+                    depositTable.innerHTML += `
+
+                        <tr>
+
+                            <td>
+                                ${formatDate(
+                                    deposit.created_at
+                                )}
+                            </td>
+
+                            <td class="amount">
+                                ₹${amount.toFixed(2)}
+                            </td>
+
+                            <td>
+                                ${rate}%
+                            </td>
+
+                            <td class="approved">
+                                ₹${commission.toFixed(2)}
+                            </td>
+
+                            <td class="approved">
+                                Approved
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
                 }
-
-                /*
-                 * Agar database commission available nahi hai,
-                 * to display calculation use karein.
-                 */
-
-                if (!commission) {
-                    commission =
-                        amount * (rate / 100);
-                }
-
-
-                depositTable.innerHTML += `
-                    <tr>
-                        <td>
-                            ${formatDate(deposit.created_at)}
-                        </td>
-
-                        <td class="amount">
-                            ₹${amount.toFixed(2)}
-                        </td>
-
-                        <td>
-                            ${rate}%
-                        </td>
-
-                        <td class="approved">
-                            ₹${commission.toFixed(2)}
-                        </td>
-
-                        <td class="approved">
-                            Approved
-                        </td>
-                    </tr>
-                `;
-
-            });
+            );
 
         }
 
 
-        /*
-         * REFERRAL COMMISSION
-         */
+        /* =================================================
+           REFERRAL RPC
+        ================================================= */
 
         const referralResult =
-            await supabaseClient
-                .from("customer_referral_commissions")
-                .select(`
-                    id,
-                    level,
-                    percentage,
-                    transaction_amount,
-                    commission_amount,
-                    status,
-                    created_at
-                `)
-                .eq("customer_id", customerId)
-                .order("created_at", {
-                    ascending: false
-                });
+            await supabaseClient.rpc(
+                "get_my_referral_data"
+            );
 
 
         if (referralResult.error) {
+
             throw referralResult.error;
+
         }
 
 
+        const referralData =
+            referralResult.data || {};
+
+
+        const levelA =
+            Array.isArray(
+                referralData.level_a
+            )
+                ? referralData.level_a
+                : [];
+
+
+        const levelB =
+            Array.isArray(
+                referralData.level_b
+            )
+                ? referralData.level_b
+                : [];
+
+
+        const levelC =
+            Array.isArray(
+                referralData.level_c
+            )
+                ? referralData.level_c
+                : [];
+
+
         const referrals =
-            referralResult.data || [];
+            Array.isArray(
+                referralData.earnings
+            )
+                ? referralData.earnings
+                : [];
+
+
+        /* =================================================
+           TEAM COUNTS
+        ================================================= */
+
+        document.getElementById(
+            "levelACount"
+        ).innerText =
+            levelA.length;
+
+
+        document.getElementById(
+            "levelBCount"
+        ).innerText =
+            levelB.length;
+
+
+        document.getElementById(
+            "levelCCount"
+        ).innerText =
+            levelC.length;
+
+
+        /* =================================================
+           TEAM LISTS
+        ================================================= */
+
+        renderTeamList(
+            "levelAList",
+            levelA,
+            "Abhi koi direct member nahi hai."
+        );
+
+
+        renderTeamList(
+            "levelBList",
+            levelB,
+            "Abhi Level B member nahi hai."
+        );
+
+
+        renderTeamList(
+            "levelCList",
+            levelC,
+            "Abhi Level C member nahi hai."
+        );
+
+
+        /* =================================================
+           REFERRAL EARNINGS HISTORY
+        ================================================= */
 
         const referralTable =
-            document.getElementById("referralTable");
+            document.getElementById(
+                "referralTable"
+            );
 
 
         if (referrals.length === 0) {
 
+
             referralTable.innerHTML = `
+
                 <tr>
-                    <td colspan="5" class="empty">
+
+                    <td
+                        colspan="6"
+                        class="empty">
+
                         Abhi koi referral earning nahi hai.
+
                     </td>
+
                 </tr>
+
             `;
+
 
         } else {
 
+
             referralTable.innerHTML = "";
 
-            referrals.forEach(function(item) {
 
-                const level =
-                    String(item.level || "")
-                        .toUpperCase();
-
-                const amount =
-                    Number(
-                        item.transaction_amount || 0
-                    );
-
-                const commission =
-                    Number(
-                        item.commission_amount || 0
-                    );
-
-                const percentage =
-                    Number(item.percentage || 0);
+            referrals.forEach(
+                function(item) {
 
 
-                referralTable.innerHTML += `
-                    <tr>
-                        <td>
-                            ${formatDate(item.created_at)}
-                        </td>
+                    const level =
+                        formatReferralLevel(
+                            item.level
+                        );
 
-                        <td>
-                            Level ${level}
-                        </td>
 
-                        <td class="amount">
-                            ₹${amount.toFixed(2)}
-                        </td>
+                    const amount =
+                        Number(
+                            item.deposit_amount || 0
+                        );
 
-                        <td class="approved">
-                            ₹${commission.toFixed(2)}
-                            <br>
-                            <small>${percentage}%</small>
-                        </td>
 
-                        <td class="approved">
-                            ${item.status || "approved"}
-                        </td>
-                    </tr>
-                `;
+                    const commission =
+                        Number(
+                            item.commission_amount || 0
+                        );
 
-            });
+
+                    const percentage =
+                        Number(
+                            item.percentage || 0
+                        );
+
+
+                    const status =
+                        String(
+                            item.status ||
+                            "approved"
+                        );
+
+
+                    let statusClass =
+                        "approved";
+
+
+                    if (
+                        status.toLowerCase() !==
+                        "approved"
+                    ) {
+
+                        statusClass =
+                            "pending";
+
+                    }
+
+
+                    referralTable.innerHTML += `
+
+                        <tr>
+
+                            <td>
+                                ${formatDate(
+                                    item.created_at
+                                )}
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    Level ${escapeHtml(
+                                        level
+                                    )}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    ${escapeHtml(
+                                        item.member_name ||
+                                        "Customer"
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    UID:
+                                    ${escapeHtml(
+                                        item.member_uid ||
+                                        "-"
+                                    )}
+                                </small>
+
+                            </td>
+
+
+                            <td class="amount">
+
+                                ₹${amount.toFixed(2)}
+
+                            </td>
+
+
+                            <td class="approved">
+
+                                ₹${commission.toFixed(2)}
+
+                                <br>
+
+                                <small>
+                                    ${percentage}%
+                                </small>
+
+                            </td>
+
+
+                            <td class="${statusClass}">
+
+                                ${escapeHtml(
+                                    status
+                                )}
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
+                }
+            );
 
         }
 
 
-        document.getElementById("message")
-            .innerText =
-            "✅ Earnings data successfully loaded.";
+        /* =================================================
+           SUCCESS
+        ================================================= */
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "✅ Earnings, referral history and team data successfully loaded.";
 
 
-        document.getElementById("message")
-            .style.color =
+        document.getElementById(
+            "message"
+        ).style.color =
             "#15803d";
 
 
     } catch (error) {
+
 
         console.error(
             "Earnings Error:",
             error
         );
 
-        document.getElementById("message")
-            .innerText =
-            "Earnings load error: " +
-            error.message;
 
-        document.getElementById("message")
-            .style.color =
+        document.getElementById(
+            "message"
+        ).innerText =
+            "Earnings load error: " +
+            (
+                error.message ||
+                "Unknown error"
+            );
+
+
+        document.getElementById(
+            "message"
+        ).style.color =
             "#dc2626";
+
 
     }
 
 }
 
 
-/*
- * DATE FORMAT
- */
+/* =====================================================
+   RENDER TEAM MEMBERS
+===================================================== */
 
-function formatDate(dateValue) {
+function renderTeamList(
+    elementId,
+    members,
+    emptyText
+) {
 
-    if (!dateValue) {
-        return "-";
+
+    const container =
+        document.getElementById(
+            elementId
+        );
+
+
+    if (
+        !members ||
+        members.length === 0
+    ) {
+
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                ${escapeHtml(
+                    emptyText
+                )}
+
+            </div>
+
+        `;
+
+
+        return;
+
     }
 
+
+    container.innerHTML = "";
+
+
+    members.forEach(
+        function(member) {
+
+
+            container.innerHTML += `
+
+                <div class="member">
+
+                    <div class="member-name">
+
+                        👤
+                        ${escapeHtml(
+                            member.name ||
+                            "Customer"
+                        )}
+
+                    </div>
+
+
+                    <div class="member-uid">
+
+                        UID:
+                        ${escapeHtml(
+                            member.uid ||
+                            "-"
+                        )}
+
+                    </div>
+
+
+                    <div class="member-date">
+
+                        Registered:
+                        ${formatDate(
+                            member.created_at
+                        )}
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LEVEL FORMAT
+===================================================== */
+
+function formatReferralLevel(
+    level
+) {
+
+
+    const value =
+        String(
+            level || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    if (
+        value === "1" ||
+        value === "A" ||
+        value === "LEVEL A"
+    ) {
+
+        return "A";
+
+    }
+
+
+    if (
+        value === "2" ||
+        value === "B" ||
+        value === "LEVEL B"
+    ) {
+
+        return "B";
+
+    }
+
+
+    if (
+        value === "3" ||
+        value === "C" ||
+        value === "LEVEL C"
+    ) {
+
+        return "C";
+
+    }
+
+
+    return value || "-";
+
+}
+
+
+/* =====================================================
+   HTML SECURITY
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+function formatDate(
+    dateValue
+) {
+
+
+    if (!dateValue) {
+
+        return "-";
+
+    }
+
+
     const date =
-        new Date(dateValue);
+        new Date(
+            dateValue
+        );
+
 
     return date.toLocaleString(
         "en-IN",
@@ -773,9 +1638,9 @@ function formatDate(dateValue) {
 }
 
 
-/*
- * LOAD
- */
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -787,17 +1652,19 @@ document.addEventListener(
 );
 
 
-/*
- * AUTO REFRESH
- */
+/* =====================================================
+   AUTO REFRESH
+===================================================== */
 
 setInterval(
     loadEarnings,
     30000
 );
 
+
 </script>
+
 
 </body>
 
-                </html>
+    </html>
