@@ -3865,7 +3865,8 @@ function getTransactionIcon(
 
     if(
         text.includes("upi") &&
-        text.includes("payment")
+        text.includes("payment") &&
+        String(row.direction || "").toLowerCase() !== "debit"
     ){
 
         return "📲";
