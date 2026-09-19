@@ -3279,68 +3279,51 @@ async function loadPayInOut(customerId){
 
     try{
 
-        const [
-            depositsResult,
-            ledgerResult
-        ] = await Promise.all([
+        /*
+           Both Pay In and Pay Out are wallet events.
+           Read the wallet ledger once so the customer history
+           is based on the same ledger that controls balance.
+        */
 
-            supabaseClient
-                .from("customer_deposits")
-                .select(
-                    "amount, status, created_at"
-                )
-                .eq(
-                    "customer_id",
-                    customerId
-                )
-                .order(
-                    "created_at",
-                    {ascending:false}
-                )
-                .limit(50),
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+            .from("wallet_ledger")
+            .select(
+                "amount, direction, component, reason, reference, upi_id, created_at"
+            )
+            .eq(
+                "customer_id",
+                customerId
+            )
+            .order(
+                "created_at",
+                {ascending:false}
+            )
+            .limit(100);
 
-            supabaseClient
-                .from("wallet_ledger")
-                .select(
-                    "amount, direction, component, reason, reference, created_at"
-                )
-                .eq(
-                    "customer_id",
-                    customerId
-                )
-                .eq(
-                    "direction",
-                    "debit"
-                )
-                .eq(
-                    "component",
-                    "manual"
-                )
-                .order(
-                    "created_at",
-                    {ascending:false}
-                )
-                .limit(50)
-
-        ]);
-
-        if(depositsResult.error){
-            throw depositsResult.error;
+        if(error){
+            throw error;
         }
 
-        if(ledgerResult.error){
-            throw ledgerResult.error;
-        }
+        const rows =
+            data || [];
 
         const payIns =
-            (depositsResult.data || [])
-            .filter(function(row){
-                return String(row.status || "").toLowerCase() === "approved";
+            rows.filter(function(row){
+
+                return (
+                    String(row.direction || "").toLowerCase() === "credit" &&
+                    String(row.component || "").toLowerCase() === "deposit" &&
+                    String(row.reason || "").toLowerCase() === "approved deposit"
+                );
+
             });
 
         const payOuts =
-            (ledgerResult.data || [])
-            .filter(function(row){
+            rows.filter(function(row){
 
                 const reason =
                     String(row.reason || "").toLowerCase();
@@ -3349,8 +3332,12 @@ async function loadPayInOut(customerId){
                     String(row.reference || "").toUpperCase();
 
                 return (
-                    reason === "upi payment" ||
-                    reference.indexOf("UPI-PAY-") === 0
+                    String(row.direction || "").toLowerCase() === "debit" &&
+                    String(row.component || "").toLowerCase() === "manual" &&
+                    (
+                        reason === "upi payment" ||
+                        reference.indexOf("UPI-PAY-") === 0
+                    )
                 );
 
             });
@@ -3407,6 +3394,9 @@ async function loadPayInOut(customerId){
             payOutList.innerHTML =
                 payOuts.map(function(row){
 
+                    const upiId =
+                        String(row.upi_id || "").trim();
+
                     return `
                         <div class="pay-flow-row">
 
@@ -3417,14 +3407,14 @@ async function loadPayInOut(customerId){
                                 </div>
 
                                 <span class="pay-flow-status">
-                                    Sell Success
+                                    Success
                                 </span>
 
                             </div>
 
                             <div class="pay-flow-meta">
                                 UPI Payment<br>
-                                ${escapeHtml(String(row.reference || "").trim() || "Payment recorded")}
+                                UPI ID: ${escapeHtml(upiId || "Not recorded")}
                             </div>
 
                             <div class="pay-flow-time">
