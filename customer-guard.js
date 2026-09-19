@@ -456,11 +456,42 @@
 
         try{
 
+            /*
+               Different customer pages initialize Supabase
+               at different points. Reuse the page's client
+               when available instead of treating a missing
+               global client as a logout.
+            */
+
+            const authClient =
+                window.supabaseClient ||
+                window.db;
+
+            if(
+                !authClient ||
+                !authClient.auth
+            ){
+
+                /*
+                   Give page-level Supabase initialization
+                   a moment to finish. Never log the customer
+                   out just because the client is not ready yet.
+                */
+
+                setTimeout(
+                    initializeGuard,
+                    150
+                );
+
+                return;
+
+            }
+
             const {
                 data,
                 error
             } =
-                await supabaseClient.auth.getUser();
+                await authClient.auth.getUser();
 
             if(
                 error ||
@@ -470,7 +501,7 @@
             ){
 
                 clearCustomerSession();
-                await supabaseClient.auth.signOut();
+                await authClient.auth.signOut();
 
                 redirectToLogin();
 
@@ -512,7 +543,16 @@
             clearCustomerSession();
 
             try{
-                await supabaseClient.auth.signOut();
+                const authClient =
+                    window.supabaseClient ||
+                    window.db;
+
+                if(
+                    authClient &&
+                    authClient.auth
+                ){
+                    await authClient.auth.signOut();
+                }
             }catch(_){}
 
             redirectToLogin();
