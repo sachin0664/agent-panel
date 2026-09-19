@@ -1420,6 +1420,8 @@ document
                 this;
 
 
+            let uploadedFileName = null;
+
             try {
 
                 button.disabled =
@@ -1849,7 +1851,7 @@ document
 
 
             const utr =
-                utrInput.value.trim();
+                utrInput.value.trim().toUpperCase();
 
 
             const file =
@@ -2084,6 +2086,8 @@ document
                     safeExtension;
 
 
+                uploadedFileName = fileName;
+
                 const {
                     error: uploadError
                 } =
@@ -2186,6 +2190,15 @@ document
 
                 if (insertError) {
 
+                    // Database-level unique UTR protection is authoritative.
+                    if (insertError.code === "23505") {
+
+                        throw new Error(
+                            "This UTR has already been used for another deposit."
+                        );
+
+                    }
+
                     throw insertError;
 
                 }
@@ -2218,6 +2231,18 @@ document
 
 
             } catch (error) {
+
+                // If the UTR was rejected by the database after the screenshot
+                // upload, remove that orphaned proof file.
+                if (
+                    uploadedFileName &&
+                    error?.message === "This UTR has already been used for another deposit."
+                ) {
+                    await supabaseClient
+                        .storage
+                        .from("payment-proofs")
+                        .remove([uploadedFileName]);
+                }
 
                 console.error(
                     "Deposit submission error:",
