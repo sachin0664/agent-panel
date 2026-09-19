@@ -3427,7 +3427,7 @@ async function loadTransactions(
             }
         )
         .limit(
-            5
+            20
         );
 
     if(error){
@@ -3446,10 +3446,34 @@ async function loadTransactions(
 
     }
 
-    if(
-        !data ||
-        data.length === 0
-    ){
+    /* Do not expose legacy withdrawal records in the final
+       customer product. Keep valid UPI/manual transactions. */
+    const visibleRows =
+        (data || [])
+        .filter(function(row){
+
+            const text =
+                (
+                    String(row.component || "") +
+                    " " +
+                    String(row.reason || "") +
+                    " " +
+                    String(row.reference || "")
+                ).toLowerCase();
+
+            return !(
+                String(row.direction || "").toLowerCase() === "debit" &&
+                (
+                    String(row.component || "").toLowerCase() === "withdrawal" ||
+                    text.includes("withdrawal") ||
+                    text.includes("withdraw")
+                )
+            );
+
+        })
+        .slice(0,5);
+
+    if(!visibleRows.length){
 
         list.innerHTML =
             `<div class="no-notification">
@@ -3462,7 +3486,7 @@ async function loadTransactions(
 
     list.innerHTML = "";
 
-    data.forEach(
+    visibleRows.forEach(
         function(row){
 
             const direction =
