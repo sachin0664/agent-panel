@@ -764,33 +764,40 @@ registerForm.addEventListener(
 
 
             // ========================================
-            // CHECK MOBILE
+            // CHECK MOBILE + REFERRAL
+            //
+            // Registration is normally anonymous, while the
+            // customers table is protected by RLS. Use the
+            // dedicated validation RPC instead of trying to
+            // read the protected customer table directly.
             // ========================================
 
             const {
-                data: existingMobile,
-                error: mobileError
+                data: registrationCheck,
+                error: registrationCheckError
             } =
-            await supabaseClient
-                .from("customers")
-                .select("id")
-                .eq(
-                    "mobile",
-                    mobile
-                )
-                .maybeSingle();
+            await supabaseClient.rpc(
+                "validate_customer_registration",
+                {
+                    p_mobile: mobile,
+                    p_referral_code: referralCode || null
+                }
+            );
 
 
 
-            if(mobileError){
+            if(registrationCheckError){
 
-                throw mobileError;
+                throw registrationCheckError;
 
             }
 
 
 
-            if(existingMobile){
+            if(
+                !registrationCheck ||
+                registrationCheck.mobile_available !== true
+            ){
 
                 throw new Error(
                     "This mobile number is already registered."
@@ -800,42 +807,15 @@ registerForm.addEventListener(
 
 
 
-            // ========================================
-            // CHECK REFERRAL
-            // ========================================
-
             let validReferral = null;
 
 
 
             if(referralCode){
 
-                const {
-                    data: referralUser,
-                    error: referralError
-                } =
-                await supabaseClient
-                    .from("customers")
-                    .select(
-                        "id, invitation_code"
-                    )
-                    .eq(
-                        "invitation_code",
-                        referralCode
-                    )
-                    .maybeSingle();
-
-
-
-                if(referralError){
-
-                    throw referralError;
-
-                }
-
-
-
-                if(!referralUser){
+                if(
+                    registrationCheck.referral_valid !== true
+                ){
 
                     throw new Error(
                         "Invalid referral code."
@@ -843,11 +823,8 @@ registerForm.addEventListener(
 
                 }
 
-
-
                 validReferral =
-                    referralUser
-                        .invitation_code;
+                    referralCode;
 
             }
 
