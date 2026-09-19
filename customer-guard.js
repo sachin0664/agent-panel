@@ -517,7 +517,7 @@
 
                 clearCustomerSession();
 
-                await supabaseClient.auth.signOut();
+                await authClient.auth.signOut();
 
                 redirectToLogin();
 
