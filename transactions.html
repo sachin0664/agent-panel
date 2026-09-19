@@ -835,7 +835,8 @@ async function loadTransactions(){
                 (
                     reason === "upi payment" ||
                     reference.indexOf("UPI-PAY-") === 0
-                );
+                ) &&
+                false;
 
             if(component === "bonus"){
                 eventType = "Welcome Bonus";
