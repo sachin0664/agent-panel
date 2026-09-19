@@ -787,6 +787,16 @@ async function loadTransactions(){
 
         (ledgerResult.data || []).forEach(function(row){
 
+            /* Deposit is already represented by customer_deposits.
+               Skip its matching wallet-ledger credit so history cannot
+               display the same deposit twice. */
+            if(
+                String(row.component || "").toLowerCase() === "deposit"
+            ){
+                return;
+            }
+
+
             const component =
                 String(row.component || "").toLowerCase();
 
