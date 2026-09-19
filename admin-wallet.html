@@ -2368,8 +2368,15 @@ async function loadCustomers(){
     }
 
 
+    // Deleted customers must stay out of Admin Wallet Management
+    // until an admin restores them from Deleted / Blocked Customers.
     customers =
-        data || [];
+        (data || []).filter(
+            customer =>
+                String(
+                    customer.status || ""
+                ).toUpperCase() !== "DELETED"
+        );
 
 
     document.getElementById(
