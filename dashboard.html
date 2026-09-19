@@ -3021,7 +3021,9 @@ async function loadEarningsSummary(customerId){
     const totalEl = document.getElementById("totalEarnings");
 
     try{
-        const {data,error} = await supabaseClient.rpc("get_my_earnings_summary");
+        const {data,error} = await supabaseClient.rpc("get_my_earnings_summary", {
+            p_customer_id: customerId
+        });
         if(error) throw error;
         const row = Array.isArray(data) ? (data[0] || {}) : (data || {});
         todayEl.innerText = formatMoney(row.today_earnings || 0);
@@ -3765,11 +3767,17 @@ function getTransactionTitle(
 
 
     if(
-        text.includes("upi") &&
-        text.includes("payment")
+        (
+            text.includes("upi") &&
+            text.includes("payment")
+        ) &&
+        (
+            String(row.direction || "").toLowerCase() === "debit" ||
+            String(row.component || "").toLowerCase() === "manual"
+        )
     ){
 
-        return "UPI Payment";
+        return "Sell Success";
 
     }
 
