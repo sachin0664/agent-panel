@@ -914,22 +914,22 @@ async function loadTransactions(){
 
             tr.innerHTML = `
                 <td>
-                    <div class="date">\${escapeHtml(formatDateTime(row.created_at))}</div>
+                    <div class="date">${escapeHtml(formatDateTime(row.created_at))}</div>
                 </td>
 
                 <td>
-                    <div class="type">\${escapeHtml(typeText)}</div>
-                    <div class="details">\${escapeHtml(description)}</div>
+                    <div class="type">${escapeHtml(typeText)}</div>
+                    <div class="details">${escapeHtml(description)}</div>
                 </td>
 
                 <td>
-                    <span class="\${isCredit ? "credit" : "debit"}">
-                        \${isCredit ? "+" : "-"} \${money(amount)}
+                    <span class="${isCredit ? "credit" : "debit"}">
+                        ${isCredit ? "+" : "-"} ${money(amount)}
                     </span>
                 </td>
 
                 <td>
-                    <span class="status">\${escapeHtml(status)}</span>
+                    <span class="status">${escapeHtml(status)}</span>
                 </td>
             `;
 
