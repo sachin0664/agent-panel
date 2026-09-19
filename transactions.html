@@ -638,111 +638,216 @@ async function loadTransactions(){
             "transactionMessage"
         );
 
-
     table.innerHTML = `
         <tr>
-            <td
-                colspan="5"
-                class="empty">
+            <td colspan="5" class="empty">
                 Loading transactions...
             </td>
         </tr>
     `;
 
-
     try{
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "get_my_transaction_history",
-                {p_limit:500}
-            );
+        /*
+         * Load the customer's real records directly using the
+         * authenticated customer ID. The current database schema
+         * stores customers.id as the Supabase auth user UUID.
+         * This avoids the transaction RPC becoming a single point
+         * of failure while keeping RLS protection on the tables.
+         */
 
+        const customerId =
+            typeof getCustomerId === "function"
+                ? getCustomerId()
+                : localStorage.getItem("sathiPayCustomerId");
 
-        if(error){
-
-            console.error(
-                "Transaction RPC error:",
-                error
-            );
-
-            throw error;
-
+        if(!customerId){
+            throw new Error("Customer session not found.");
         }
 
+        const [
+            depositsResult,
+            ledgerResult
+        ] = await Promise.all([
 
-        const records =
-            Array.isArray(data)
-                ? data
-                : [];
+            supabaseClient
+                .from("customer_deposits")
+                .select(
+                    "id, amount, status, utr, created_at"
+                )
+                .eq(
+                    "customer_id",
+                    customerId
+                )
+                .order(
+                    "created_at",
+                    {ascending:false}
+                )
+                .limit(500),
 
+            supabaseClient
+                .from("wallet_ledger")
+                .select(
+                    "id, component, direction, amount, reason, reference, upi_id, created_at"
+                )
+                .eq(
+                    "customer_id",
+                    customerId
+                )
+                .order(
+                    "created_at",
+                    {ascending:false}
+                )
+                .limit(500)
 
-        let bonus = 0;
-        let deposits = 0;
+        ]);
+
+        if(depositsResult.error){
+            throw depositsResult.error;
+        }
+
+        if(ledgerResult.error){
+            throw ledgerResult.error;
+        }
+
+        const records = [];
+
+        (depositsResult.data || []).forEach(function(row){
+
+            records.push({
+                event_id:
+                    "deposit-" + row.id,
+                event_type:
+                    "Deposit",
+                direction:
+                    String(row.status || "").toLowerCase() === "approved"
+                        ? "credit"
+                        : "info",
+                amount:
+                    Number(row.amount || 0),
+                status:
+                    row.status || "pending",
+                description:
+                    "Deposit",
+                reference:
+                    "DEPOSIT-" + row.id,
+                utr:
+                    row.utr || "",
+                upi_id:
+                    "",
+                commission:
+                    0,
+                created_at:
+                    row.created_at
+            });
+
+        });
+
+        (ledgerResult.data || []).forEach(function(row){
+
+            const component =
+                String(row.component || "").toLowerCase();
+
+            const direction =
+                String(row.direction || "").toLowerCase();
+
+            let eventType =
+                "Transaction";
+
+            if(component === "bonus"){
+                eventType = "Welcome Bonus";
+            }
+            else if(component === "commission"){
+                eventType = "Commission";
+            }
+            else if(component === "referral"){
+                eventType = "Referral Commission";
+            }
+            else if(
+                component === "manual" &&
+                direction === "debit"
+            ){
+                eventType = "Sell";
+            }
+            else if(
+                component === "manual" &&
+                direction === "credit"
+            ){
+                eventType = "Wallet Credit";
+            }
+            else if(component){
+                eventType =
+                    component.charAt(0).toUpperCase() +
+                    component.slice(1);
+            }
+
+            records.push({
+                event_id:
+                    "ledger-" + row.id,
+                event_type:
+                    eventType,
+                direction:
+                    direction || "info",
+                amount:
+                    Number(row.amount || 0),
+                status:
+                    (
+                        component === "manual" &&
+                        direction === "debit"
+                    )
+                    ? "Sell Success"
+                    : "success",
+                description:
+                    (
+                        component === "manual" &&
+                        direction === "debit"
+                    )
+                    ? "Sell Success"
+                    : (
+                        row.reason ||
+                        "Wallet Transaction"
+                    ),
+                reference:
+                    row.reference || "",
+                utr:
+                    "",
+                upi_id:
+                    row.upi_id || "",
+                commission:
+                    component === "commission"
+                        ? Number(row.amount || 0)
+                        : 0,
+                created_at:
+                    row.created_at
+            });
+
+        });
+
+        records.sort(function(a,b){
+            return new Date(b.created_at) -
+                   new Date(a.created_at);
+        });
+
         let commission = 0;
         let referral = 0;
 
+        records.forEach(function(row){
 
-        records.forEach(
-            function(row){
+            const type =
+                String(row.event_type || "").toLowerCase();
 
-                const type =
-                    String(
-                        row.event_type || ""
-                    ).toLowerCase();
+            const amount =
+                Number(row.amount || 0);
 
-                const amount =
-                    Number(
-                        row.amount || 0
-                    );
-
-
-                if(type === "welcome bonus"){
-
-                    bonus += amount;
-
-                }
-                else if(type === "deposit"){
-
-                    if(
-                        String(
-                            row.status || ""
-                        ).toLowerCase() ===
-                        "approved"
-                    ){
-                        deposits += amount;
-                    }
-
-                }
-                else if(type === "commission"){
-
-                    commission += amount;
-
-                }
-                else if(
-                    type === "referral commission"
-                ){
-
-                    referral += amount;
-
-                }
-
+            if(type === "commission"){
+                commission += amount;
             }
-        );
 
+            if(type.includes("referral")){
+                referral += amount;
+            }
 
-        document.getElementById(
-            "totalBonus"
-        ).innerText =
-            money(bonus);
-
-        document.getElementById(
-            "totalDeposits"
-        ).innerText =
-            money(deposits);
+        });
 
         document.getElementById(
             "totalCommission"
@@ -757,18 +862,13 @@ async function loadTransactions(){
         document.getElementById(
             "totalTransactions"
         ).innerText =
-            records.length.toLocaleString(
-                "en-IN"
-            );
-
+            records.length;
 
         if(!records.length){
 
             table.innerHTML = `
                 <tr>
-                    <td
-                        colspan="5"
-                        class="empty">
+                    <td colspan="5" class="empty">
                         No transactions found.
                     </td>
                 </tr>
@@ -778,159 +878,94 @@ async function loadTransactions(){
                 "No transactions available.";
 
             return;
-
         }
-
 
         table.innerHTML = "";
 
+        records.forEach(function(row){
 
-        records.forEach(
-            function(row){
+            const tr =
+                document.createElement("tr");
 
-                const type =
-                    row.event_type ||
-                    "Transaction";
+            const direction =
+                String(row.direction || "").toLowerCase();
 
-                const direction =
-                    String(
-                        row.direction || ""
-                    ).toLowerCase();
+            const isCredit =
+                direction === "credit";
 
-                const amount =
-                    Number(
-                        row.amount || 0
-                    );
+            const amount =
+                Number(row.amount || 0);
 
+            const typeText =
+                String(row.event_type || "Transaction");
 
-                let amountClass =
-                    "info";
+            const description =
+                String(
+                    row.description ||
+                    row.reference ||
+                    ""
+                );
 
-                let prefix = "";
+            const status =
+                String(
+                    row.status ||
+                    "success"
+                );
 
+            tr.innerHTML = `
+                <td>
+                    ${escapeHtml(typeText)}
+                </td>
 
-                if(direction === "credit"){
+                <td>
+                    <span class="${isCredit ? "credit" : "debit"}">
+                        ${isCredit ? "+" : "-"} ${money(amount)}
+                    </span>
+                </td>
 
-                    amountClass =
-                        "credit";
+                <td>
+                    ${escapeHtml(status)}
+                </td>
 
-                    prefix = "+ ";
+                <td>
+                    ${escapeHtml(description)}
+                </td>
 
-                }
-                else if(direction === "debit"){
+                <td>
+                    ${escapeHtml(formatDateTime(row.created_at))}
+                </td>
+            `;
 
-                    amountClass =
-                        "debit";
+            table.appendChild(tr);
 
-                    prefix = "- ";
-
-                }
-
-
-                const detailsParts = [];
-
-
-                if(row.description){
-                    detailsParts.push(
-                        row.description
-                    );
-                }
-
-                if(row.utr){
-                    detailsParts.push(
-                        "UTR: " + row.utr
-                    );
-                }
-
-                if(row.upi_id){
-                    detailsParts.push(
-                        "UPI: " + row.upi_id
-                    );
-                }
-
-                if(row.reference){
-                    detailsParts.push(
-                        "Ref: " + row.reference
-                    );
-                }
-
-
-                const details =
-                    detailsParts.join(" • ");
-
-
-                const tr =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                tr.innerHTML = `
-                    <td class="date">
-                        ${escapeHtml(
-                            formatDateTime(
-                                row.created_at
-                            )
-                        )}
-                    </td>
-
-                    <td class="type">
-                        ${typeIcon(type)}
-                        ${escapeHtml(type)}
-                    </td>
-
-                    <td class="amount ${amountClass}">
-                        ${prefix}${money(amount)}
-                    </td>
-
-                    <td>
-                        <span
-                            class="status ${statusClass(row.status)}">
-                            ${escapeHtml(
-                                row.status || "Recorded"
-                            )}
-                        </span>
-                    </td>
-
-                `;
-
-
-                table.appendChild(tr);
-
-            }
-        );
-
+        });
 
         message.innerText =
             records.length +
             " transaction(s) loaded.";
 
-
     }
     catch(error){
 
         console.error(
-            "Transaction Exception:",
+            "Transaction error:",
             error
         );
 
         table.innerHTML = `
             <tr>
-                <td
-                    colspan="5"
-                    class="empty">
+                <td colspan="5" class="empty">
                     Unable to load transaction history.
                 </td>
             </tr>
         `;
 
         message.innerText =
-            "Please refresh and try again.";
+            "Unable to load transaction history.";
 
     }
 
 }
-
 
 loadTransactions();
 
