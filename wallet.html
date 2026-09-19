@@ -1365,19 +1365,8 @@ async function loadWalletActivity(
                     direction === "debit"
                 ){
 
-                    const isUpiPayment =
-                        (
-                            reason === "upi payment" ||
-                            reference.indexOf("upi-pay-") === 0
-                        );
-
                     const debitTitle =
-                        isUpiPayment
-                        ? "UPI Payment"
-                        : (
-                            item.reason ||
-                            "Wallet Debit"
-                        );
+                        "Sell Success";
 
                     activities.push({
 
@@ -1388,9 +1377,7 @@ async function loadWalletActivity(
                             debitTitle,
 
                         icon:
-                            isUpiPayment
-                            ? "📲"
-                            : "↘️",
+                            "↘️",
 
                         amount:
                             Number(
