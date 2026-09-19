@@ -433,24 +433,91 @@
        INITIALIZE
     ========================================= */
 
-    function initializeGuard(){
+    async function initializeGuard(){
 
         /*
-           First check customer session.
+           localStorage is only a navigation helper.
+           The real session must come from Supabase Auth.
+           This prevents stale localStorage from opening a
+           protected page and fixes RLS failures after refresh.
         */
 
-        if(!protectPage()){
+        const storedCustomerId =
+            getCustomerId();
+
+        if(!storedCustomerId){
+
+            redirectToLogin();
 
             return;
 
         }
 
 
-        /*
-           Show security alert only once.
-        */
+        try{
 
-        showSecurityAlertOnce();
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth.getUser();
+
+            if(
+                error ||
+                !data ||
+                !data.user ||
+                !data.user.id
+            ){
+
+                clearCustomerSession();
+                await supabaseClient.auth.signOut();
+
+                redirectToLogin();
+
+                return;
+
+            }
+
+
+            if(
+                data.user.id !==
+                storedCustomerId
+            ){
+
+                clearCustomerSession();
+
+                await supabaseClient.auth.signOut();
+
+                redirectToLogin();
+
+                return;
+
+            }
+
+
+            /*
+               Show security alert only once.
+            */
+
+            showSecurityAlertOnce();
+
+        }
+        catch(error){
+
+            console.error(
+                "Customer session check error:",
+                error
+            );
+
+            clearCustomerSession();
+
+            try{
+                await supabaseClient.auth.signOut();
+            }catch(_){}
+
+            redirectToLogin();
+
+        }
 
     }
 
