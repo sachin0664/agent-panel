@@ -688,7 +688,7 @@ async function loadTransactions(){
             supabaseClient
                 .from("wallet_ledger")
                 .select(
-                    "id, component, direction, amount, reason, reference, upi_id, created_at"
+                    "id, component, direction, amount, reason, reference, created_at"
                 )
                 .eq(
                     "customer_id",
@@ -812,7 +812,7 @@ async function loadTransactions(){
                 utr:
                     "",
                 upi_id:
-                    row.upi_id || "",
+                    "",
                 commission:
                     component === "commission"
                         ? Number(row.amount || 0)
@@ -914,25 +914,22 @@ async function loadTransactions(){
 
             tr.innerHTML = `
                 <td>
-                    ${escapeHtml(typeText)}
+                    <div class="date">\${escapeHtml(formatDateTime(row.created_at))}</div>
                 </td>
 
                 <td>
-                    <span class="${isCredit ? "credit" : "debit"}">
-                        ${isCredit ? "+" : "-"} ${money(amount)}
+                    <div class="type">\${escapeHtml(typeText)}</div>
+                    <div class="details">\${escapeHtml(description)}</div>
+                </td>
+
+                <td>
+                    <span class="\${isCredit ? "credit" : "debit"}">
+                        \${isCredit ? "+" : "-"} \${money(amount)}
                     </span>
                 </td>
 
                 <td>
-                    ${escapeHtml(status)}
-                </td>
-
-                <td>
-                    ${escapeHtml(description)}
-                </td>
-
-                <td>
-                    ${escapeHtml(formatDateTime(row.created_at))}
+                    <span class="status">\${escapeHtml(status)}</span>
                 </td>
             `;
 
