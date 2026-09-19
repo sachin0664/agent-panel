@@ -682,7 +682,7 @@ async function loadTransactions(){
 
     table.innerHTML = `
         <tr>
-            <td colspan="5" class="empty">
+            <td colspan="4" class="empty">
                 Loading transactions...
             </td>
         </tr>
@@ -796,6 +796,37 @@ async function loadTransactions(){
             let eventType =
                 "Transaction";
 
+            const reason =
+                String(row.reason || "").toLowerCase();
+
+            const reference =
+                String(row.reference || "").toUpperCase();
+
+            const isLegacyWithdrawal =
+                direction === "debit" &&
+                (
+                    component === "withdrawal" ||
+                    reason.includes("withdrawal") ||
+                    reason.includes("withdraw") ||
+                    reference.indexOf("WITHDRAWAL") === 0 ||
+                    reference.indexOf("WITHDRAW") === 0
+                );
+
+            /* Old withdrawal ledger entries are intentionally not
+               shown because the final customer product has no
+               withdrawal system/history. */
+            if(isLegacyWithdrawal){
+                return;
+            }
+
+            const isUpiPayment =
+                component === "manual" &&
+                direction === "debit" &&
+                (
+                    reason === "upi payment" ||
+                    reference.indexOf("UPI-PAY-") === 0
+                );
+
             if(component === "bonus"){
                 eventType = "Welcome Bonus";
             }
@@ -804,6 +835,9 @@ async function loadTransactions(){
             }
             else if(component === "referral"){
                 eventType = "Referral Commission";
+            }
+            else if(isUpiPayment){
+                eventType = "UPI Payment";
             }
             else if(
                 component === "manual" &&
@@ -833,14 +867,18 @@ async function loadTransactions(){
                 amount:
                     Number(row.amount || 0),
                 status:
-                    (
+                    isUpiPayment
+                    ? "Success"
+                    : (
                         component === "manual" &&
                         direction === "debit"
                     )
                     ? "Sell Success"
                     : "success",
                 description:
-                    (
+                    isUpiPayment
+                    ? "UPI Payment"
+                    : (
                         component === "manual" &&
                         direction === "debit"
                     )
@@ -870,6 +908,8 @@ async function loadTransactions(){
                    new Date(a.created_at);
         });
 
+        let bonus = 0;
+        let deposits = 0;
         let commission = 0;
         let referral = 0;
 
@@ -881,15 +921,49 @@ async function loadTransactions(){
             const amount =
                 Number(row.amount || 0);
 
-            if(type === "commission"){
+            const status =
+                String(row.status || "").toLowerCase();
+
+            if(
+                type === "welcome bonus" &&
+                row.direction === "credit"
+            ){
+                bonus += amount;
+            }
+
+            if(
+                type === "deposit" &&
+                row.direction === "credit" &&
+                status === "approved"
+            ){
+                deposits += amount;
+            }
+
+            if(
+                type === "commission" &&
+                row.direction === "credit"
+            ){
                 commission += amount;
             }
 
-            if(type.includes("referral")){
+            if(
+                type.includes("referral") &&
+                row.direction === "credit"
+            ){
                 referral += amount;
             }
 
         });
+
+        document.getElementById(
+            "totalBonus"
+        ).innerText =
+            money(bonus);
+
+        document.getElementById(
+            "totalDeposits"
+        ).innerText =
+            money(deposits);
 
         document.getElementById(
             "totalCommission"
@@ -910,7 +984,7 @@ async function loadTransactions(){
 
             table.innerHTML = `
                 <tr>
-                    <td colspan="5" class="empty">
+                    <td colspan="4" class="empty">
                         No transactions found.
                     </td>
                 </tr>
@@ -998,7 +1072,7 @@ async function loadTransactions(){
 
         table.innerHTML = `
             <tr>
-                <td colspan="5" class="empty">
+                <td colspan="4" class="empty">
                     Unable to load transaction history.
                 </td>
             </tr>
