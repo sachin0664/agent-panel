@@ -1341,7 +1341,8 @@ async function loadWalletActivity(
                     ).toLowerCase();
 
 
-                /* LEGACY WITHDRAWAL */
+                /* FINAL PRODUCT HAS NO WITHDRAWAL SYSTEM.
+                   Do not expose old withdrawal ledger rows. */
 
                 const isWithdrawal =
                     direction === "debit" &&
@@ -1353,35 +1354,7 @@ async function loadWalletActivity(
                         reference.includes("withdraw")
                     );
 
-
                 if(isWithdrawal){
-
-                    activities.push({
-
-                        date:
-                            item.created_at,
-
-                        title:
-                            "Legacy Withdrawal",
-
-                        icon:
-                            "💸",
-
-                        amount:
-                            Number(
-                                item.amount || 0
-                            ),
-
-                        type:
-                            "withdrawal",
-
-                        balanceAfter:
-                            Number(
-                                item.balance_after || 0
-                            )
-
-                    });
-
                     return;
                 }
 
@@ -1392,12 +1365,15 @@ async function loadWalletActivity(
                     direction === "debit"
                 ){
 
-                    const debitTitle =
+                    const isUpiPayment =
                         (
-                            reason.includes("upi payment") ||
-                            reference.includes("upi payment")
-                        )
-                        ? "Sell Success"
+                            reason === "upi payment" ||
+                            reference.indexOf("upi-pay-") === 0
+                        );
+
+                    const debitTitle =
+                        isUpiPayment
+                        ? "UPI Payment"
                         : (
                             item.reason ||
                             "Wallet Debit"
@@ -1412,7 +1388,9 @@ async function loadWalletActivity(
                             debitTitle,
 
                         icon:
-                            "↘️",
+                            isUpiPayment
+                            ? "📲"
+                            : "↘️",
 
                         amount:
                             Number(
