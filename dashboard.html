@@ -4238,28 +4238,31 @@ async function changeSellStatus(){
         toggle.checked;
 
 
-    updateSellStatus(
-        newStatus
-    );
+    /*
+       Save through the secure customer RPC.
+       The RPC uses auth.uid() on the server, so
+       refresh/reload reads the same saved value.
+    */
+
+    toggle.disabled = true;
 
 
     const {
+        data,
         error
     } =
-        await supabaseClient
-        .from(
-            "customers"
-        )
-        .update({
-            sell_on:newStatus
-        })
-        .eq(
-            "id",
-            customerId
+        await supabaseClient.rpc(
+            "set_customer_sell_status",
+            {
+                p_enabled:newStatus
+            }
         );
 
 
-    if(error){
+    if(
+        error ||
+        data !== newStatus
+    ){
 
         toggle.checked =
             !newStatus;
@@ -4273,24 +4276,35 @@ async function changeSellStatus(){
         document.getElementById(
             "message"
         ).innerText =
-            "Unable to update selling status.";
+            "Unable to update account status. Please try again.";
 
 
         console.error(
+            "Account status update error:",
             error
         );
+
+        toggle.disabled = false;
 
         return;
 
     }
 
 
+    updateSellStatus(
+        newStatus
+    );
+
+
     document.getElementById(
         "message"
     ).innerText =
         newStatus
-        ? "Selling is now ON."
-        : "Selling is now OFF.";
+        ? "Account is now Active."
+        : "Account is now Inactive.";
+
+
+    toggle.disabled = false;
 
 }
 
