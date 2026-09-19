@@ -3302,7 +3302,7 @@ async function loadPayInOut(customerId){
             supabaseClient
                 .from("wallet_ledger")
                 .select(
-                    "amount, direction, component, reason, reference, upi_id, created_at"
+                    "amount, direction, component, reason, reference, created_at"
                 )
                 .eq(
                     "customer_id",
@@ -3407,9 +3407,6 @@ async function loadPayInOut(customerId){
             payOutList.innerHTML =
                 payOuts.map(function(row){
 
-                    const upiId =
-                        String(row.upi_id || "").trim();
-
                     return `
                         <div class="pay-flow-row">
 
@@ -3427,7 +3424,7 @@ async function loadPayInOut(customerId){
 
                             <div class="pay-flow-meta">
                                 UPI Payment<br>
-                                UPI ID: ${escapeHtml(upiId || "Not recorded")}
+                                ${escapeHtml(String(row.reference || "").trim() || "Payment recorded")}
                             </div>
 
                             <div class="pay-flow-time">
