@@ -1392,14 +1392,24 @@ async function loadWalletActivity(
                     direction === "debit"
                 ){
 
+                    const debitTitle =
+                        (
+                            reason.includes("upi payment") ||
+                            reference.includes("upi payment")
+                        )
+                        ? "Sell Success"
+                        : (
+                            item.reason ||
+                            "Wallet Debit"
+                        );
+
                     activities.push({
 
                         date:
                             item.created_at,
 
                         title:
-                            item.reason ||
-                            "Wallet Debit",
+                            debitTitle,
 
                         icon:
                             "↘️",
