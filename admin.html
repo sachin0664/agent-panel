@@ -264,6 +264,87 @@ button:disabled{
     gap:12px;
 }
 
+.commissionLauncher{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.commissionLaunchBox{
+    background:linear-gradient(135deg,#eff6ff,#f5f3ff);
+    border:1px solid #dbe3ef;
+    border-radius:16px;
+    padding:14px;
+    cursor:pointer;
+    text-align:center;
+    transition:.18s;
+}
+
+.commissionLaunchBox:hover{
+    transform:translateY(-2px);
+    box-shadow:0 7px 20px rgba(0,0,0,.08);
+}
+
+.commissionLaunchIcon{
+    font-size:28px;
+    margin-bottom:6px;
+}
+
+.commissionLaunchTitle{
+    font-size:15px;
+    font-weight:bold;
+}
+
+.commissionLaunchHint{
+    margin-top:6px;
+    font-size:12px;
+    color:#2563eb;
+    font-weight:bold;
+}
+
+.commissionModalBox{
+    background:white;
+    border-radius:22px;
+    padding:20px;
+    width:100%;
+    max-width:520px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+
+.commissionModalHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.commissionModalHeader h2{
+    margin:0;
+    font-size:21px;
+}
+
+.commissionClose{
+    width:40px;
+    height:40px;
+    padding:0;
+    border-radius:50%;
+    background:#e2e8f0;
+    color:#111827;
+    font-size:20px;
+}
+
+.commissionModalRates{
+    background:linear-gradient(135deg,#f8fafc,#eef2ff);
+    border:1px solid #dbe3ef;
+    border-radius:16px;
+    padding:8px 14px;
+}
+
+.commissionModalRates .rate{
+    padding:13px 4px;
+}
+
 .commissionHeading{
     font-size:15px;
     font-weight:bold;
@@ -803,6 +884,27 @@ body.pageReady{
         grid-template-columns:1fr;
     }
 
+    .commissionLauncher{
+        grid-template-columns:1fr 1fr;
+        gap:9px;
+    }
+
+    .commissionLaunchBox{
+        padding:12px 7px;
+    }
+
+    .commissionLaunchIcon{
+        font-size:24px;
+    }
+
+    .commissionLaunchTitle{
+        font-size:13px;
+    }
+
+    .commissionLaunchHint{
+        font-size:10px;
+    }
+
     .depositFolders{
         grid-template-columns:1fr 1fr 1fr;
     }
@@ -1149,61 +1251,106 @@ body.pageReady{
 
 <div class="card">
 
-    <h2>💰 Commission Rules</h2>
+    <h2>💰 Commission & Referral</h2>
 
-    <div class="commissionGrid">
+    <div class="commissionLauncher">
 
-        <div class="commissionBox">
-
-            <div class="commissionHeading">
-                💵 Deposit Commission
-            </div>
-
-            <div class="rate">
-                <span>₹1 – ₹9,999</span>
-                <b>6%</b>
-            </div>
-
-            <div class="rate">
-                <span>₹10,000 – ₹19,999</span>
-                <b>8%</b>
-            </div>
-
-            <div class="rate">
-                <span>₹20,000+</span>
-                <b>10%</b>
-            </div>
-
+        <div
+            class="commissionLaunchBox"
+            onclick="openCommissionRules()"
+        >
+            <div class="commissionLaunchIcon">💵</div>
+            <div class="commissionLaunchTitle">Commission Rules</div>
+            <div class="commissionLaunchHint">View deposit rates →</div>
         </div>
 
-
-        <div class="commissionBox">
-
-            <div class="commissionHeading">
-                👥 Referral Commission
-            </div>
-
-            <div class="rate">
-                <span>Level A</span>
-                <b>1%</b>
-            </div>
-
-            <div class="rate">
-                <span>Level B</span>
-                <b>0.5%</b>
-            </div>
-
-            <div class="rate">
-                <span>Level C</span>
-                <b>0.2%</b>
-            </div>
-
+        <div
+            class="commissionLaunchBox"
+            onclick="openReferralCommission()"
+        >
+            <div class="commissionLaunchIcon">👥</div>
+            <div class="commissionLaunchTitle">Referral Commission</div>
+            <div class="commissionLaunchHint">View Level A / B / C →</div>
         </div>
 
     </div>
 
 </div>
 
+</div>
+
+
+<!-- COMMISSION RULES MODAL -->
+
+<div
+    id="commissionRulesModal"
+    class="settingsModal"
+    onclick="closeSettingsModal(event,'commissionRulesModal')"
+>
+    <div
+        class="commissionModalBox"
+        onclick="event.stopPropagation()"
+    >
+        <div class="commissionModalHeader">
+            <h2>💰 Commission Rules</h2>
+            <button
+                class="commissionClose"
+                onclick="closeSettingsModal(null,'commissionRulesModal')"
+            >✕</button>
+        </div>
+
+        <div class="commissionModalRates">
+            <div class="rate">
+                <span>₹1 – ₹9,999</span>
+                <b>6%</b>
+            </div>
+            <div class="rate">
+                <span>₹10,000 – ₹19,999</span>
+                <b>8%</b>
+            </div>
+            <div class="rate">
+                <span>₹20,000+</span>
+                <b>10%</b>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- REFERRAL COMMISSION MODAL -->
+
+<div
+    id="referralCommissionModal"
+    class="settingsModal"
+    onclick="closeSettingsModal(event,'referralCommissionModal')"
+>
+    <div
+        class="commissionModalBox"
+        onclick="event.stopPropagation()"
+    >
+        <div class="commissionModalHeader">
+            <h2>👥 Referral Commission</h2>
+            <button
+                class="commissionClose"
+                onclick="closeSettingsModal(null,'referralCommissionModal')"
+            >✕</button>
+        </div>
+
+        <div class="commissionModalRates">
+            <div class="rate">
+                <span>Level A</span>
+                <b>1%</b>
+            </div>
+            <div class="rate">
+                <span>Level B</span>
+                <b>0.5%</b>
+            </div>
+            <div class="rate">
+                <span>Level C</span>
+                <b>0.2%</b>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -1720,6 +1867,24 @@ function openSupportSettings(){
 
     document.getElementById(
         "supportSettingsModal"
+    ).style.display =
+        "flex";
+
+}
+
+function openCommissionRules(){
+
+    document.getElementById(
+        "commissionRulesModal"
+    ).style.display =
+        "flex";
+
+}
+
+function openReferralCommission(){
+
+    document.getElementById(
+        "referralCommissionModal"
     ).style.display =
         "flex";
 
