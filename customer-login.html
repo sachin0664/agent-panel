@@ -239,7 +239,24 @@ loginForm.addEventListener(
                 ) {
 
                     message.innerText =
-                        "🚫 This customer account is blocked. Please contact admin support.";
+                        "This customer account is blocked. Please contact customer support.";
+
+                    loginForm.style.display = "none";
+
+                    const forgotBlock =
+                        document.getElementById("forgotPasswordLink")
+                            ?.closest("p");
+
+                    if (forgotBlock) {
+                        forgotBlock.style.display = "none";
+                    }
+
+                    const registerBlock =
+                        message.nextElementSibling;
+
+                    if (registerBlock) {
+                        registerBlock.style.display = "none";
+                    }
 
                 }
 
