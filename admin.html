@@ -4365,12 +4365,139 @@ async function loadArchivedCustomers(){
                 <div class="row"><span class="label">Deleted At</span><span class="value">${formatReferralDate(row.archived_at)}</span></div>
                 <div class="row"><span class="label">Status</span><span class="value">🔒 BLOCKED</span></div>
                 <div class="actions">
-                    <button class="green full" onclick="restoreCustomer('${row.customer_id}')">♻️ Restore & Unblock</button>
+
+                    <button
+                        class="green full"
+                        onclick="restoreCustomer('${row.customer_id}')"
+                    >
+                        ♻️ Restore & Unblock
+                    </button>
+
+                    <button
+                        class="red full"
+                        onclick="permanentlyDeleteCustomer('${row.customer_id}')"
+                    >
+                        🗑️ Permanently Delete
+                    </button>
+
                 </div>
             </div>
         `;
     }).join("");
 }
+
+async function permanentlyDeleteCustomer(customerId){
+
+    if(!customerId){
+
+        alert("❌ Customer ID missing.");
+
+        return;
+
+    }
+
+
+    const firstConfirm =
+        confirm(
+            "⚠️ PERMANENT DELETE\n\n" +
+            "Is customer ka account aur customer-related records permanently delete ho jayenge.\n\n" +
+            "Is action ke baad Restore possible nahi hoga.\n\n" +
+            "Continue karna hai?"
+        );
+
+    if(!firstConfirm){
+
+        return;
+
+    }
+
+
+    const secondConfirm =
+        confirm(
+            "🚨 FINAL CONFIRMATION\n\n" +
+            "Customer ka profile, deposits, wallet ledger, UPI records, referral commission records, archive aur login account permanently delete hoga.\n\n" +
+            "Customer same mobile/details se dobara NEW registration kar sakta hai.\n\n" +
+            "Permanently delete karein?"
+        );
+
+    if(!secondConfirm){
+
+        return;
+
+    }
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.rpc(
+            "admin_permanently_delete_customer",
+            {
+                p_customer_id:
+                    customerId
+            }
+        );
+
+
+        if(error){
+
+            alert(
+                "❌ Permanent delete failed:\n\n" +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        if(data !== true){
+
+            alert(
+                "❌ Permanent delete failed."
+            );
+
+            return;
+
+        }
+
+
+        alert(
+            "✅ Customer permanently deleted.\n\n" +
+            "Purane customer records remove ho gaye hain. Ab same details se NEW registration ki ja sakti hai."
+        );
+
+
+        await loadArchivedCustomers();
+
+        await loadCustomers();
+
+        await loadAdminTotals();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Permanent delete customer error:",
+            error
+        );
+
+        alert(
+            "❌ " +
+            (
+                error.message ||
+                "Permanent delete failed."
+            )
+        );
+
+    }
+
+}
+
 
 async function restoreCustomer(customerId){
 
