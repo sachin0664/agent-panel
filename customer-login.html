@@ -384,6 +384,35 @@ loginForm.addEventListener(
 
 
             /* =====================================
+               BLOCKED / DELETED CUSTOMER
+            ===================================== */
+
+            const customerStatus =
+                String(
+                    customer.status || ""
+                ).toLowerCase();
+
+            if(
+                customerStatus === "blocked" ||
+                customerStatus === "deleted" ||
+                customerStatus === "inactive"
+            ){
+
+                await supabaseClient.auth.signOut();
+
+                message.innerText =
+                    "This account is blocked.\\nPlease contact customer support.";
+
+                message.style.color =
+                    "red";
+
+                return;
+
+            }
+
+
+
+            /* =====================================
                SAVE CUSTOMER SESSION DATA
             ===================================== */
 
