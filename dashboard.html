@@ -3286,44 +3286,43 @@ async function loadPayInOut(customerId){
     try{
 
         /*
-         * Load Pay In / Pay Out directly from the customer-owned
-         * tables. This avoids depending on auth.uid() inside the
-         * transaction RPC and uses the same customerId already
-         * verified by the dashboard.
+         * Pay In / Pay Out history is loaded through a
+         * customer-only RPC. The database uses auth.uid()
+         * internally, so the history remains restricted to
+         * the logged-in customer and does not depend on
+         * client-side customer IDs or direct table RLS.
          */
 
-        const [depositResult, ledgerResult] =
-            await Promise.all([
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "get_customer_pay_flow_history"
+            );
 
-                supabaseClient
-                .from("customer_deposits")
-                .select("id, amount, status, created_at")
-                .eq("customer_id", customerId)
-                .eq("status", "approved")
-                .order("created_at", {ascending:false})
-                .limit(500),
 
-                supabaseClient
-                .from("wallet_ledger")
-                .select("id, component, direction, amount, reason, reference, upi_id, created_at")
-                .eq("customer_id", customerId)
-                .eq("component", "manual")
-                .eq("direction", "debit")
-                .order("created_at", {ascending:false})
-                .limit(500)
-
-            ]);
-
-        if(depositResult.error){
-            throw depositResult.error;
+        if(error){
+            throw error;
         }
 
-        if(ledgerResult.error){
-            throw ledgerResult.error;
-        }
 
-        const payIns = depositResult.data || [];
-        const payOuts = ledgerResult.data || [];
+        const rows =
+            Array.isArray(data)
+            ? data
+            : [];
+
+
+        const payIns =
+            rows.filter(function(row){
+                return row.flow_type === "pay_in";
+            });
+
+
+        const payOuts =
+            rows.filter(function(row){
+                return row.flow_type === "pay_out";
+            });
 
 
         if(!payIns.length){
@@ -3341,13 +3340,15 @@ async function loadPayInOut(customerId){
                         <div class="pay-flow-row">
 
                             <div class="pay-flow-top">
+
                                 <div class="pay-flow-amount pay-flow-credit">
                                     + ${formatMoney(row.amount)}
                                 </div>
 
                                 <span class="pay-flow-status">
-                                    Approved
+                                    ${escapeHtml(row.status || "Approved")}
                                 </span>
+
                             </div>
 
                             <div class="pay-flow-meta">
@@ -3369,7 +3370,7 @@ async function loadPayInOut(customerId){
         if(!payOuts.length){
 
             payOutList.innerHTML =
-                '<div class="pay-flow-empty">No sell records.</div>';
+                '<div class="pay-flow-empty">No UPI payment records.</div>';
 
         }
         else{
@@ -3377,26 +3378,15 @@ async function loadPayInOut(customerId){
             payOutList.innerHTML =
                 payOuts.map(function(row){
 
-                    let upiId = row.upi_id || "";
+                    const upiId =
+                        String(row.upi_id || "").trim();
 
-                    if(!upiId){
-
-                        const reference =
-                            String(row.reference || "");
-
-                        const match =
-                            reference.match(/UPI_ID:([^|]+)/i);
-
-                        if(match){
-                            upiId = match[1].trim();
-                        }
-
-                    }
 
                     return `
                         <div class="pay-flow-row">
 
                             <div class="pay-flow-top">
+
                                 <div class="pay-flow-amount pay-flow-debit">
                                     - ${formatMoney(row.amount)}
                                 </div>
@@ -3404,10 +3394,11 @@ async function loadPayInOut(customerId){
                                 <span class="pay-flow-status">
                                     Sell Success
                                 </span>
+
                             </div>
 
                             <div class="pay-flow-meta">
-                                Sell Success<br>
+                                UPI Payment<br>
                                 UPI ID: ${escapeHtml(upiId || "Not recorded")}
                             </div>
 
@@ -3425,10 +3416,15 @@ async function loadPayInOut(customerId){
     }
     catch(error){
 
-        console.error("Pay In/Out error:", error);
+        console.error(
+            "Pay In/Out error:",
+            error
+        );
+
 
         payInList.innerHTML =
             '<div class="pay-flow-empty">Unable to load Pay In.</div>';
+
 
         payOutList.innerHTML =
             '<div class="pay-flow-empty">Unable to load Pay Out.</div>';
