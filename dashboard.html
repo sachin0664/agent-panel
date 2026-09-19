@@ -3282,48 +3282,83 @@ async function loadPayInOut(customerId){
 
     if(!payInList || !payOutList) return;
 
-
     try{
 
-        /*
-         * Pay In / Pay Out history is loaded through a
-         * customer-only RPC. The database uses auth.uid()
-         * internally, so the history remains restricted to
-         * the logged-in customer and does not depend on
-         * client-side customer IDs or direct table RLS.
-         */
+        const [
+            depositsResult,
+            ledgerResult
+        ] = await Promise.all([
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "get_customer_pay_flow_history"
-            );
+            supabaseClient
+                .from("customer_deposits")
+                .select(
+                    "amount, status, created_at"
+                )
+                .eq(
+                    "customer_id",
+                    customerId
+                )
+                .order(
+                    "created_at",
+                    {ascending:false}
+                )
+                .limit(50),
 
+            supabaseClient
+                .from("wallet_ledger")
+                .select(
+                    "amount, direction, component, reason, reference, upi_id, created_at"
+                )
+                .eq(
+                    "customer_id",
+                    customerId
+                )
+                .eq(
+                    "direction",
+                    "debit"
+                )
+                .eq(
+                    "component",
+                    "manual"
+                )
+                .order(
+                    "created_at",
+                    {ascending:false}
+                )
+                .limit(50)
 
-        if(error){
-            throw error;
+        ]);
+
+        if(depositsResult.error){
+            throw depositsResult.error;
         }
 
-
-        const rows =
-            Array.isArray(data)
-            ? data
-            : [];
-
+        if(ledgerResult.error){
+            throw ledgerResult.error;
+        }
 
         const payIns =
-            rows.filter(function(row){
-                return row.flow_type === "pay_in";
+            (depositsResult.data || [])
+            .filter(function(row){
+                return String(row.status || "").toLowerCase() === "approved";
             });
-
 
         const payOuts =
-            rows.filter(function(row){
-                return row.flow_type === "pay_out";
-            });
+            (ledgerResult.data || [])
+            .filter(function(row){
 
+                const reason =
+                    String(row.reason || "").toLowerCase();
+
+                const reference =
+                    String(row.reference || "").toUpperCase();
+
+                return (
+                    reason === "upi payment" ||
+                    reference.indexOf("UPI-PAY-") === 0
+                );
+
+            });
 
         if(!payIns.length){
 
@@ -3346,7 +3381,7 @@ async function loadPayInOut(customerId){
                                 </div>
 
                                 <span class="pay-flow-status">
-                                    ${escapeHtml(row.status || "Approved")}
+                                    Approved
                                 </span>
 
                             </div>
@@ -3366,7 +3401,6 @@ async function loadPayInOut(customerId){
 
         }
 
-
         if(!payOuts.length){
 
             payOutList.innerHTML =
@@ -3380,7 +3414,6 @@ async function loadPayInOut(customerId){
 
                     const upiId =
                         String(row.upi_id || "").trim();
-
 
                     return `
                         <div class="pay-flow-row">
@@ -3421,10 +3454,8 @@ async function loadPayInOut(customerId){
             error
         );
 
-
         payInList.innerHTML =
             '<div class="pay-flow-empty">Unable to load Pay In.</div>';
-
 
         payOutList.innerHTML =
             '<div class="pay-flow-empty">Unable to load Pay Out.</div>';
