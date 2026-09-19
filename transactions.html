@@ -150,8 +150,28 @@ tr:last-child td{
 }
 
 .type{
+    display:flex;
+    align-items:center;
+    gap:8px;
     font-weight:900;
     color:#173d76;
+}
+
+.type-icon{
+    width:34px;
+    height:34px;
+    border-radius:11px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    flex-shrink:0;
+    background:linear-gradient(135deg,#eef6ff,#f4efff);
+    box-shadow:0 4px 12px rgba(20,60,100,.08);
+}
+
+.type-name{
+    line-height:1.2;
 }
 
 .details{
@@ -214,6 +234,18 @@ tr:last-child td{
     white-space:nowrap;
     color:#65758c;
     font-size:10px;
+    line-height:1.35;
+}
+
+.date-day{
+    font-weight:900;
+    color:#334f73;
+}
+
+.date-time{
+    margin-top:2px;
+    color:#9aa7b8;
+    font-size:9px;
 }
 
 .empty{
@@ -546,7 +578,7 @@ function formatDateTime(value){
         return "";
     }
 
-    return date.toLocaleString(
+    const parts = new Intl.DateTimeFormat(
         "en-IN",
         {
             day:"2-digit",
@@ -557,7 +589,17 @@ function formatDateTime(value){
             hour12:true,
             timeZone:"Asia/Kolkata"
         }
-    );
+    ).formatToParts(date);
+
+    const getPart = function(name){
+        const item = parts.find(function(p){ return p.type === name; });
+        return item ? item.value : "";
+    };
+
+    return {
+        day: getPart("day") + " " + getPart("month") + " " + getPart("year"),
+        time: getPart("hour") + ":" + getPart("minute") + " " + getPart("dayPeriod")
+    };
 
 }
 
@@ -914,12 +956,17 @@ async function loadTransactions(){
 
             tr.innerHTML = `
                 <td>
-                    <div class="date">${escapeHtml(formatDateTime(row.created_at))}</div>
+                    <div class="date">
+                        <div class="date-day">${escapeHtml(formatDateTime(row.created_at).day)}</div>
+                        <div class="date-time">${escapeHtml(formatDateTime(row.created_at).time)}</div>
+                    </div>
                 </td>
 
                 <td>
-                    <div class="type">${escapeHtml(typeText)}</div>
-                    <div class="details">${escapeHtml(description)}</div>
+                    <div class="type">
+                        <span class="type-icon">${typeIcon(typeText)}</span>
+                        <span class="type-name">${escapeHtml(typeText)}</span>
+                    </div>
                 </td>
 
                 <td>
@@ -929,7 +976,7 @@ async function loadTransactions(){
                 </td>
 
                 <td>
-                    <span class="status">${escapeHtml(status)}</span>
+                    <span class="status ${statusClass(status)}">${escapeHtml(status)}</span>
                 </td>
             `;
 
