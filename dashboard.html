@@ -3021,9 +3021,7 @@ async function loadEarningsSummary(customerId){
     const totalEl = document.getElementById("totalEarnings");
 
     try{
-        const {data,error} = await supabaseClient.rpc("get_my_earnings_summary", {
-            p_customer_id: customerId
-        });
+        const {data,error} = await supabaseClient.rpc("get_my_earnings_summary");
         if(error) throw error;
         const row = Array.isArray(data) ? (data[0] || {}) : (data || {});
         todayEl.innerText = formatMoney(row.today_earnings || 0);
