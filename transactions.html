@@ -829,15 +829,6 @@ async function loadTransactions(){
                 return;
             }
 
-            const isUpiPayment =
-                component === "manual" &&
-                direction === "debit" &&
-                (
-                    reason === "upi payment" ||
-                    reference.indexOf("UPI-PAY-") === 0
-                ) &&
-                false;
-
             if(component === "bonus"){
                 eventType = "Welcome Bonus";
             }
