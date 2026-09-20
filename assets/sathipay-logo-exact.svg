@@ -1,22 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
 <title id="title">Sathi Pay SP Logo</title>
-<desc id="desc">A distinctive colorful intertwined S and P monogram for Sathi Pay.</desc>
+<desc id="desc">A distinctive two-color SP monogram with separated S and P lettering.</desc>
 <defs>
-<linearGradient id="bg" x1="55" y1="40" x2="455" y2="470" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#087FF5"/><stop offset=".45" stop-color="#4238F5"/><stop offset="1" stop-color="#10C98A"/>
-</linearGradient>
-<linearGradient id="ribbon" x1="120" y1="130" x2="410" y2="390" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#FFFFFF"/><stop offset=".48" stop-color="#E9FFFF"/><stop offset="1" stop-color="#5CF0C5"/>
-</linearGradient>
-<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#062D72" flood-opacity=".28"/></filter>
+  <linearGradient id="bg" x1="55" y1="35" x2="455" y2="475" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#086EF4"/>
+    <stop offset=".48" stop-color="#4B35F4"/>
+    <stop offset="1" stop-color="#10C99A"/>
+  </linearGradient>
+  <linearGradient id="sColor" x1="135" y1="145" x2="270" y2="350" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFE45C"/>
+    <stop offset=".42" stop-color="#FF7A8A"/>
+    <stop offset="1" stop-color="#FF4FA3"/>
+  </linearGradient>
+  <linearGradient id="pColor" x1="305" y1="155" x2="420" y2="360" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFFFFF"/>
+    <stop offset=".45" stop-color="#7CFFF0"/>
+    <stop offset="1" stop-color="#25D9C4"/>
+  </linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#04255F" flood-opacity=".30"/>
+  </filter>
+  <filter id="letterShadow" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#001E55" flood-opacity=".24"/>
+  </filter>
 </defs>
+
 <rect x="36" y="36" width="440" height="440" rx="116" fill="url(#bg)" filter="url(#shadow)"/>
-<circle cx="256" cy="256" r="154" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="16"/>
-<!-- clear S ribbon -->
-<path d="M334 147C312 122 282 108 247 108C190 108 151 141 151 190C151 238 187 260 239 273C277 282 292 292 292 310C292 329 273 341 244 341C211 341 185 328 163 301L126 334C155 372 195 392 245 392C308 392 348 360 348 306C348 258 313 235 253 220C216 211 207 201 207 184C207 164 225 151 250 151C277 151 299 162 316 182Z" fill="url(#ribbon)"/>
-<!-- clear P ribbon -->
-<path d="M276 118H351C406 118 438 148 438 195C438 243 404 271 351 271H331V392H276V118ZM331 164V225H349C374 225 389 214 389 195C389 176 374 164 349 164Z" fill="#fff" fill-opacity=".97"/>
-<!-- colorful fold -->
-<path d="M276 270H331V392H276Z" fill="#2BE3B0" fill-opacity=".78"/>
-<circle cx="403" cy="105" r="12" fill="#FFD34D"/><circle cx="426" cy="130" r="6" fill="#fff" fill-opacity=".78"/>
+<circle cx="256" cy="256" r="166" fill="none" stroke="#FFFFFF" stroke-opacity=".14" stroke-width="10"/>
+
+<!-- Separate, rounded S -->
+<path d="M245 156
+         C225 137 201 128 174 128
+         C131 128 105 153 105 187
+         C105 222 130 239 174 251
+         L209 261
+         C231 268 241 279 241 295
+         C241 316 221 331 194 331
+         C164 331 140 319 119 296"
+      fill="none"
+      stroke="url(#sColor)"
+      stroke-width="54"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      filter="url(#letterShadow)"/>
+
+<!-- Separate, rounded P with a deliberate gap from S -->
+<path d="M307 355 V157
+         H357
+         C399 157 423 180 423 216
+         C423 252 399 274 357 274
+         H307"
+      fill="none"
+      stroke="url(#pColor)"
+      stroke-width="54"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      filter="url(#letterShadow)"/>
+
+<!-- Small brand accent -->
+<circle cx="405" cy="112" r="12" fill="#FFD34D"/>
+<circle cx="429" cy="136" r="6" fill="#FFFFFF" fill-opacity=".8"/>
 </svg>
