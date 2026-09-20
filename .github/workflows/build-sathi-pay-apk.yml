@@ -6,6 +6,7 @@ on:
       - 'sathi-pay-app/**'
       - 'customer-register.html'
       - 'assets/sathipay-logo-user.jpg'
+      - 'assets/sathipay-logo-final.jpg'
       - '.github/workflows/build-sathi-pay-apk.yml'
   workflow_dispatch:
 
