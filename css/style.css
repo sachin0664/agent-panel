@@ -152,3 +152,304 @@ a {
 .admin-menu a:hover {
     transform: translateY(-1px);
 }
+
+
+/* =========================================================
+   SATHI PAY CUSTOMER LOGIN — COLORFUL PREMIUM UI
+   Functional markup/JS remains unchanged.
+========================================================= */
+
+body.customer-login-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 8% 5%, rgba(30,136,229,.18), transparent 30%),
+        radial-gradient(circle at 95% 12%, rgba(16,185,129,.17), transparent 30%),
+        linear-gradient(180deg, #f7fbff 0%, #eef8f5 100%);
+    color: #172033;
+}
+
+.customer-login-page .brand-header {
+    min-height: 76px;
+    padding: 12px 22px;
+    background: linear-gradient(110deg, #123d8f 0%, #1769df 48%, #08a878 100%);
+    box-shadow: 0 8px 25px rgba(20,75,150,.20);
+    position: relative;
+    z-index: 2;
+}
+
+.brand-header-left {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.brand-name {
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -.7px;
+}
+
+.brand-name span { color: #fff; }
+.brand-name b { color: #63efb5; }
+
+.brand-tagline {
+    margin-top: 5px;
+    font-size: 8px;
+    letter-spacing: 2.3px;
+    color: rgba(255,255,255,.82);
+}
+
+.brand-mini-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 5px 15px rgba(0,0,0,.16);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.mini-sp {
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -6px;
+    transform: translateX(-2px);
+    background: linear-gradient(135deg,#0d83ed,#174ea6 48%,#0fb98a 52%,#2fd45e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.mini-crown {
+    position: absolute;
+    top: -3px;
+    right: 5px;
+    color: #f5a900;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.header-register {
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.45);
+    color: #fff !important;
+    padding: 10px 17px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: none;
+}
+
+.login-page-shell {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 34px 18px 44px;
+}
+
+.login-card {
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 28px;
+    padding: 28px 22px 22px;
+    box-shadow: 0 20px 55px rgba(20,67,120,.14);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 6px;
+    background: linear-gradient(90deg,#147ff5,#17b88a,#76d94d,#f7b500);
+}
+
+.login-card-top {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.login-logo {
+    width: 82px;
+    height: 82px;
+    margin: 4px auto 13px;
+    border-radius: 24px;
+    background: linear-gradient(145deg,#e9f5ff,#e9fff6);
+    border: 1px solid #dbeafe;
+    box-shadow: inset 0 1px 0 #fff, 0 9px 22px rgba(31,111,202,.12);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-sp {
+    font-size: 43px;
+    font-weight: 900;
+    letter-spacing: -9px;
+    transform: translateX(-3px);
+    background: linear-gradient(135deg,#0a83ee 5%,#174ea6 46%,#0bb98a 55%,#36d65a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.login-crown {
+    position: absolute;
+    top: -11px;
+    right: 12px;
+    font-size: 28px;
+    color: #f6ad00;
+    text-shadow: 0 2px 5px rgba(245,169,0,.22);
+}
+
+.login-logo i {
+    position: absolute;
+    width: 76px;
+    height: 10px;
+    border-radius: 100%;
+    border-top: 5px solid #25c95a;
+    transform: rotate(-18deg);
+    bottom: 12px;
+    right: -8px;
+}
+
+.login-kicker {
+    color: #1682d9;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.login-card h2 {
+    margin: 6px 0 5px;
+    font-size: 29px;
+    color: #15243b;
+}
+
+.login-card-top p {
+    margin: 0;
+    color: #718096;
+    font-size: 14px;
+}
+
+.customer-login-page form {
+    margin-top: 12px;
+}
+
+.customer-login-page form label {
+    font-size: 13px;
+    font-weight: 800;
+    color: #34445c;
+    margin: 16px 0 7px;
+}
+
+.customer-login-page form input {
+    margin: 0;
+    min-height: 55px;
+    padding: 15px 16px;
+    border: 1.5px solid #d7e2ee;
+    border-radius: 15px;
+    background: #f9fbfd;
+    color: #18243a;
+    font-size: 15px;
+    outline: none;
+    transition: .2s ease;
+    box-shadow: inset 0 1px 2px rgba(30,60,90,.03);
+}
+
+.customer-login-page form input:focus {
+    border-color: #1682e8;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(22,130,232,.10);
+}
+
+.customer-login-page #loginButton {
+    width: 100%;
+    min-height: 55px;
+    margin-top: 22px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 800;
+    background: linear-gradient(100deg,#1769e0,#078eea 48%,#08ae7b);
+    box-shadow: 0 10px 22px rgba(19,119,217,.24);
+}
+
+.customer-login-page #loginButton:disabled {
+    opacity: .72;
+}
+
+.login-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.login-actions a {
+    font-size: 14px;
+    font-weight: 700;
+    color: #166bd3;
+}
+
+.secure-note {
+    font-size: 11px;
+    color: #19966f;
+    background: #eafbf4;
+    border-radius: 20px;
+    padding: 7px 10px;
+    font-weight: 700;
+}
+
+.customer-login-page .login-message {
+    min-height: 20px;
+    white-space: pre-line;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin: 15px 0 5px;
+}
+
+.register-box {
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 15px;
+    background: linear-gradient(135deg,#f0f7ff,#effcf7);
+    border: 1px solid #dcecf6;
+    text-align: center;
+    font-size: 13px;
+    color: #526277;
+}
+
+.register-box a {
+    display: block;
+    margin-top: 5px;
+    font-weight: 800;
+    color: #116fce;
+}
+
+.login-trust-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 15px;
+    margin-top: 17px;
+    color: #7890a5;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+@media (max-width: 480px) {
+    .customer-login-page .brand-header { padding: 11px 14px; }
+    .brand-name { font-size: 21px; }
+    .brand-tagline { font-size: 7px; letter-spacing: 1.8px; }
+    .header-register { padding: 9px 13px; }
+    .login-page-shell { padding: 24px 12px 35px; }
+    .login-card { padding: 25px 17px 19px; border-radius: 24px; }
+    .login-card h2 { font-size: 27px; }
+}
