@@ -709,7 +709,8 @@ async function loadTransactions(){
 
         const [
             depositsResult,
-            ledgerResult
+            ledgerResult,
+            referralResult
         ] = await Promise.all([
 
             supabaseClient
@@ -740,6 +741,21 @@ async function loadTransactions(){
                     "created_at",
                     {ascending:false}
                 )
+                .limit(500),
+
+            supabaseClient
+                .from("customer_referral_commissions")
+                .select(
+                    "id, source_customer_id, deposit_id, level, percentage, transaction_amount, commission_amount, status, created_at"
+                )
+                .eq(
+                    "customer_id",
+                    customerId
+                )
+                .order(
+                    "created_at",
+                    {ascending:false}
+                )
                 .limit(500)
 
         ]);
@@ -750,6 +766,10 @@ async function loadTransactions(){
 
         if(ledgerResult.error){
             throw ledgerResult.error;
+        }
+
+        if(referralResult.error){
+            throw referralResult.error;
         }
 
         const records = [];
@@ -785,13 +805,51 @@ async function loadTransactions(){
 
         });
 
+        /* =============================================
+           REFERRAL COMMISSION HISTORY
+           customer_referral_commissions is authoritative.
+           Never display legacy referral wallet-ledger rows here.
+        ============================================== */
+
+        (referralResult.data || []).forEach(function(row){
+
+            records.push({
+                event_id:
+                    "referral-" + row.id,
+                event_type:
+                    "Referral Commission",
+                direction:
+                    "credit",
+                amount:
+                    Number(row.commission_amount || 0),
+                status:
+                    row.status || "approved",
+                description:
+                    "Level " + String(row.level || ""),
+                reference:
+                    "REFERRAL-COMMISSION-" + row.id,
+                utr:
+                    "",
+                upi_id:
+                    "",
+                commission:
+                    Number(row.commission_amount || 0),
+                created_at:
+                    row.created_at
+            });
+
+        });
+
+
         (ledgerResult.data || []).forEach(function(row){
 
-            /* Deposit is already represented by customer_deposits.
-               Skip its matching wallet-ledger credit so history cannot
-               display the same deposit twice. */
+            /* Deposit and referral commission history have their own
+               authoritative tables. Do not rebuild them from wallet_ledger,
+               otherwise legacy/correction referral rows can appear as extra
+               customer transactions. */
             if(
-                String(row.component || "").toLowerCase() === "deposit"
+                String(row.component || "").toLowerCase() === "deposit" ||
+                String(row.component || "").toLowerCase() === "referral"
             ){
                 return;
             }
