@@ -741,6 +741,17 @@ async function loadEarnings(){
         }
 
 
+        /* AUTHORITATIVE FINANCIAL SUMMARY */
+
+        const {
+            data: financialSummary,
+            error: financialSummaryError
+        } = await supabaseClient.rpc("get_my_financial_summary");
+
+        if(financialSummaryError){
+            throw financialSummaryError;
+        }
+
         /* DEPOSIT COMMISSION */
 
         const {
@@ -882,51 +893,16 @@ async function loadEarnings(){
         });
 
 
-        /* DEPOSIT TOTAL */
+        /* DISPLAY TOTALS — same authoritative source as Dashboard/Wallet */
 
-        let depositTotal = 0;
+        const depositTotal =
+            Number(financialSummary?.commission_balance || 0);
 
-        (deposits || []).forEach(
-            item => {
-
-                depositTotal +=
-                    Number(
-                        item.commission || 0
-                    );
-
-            }
-        );
-
-
-        /* REFERRAL TOTAL */
-
-        let referralTotal = 0;
-
-        (referralRows || []).forEach(
-            item => {
-
-                if(
-                    item.status ===
-                    "approved"
-                ){
-
-                    referralTotal +=
-                        Number(
-                            item.commission_amount ||
-                            0
-                        );
-
-                }
-
-            }
-        );
-
+        const referralTotal =
+            Number(financialSummary?.referral_balance || 0);
 
         const bonusTotal =
-            Number(
-                customer.bonus_balance ||
-                0
-            );
+            Number(financialSummary?.bonus_balance || 0);
 
 
         /*
