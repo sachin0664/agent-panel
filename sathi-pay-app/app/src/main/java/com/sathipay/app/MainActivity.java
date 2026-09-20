@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.webkit.CookieManager;
@@ -91,10 +92,10 @@ public class MainActivity extends Activity {
 
     private void setupWebView() {
         webView = new WebView(this);
-        setContentView(webView);
 
-        // Keep the native system bars outside the website viewport so the
-        // customer dashboard matches the normal mobile website layout.
+        // Keep the native system bars outside the website viewport and add a
+        // clean white gap above the Sathi Pay header, matching the customer
+        // website layout shown in the reference.
         getWindow().setStatusBarColor(Color.WHITE);
         getWindow().setNavigationBarColor(Color.WHITE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
@@ -104,10 +105,15 @@ public class MainActivity extends Activity {
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                         | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
 
-        // Give the Sathi Pay header a small clean gap below the phone status bar.
         float density = getResources().getDisplayMetrics().density;
-        webView.setPadding(0, (int) (12 * density), 0, 0);
-        webView.setClipToPadding(false);
+        FrameLayout root = new FrameLayout(this);
+        root.setBackgroundColor(Color.WHITE);
+        FrameLayout.LayoutParams webParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT);
+        webParams.topMargin = (int) (18 * density);
+        root.addView(webView, webParams);
+        setContentView(root);
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
