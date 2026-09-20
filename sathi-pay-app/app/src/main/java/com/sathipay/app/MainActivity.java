@@ -117,6 +117,8 @@ public class MainActivity extends Activity {
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
+        // Always fetch the latest Sathi Pay web UI so logout -> login never shows stale cached styling.
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
         settings.setLoadWithOverviewMode(false);
