@@ -453,3 +453,10 @@ body.customer-login-page {
     .login-card { padding: 25px 17px 19px; border-radius: 24px; }
     .login-card h2 { font-size: 27px; }
 }
+
+
+/* SATHI PAY OFFICIAL LOGO */
+.brand-mini-logo img{display:block;width:44px;height:44px;object-fit:contain;border-radius:12px}
+.login-logo img{display:block;width:82px;height:82px;object-fit:contain;border-radius:20px}
+.brand-mini-logo{display:grid;place-items:center;background:#fff;border-radius:14px;overflow:hidden}
+.login-logo{display:grid;place-items:center;background:#fff;border-radius:22px;overflow:hidden}
