@@ -1,0 +1,42 @@
+name: Build Sathi Pay APK
+
+on:
+  push:
+    paths:
+      - 'sathi-pay-app/**'
+      - '.github/workflows/build-sathi-pay-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+      - name: Build debug APK
+        working-directory: sathi-pay-app
+        run: gradle assembleDebug --no-daemon
+      - name: Prepare APK
+        run: cp sathi-pay-app/app/build/outputs/apk/debug/app-debug.apk SathiPay.apk
+      - name: Publish APK release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: sathi-pay-v1.0.${{ github.run_number }}
+          name: Sathi Pay Android App v1.0.${{ github.run_number }}
+          body: |
+            Sathi Pay Android application.
+            The app opens the live Sathi Pay website at https://mysathipay.com/
+          files: SathiPay.apk
+          make_latest: true
