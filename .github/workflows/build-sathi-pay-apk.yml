@@ -36,7 +36,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y imagemagick librsvg2-bin
-          convert assets/sathipay-logo-exact.svg -background white -alpha remove -alpha off -resize 512x512 sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
+          convert assets/sathipay-logo-exact.svg -background none -alpha on -resize 512x512 sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
 
       - name: Set up Gradle build
         working-directory: sathi-pay-app
