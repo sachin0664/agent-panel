@@ -905,7 +905,7 @@ async function loadTransactions(){
                 eventType = "Referral Commission";
             }
             else if(isUpiPayment){
-                eventType = "UPI Payment";
+                eventType = "Sell Success";
             }
             else if(
                 component === "manual" &&
@@ -945,7 +945,7 @@ async function loadTransactions(){
                     : "success",
                 description:
                     isUpiPayment
-                    ? "UPI Payment"
+                    ? "Sell Success"
                     : (
                         component === "manual" &&
                         direction === "debit"
