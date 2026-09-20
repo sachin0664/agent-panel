@@ -7,13 +7,21 @@ import android.os.Bundle;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
-    private static final String HOME_URL = "https://mysathipay.com/";
+    /*
+     * Open the real customer dashboard first.
+     * If the customer is not logged in, dashboard.html already
+     * sends the user to customer-login.html.
+     */
+    private static final String HOME_URL =
+            "https://mysathipay.com/dashboard.html";
+
     private static final int FILE_CHOOSER_REQUEST = 1001;
 
     private WebView webView;
@@ -36,19 +44,44 @@ public class MainActivity extends Activity {
         settings.setDisplayZoomControls(false);
         settings.setSupportMultipleWindows(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
 
-        CookieManager.getInstance().setAcceptCookie(true);
-        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.setAcceptThirdPartyCookies(webView, true);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            public boolean shouldOverrideUrlLoading(
+                    WebView view,
+                    WebResourceRequest request) {
                 return openUrl(request.getUrl().toString());
             }
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            public boolean shouldOverrideUrlLoading(
+                    WebView view,
+                    String url) {
                 return openUrl(url);
+            }
+
+            @Override
+            public void onReceivedError(
+                    WebView view,
+                    WebResourceRequest request,
+                    WebResourceError error) {
+
+                if (request.isForMainFrame()) {
+                    /*
+                     * Retry the customer entry point instead of leaving
+                     * the app on a blank white WebView.
+                     */
+                    view.postDelayed(
+                            () -> view.loadUrl(HOME_URL),
+                            500
+                    );
+                }
             }
         });
 
@@ -67,7 +100,10 @@ public class MainActivity extends Activity {
 
                 try {
                     Intent intent = fileChooserParams.createIntent();
-                    startActivityForResult(intent, FILE_CHOOSER_REQUEST);
+                    startActivityForResult(
+                            intent,
+                            FILE_CHOOSER_REQUEST
+                    );
                     return true;
                 } catch (Exception e) {
                     filePathCallback = null;
@@ -88,12 +124,18 @@ public class MainActivity extends Activity {
         String host = uri.getHost();
 
         if (host != null &&
-                (host.equals("mysathipay.com") || host.equals("www.mysathipay.com"))) {
+                (host.equals("mysathipay.com")
+                        || host.equals("www.mysathipay.com"))) {
             return false;
         }
 
         try {
-            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            startActivity(
+                    new Intent(
+                            Intent.ACTION_VIEW,
+                            uri
+                    )
+            );
         } catch (Exception ignored) {
         }
 
@@ -101,8 +143,16 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(
+            int requestCode,
+            int resultCode,
+            Intent data) {
+
+        super.onActivityResult(
+                requestCode,
+                resultCode,
+                data
+        );
 
         if (requestCode == FILE_CHOOSER_REQUEST) {
             if (filePathCallback == null) {
@@ -113,10 +163,16 @@ public class MainActivity extends Activity {
 
             if (resultCode == RESULT_OK && data != null) {
                 Uri result = data.getData();
+
                 if (result != null) {
                     results = new Uri[]{result};
                 } else {
-                    results = WebChromeClient.FileChooserParams.parseResult(resultCode, data);
+                    results =
+                            WebChromeClient.FileChooserParams
+                                    .parseResult(
+                                            resultCode,
+                                            data
+                                    );
                 }
             }
 
@@ -139,6 +195,7 @@ public class MainActivity extends Activity {
         if (webView != null) {
             webView.saveState(outState);
         }
+
         super.onSaveInstanceState(outState);
     }
 
@@ -151,6 +208,7 @@ public class MainActivity extends Activity {
             webView.destroy();
             webView = null;
         }
+
         super.onDestroy();
     }
 }
