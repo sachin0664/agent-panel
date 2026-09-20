@@ -4246,10 +4246,19 @@ function closeSecurityModal(){
 
 function showAppMessage(){
 
+    const apkUrl =
+        "https://github.com/sachin0664/agent-panel/releases/latest/download/SathiPay.apk";
+
+    window.open(
+        apkUrl,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
     document.getElementById(
         "message"
     ).innerText =
-        "App download option will be available soon.";
+        "Sathi Pay app download started.";
 
 }
 
