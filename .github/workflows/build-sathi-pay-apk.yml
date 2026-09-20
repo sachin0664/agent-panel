@@ -31,8 +31,11 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Use exact supplied Sathi Pay logo
-        run: cp assets/sathipay-logo-user.jpg sathi-pay-app/app/src/main/res/drawable/sathipay_logo.jpg
+      - name: Generate exact supplied Sathi Pay logo for Android
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick librsvg2-bin
+          convert assets/sathipay-logo-exact.svg -background white -alpha remove -alpha off -resize 512x512 sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
 
       - name: Set up Gradle build
         working-directory: sathi-pay-app
