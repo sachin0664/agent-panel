@@ -3748,17 +3748,77 @@ async function loadDashboard(){
            refresh. This keeps the existing UI and data logic
            unchanged; it only synchronizes auth before loading.
         */
-        const authResult =
-            await withTimeout(
-                supabaseClient.auth.getUser(),
-                10000
-            );
+        /*
+           Supabase restores the saved session asynchronously after
+           a hard refresh. Wait for that persisted session instead
+           of redirecting the customer during the short restore window.
+        */
+        let authUser = null;
+        let authError = null;
+
+        for(
+            let attempt = 0;
+            attempt < 20;
+            attempt++
+        ){
+
+            try{
+
+                const authResult =
+                    await withTimeout(
+                        supabaseClient.auth.getSession(),
+                        3000
+                    );
+
+                authError =
+                    authResult.error;
+
+                if(
+                    !authError &&
+                    authResult.data &&
+                    authResult.data.session &&
+                    authResult.data.session.user
+                ){
+
+                    authUser =
+                        authResult.data.session.user;
+
+                    break;
+
+                }
+
+            }
+            catch(error){
+
+                authError = error;
+
+            }
+
+            await new Promise(function(resolve){
+                setTimeout(resolve, 300);
+            });
+
+        }
 
         if(
-            authResult.error ||
-            !authResult.data ||
-            !authResult.data.user ||
-            authResult.data.user.id !== customerId
+            !authUser ||
+            !authUser.id
+        ){
+
+            console.error(
+                "Dashboard session restore failed:",
+                authError
+            );
+
+            message.innerText =
+                "Session is still loading. Please wait.";
+
+            return;
+
+        }
+
+        if(
+            authUser.id !== customerId
         ){
 
             window.location.href =
