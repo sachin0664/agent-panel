@@ -35,14 +35,33 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -e
-          CONTENT=$(base64 -w 0 SathiPay.apk)
           RESPONSE=$(curl -sS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/contents/SathiPay.apk)
           SHA=$(printf '%s' "$RESPONSE" | python -c "import sys,json; print(json.load(sys.stdin).get('sha',''))")
           if [ -n "$SHA" ]; then
-            curl -fsSL -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/contents/SathiPay.apk -d "{"message":"Update customer APK","content":"$CONTENT","sha":"$SHA","branch":"main"}"
+            python - "$SHA" <<'PY' > payload.json
+import base64, json, sys
+with open("SathiPay.apk", "rb") as f:
+    content = base64.b64encode(f.read()).decode("ascii")
+print(json.dumps({
+    "message": "Update customer APK",
+    "content": content,
+    "sha": sys.argv[1],
+    "branch": "main"
+}))
+PY
           else
-            curl -fsSL -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/contents/SathiPay.apk -d "{"message":"Add customer APK","content":"$CONTENT","branch":"main"}"
+            python - <<'PY' > payload.json
+import base64, json
+with open("SathiPay.apk", "rb") as f:
+    content = base64.b64encode(f.read()).decode("ascii")
+print(json.dumps({
+    "message": "Add customer APK",
+    "content": content,
+    "branch": "main"
+}))
+PY
           fi
+          curl -fsSL -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" https://api.github.com/repos/${{ github.repository }}/contents/SathiPay.apk --data-binary @payload.json
 
       - name: Publish APK release
         uses: softprops/action-gh-release@v2
