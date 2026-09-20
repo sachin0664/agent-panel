@@ -1,63 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-<title id="title">Sathi Pay SP Logo</title>
-<desc id="desc">A distinctive two-color SP monogram with separated S and P lettering.</desc>
-<defs>
-  <linearGradient id="bg" x1="55" y1="35" x2="455" y2="475" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#086EF4"/>
-    <stop offset=".48" stop-color="#4B35F4"/>
-    <stop offset="1" stop-color="#10C99A"/>
-  </linearGradient>
-  <linearGradient id="sColor" x1="135" y1="145" x2="270" y2="350" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FFE45C"/>
-    <stop offset=".42" stop-color="#FF7A8A"/>
-    <stop offset="1" stop-color="#FF4FA3"/>
-  </linearGradient>
-  <linearGradient id="pColor" x1="305" y1="155" x2="420" y2="360" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FFFFFF"/>
-    <stop offset=".45" stop-color="#7CFFF0"/>
-    <stop offset="1" stop-color="#25D9C4"/>
-  </linearGradient>
-  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-    <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#04255F" flood-opacity=".30"/>
-  </filter>
-  <filter id="letterShadow" x="-30%" y="-30%" width="160%" height="160%">
-    <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#001E55" flood-opacity=".24"/>
-  </filter>
-</defs>
-
-<rect x="36" y="36" width="440" height="440" rx="116" fill="url(#bg)" filter="url(#shadow)"/>
-<circle cx="256" cy="256" r="166" fill="none" stroke="#FFFFFF" stroke-opacity=".14" stroke-width="10"/>
-
-<!-- Separate, rounded S -->
-<path d="M245 156
-         C225 137 201 128 174 128
-         C131 128 105 153 105 187
-         C105 222 130 239 174 251
-         L209 261
-         C231 268 241 279 241 295
-         C241 316 221 331 194 331
-         C164 331 140 319 119 296"
-      fill="none"
-      stroke="url(#sColor)"
-      stroke-width="54"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      filter="url(#letterShadow)"/>
-
-<!-- Separate, rounded P with a deliberate gap from S -->
-<path d="M307 355 V157
-         H357
-         C399 157 423 180 423 216
-         C423 252 399 274 357 274
-         H307"
-      fill="none"
-      stroke="url(#pColor)"
-      stroke-width="54"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      filter="url(#letterShadow)"/>
-
-<!-- Small brand accent -->
-<circle cx="405" cy="112" r="12" fill="#FFD34D"/>
-<circle cx="429" cy="136" r="6" fill="#FFFFFF" fill-opacity=".8"/>
+<title id="title">Sathi Pay SP</title>
+<desc id="desc">Minimal geometric Sathi Pay monogram with distinct S and P colors.</desc>
+<rect x="32" y="32" width="448" height="448" rx="112" fill="#0B1F3A"/>
+<!-- S: clean geometric ribbon -->
+<path d="M246 142
+C222 122 194 112 164 112
+C119 112 88 137 88 178
+C88 220 119 239 166 252
+L207 263
+C228 269 238 280 238 296
+C238 317 216 332 188 332
+C155 332 127 319 105 296"
+fill="none" stroke="#FF4F87" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- P: intentionally separated from S -->
+<path d="M310 368V144H361C403 144 430 167 430 207C430 247 403 270 361 270H310"
+fill="none" stroke="#25D9C7" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- subtle brand cut to make the P distinctive -->
+<path d="M310 270H347" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" opacity=".9"/>
 </svg>
