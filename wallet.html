@@ -1180,95 +1180,11 @@ async function loadWalletActivity(
         }
 
 
-        /* =====================================
-           REFERRAL COMMISSION
-        ===================================== */
-
-        const {
-            data: referrals,
-            error: referralError
-        } =
-            await db
-            .from(
-                "customer_referral_commissions"
-            )
-            .select(`
-                id,
-                level,
-                percentage,
-                transaction_amount,
-                commission_amount,
-                status,
-                created_at
-            `)
-            .eq(
-                "customer_id",
-                customerId
-            )
-            .order(
-                "created_at",
-                {
-                    ascending:false
-                }
-            )
-            .limit(15);
-
-
-        if(referralError){
-
-            console.error(
-                "Referral history:",
-                referralError
-            );
-
-        }else{
-
-            (referrals || [])
-            .forEach(item => {
-
-                if(
-                    String(
-                        item.status || ""
-                    ).toLowerCase()
-                    !==
-                    "approved"
-                ){
-
-                    return;
-                }
-
-
-                const commission =
-                    Number(
-                        item.commission_amount ||
-                        0
-                    );
-
-
-                activities.push({
-
-                    date:
-                        item.created_at,
-
-                    title:
-                        "Level " +
-                        (item.level || "A") +
-                        " Referral Income",
-
-                    icon:
-                        "👥",
-
-                    amount:
-                        commission,
-
-                    type:
-                        "referral"
-
-                });
-
-            });
-
-        }
+        /*
+         * Referral income is already stored in wallet_ledger.
+         * Keep ledger as the single activity source so referral
+         * credits cannot appear twice.
+         */
 
 
         /* =====================================
