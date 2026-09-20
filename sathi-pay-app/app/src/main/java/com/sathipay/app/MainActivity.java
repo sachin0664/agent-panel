@@ -23,7 +23,7 @@ import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
     private static final String HOME_URL =
-            "https://mysathipay.com/dashboard.html";
+            "https://mysathipay.com/customer-login.html";
     private static final int FILE_CHOOSER_REQUEST = 1001;
 
     private WebView webView;
