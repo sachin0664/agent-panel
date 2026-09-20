@@ -1439,6 +1439,18 @@ async function loadReferralHistory(){
                    AMOUNTS
                 ========================= */
 
+                const commission =
+                    Number(
+                        item.commission_amount || 0
+                    );
+
+
+                const percentage =
+                    Number(
+                        item.percentage || 0
+                    );
+
+
                 let deposit =
                     Number(
                         item.deposit_amount || 0
@@ -1460,18 +1472,6 @@ async function loadReferralHistory(){
                         (commission * 100) /
                         percentage;
                 }
-
-
-                const commission =
-                    Number(
-                        item.commission_amount || 0
-                    );
-
-
-                const percentage =
-                    Number(
-                        item.percentage || 0
-                    );
 
 
                 /* =========================
