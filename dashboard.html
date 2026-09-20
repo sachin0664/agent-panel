@@ -3814,18 +3814,41 @@ async function loadDashboard(){
             "Not available";
 
 
-        const { data: financialSummary, error: financialError } =
-            await supabaseClient.rpc("get_my_financial_summary");
+        /*
+           Financial summary normally comes from the secure RPC.
+           If the RPC is temporarily unavailable during a hard
+           refresh, use the already-loaded customer row as a
+           safe fallback. The customer row is fetched for this
+           exact authenticated customer above, so this prevents
+           the dashboard cards from incorrectly staying at ₹0.00
+           after refresh. No UI or database data is changed.
+        */
+        let financialSummary = null;
+        let financialError = null;
 
-        if(financialError){
-            throw financialError;
+        try{
+            const result =
+                await withTimeout(
+                    supabaseClient.rpc("get_my_financial_summary"),
+                    10000
+                );
+
+            financialSummary = result.data;
+            financialError = result.error;
+        }
+        catch(error){
+            financialError = error;
         }
 
         const wallet =
-            Number(financialSummary?.wallet_balance || 0);
+            !financialError && financialSummary
+                ? Number(financialSummary.wallet_balance || 0)
+                : Number(customer.wallet_balance || 0);
 
         const referral =
-            Number(financialSummary?.referral_balance || 0);
+            !financialError && financialSummary
+                ? Number(financialSummary.referral_balance || 0)
+                : Number(customer.referral_balance || 0);
 
 
         document.getElementById(
