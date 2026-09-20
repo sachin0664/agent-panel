@@ -4013,16 +4013,18 @@ async function loadDashboard(){
             "Not available";
 
 
-        const wallet =
-            Number(
-                customer.wallet_balance || 0
-            );
+        const { data: financialSummary, error: financialError } =
+            await supabaseClient.rpc("get_my_financial_summary");
 
+        if(financialError){
+            throw financialError;
+        }
+
+        const wallet =
+            Number(financialSummary?.wallet_balance || 0);
 
         const referral =
-            Number(
-                customer.referral_balance || 0
-            );
+            Number(financialSummary?.referral_balance || 0);
 
 
         document.getElementById(
