@@ -988,46 +988,41 @@ async function loadWallet(){
             (customer.uid || "N/A");
 
 
-        /* WALLET BALANCES */
+        /* WALLET BALANCES — single authoritative financial summary */
+
+        const {
+            data: financialSummary,
+            error: financialError
+        } = await db.rpc("get_my_financial_summary");
+
+        if(financialError){
+            throw financialError;
+        }
 
         document.getElementById(
             "walletBalance"
         ).textContent =
-            money(
-                customer.wallet_balance
-            );
-
+            money(financialSummary?.wallet_balance || 0);
 
         document.getElementById(
             "depositBalance"
         ).textContent =
-            money(
-                customer.deposit_balance
-            );
-
+            money(financialSummary?.deposit_balance || 0);
 
         document.getElementById(
             "bonusBalance"
         ).textContent =
-            money(
-                customer.bonus_balance
-            );
-
+            money(financialSummary?.bonus_balance || 0);
 
         document.getElementById(
             "commissionBalance"
         ).textContent =
-            money(
-                customer.commission_balance
-            );
-
+            money(financialSummary?.commission_balance || 0);
 
         document.getElementById(
             "referralBalance"
         ).textContent =
-            money(
-                customer.referral_balance
-            );
+            money(financialSummary?.referral_balance || 0);
 
 
         await loadWalletActivity(
