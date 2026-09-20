@@ -1,23 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
 <title id="title">Sathi Pay SP Logo</title>
-<desc id="desc">A clean, professional S and P monogram for Sathi Pay.</desc>
+<desc id="desc">A distinctive colorful intertwined S and P monogram for Sathi Pay.</desc>
 <defs>
-  <linearGradient id="bg" x1="72" y1="40" x2="440" y2="472" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#075FE8"/>
-    <stop offset="0.55" stop-color="#1646C8"/>
-    <stop offset="1" stop-color="#08B889"/>
-  </linearGradient>
-  <linearGradient id="p" x1="282" y1="120" x2="382" y2="392" gradientUnits="userSpaceOnUse">
-    <stop offset="0" stop-color="#FFFFFF"/>
-    <stop offset="1" stop-color="#72F2C6"/>
-  </linearGradient>
-  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-    <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#021A4A" flood-opacity=".28"/>
-  </filter>
+<linearGradient id="bg" x1="55" y1="40" x2="455" y2="470" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#087FF5"/><stop offset=".45" stop-color="#4238F5"/><stop offset="1" stop-color="#10C98A"/>
+</linearGradient>
+<linearGradient id="ribbon" x1="120" y1="130" x2="410" y2="390" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#FFFFFF"/><stop offset=".48" stop-color="#E9FFFF"/><stop offset="1" stop-color="#5CF0C5"/>
+</linearGradient>
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#062D72" flood-opacity=".28"/></filter>
 </defs>
 <rect x="36" y="36" width="440" height="440" rx="116" fill="url(#bg)" filter="url(#shadow)"/>
-<path d="M145 151C169 126 198 113 232 113C274 113 304 130 325 157L290 188C275 169 256 160 232 160C210 160 194 169 194 185C194 201 207 209 238 217C299 232 326 253 326 293C326 341 287 377 232 377C187 377 150 359 125 326L163 296C181 319 204 331 233 331C258 331 275 319 275 301C275 285 261 276 228 268C171 255 143 233 143 194C143 178 144 164 145 151Z" fill="#FFFFFF"/>
-<path d="M283 119H354C410 119 441 148 441 194C441 241 409 270 354 270H331V378H283V119ZM331 164V225H351C377 225 392 214 392 194C392 175 377 164 351 164H331Z" fill="url(#p)"/>
-<circle cx="399" cy="108" r="11" fill="#FFD24A"/>
-<circle cx="424" cy="132" r="6" fill="#FFFFFF" fill-opacity=".78"/>
+<circle cx="256" cy="256" r="154" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="16"/>
+<!-- clear S ribbon -->
+<path d="M334 147C312 122 282 108 247 108C190 108 151 141 151 190C151 238 187 260 239 273C277 282 292 292 292 310C292 329 273 341 244 341C211 341 185 328 163 301L126 334C155 372 195 392 245 392C308 392 348 360 348 306C348 258 313 235 253 220C216 211 207 201 207 184C207 164 225 151 250 151C277 151 299 162 316 182Z" fill="url(#ribbon)"/>
+<!-- clear P ribbon -->
+<path d="M276 118H351C406 118 438 148 438 195C438 243 404 271 351 271H331V392H276V118ZM331 164V225H349C374 225 389 214 389 195C389 176 374 164 349 164Z" fill="#fff" fill-opacity=".97"/>
+<!-- colorful fold -->
+<path d="M276 270H331V392H276Z" fill="#2BE3B0" fill-opacity=".78"/>
+<circle cx="403" cy="105" r="12" fill="#FFD34D"/><circle cx="426" cy="130" r="6" fill="#fff" fill-opacity=".78"/>
 </svg>
