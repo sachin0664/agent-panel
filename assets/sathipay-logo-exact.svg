@@ -1,49 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-<title id="title">Sathi Pay SP</title>
-<desc id="desc">Custom colorful geometric SP monogram for Sathi Pay.</desc>
+<title id="title">Sathi Pay SP</title><desc id="desc">Colorful crowned SP Sathi Pay brand mark.</desc>
 <defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#5B21B6"/>
-    <stop offset=".48" stop-color="#2563EB"/>
-    <stop offset="1" stop-color="#06B6D4"/>
-  </linearGradient>
-  <linearGradient id="s" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#FF3D81"/>
-    <stop offset="1" stop-color="#FFB000"/>
-  </linearGradient>
-  <linearGradient id="p" x1="0" y1="1" x2="1" y2="0">
-    <stop offset="0" stop-color="#7CFFCB"/>
-    <stop offset="1" stop-color="#FFFFFF"/>
-  </linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1724D9"/><stop offset=".5" stop-color="#087FF5"/><stop offset="1" stop-color="#16D879"/></linearGradient>
+<linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#19E7FF"/><stop offset=".55" stop-color="#087FF5"/><stop offset="1" stop-color="#7A2CFF"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00D9B5"/><stop offset=".6" stop-color="#7BFF4B"/><stop offset="1" stop-color="#06B6D4"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FF9D00"/><stop offset=".55" stop-color="#FFD91A"/><stop offset="1" stop-color="#FFB000"/></linearGradient>
 </defs>
-<rect x="24" y="24" width="464" height="464" rx="112" fill="url(#bg)"/>
-<!-- subtle colorful background panels -->
-<path d="M24 330C110 300 150 344 214 382C286 425 363 431 488 365V488H24Z" fill="#7C3AED" opacity=".32"/>
-<path d="M24 92C116 42 193 62 260 96C336 134 401 116 488 66V24H24Z" fill="#06B6D4" opacity=".28"/>
-
-<!-- Custom S: filled ribbon, not a font -->
-<path d="M242 125
-C220 105 191 94 157 94
-C105 94 70 123 70 170
-C70 218 104 241 157 256
-L193 266
-C211 271 220 281 220 294
-C220 311 203 323 180 323
-C149 323 122 312 98 289
-L70 321
-C100 351 136 368 181 368
-C233 368 268 338 268 293
-C268 247 237 224 185 209
-L150 199
-C129 193 118 184 118 169
-C118 152 134 140 158 140
-C184 140 205 149 222 164Z" fill="url(#s)"/>
-
-<!-- Custom P: separate mark with stronger silhouette -->
-<path d="M294 372V94H365
-C424 94 456 126 456 181
-C456 237 424 269 365 269H345V372Z
-M345 141V222H362
-C391 222 407 208 407 181
-C407 155 391 141 362 141Z" fill="url(#p)"/>
+<rect x="16" y="16" width="480" height="480" rx="118" fill="url(#b)"/>
+<path d="M20 345C125 290 177 375 263 401C345 426 419 383 492 326V496H20Z" fill="#7B2CFF" opacity=".18"/>
+<!-- crown -->
+<path d="M194 105L219 62L256 94L291 54L318 105L352 78L340 139H188Z" fill="url(#g)"/>
+<circle cx="219" cy="62" r="8" fill="#FFD91A"/><circle cx="291" cy="54" r="8" fill="#FFD91A"/><circle cx="352" cy="78" r="8" fill="#FFD91A"/>
+<!-- S ribbon -->
+<path d="M253 153C225 130 195 118 160 118C111 118 78 144 78 188C78 232 110 251 160 265L196 275C219 282 231 293 231 310C231 331 210 345 181 345C148 345 119 332 94 307L70 340C101 371 139 388 184 388C236 388 270 357 270 309C270 263 240 239 188 224L151 214C130 208 119 198 119 184C119 168 136 157 160 157C186 157 207 166 229 184Z" fill="url(#s)"/>
+<!-- P -->
+<path d="M286 388V118H354C410 118 443 148 443 199C443 251 410 280 354 280H335V388Z" fill="url(#p)"/>
+<path d="M335 159V239H351C379 239 395 225 395 199C395 174 379 159 351 159Z" fill="#1526B8"/>
+<!-- white orbit swoosh -->
+<path d="M64 370C157 407 280 402 450 300C465 291 475 294 466 308C372 419 192 451 72 411C43 401 42 385 64 370Z" fill="#fff"/>
 </svg>
