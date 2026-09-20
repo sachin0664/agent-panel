@@ -209,7 +209,10 @@ begin
            case when lower(coalesce(w.reason,'')) like '%level 3%' then 0.2
                 when lower(coalesce(w.reason,'')) like '%level 2%' then 0.5
                 else 1.0 end as percentage,
-           null::numeric as deposit_amount,w.amount as commission_amount,
+           round(w.amount / case when lower(coalesce(w.reason,'')) like '%level 3%' then 0.2
+                                      when lower(coalesce(w.reason,'')) like '%level 2%' then 0.5
+                                      else 1.0 end, 2) as deposit_amount,
+           w.amount as commission_amount,
            'approved'::text as status,w.created_at,
            'Referral member'::text as member_name,null::text as member_uid
     from public.wallet_ledger w
