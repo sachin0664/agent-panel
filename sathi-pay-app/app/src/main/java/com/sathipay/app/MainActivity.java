@@ -51,29 +51,29 @@ public class MainActivity extends Activity {
         LinearLayout splash = new LinearLayout(this);
         splash.setOrientation(LinearLayout.VERTICAL);
         splash.setGravity(Gravity.CENTER);
-        splash.setPadding(32, 32, 32, 32);
+        splash.setPadding(22, 28, 22, 28);
 
         GradientDrawable background = new GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
-                new int[]{Color.WHITE, Color.rgb(241, 249, 247)}
+                new int[]{Color.WHITE, Color.rgb(239, 248, 255), Color.rgb(239, 253, 247)}
         );
         splash.setBackground(background);
 
         ImageView logo = new ImageView(this);
         logo.setImageResource(R.drawable.ic_launcher);
         logo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        splash.addView(logo, new LinearLayout.LayoutParams(190, 190));
+        splash.addView(logo, new LinearLayout.LayoutParams(220, 220));
 
         TextView title = new TextView(this);
         title.setText("Sathi Pay");
         title.setTextColor(Color.rgb(18, 76, 150));
-        title.setTextSize(30);
+        title.setTextSize(34);
         title.setGravity(Gravity.CENTER);
         title.setTypeface(null, android.graphics.Typeface.BOLD);
         LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        titleParams.topMargin = 18;
+        titleParams.topMargin = 8;
         splash.addView(title, titleParams);
 
         TextView tagline = new TextView(this);
