@@ -242,36 +242,54 @@ begin
     join referral_tree rt on c.referred_by=rt.invitation_code
     where rt.level<3 and not c.id=any(rt.path)
   ),
-  structured_earnings as (
-    select r.id::text as id,r.level::text as level,r.percentage,
-           r.transaction_amount as deposit_amount,r.commission_amount,r.status,r.created_at,
-           coalesce(c.name,'Referral member') as member_name,c.uid as member_uid
-    from public.customer_referral_commissions r
-    left join public.customers c on c.id=r.source_customer_id
-    where r.customer_id=v_customer_id and lower(coalesce(r.status,''))='approved'
-  ),
-  legacy_earnings as (
-    select 'ledger-'||w.id::text as id,
-           case when lower(coalesce(w.reason,'')) like '%level 3%' then '3'
-                when lower(coalesce(w.reason,'')) like '%level 2%' then '2'
-                else '1' end as level,
-           case when lower(coalesce(w.reason,'')) like '%level 3%' then 0.2
-                when lower(coalesce(w.reason,'')) like '%level 2%' then 0.5
-                else 1.0 end as percentage,
-           round(w.amount / case when lower(coalesce(w.reason,'')) like '%level 3%' then 0.2
-                                      when lower(coalesce(w.reason,'')) like '%level 2%' then 0.5
-                                      else 1.0 end, 2) as deposit_amount,
-           w.amount as commission_amount,
-           'approved'::text as status,w.created_at,
-           'Referral member'::text as member_name,null::text as member_uid
+  ledger_earnings as (
+    select
+      'ledger-'||w.id::text as id,
+      case
+        when lower(coalesce(w.reason,'')) like '%level 3%' or lower(coalesce(w.reason,'')) like '%level c%' then '3'
+        when lower(coalesce(w.reason,'')) like '%level 2%' or lower(coalesce(w.reason,'')) like '%level b%' then '2'
+        else '1'
+      end as level,
+      case
+        when lower(coalesce(w.reason,'')) like '%level 3%' or lower(coalesce(w.reason,'')) like '%level c%' then 0.2::numeric
+        when lower(coalesce(w.reason,'')) like '%level 2%' or lower(coalesce(w.reason,'')) like '%level b%' then 0.5::numeric
+        else 1.0::numeric
+      end as percentage,
+      round(
+        w.amount /
+        case
+          when lower(coalesce(w.reason,'')) like '%level 3%' or lower(coalesce(w.reason,'')) like '%level c%' then 0.2::numeric
+          when lower(coalesce(w.reason,'')) like '%level 2%' or lower(coalesce(w.reason,'')) like '%level b%' then 0.5::numeric
+          else 1.0::numeric
+        end * 100,
+        2
+      ) as deposit_amount,
+      w.amount as commission_amount,
+      'approved'::text as status,
+      w.created_at,
+      coalesce(src.name,'Referral member') as member_name,
+      src.uid as member_uid
     from public.wallet_ledger w
+    left join lateral (
+      select c.name,c.uid
+      from public.customer_referral_commissions r
+      join public.customers c on c.id=r.source_customer_id
+      where r.customer_id=w.customer_id
+        and (
+          w.reference='REFERRAL-COMMISSION-'||r.id::text
+          or (
+            r.commission_amount=w.amount
+            and abs(extract(epoch from (r.created_at-w.created_at)))<=5
+          )
+        )
+      order by
+        case when w.reference='REFERRAL-COMMISSION-'||r.id::text then 0 else 1 end,
+        abs(extract(epoch from (r.created_at-w.created_at)))
+      limit 1
+    ) src on true
     where w.customer_id=v_customer_id
       and lower(coalesce(w.component,''))='referral'
       and lower(coalesce(w.direction,''))='credit'
-      and not exists (
-        select 1 from public.customer_referral_commissions r
-        where ('REFERRAL-COMMISSION-'||r.id::text)=w.reference
-      )
   )
   select jsonb_build_object(
     'level_a',coalesce((select jsonb_agg(jsonb_build_object('id',id,'name',name,'uid',uid,'created_at',created_at) order by created_at desc) from referral_tree where level=1),'[]'::jsonb),
@@ -284,11 +302,7 @@ begin
         'status',e.status,'created_at',e.created_at,
         'member_name',e.member_name,'member_uid',e.member_uid
       ) order by e.created_at desc)
-      from (
-        select * from structured_earnings
-        union all
-        select * from legacy_earnings
-      ) e
+      from ledger_earnings e
     ),'[]'::jsonb)
   ) into v_result;
 
