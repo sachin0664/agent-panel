@@ -1161,7 +1161,10 @@ async function loadTeam(){
             error
         } =
             await supabaseClient.rpc(
-                "get_referral_team_counts"
+                "get_referral_team_counts",
+                {
+                    p_customer_id: customerId
+                }
             );
 
 
@@ -1436,10 +1439,27 @@ async function loadReferralHistory(){
                    AMOUNTS
                 ========================= */
 
-                const deposit =
+                let deposit =
                     Number(
                         item.deposit_amount || 0
                     );
+
+                /*
+                 * Legacy referral records may contain only the
+                 * commission amount. If the stored deposit amount
+                 * is missing/incorrect, derive it from commission
+                 * and the referral rate.
+                 */
+                if(
+                    deposit > 0 &&
+                    commission > 0 &&
+                    percentage > 0 &&
+                    deposit <= commission
+                ){
+                    deposit =
+                        (commission * 100) /
+                        percentage;
+                }
 
 
                 const commission =
