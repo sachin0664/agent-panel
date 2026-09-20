@@ -834,63 +834,7 @@ async function loadEarnings(){
 
         }
 
-        /*
-         * Legacy referral credits were already written to wallet_ledger
-         * before customer_referral_commissions became the main history table.
-         * Merge only ledger credits that do not already have a matching
-         * referral-history row so the same commission is never counted twice.
-         */
-        let referralRows = [...(referrals || [])];
-
-        const {
-            data:legacyReferralLedger,
-            error:legacyReferralError
-        } = await supabaseClient
-            .from("wallet_ledger")
-            .select("id, amount, reason, reference, created_at")
-            .eq("customer_id", customerId)
-            .eq("component", "referral")
-            .eq("direction", "credit")
-            .order("created_at", {ascending:false});
-
-        if(legacyReferralError){
-            throw legacyReferralError;
-        }
-
-        const knownReferralReferences = new Set(
-            referralRows.map(item =>
-                "REFERRAL-COMMISSION-" + String(item.id)
-            )
-        );
-
-        (legacyReferralLedger || []).forEach(item => {
-            if(knownReferralReferences.has(String(item.reference || ""))){
-                return;
-            }
-
-            const reason = String(item.reason || "").toLowerCase();
-
-            let level = 1;
-            let percentage = 1;
-
-            if(reason.includes("level 2")){
-                level = 2;
-                percentage = 0.5;
-            }else if(reason.includes("level 3")){
-                level = 3;
-                percentage = 0.2;
-            }
-
-            referralRows.push({
-                id: "ledger-" + item.id,
-                level: level,
-                percentage: percentage,
-                transaction_amount: null,
-                commission_amount: Number(item.amount || 0),
-                status: "approved",
-                created_at: item.created_at
-            });
-        });
+        const referralRows = [...(referrals || [])];
 
 
         /* DISPLAY TOTALS — same authoritative source as Dashboard/Wallet */
