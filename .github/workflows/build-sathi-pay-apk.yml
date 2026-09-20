@@ -5,6 +5,7 @@ on:
     paths:
       - 'sathi-pay-app/**'
       - 'customer-register.html'
+      - 'assets/sathipay-logo-user.jpg'
       - '.github/workflows/build-sathi-pay-apk.yml'
   workflow_dispatch:
 
@@ -29,7 +30,10 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Build release APK
+      - name: Use exact supplied Sathi Pay logo
+        run: cp assets/sathipay-logo-user.jpg sathi-pay-app/app/src/main/res/drawable/sathipay_logo.jpg
+
+      - name: Set up Gradle build
         working-directory: sathi-pay-app
         run: gradle assembleRelease --no-daemon
 
@@ -47,9 +51,9 @@ jobs:
           SHA=$(printf '%s' "$RESPONSE" | python -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || true)
 
           if [ -n "$SHA" ]; then
-            gh api --method PUT "$API"               -f message="Update customer APK"               -f content="$CONTENT"               -f sha="$SHA"               -f branch="main"
+            gh api --method PUT "$API" -f message="Update customer APK" -f content="$CONTENT" -f sha="$SHA" -f branch="main"
           else
-            gh api --method PUT "$API"               -f message="Add customer APK"               -f content="$CONTENT"               -f branch="main"
+            gh api --method PUT "$API" -f message="Add customer APK" -f content="$CONTENT" -f branch="main"
           fi
 
       - name: Publish APK release
