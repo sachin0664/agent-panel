@@ -160,6 +160,55 @@ begin
 end;
 $function$;
 
+create or replace function public.get_referral_team_counts()
+returns table(direct_count bigint,total_count bigint)
+language plpgsql
+stable
+security definer
+set search_path = public
+as $function$
+declare
+  v_customer_id uuid;
+  v_auth_id uuid := auth.uid();
+  v_email text := lower(trim(coalesce(auth.jwt()->>'email','')));
+  v_invitation_code text;
+begin
+  select c.id, c.invitation_code
+  into v_customer_id, v_invitation_code
+  from public.customers c
+  where c.id = v_auth_id
+     or (c.auth_user_id = v_auth_id and v_auth_id is not null)
+     or (v_email <> '' and lower(coalesce(c.email,'')) = v_email)
+  order by
+    case when c.id = v_auth_id then 0
+         when c.auth_user_id = v_auth_id then 1
+         else 2 end,
+    c.created_at desc
+  limit 1;
+
+  if v_customer_id is null or v_invitation_code is null then
+    return query select 0::bigint, 0::bigint;
+    return;
+  end if;
+
+  return query
+  with recursive team as (
+    select c.id,c.invitation_code,c.referred_by,0 as level,array[c.id] as path
+    from public.customers c
+    where c.id = v_customer_id
+    union all
+    select child.id,child.invitation_code,child.referred_by,team.level+1,team.path||child.id
+    from team
+    join public.customers child on child.referred_by = team.invitation_code
+    where team.level < 3 and not child.id = any(team.path)
+  )
+  select
+    count(*) filter (where level=1)::bigint as direct_count,
+    count(*) filter (where level between 1 and 3)::bigint as total_count
+  from team;
+end;
+$function$;
+
 create or replace function public.get_my_referral_data()
 returns jsonb
 language plpgsql
