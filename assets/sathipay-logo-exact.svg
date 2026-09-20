@@ -1,1 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><image href="sathipay-logo-user.jpg" x="0" y="0" width="256" height="256" preserveAspectRatio="xMidYMid meet"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">Sathi Pay SP Logo</title>
+<desc id="desc">A unique Sathi Pay SP monogram in a blue, violet and green fintech style.</desc>
+<defs>
+  <linearGradient id="bg" x1="40" y1="20" x2="470" y2="490" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#087FF5"/>
+    <stop offset=".52" stop-color="#4F46E5"/>
+    <stop offset="1" stop-color="#10C98A"/>
+  </linearGradient>
+  <linearGradient id="accent" x1="100" y1="90" x2="410" y2="420" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFFFFF"/>
+    <stop offset="1" stop-color="#D9FFF1"/>
+  </linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#063B82" flood-opacity=".24"/>
+  </filter>
+</defs>
+<rect x="38" y="38" width="436" height="436" rx="112" fill="url(#bg)" filter="url(#shadow)"/>
+<circle cx="256" cy="256" r="154" fill="none" stroke="#FFFFFF" stroke-opacity=".20" stroke-width="18"/>
+<path d="M345 154c-24-30-63-47-105-47-68 0-116 39-116 93 0 52 40 76 106 91 49 11 66 22 66 43 0 23-24 38-61 38-44 0-75-18-100-50l-38 32c32 43 78 67 137 67 72 0 120-36 120-91 0-53-38-78-111-95-46-10-61-20-61-40 0-23 24-39 60-39 35 0 61 12 82 36z" fill="url(#accent)"/>
+<path d="M205 126h112c55 0 92 30 92 78 0 47-37 77-92 77h-57v105h-55zm55 50v55h52c26 0 43-10 43-28s-17-27-43-27z" fill="#FFFFFF" fill-opacity=".96"/>
+<circle cx="402" cy="111" r="13" fill="#FFD34D"/>
+<circle cx="426" cy="135" r="7" fill="#FFFFFF" fill-opacity=".75"/>
+</svg>
