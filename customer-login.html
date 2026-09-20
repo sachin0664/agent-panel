@@ -20,24 +20,34 @@
 </head>
 
 
-<body>
+<body class="customer-login-page">
 
-
-<header>
-
-    <h1>Sathi Pay</h1>
-
-    <a href="customer-register.html">
-        Register
-    </a>
-
+<header class="brand-header">
+    <div class="brand-header-left">
+        <div class="brand-mini-logo" aria-hidden="true">
+            <span class="mini-crown">♛</span>
+            <span class="mini-sp">SP</span>
+        </div>
+        <div>
+            <div class="brand-name"><span>Sathi</span> <b>Pay</b></div>
+            <div class="brand-tagline">SAFE • FAST • TOGETHER</div>
+        </div>
+    </div>
+    <a class="header-register" href="customer-register.html">Register</a>
 </header>
 
-
-
-<main class="container">
-
-    <h2>Customer Login</h2>
+<main class="login-page-shell">
+    <section class="login-card">
+        <div class="login-card-top">
+            <div class="login-logo" aria-hidden="true">
+                <span class="login-crown">♛</span>
+                <span class="login-sp">SP</span>
+                <i></i>
+            </div>
+            <div class="login-kicker">WELCOME BACK</div>
+            <h2>Customer Login</h2>
+            <p>Securely access your Sathi Pay account</p>
+        </div>
 
 
     <!-- LOGIN FORM -->
@@ -79,34 +89,27 @@
 
     </form>
 
-
     <!-- FORGOT PASSWORD -->
 
-    <p style="margin-top:15px;">
-
-        <a
-            href="#"
-            id="forgotPasswordLink"
-        >
-            Forgot Password?
-        </a>
-
-    </p>
+    <div class="login-actions">
+        <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+        <span class="secure-note">🔒 Secure Login</span>
+    </div>
 
 
-    <p id="customerLoginMessage"></p>
+    <p id="customerLoginMessage" class="login-message"></p>
 
+    <div class="register-box">
+        <span>Don't have an account?</span>
+        <a href="customer-register.html">Create your account</a>
+    </div>
 
-    <p>
-        Don't have an account?
-
-        <a href="customer-register.html">
-            Register here
-        </a>
-
-    </p>
-
-
+    <div class="login-trust-row">
+        <span>✓ Protected account</span>
+        <span>✓ Fast access</span>
+        <span>✓ Sathi Pay</span>
+    </div>
+    </section>
 </main>
 
 
