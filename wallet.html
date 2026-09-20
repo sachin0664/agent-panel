@@ -1270,14 +1270,30 @@ async function loadWalletActivity(
                 }
 
 
+                /* Referral corrections/legacy referral ledger rows are
+                   not customer-facing wallet activity. Referral history is
+                   authoritative from customer_referral_commissions. */
+                if(component === "referral"){
+                    return;
+                }
+
                 /* OTHER DEBITS */
 
                 if(
                     direction === "debit"
                 ){
 
+                    const isUpiPayment =
+                        component === "manual" &&
+                        (
+                            reason.includes("upi payment") ||
+                            reference.indexOf("upi-pay-") === 0
+                        );
+
                     const debitTitle =
-                        "Sell Success";
+                        isUpiPayment
+                            ? "UPI Payment"
+                            : "Sell Success";
 
                     activities.push({
 
@@ -1288,7 +1304,7 @@ async function loadWalletActivity(
                             debitTitle,
 
                         icon:
-                            "↘️",
+                            isUpiPayment ? "📲" : "↘️",
 
                         amount:
                             Number(
