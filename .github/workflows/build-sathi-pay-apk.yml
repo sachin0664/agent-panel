@@ -25,16 +25,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
-      - name: Build debug APK
+      - name: Build release APK
         working-directory: sathi-pay-app
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleRelease --no-daemon
       - name: Prepare APK
-        run: cp sathi-pay-app/app/build/outputs/apk/debug/app-debug.apk SathiPay.apk
+        run: cp sathi-pay-app/app/build/outputs/apk/release/app-release.apk SathiPay.apk
       - name: Publish APK release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: sathi-pay-v1.0.${{ github.run_number }}
-          name: Sathi Pay Android App v1.0.${{ github.run_number }}
+          tag_name: sathi-pay-v1.0.1-${{ github.run_number }}
+          name: Sathi Pay Android App v1.0.1-${{ github.run_number }}
           body: |
             Sathi Pay Android application.
             The app opens the live Sathi Pay website at https://mysathipay.com/
