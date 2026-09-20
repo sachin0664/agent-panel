@@ -1085,13 +1085,24 @@ async function loadCustomer(){
 
         /* =========================
            REFERRAL EARNINGS BALANCE
+           Uses the same authoritative financial summary
+           as Dashboard, Wallet and Earnings.
         ========================= */
+
+        const {
+            data: financialSummary,
+            error: financialSummaryError
+        } = await supabaseClient.rpc("get_my_financial_summary");
+
+        if(financialSummaryError){
+            throw financialSummaryError;
+        }
 
         document.getElementById(
             "referralEarnings"
         ).textContent =
             Number(
-                data.referral_balance || 0
+                financialSummary?.referral_balance || 0
             ).toFixed(2);
 
 
