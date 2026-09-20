@@ -10,8 +10,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowInsets;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -95,16 +93,13 @@ public class MainActivity extends Activity {
         webView = new WebView(this);
         setContentView(webView);
 
-        // Android 15+ can draw the WebView under the status/navigation bars.
-        // Apply the real system-bar insets so the Sathi Pay header/logo is never
-        // hidden behind the phone status bar, and the bottom navigation stays clear.
-        webView.setOnApplyWindowInsetsListener((view, insets) -> {
-            int top = insets.getSystemWindowInsetTop();
-            int bottom = insets.getSystemWindowInsetBottom();
-            view.setPadding(0, top, 0, bottom);
-            return insets;
-        });
-        webView.requestApplyInsets();
+        // Keep the native system bars outside the website viewport so the
+        // customer dashboard matches the normal mobile website layout.
+        getWindow().setStatusBarColor(Color.WHITE);
+        getWindow().setNavigationBarColor(Color.WHITE);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                        | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
