@@ -336,3 +336,143 @@ set wallet_balance=coalesce(l.wallet_total,0),
 from deposit_totals d
 full join ledger_totals l on l.customer_id=d.customer_id
 where c.id=coalesce(d.customer_id,l.customer_id);
+
+
+-- ============================================================
+-- FINAL APPLICATION AUDIT / AUTHORITATIVE DATA FIX
+-- 2026-09-20
+-- ============================================================
+-- Run after the base schema. This section makes the customer
+-- financial UI use one authoritative source per data type:
+-- deposits -> customer_deposits
+-- deposit commission -> customer_deposits.commission
+-- referral commission -> customer_referral_commissions
+-- bonus/wallet debits/credits -> wallet_ledger
+-- ============================================================
+
+-- Reconcile legacy/orphan referral credits without deleting history.
+insert into public.wallet_ledger
+  (customer_id,component,direction,amount,balance_after,reason,reference,created_by)
+select c.id,'referral','debit',x.amount,
+       round(coalesce(c.wallet_balance,0)-x.amount,2),
+       'Correction - legacy referral credits reconciled to authoritative referral commissions',
+       x.reference,null
+from public.customers c
+join (values
+  ('SPX25IH39Q46IIQW',4.40::numeric,'REFERRAL-CORRECTION-RAJ-20260920'),
+  ('SP6UNNNQE7YMJQWF',12.00::numeric,'REFERRAL-CORRECTION-NEMI2-20260920')
+) x(uid,amount,reference) on x.uid=c.uid
+where not exists (
+  select 1 from public.wallet_ledger w where w.reference=x.reference
+);
+
+-- Reconcile stored customer balances to authoritative records.
+update public.customers c
+set
+  deposit_balance=coalesce((select sum(d.amount) from public.customer_deposits d where d.customer_id=c.id and lower(coalesce(d.status,''))='approved'),0),
+  commission_balance=coalesce((select sum(d.commission) from public.customer_deposits d where d.customer_id=c.id and lower(coalesce(d.status,''))='approved'),0),
+  referral_balance=coalesce((select sum(r.commission_amount) from public.customer_referral_commissions r where r.customer_id=c.id and lower(coalesce(r.status,''))='approved'),0),
+  bonus_balance=coalesce((select sum(case when w.direction='credit' then w.amount else -w.amount end) from public.wallet_ledger w where w.customer_id=c.id and w.component='bonus'),0),
+  wallet_balance=coalesce((select sum(case when w.direction='credit' then w.amount else -w.amount end) from public.wallet_ledger w where w.customer_id=c.id),0),
+  updated_at=now();
+
+create or replace function public.get_my_financial_summary()
+returns jsonb language plpgsql security definer set search_path=public
+as $$
+declare
+  v_customer_id uuid:=auth.uid();
+  v_deposit numeric:=0; v_bonus numeric:=0; v_commission numeric:=0;
+  v_referral numeric:=0; v_wallet numeric:=0;
+begin
+  if v_customer_id is null then raise exception 'Customer is not logged in'; end if;
+  select coalesce(sum(amount),0) into v_deposit from public.customer_deposits
+    where customer_id=v_customer_id and lower(coalesce(status,''))='approved';
+  select coalesce(sum(commission),0) into v_commission from public.customer_deposits
+    where customer_id=v_customer_id and lower(coalesce(status,''))='approved';
+  select coalesce(sum(case when direction='credit' then amount else -amount end),0)
+    into v_bonus from public.wallet_ledger where customer_id=v_customer_id and component='bonus';
+  select coalesce(sum(commission_amount),0) into v_referral
+    from public.customer_referral_commissions
+    where customer_id=v_customer_id and lower(coalesce(status,''))='approved';
+  select coalesce(sum(case when direction='credit' then amount else -amount end),0)
+    into v_wallet from public.wallet_ledger where customer_id=v_customer_id;
+  return jsonb_build_object(
+    'customer_id',v_customer_id,
+    'deposit_balance',round(v_deposit,2),
+    'bonus_balance',round(v_bonus,2),
+    'commission_balance',round(v_commission,2),
+    'referral_balance',round(v_referral,2),
+    'wallet_balance',round(v_wallet,2),
+    'total_earnings',round(v_commission+v_referral,2)
+  );
+end;
+$$;
+
+create or replace function public.get_my_earnings_summary()
+returns table(today_earnings numeric,total_earnings numeric)
+language plpgsql security definer set search_path=public
+as $$
+declare
+  v_customer_id uuid:=auth.uid();
+  v_tc numeric:=0; v_tr numeric:=0; v_c numeric:=0; v_r numeric:=0;
+begin
+  if v_customer_id is null then return query select 0::numeric,0::numeric; return; end if;
+  select coalesce(sum(d.commission),0) into v_c from public.customer_deposits d
+    where d.customer_id=v_customer_id and lower(coalesce(d.status,''))='approved';
+  select coalesce(sum(r.commission_amount),0) into v_r from public.customer_referral_commissions r
+    where r.customer_id=v_customer_id and lower(coalesce(r.status,''))='approved';
+  select coalesce(sum(d.commission),0) into v_tc from public.customer_deposits d
+    where d.customer_id=v_customer_id and lower(coalesce(d.status,''))='approved'
+      and d.created_at >= date_trunc('day',now() at time zone 'Asia/Kolkata') at time zone 'Asia/Kolkata'
+      and d.created_at < (date_trunc('day',now() at time zone 'Asia/Kolkata')+interval '1 day') at time zone 'Asia/Kolkata';
+  select coalesce(sum(r.commission_amount),0) into v_tr from public.customer_referral_commissions r
+    where r.customer_id=v_customer_id and lower(coalesce(r.status,''))='approved'
+      and r.created_at >= date_trunc('day',now() at time zone 'Asia/Kolkata') at time zone 'Asia/Kolkata'
+      and r.created_at < (date_trunc('day',now() at time zone 'Asia/Kolkata')+interval '1 day') at time zone 'Asia/Kolkata';
+  return query select round(v_tc+v_tr,2),round(v_c+v_r,2);
+end;
+$$;
+
+create or replace function public.get_referral_team_counts(p_customer_id uuid)
+returns table(direct_count bigint,total_count bigint)
+language plpgsql stable security definer set search_path=public
+as $$
+begin
+  if p_customer_id is null then return query select 0::bigint,0::bigint; return; end if;
+  if p_customer_id<>auth.uid() and not public.is_admin() then raise exception 'not allowed'; end if;
+  return query
+  with recursive team as (
+    select c.id,c.invitation_code,c.referred_by,0 level,array[c.id] path
+    from public.customers c where c.id=p_customer_id
+    union all
+    select child.id,child.invitation_code,child.referred_by,team.level+1,team.path||child.id
+    from team join public.customers child on child.referred_by=team.invitation_code
+    where team.level<3 and lower(coalesce(child.status,''))='active'
+      and not child.id=any(team.path)
+  )
+  select count(*) filter(where level=1)::bigint,
+         count(*) filter(where level between 1 and 3)::bigint
+  from team where level>0;
+end;
+$$;
+
+create or replace function public.get_referral_team_counts()
+returns table(direct_count bigint,total_count bigint)
+language sql stable security definer set search_path=public
+as $$ select * from public.get_referral_team_counts(auth.uid()); $$;
+
+create or replace function public.get_my_referral_counts()
+returns table(direct_team bigint,total_network bigint)
+language sql stable security definer set search_path=public
+as $$ select direct_count,total_count from public.get_referral_team_counts(auth.uid()); $$;
+
+revoke execute on function public.get_referral_team_counts() from public,anon;
+revoke execute on function public.get_referral_team_counts(uuid) from public,anon;
+revoke execute on function public.get_my_referral_counts() from public,anon;
+grant execute on function public.get_referral_team_counts() to authenticated;
+grant execute on function public.get_referral_team_counts(uuid) to authenticated;
+grant execute on function public.get_my_referral_counts() to authenticated;
+
+-- Global UPI uniqueness is already enforced by the existing
+-- customer_upis_upi_id_normalized_unique index.
+-- Do not remove that index.
