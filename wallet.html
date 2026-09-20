@@ -1329,6 +1329,39 @@ async function loadWalletActivity(
 
 
         /* =====================================
+           AUTHORITATIVE REFERRAL ACTIVITY
+           Referral history comes only from customer_referral_commissions.
+           Legacy/correction wallet rows are intentionally excluded above.
+        ===================================== */
+
+        const {
+            data: referralRows,
+            error: referralError
+        } = await db
+            .from("customer_referral_commissions")
+            .select("id, level, commission_amount, created_at")
+            .eq("customer_id", customerId)
+            .eq("status", "approved")
+            .order("created_at", {ascending:false})
+            .limit(30);
+
+        if(referralError){
+            console.error("Referral wallet activity:", referralError);
+        }else{
+            (referralRows || []).forEach(item => {
+                activities.push({
+                    date: item.created_at,
+                    title: "Referral Commission",
+                    icon: "👥",
+                    amount: Number(item.commission_amount || 0),
+                    type: "credit",
+                    balanceAfter: null
+                });
+            });
+        }
+
+
+        /* =====================================
            SORT LATEST FIRST
         ===================================== */
 
