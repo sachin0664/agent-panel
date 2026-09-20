@@ -18,12 +18,40 @@
     >
 
 <style>
-/* Sathi Pay unique SP vector brand */
-.brand-header-left{gap:10px}
-.brand-mini-logo{width:58px!important;height:58px!important;border-radius:17px!important;background:transparent!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important;box-shadow:0 8px 20px rgba(35,93,220,.18)}
-.brand-mini-logo img{width:58px!important;height:58px!important;object-fit:contain!important;border-radius:17px!important}
-.login-logo{width:112px!important;height:112px!important;border-radius:26px!important;background:transparent!important;overflow:visible!important;margin-bottom:8px}
-.login-logo img{width:112px!important;height:112px!important;object-fit:contain!important;border-radius:26px!important}
+/* Sathi Pay premium colorful login refresh */
+.customer-login-page{background:linear-gradient(135deg,#eef8ff 0%,#f8fbff 48%,#eafff8 100%)!important;min-height:100vh}
+.customer-login-page .brand-header{background:linear-gradient(100deg,#075fe8 0%,#1766e8 48%,#10bfa0 100%)!important;border-bottom:0!important;box-shadow:0 8px 28px rgba(20,88,190,.20)!important}
+.customer-login-page .brand-name,.customer-login-page .brand-tagline{color:#fff!important}
+.customer-login-page .brand-name span{color:#fff!important}.customer-login-page .brand-name b{color:#52efc2!important}
+.customer-login-page .header-register{border:1px solid rgba(255,255,255,.48)!important;background:rgba(255,255,255,.12)!important;color:#fff!important;border-radius:16px!important;padding:13px 22px!important;box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.customer-login-page .brand-mini-logo{width:60px!important;height:60px!important;border-radius:18px!important;background:transparent!important;box-shadow:0 8px 22px rgba(7,70,210,.25)!important}
+.customer-login-page .brand-mini-logo img{width:60px!important;height:60px!important;object-fit:contain!important}
+.customer-login-page .login-page-shell{padding:44px 18px 60px!important;background:radial-gradient(circle at 12% 85%,rgba(16,201,138,.18),transparent 28%),radial-gradient(circle at 88% 20%,rgba(8,127,245,.16),transparent 30%)!important}
+.customer-login-page .login-card{max-width:650px!important;margin:0 auto!important;background:rgba(255,255,255,.94)!important;border:1px solid rgba(255,255,255,.9)!important;border-radius:34px!important;box-shadow:0 24px 70px rgba(35,92,170,.18)!important;padding:42px 44px 34px!important;position:relative!important;overflow:hidden!important}
+.customer-login-page .login-card:before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,#087ff5,#7b35f5,#10d99c,#ffd34d)}
+.customer-login-page .login-card-top{text-align:center!important}
+.customer-login-page .login-logo{width:116px!important;height:116px!important;margin:0 auto 14px!important;border-radius:30px!important;background:transparent!important;box-shadow:0 16px 32px rgba(34,92,190,.16)!important}
+.customer-login-page .login-logo img{width:116px!important;height:116px!important;object-fit:contain!important}
+.customer-login-page .login-kicker{display:inline-block!important;padding:8px 24px!important;border-radius:999px!important;background:linear-gradient(90deg,#eef7ff,#e8fff6)!important;color:#1672ad!important;font-weight:900!important;letter-spacing:4px!important}
+.customer-login-page .login-card h2{font-size:46px!important;line-height:1.05!important;margin:14px 0 10px!important;font-weight:900!important;background:linear-gradient(90deg,#102a56,#087ff5,#10b982)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.customer-login-page .login-card-top p{font-size:18px!important;color:#657895!important;margin-bottom:28px!important}
+.customer-login-page form label{display:block!important;font-weight:850!important;color:#17345f!important;margin:18px 0 8px!important}
+.customer-login-page form input{width:100%!important;border:2px solid #dceaff!important;background:#f9fcff!important;border-radius:20px!important;padding:18px 20px!important;font-size:17px!important;outline:none!important;transition:.2s!important}
+.customer-login-page form input:focus{border-color:#1a8bf2!important;box-shadow:0 0 0 4px rgba(26,139,242,.10)!important;background:#fff!important}
+.customer-login-page #loginButton{width:100%!important;border:0!important;border-radius:20px!important;padding:17px!important;margin-top:24px!important;background:linear-gradient(100deg,#087ff5,#5538f5,#11d994)!important;color:#fff!important;font-size:20px!important;font-weight:900!important;box-shadow:0 14px 28px rgba(35,114,230,.22)!important}
+.customer-login-page .login-actions{margin-top:20px!important}
+.customer-login-page .login-actions a{color:#126dcc!important;font-weight:850!important}
+.customer-login-page .secure-note{background:#e9fff7!important;color:#16956e!important;border-radius:999px!important;padding:10px 16px!important}
+.customer-login-page .register-box{background:linear-gradient(100deg,#eef8ff,#effcf8)!important;border:1px solid #d8edf4!important;border-radius:22px!important;margin-top:34px!important;padding:18px!important;text-align:center!important}
+.customer-login-page .login-trust-row{color:#66809f!important}
+@media(max-width:700px){
+.customer-login-page .brand-header{padding:10px 14px!important}
+.customer-login-page .brand-mini-logo,.customer-login-page .brand-mini-logo img{width:54px!important;height:54px!important}
+.customer-login-page .login-page-shell{padding:34px 14px 46px!important}
+.customer-login-page .login-card{padding:36px 22px 28px!important;border-radius:28px!important}
+.customer-login-page .login-logo,.customer-login-page .login-logo img{width:108px!important;height:108px!important}
+.customer-login-page .login-card h2{font-size:38px!important}
+}
 </style>
 </head>
 
