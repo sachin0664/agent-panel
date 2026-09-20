@@ -97,9 +97,17 @@ public class MainActivity extends Activity {
         // customer dashboard matches the normal mobile website layout.
         getWindow().setStatusBarColor(Color.WHITE);
         getWindow().setNavigationBarColor(Color.WHITE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            getWindow().setDecorFitsSystemWindows(true);
+        }
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                         | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+
+        // Give the Sathi Pay header a small clean gap below the phone status bar.
+        float density = getResources().getDisplayMetrics().density;
+        webView.setPadding(0, (int) (12 * density), 0, 0);
+        webView.setClipToPadding(false);
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
