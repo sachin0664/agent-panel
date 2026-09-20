@@ -3721,6 +3721,36 @@ async function loadDashboard(){
 
         }
 
+        /*
+           IMPORTANT:
+           Wait for Supabase Auth to restore the saved session
+           before reading customer data. On a hard refresh,
+           the customer page can otherwise query RLS-protected
+           data before auth.uid() is ready, which leaves the
+           dashboard showing stale/empty values until another
+           refresh. This keeps the existing UI and data logic
+           unchanged; it only synchronizes auth before loading.
+        */
+        const authResult =
+            await withTimeout(
+                supabaseClient.auth.getUser(),
+                10000
+            );
+
+        if(
+            authResult.error ||
+            !authResult.data ||
+            !authResult.data.user ||
+            authResult.data.user.id !== customerId
+        ){
+
+            window.location.href =
+                "customer-login.html";
+
+            return;
+
+        }
+
 
         const {
             data:customer,
