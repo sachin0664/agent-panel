@@ -918,52 +918,28 @@ async function loadTransactions(){
                    new Date(a.created_at);
         });
 
-        let bonus = 0;
-        let deposits = 0;
-        let commission = 0;
-        let referral = 0;
+        /* SUMMARY — use the same authoritative financial source
+           as Dashboard, Wallet, Earnings and Referral. */
+        const {
+            data: financialSummary,
+            error: financialSummaryError
+        } = await supabaseClient.rpc("get_my_financial_summary");
 
-        records.forEach(function(row){
+        if(financialSummaryError){
+            throw financialSummaryError;
+        }
 
-            const type =
-                String(row.event_type || "").toLowerCase();
+        const bonus =
+            Number(financialSummary?.bonus_balance || 0);
 
-            const amount =
-                Number(row.amount || 0);
+        const deposits =
+            Number(financialSummary?.deposit_balance || 0);
 
-            const status =
-                String(row.status || "").toLowerCase();
+        const commission =
+            Number(financialSummary?.commission_balance || 0);
 
-            if(
-                type === "welcome bonus" &&
-                row.direction === "credit"
-            ){
-                bonus += amount;
-            }
-
-            if(
-                type === "deposit" &&
-                row.direction === "credit" &&
-                status === "approved"
-            ){
-                deposits += amount;
-            }
-
-            if(
-                type === "commission" &&
-                row.direction === "credit"
-            ){
-                commission += amount;
-            }
-
-            if(
-                type.includes("referral") &&
-                row.direction === "credit"
-            ){
-                referral += amount;
-            }
-
-        });
+        const referral =
+            Number(financialSummary?.referral_balance || 0);
 
         document.getElementById(
             "totalBonus"
