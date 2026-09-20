@@ -1,28 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
 <title id="title">Sathi Pay SP</title>
-<desc id="desc">Original colorful geometric Sathi Pay monogram with separated S and P.</desc>
+<desc id="desc">Custom colorful geometric SP monogram for Sathi Pay.</desc>
 <defs>
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#4F46E5"/>
-    <stop offset=".48" stop-color="#06B6D4"/>
-    <stop offset="1" stop-color="#22C55E"/>
+    <stop offset="0" stop-color="#5B21B6"/>
+    <stop offset=".48" stop-color="#2563EB"/>
+    <stop offset="1" stop-color="#06B6D4"/>
   </linearGradient>
   <linearGradient id="s" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#FF4D8D"/>
+    <stop offset="0" stop-color="#FF3D81"/>
     <stop offset="1" stop-color="#FFB000"/>
   </linearGradient>
   <linearGradient id="p" x1="0" y1="1" x2="1" y2="0">
-    <stop offset="0" stop-color="#FFFFFF"/>
-    <stop offset="1" stop-color="#B9FFF5"/>
+    <stop offset="0" stop-color="#7CFFCB"/>
+    <stop offset="1" stop-color="#FFFFFF"/>
   </linearGradient>
 </defs>
-<rect x="24" y="24" width="464" height="464" rx="118" fill="url(#bg)"/>
-<!-- S: custom two-arc monogram -->
-<path d="M246 139C226 119 199 108 166 108C119 108 88 134 88 174C88 215 118 235 165 249L202 260C228 268 241 282 241 301C241 324 218 340 187 340C153 340 124 326 101 302"
- fill="none" stroke="url(#s)" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"/>
-<!-- P: separated, compact custom stem + bowl -->
-<path d="M307 372V140H360C405 140 431 164 431 205C431 246 405 270 360 270H307"
- fill="none" stroke="url(#p)" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"/>
-<!-- clean brand notch -->
-<path d="M307 270H348" fill="none" stroke="#4F46E5" stroke-width="11" stroke-linecap="round"/>
+<rect x="24" y="24" width="464" height="464" rx="112" fill="url(#bg)"/>
+<!-- subtle colorful background panels -->
+<path d="M24 330C110 300 150 344 214 382C286 425 363 431 488 365V488H24Z" fill="#7C3AED" opacity=".32"/>
+<path d="M24 92C116 42 193 62 260 96C336 134 401 116 488 66V24H24Z" fill="#06B6D4" opacity=".28"/>
+
+<!-- Custom S: filled ribbon, not a font -->
+<path d="M242 125
+C220 105 191 94 157 94
+C105 94 70 123 70 170
+C70 218 104 241 157 256
+L193 266
+C211 271 220 281 220 294
+C220 311 203 323 180 323
+C149 323 122 312 98 289
+L70 321
+C100 351 136 368 181 368
+C233 368 268 338 268 293
+C268 247 237 224 185 209
+L150 199
+C129 193 118 184 118 169
+C118 152 134 140 158 140
+C184 140 205 149 222 164Z" fill="url(#s)"/>
+
+<!-- Custom P: separate mark with stronger silhouette -->
+<path d="M294 372V94H365
+C424 94 456 126 456 181
+C456 237 424 269 365 269H345V372Z
+M345 141V222H362
+C391 222 407 208 407 181
+C407 155 391 141 362 141Z" fill="url(#p)"/>
 </svg>
