@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowInsets;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -91,6 +94,17 @@ public class MainActivity extends Activity {
     private void setupWebView() {
         webView = new WebView(this);
         setContentView(webView);
+
+        // Android 15+ can draw the WebView under the status/navigation bars.
+        // Apply the real system-bar insets so the Sathi Pay header/logo is never
+        // hidden behind the phone status bar, and the bottom navigation stays clear.
+        webView.setOnApplyWindowInsetsListener((view, insets) -> {
+            int top = insets.getSystemWindowInsetTop();
+            int bottom = insets.getSystemWindowInsetBottom();
+            view.setPadding(0, top, 0, bottom);
+            return insets;
+        });
+        webView.requestApplyInsets();
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
