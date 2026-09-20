@@ -487,21 +487,79 @@
 
             }
 
-            const {
-                data,
-                error
-            } =
-                await authClient.auth.getUser();
+            /*
+               On a hard refresh Supabase can still be restoring
+               the persisted session. Do not treat a temporary
+               auth error as a real logout. Wait for the session
+               to become available before redirecting.
+            */
+            let sessionData = null;
+            let sessionError = null;
 
-            if(
-                error ||
-                !data ||
-                !data.user ||
-                !data.user.id
+            for(
+                let attempt = 0;
+                attempt < 20;
+                attempt++
             ){
 
-                clearCustomerSession();
-                await authClient.auth.signOut();
+                try{
+
+                    const result =
+                        await authClient.auth.getSession();
+
+                    sessionData =
+                        result.data;
+
+                    sessionError =
+                        result.error;
+
+                    if(
+                        !sessionError &&
+                        sessionData &&
+                        sessionData.session &&
+                        sessionData.session.user &&
+                        sessionData.session.user.id
+                    ){
+
+                        break;
+
+                    }
+
+                }
+                catch(error){
+
+                    sessionError = error;
+
+                }
+
+                await new Promise(function(resolve){
+                    setTimeout(resolve, 300);
+                });
+
+            }
+
+            const authUser =
+                sessionData &&
+                sessionData.session &&
+                sessionData.session.user
+                    ? sessionData.session.user
+                    : null;
+
+            /*
+               Only a confirmed missing session logs the customer
+               out. A temporary refresh/network error never clears
+               localStorage or signs the user out.
+            */
+            if(
+                sessionError ||
+                !authUser ||
+                !authUser.id
+            ){
+
+                console.error(
+                    "Customer session unavailable after refresh wait:",
+                    sessionError
+                );
 
                 redirectToLogin();
 
@@ -511,7 +569,7 @@
 
 
             if(
-                data.user.id !==
+                authUser.id !==
                 storedCustomerId
             ){
 
