@@ -547,7 +547,6 @@ async function loadCustomerProfile() {
                 mobile,
                 invitation_code,
                 sell_on,
-                upi_id,
                 status
             `)
 
@@ -619,15 +618,134 @@ async function loadCustomerProfile() {
             customer.mobile || "Not available";
 
 
-        const savedEmail =
-            localStorage.getItem(
-                "sathiPayCustomerEmail"
+        /* =====================================
+           EMAIL — READ FROM SUPABASE AUTH
+           Do not depend on localStorage.
+        ===================================== */
+
+        let customerEmail = "";
+
+        try {
+
+            const {
+                data: authData
+            } =
+                await supabaseClient.auth.getUser();
+
+            customerEmail =
+                authData &&
+                authData.user &&
+                authData.user.email
+                    ? authData.user.email
+                    : "";
+
+        }
+        catch (emailError) {
+
+            console.warn(
+                "Profile email load error:",
+                emailError
             );
+
+        }
 
         document.getElementById(
             "profileEmail"
         ).innerText =
-            savedEmail || "Not available";
+            customerEmail || "Not available";
+
+        if (customerEmail) {
+
+            localStorage.setItem(
+                "sathiPayCustomerEmail",
+                customerEmail
+            );
+
+        }
+
+        /* =====================================
+           UPI — READ FROM NEW customer_upis TABLE
+        ===================================== */
+
+        let profileUPI = "";
+
+        try {
+
+            const {
+                data: upiRows,
+                error: upiError
+            } =
+                await supabaseClient
+
+                    .from("customer_upis")
+
+                    .select(
+                        "upi_id,enabled,created_at"
+                    )
+
+                    .eq(
+                        "customer_id",
+                        customerId
+                    )
+
+                    .order(
+                        "created_at",
+                        {
+                            ascending: true
+                        }
+                    );
+
+            if (upiError) {
+
+                console.warn(
+                    "Profile UPI load error:",
+                    upiError
+                );
+
+            }
+            else if (
+                Array.isArray(upiRows) &&
+                upiRows.length > 0
+            ) {
+
+                const enabledUPI =
+                    upiRows.find(
+                        row =>
+                            row &&
+                            row.enabled !== false &&
+                            row.upi_id
+                    );
+
+                const firstUPI =
+                    upiRows.find(
+                        row =>
+                            row &&
+                            row.upi_id
+                    );
+
+                profileUPI =
+                    (
+                        enabledUPI ||
+                        firstUPI ||
+                        {}
+                    ).upi_id || "";
+
+            }
+
+        }
+        catch (upiError) {
+
+            console.warn(
+                "Profile UPI exception:",
+                upiError
+            );
+
+        }
+
+        document.getElementById(
+            "profileUPI"
+        ).innerText =
+            profileUPI || "Not added";
 
 
         const status =
@@ -677,13 +795,6 @@ async function loadCustomerProfile() {
             customer.sell_on
                 ? "ON"
                 : "OFF";
-
-
-        document.getElementById(
-            "profileUPI"
-        ).innerText =
-            customer.upi_id ||
-            "Not added";
 
 
         localStorage.setItem(
