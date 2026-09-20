@@ -16,52 +16,40 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+
       - name: Build release APK
         working-directory: sathi-pay-app
         run: gradle assembleRelease --no-daemon
+
       - name: Prepare APK
         run: cp sathi-pay-app/app/build/outputs/apk/release/app-release.apk SathiPay.apk
+
       - name: Publish APK on mysathipay.com
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -e
-          RESPONSE=$(curl -sS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/contents/SathiPay.apk)
-          SHA=$(printf '%s' "$RESPONSE" | python -c "import sys,json; print(json.load(sys.stdin).get('sha',''))")
+          CONTENT=$(base64 -w 0 SathiPay.apk)
+          API="repos/${{ github.repository }}/contents/SathiPay.apk"
+          RESPONSE=$(gh api "$API" 2>/dev/null || true)
+          SHA=$(printf '%s' "$RESPONSE" | python -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || true)
+
           if [ -n "$SHA" ]; then
-            python - "$SHA" <<'PY' > payload.json
-import base64, json, sys
-with open("SathiPay.apk", "rb") as f:
-    content = base64.b64encode(f.read()).decode("ascii")
-print(json.dumps({
-    "message": "Update customer APK",
-    "content": content,
-    "sha": sys.argv[1],
-    "branch": "main"
-}))
-PY
+            gh api --method PUT "$API"               -f message="Update customer APK"               -f content="$CONTENT"               -f sha="$SHA"               -f branch="main"
           else
-            python - <<'PY' > payload.json
-import base64, json
-with open("SathiPay.apk", "rb") as f:
-    content = base64.b64encode(f.read()).decode("ascii")
-print(json.dumps({
-    "message": "Add customer APK",
-    "content": content,
-    "branch": "main"
-}))
-PY
+            gh api --method PUT "$API"               -f message="Add customer APK"               -f content="$CONTENT"               -f branch="main"
           fi
-          curl -fsSL -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" https://api.github.com/repos/${{ github.repository }}/contents/SathiPay.apk --data-binary @payload.json
 
       - name: Publish APK release
         uses: softprops/action-gh-release@v2
