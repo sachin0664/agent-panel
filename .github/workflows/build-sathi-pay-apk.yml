@@ -7,6 +7,7 @@ on:
       - 'customer-register.html'
       - 'assets/sathipay-logo-user.jpg'
       - 'assets/sathipay-logo-final.jpg'
+      - 'assets/sathipay-logo-exact.svg'
       - '.github/workflows/build-sathi-pay-apk.yml'
   workflow_dispatch:
 
@@ -31,7 +32,7 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Generate exact supplied Sathi Pay logo for Android
+      - name: Generate Sathi Pay SP vector logo for Android
         run: |
           sudo apt-get update
           sudo apt-get install -y imagemagick librsvg2-bin
