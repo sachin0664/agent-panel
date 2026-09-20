@@ -3433,7 +3433,18 @@ async function loadTransactions(
         titleDiv.innerText = title;
         const sub = document.createElement("div");
         sub.className = "transaction-sub";
-        sub.innerText = row.description || row.reference || (isCredit ? "Credit" : "Debit");
+        const isUpiDebit =
+            !isCredit &&
+            (
+                String(row.component || "").toLowerCase() === "manual" ||
+                String(row.reason || "").toLowerCase().includes("upi payment") ||
+                String(row.reference || "").toLowerCase().startsWith("upi-pay-")
+            );
+
+        sub.innerText =
+            isUpiDebit
+                ? "Sell Success"
+                : (row.description || row.reference || (isCredit ? "Credit" : "Debit"));
         main.appendChild(titleDiv);
         main.appendChild(sub);
 
@@ -3482,9 +3493,10 @@ function getTransactionTitle(
 
     if(
         text.includes("upi") &&
-        text.includes("payment")
+        text.includes("payment") &&
+        String(row.direction || "").toLowerCase() === "debit"
     ){
-        return "UPI Payment";
+        return "Sell Success";
     }
 
 
@@ -3579,7 +3591,12 @@ function getTransactionIcon(
 
     if(
         text.includes("withdraw") ||
-        text.includes("sell")
+        text.includes("sell") ||
+        (
+            text.includes("upi") &&
+            text.includes("payment") &&
+            String(row.direction || "").toLowerCase() === "debit"
+        )
     ){
 
         return "📈";
