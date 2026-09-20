@@ -3394,300 +3394,71 @@ async function loadTransactions(
     customerId
 ){
 
-    const list =
-        document.getElementById(
-            "transactionList"
-        );
+    const list = document.getElementById("transactionList");
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-        .from(
-            "wallet_ledger"
-        )
-        .select(`
-            id,
-            component,
-            direction,
-            amount,
-            reason,
-            reference,
-            created_at
-        `)
-        .eq(
-            "customer_id",
-            customerId
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        )
-        .limit(
-            20
-        );
+    const { data, error } = await supabaseClient.rpc("get_my_transaction_history", {p_limit:20});
 
     if(error){
-
-        console.error(
-            "Transaction error:",
-            error
-        );
-
-        list.innerHTML =
-            `<div class="no-notification">
-                No recent transactions.
-            </div>`;
-
+        console.error("Transaction error:", error);
+        list.innerHTML = "<div class=\"no-notification\">No recent transactions.</div>";
         return;
-
     }
 
-    /* Do not expose legacy withdrawal records in the final
-       customer product. Keep valid UPI/manual transactions. */
-    const visibleRows =
-        (data || [])
-        .filter(function(row){
-
-            const text =
-                (
-                    String(row.component || "") +
-                    " " +
-                    String(row.reason || "") +
-                    " " +
-                    String(row.reference || "")
-                ).toLowerCase();
-
-            return !(
-                String(row.direction || "").toLowerCase() === "debit" &&
-                (
-                    String(row.component || "").toLowerCase() === "withdrawal" ||
-                    text.includes("withdrawal") ||
-                    text.includes("withdraw")
-                )
-            );
-
-        })
-        .slice(0,5);
+    const visibleRows = (data || []).slice(0,5);
 
     if(!visibleRows.length){
-
-        list.innerHTML =
-            `<div class="no-notification">
-                No recent transactions.
-            </div>`;
-
+        list.innerHTML = "<div class=\"no-notification\">No recent transactions.</div>";
         return;
-
     }
 
     list.innerHTML = "";
 
-    visibleRows.forEach(
-        function(row){
+    visibleRows.forEach(function(row){
+        const direction = String(row.direction || "").toLowerCase();
+        const isCredit = direction === "credit";
+        const title = getTransactionTitle(row);
+        const icon = getTransactionIcon(row);
+        const amount = formatMoney(row.amount);
 
-            const direction =
-                String(
-                    row.direction || ""
-                ).toLowerCase();
+        const div = document.createElement("div");
+        div.className = "transaction";
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "transaction-icon " + (isCredit ? "green-icon" : "pink-icon");
+        iconDiv.innerText = icon;
 
-            const isCredit =
-                direction === "credit";
+        const main = document.createElement("div");
+        main.className = "transaction-main";
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "transaction-title";
+        titleDiv.innerText = title;
+        const sub = document.createElement("div");
+        sub.className = "transaction-sub";
+        sub.innerText = row.description || row.reference || (isCredit ? "Credit" : "Debit");
+        main.appendChild(titleDiv);
+        main.appendChild(sub);
 
-            const title =
-                getTransactionTitle(
-                    row
-                );
+        const right = document.createElement("div");
+        right.className = "transaction-amount";
+        const amountDiv = document.createElement("div");
+        amountDiv.className = isCredit ? "credit" : "debit";
+        amountDiv.innerText = (isCredit ? "+ " : "- ") + amount;
+        const status = document.createElement("span");
+        status.className = "transaction-status";
+        status.innerText = row.status || (isCredit ? "Completed" : "Processed");
+        const time = document.createElement("div");
+        time.className = "transaction-time";
+        time.innerText = formatDateTime(row.created_at);
+        right.appendChild(amountDiv);
+        right.appendChild(status);
+        right.appendChild(time);
 
-            const icon =
-                getTransactionIcon(
-                    row
-                );
-
-            const amount =
-                formatMoney(
-                    row.amount
-                );
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "transaction";
-
-            const iconDiv =
-                document.createElement(
-                    "div"
-                );
-
-            iconDiv.className =
-                "transaction-icon " +
-                (
-                    isCredit
-                    ? "green-icon"
-                    : "pink-icon"
-                );
-
-            iconDiv.innerText =
-                icon;
-
-            const main =
-                document.createElement(
-                    "div"
-                );
-
-            main.className =
-                "transaction-main";
-
-            const titleDiv =
-                document.createElement(
-                    "div"
-                );
-
-            titleDiv.className =
-                "transaction-title";
-
-            titleDiv.innerText =
-                title;
-
-            const sub =
-                document.createElement(
-                    "div"
-                );
-
-            sub.className =
-                "transaction-sub";
-
-            const transactionText =
-                (
-                    String(
-                        row.component || ""
-                    ) +
-                    " " +
-                    String(
-                        row.reason || ""
-                    ) +
-                    " " +
-                    String(
-                        row.reference || ""
-                    )
-                ).toLowerCase();
-
-            const isSellTransaction =
-                transactionText.includes("withdraw") ||
-                transactionText.includes("sell");
-
-            sub.innerText =
-                isSellTransaction
-                ? "Approved customer sell"
-                : (
-                    row.reason ||
-                    row.reference ||
-                    (
-                        isCredit
-                        ? "Credit"
-                        : "Debit"
-                    )
-                );
-
-            main.appendChild(
-                titleDiv
-            );
-
-            main.appendChild(
-                sub
-            );
-
-            const right =
-                document.createElement(
-                    "div"
-                );
-
-            right.className =
-                "transaction-amount";
-
-            const amountDiv =
-                document.createElement(
-                    "div"
-                );
-
-            amountDiv.className =
-                isCredit
-                ? "credit"
-                : "debit";
-
-            amountDiv.innerText =
-                (
-                    isCredit
-                    ? "+ "
-                    : "- "
-                ) +
-                amount;
-
-            const status =
-                document.createElement(
-                    "span"
-                );
-
-            status.className =
-                "transaction-status";
-
-            status.innerText =
-                isCredit
-                ? "Completed"
-                : "Processed";
-
-            const time =
-                document.createElement(
-                    "div"
-                );
-
-            time.className =
-                "transaction-time";
-
-            time.innerText =
-                formatDateTime(
-                    row.created_at
-                );
-
-            right.appendChild(
-                amountDiv
-            );
-
-            right.appendChild(
-                status
-            );
-
-            right.appendChild(
-                time
-            );
-
-            div.appendChild(
-                iconDiv
-            );
-
-            div.appendChild(
-                main
-            );
-
-            div.appendChild(
-                right
-            );
-
-            list.appendChild(
-                div
-            );
-
-        }
-    );
+        div.appendChild(iconDiv);
+        div.appendChild(main);
+        div.appendChild(right);
+        list.appendChild(div);
+    });
 
 }
-
 
 function getTransactionTitle(
     row
@@ -3707,6 +3478,14 @@ function getTransactionTitle(
                 row.reference || ""
             )
         ).toLowerCase();
+
+
+    if(
+        text.includes("upi") &&
+        text.includes("payment")
+    ){
+        return "UPI Payment";
+    }
 
 
     if(
@@ -3765,18 +3544,10 @@ function getTransactionTitle(
 
 
     if(
-        (
-            text.includes("upi") &&
-            text.includes("payment")
-        ) &&
-        (
-            String(row.direction || "").toLowerCase() === "debit" ||
-            String(row.component || "").toLowerCase() === "manual"
-        )
+        text.includes("upi") &&
+        text.includes("payment")
     ){
-
-        return "Sell Success";
-
+        return "UPI Payment";
     }
 
 
