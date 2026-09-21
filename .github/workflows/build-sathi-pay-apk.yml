@@ -9,6 +9,8 @@ on:
       - 'assets/sathipay-logo-user.jpg'
       - 'assets/sathipay-logo-final.jpg'
       - 'assets/sathipay-logo-exact.svg'
+      - 'assets/sathipay-logo.svg'
+      - 'assets/sathipay-app-icon.svg'
       - '.github/workflows/build-sathi-pay-apk.yml'
   workflow_dispatch:
 
@@ -38,7 +40,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y librsvg2-bin imagemagick
           mkdir -p sathi-pay-app/app/src/main/res/drawable
-          rsvg-convert -w 512 -h 512 assets/sathipay-logo-exact.svg > sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
+          rsvg-convert -w 512 -h 512 assets/sathipay-app-icon.svg > sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
           identify sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
 
       - name: Set up Gradle build
