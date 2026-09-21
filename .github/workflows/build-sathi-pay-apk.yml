@@ -57,7 +57,7 @@ jobs:
           RESPONSE=$(gh api "$API" 2>/dev/null || true)
           SHA=$(printf '%s' "$RESPONSE" | python -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || true)
 
-          python - "$SHA" > apk-payload.json <<'PY'
+          python - "$SHA" <<'PY'
 import base64, json, sys
 payload = {
     "message": "Update customer APK" if sys.argv[1] else "Add customer APK",
