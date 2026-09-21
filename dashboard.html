@@ -2811,6 +2811,39 @@ async function shareReferral(){
 
     };
 
+    /*
+       When running inside the Sathi Pay Android app, use the
+       native Android share chooser. Android WebView does not
+       reliably expose navigator.share(), so this prevents the
+       Share button from falling back to copy-only behavior.
+    */
+    if(
+        window.SathiPayAndroid &&
+        typeof window.SathiPayAndroid.shareText === "function"
+    ){
+
+        try{
+
+            window.SathiPayAndroid.shareText(
+                shareData.title,
+                shareData.text,
+                shareData.url
+            );
+
+            return;
+
+        }
+        catch(error){
+
+            console.log(
+                "Native share unavailable.",
+                error
+            );
+
+        }
+
+    }
+
     if(
         navigator.share
     ){
@@ -2821,25 +2854,25 @@ async function shareReferral(){
                 shareData
             );
 
+            return;
+
         }
         catch(error){
 
             console.log(
-                "Share cancelled."
+                "Web share unavailable.",
+                error
             );
 
         }
 
     }
-    else{
 
-        await copyReferralLink();
+    await copyReferralLink();
 
-        alert(
-            "Referral link copied. You can now share it."
-        );
-
-    }
+    alert(
+        "Referral link copied. You can now share it."
+    );
 
 }
 
