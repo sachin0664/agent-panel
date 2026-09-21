@@ -1,1 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><image href="sathipay-logo-user.jpg" x="0" y="0" width="256" height="256" preserveAspectRatio="xMidYMid meet"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Sathi Pay logo">
+  <defs>
+    <linearGradient id="shield" x1="24" y1="24" x2="232" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1677ff"/>
+      <stop offset="0.55" stop-color="#1557d9"/>
+      <stop offset="1" stop-color="#11c98b"/>
+    </linearGradient>
+    <linearGradient id="crown" x1="72" y1="26" x2="184" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffe44d"/>
+      <stop offset="1" stop-color="#f5b900"/>
+    </linearGradient>
+    <linearGradient id="p" x1="120" y1="92" x2="180" y2="178" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#35f0ad"/>
+      <stop offset="1" stop-color="#0ecb87"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Crown -->
+  <path d="M70 63 L78 31 L101 49 L128 20 L155 49 L178 31 L186 63 Z"
+        fill="url(#crown)" stroke="#e2a900" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M72 63 H184 L178 76 H78 Z" fill="#ffd33b"/>
+  <circle cx="78" cy="31" r="5" fill="#fff3a1"/>
+  <circle cx="128" cy="20" r="5" fill="#fff3a1"/>
+  <circle cx="178" cy="31" r="5" fill="#fff3a1"/>
+
+  <!-- Main mark -->
+  <rect x="48" y="68" width="160" height="142" rx="34" fill="url(#shield)"/>
+  <path d="M91 96 C77 96 69 106 69 121 V168 C69 181 78 190 91 190 H108 V151 H96 V126 C96 120 100 116 106 116 H118 V96 Z"
+        fill="#ffffff"/>
+  <path d="M122 96 H151 C175 96 188 109 188 130 C188 151 175 164 151 164 H139 V190 H122 Z
+           M139 115 V145 H149 C162 145 169 140 169 130 C169 120 162 115 149 115 Z"
+        fill="url(#p)"/>
+
+  <!-- Diagonal signature -->
+  <path d="M77 184 L177 96" stroke="#ffffff" stroke-width="13" stroke-linecap="round" opacity=".92"/>
+  <path d="M85 191 L181 107" stroke="#18d99a" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Sathi Pay wordmark -->
+  <text x="128" y="238" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="-0.7">
+    <tspan fill="#1677ff">Sathi</tspan><tspan fill="#16d79a">Pay</tspan>
+  </text>
+</svg>
