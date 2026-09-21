@@ -137,7 +137,7 @@ public class MainActivity extends Activity {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, text + "\\n" + url);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, text + "\n" + url);
                 startActivity(Intent.createChooser(shareIntent, "Share with"));
             }
         }, "SathiPayAndroid");
