@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.webkit.CookieManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -129,6 +130,17 @@ public class MainActivity extends Activity {
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
+
+        webView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void shareText(String title, String text, String url) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, text + "\\n" + url);
+                startActivity(Intent.createChooser(shareIntent, "Share with"));
+            }
+        }, "SathiPayAndroid");
 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
