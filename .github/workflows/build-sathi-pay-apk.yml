@@ -53,16 +53,22 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -e
-          CONTENT=$(base64 -w 0 SathiPay.apk)
           API="repos/${{ github.repository }}/contents/SathiPay.apk"
           RESPONSE=$(gh api "$API" 2>/dev/null || true)
           SHA=$(printf '%s' "$RESPONSE" | python -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || true)
 
-          if [ -n "$SHA" ]; then
-            gh api --method PUT "$API" -f message="Update customer APK" -f content="$CONTENT" -f sha="$SHA" -f branch="main"
-          else
-            gh api --method PUT "$API" -f message="Add customer APK" -f content="$CONTENT" -f branch="main"
-          fi
+          python - "$SHA" > apk-payload.json <<'PY'
+import base64, json, sys
+payload = {
+    "message": "Update customer APK" if sys.argv[1] else "Add customer APK",
+    "content": base64.b64encode(open("SathiPay.apk","rb").read()).decode("ascii"),
+    "branch": "main",
+}
+if sys.argv[1]:
+    payload["sha"] = sys.argv[1]
+json.dump(payload, open("apk-payload.json","w"))
+PY
+          gh api --method PUT "$API" --input apk-payload.json
 
       - name: Publish APK release
         uses: softprops/action-gh-release@v2
