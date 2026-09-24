@@ -4725,6 +4725,20 @@ function renderDeposit(d){
             <div class="row">
 
                 <span class="label">
+                    Customer UID
+                </span>
+
+                <span class="value">
+                    ${escapeHtml(
+                        d.customer?.uid || "-"
+                    )}
+                </span>
+
+            </div>
+
+            <div class="row">
+
+                <span class="label">
                     UTR
                 </span>
 
@@ -4850,7 +4864,7 @@ async function loadDeposits(){
             statuses.map(status =>
                 supabaseClient
                     .from("customer_deposits")
-                    .select("*",{count:"exact"})
+                    .select("*, customer:customers(uid)",{count:"exact"})
                     .eq("status",status)
                     .order("id",{ascending:false})
                     .limit(50)
