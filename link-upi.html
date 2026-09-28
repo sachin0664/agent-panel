@@ -1540,6 +1540,14 @@ forgotPinBtn.addEventListener(
 
     try{
 
+      localStorage.setItem(
+        'sathiPayRecoveryType',
+        JSON.stringify({
+          type: 'upi',
+          time: Date.now()
+        })
+      );
+
       const {
         error
       } =
@@ -1555,6 +1563,10 @@ forgotPinBtn.addEventListener(
         console.error(
           'UPI PIN reset email error:',
           error
+        );
+
+        localStorage.removeItem(
+          'sathiPayRecoveryType'
         );
 
         msg.style.color = '#dc2626';
