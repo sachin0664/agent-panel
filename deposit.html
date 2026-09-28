@@ -768,7 +768,7 @@ body {
                 </span>
 
                 <strong id="commissionRate">
-                    6%
+                    4.5%
                 </strong>
 
             </div>
@@ -1032,7 +1032,9 @@ function updateCommission() {
     document.getElementById(
         "commissionRate"
     ).textContent =
-        Math.round(rate * 100) + "%";
+        rate === 0.045
+            ? "4.5%"
+            : Math.round(rate * 100) + "%";
 
 
     document.getElementById(
