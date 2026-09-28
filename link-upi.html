@@ -1624,6 +1624,19 @@ addBtn.onclick = async () => {
   saveBtn.textContent =
     'Save UPI';
 
+  /*
+   * Load the real logged-in customer before
+   * checking the customer-level UPI PIN.
+   */
+  customerId =
+    await getCustomerId();
+
+  if(!customerId){
+
+    return;
+
+  }
+
   pinRequired = false;
 
   pinBox.style.display = 'none';
@@ -1698,6 +1711,20 @@ document.getElementById(
 
     msg.textContent =
       'Maximum 3 UPI IDs allowed.';
+
+    return;
+
+  }
+
+
+  /*
+   * PIN setup/verification must always use
+   * the currently logged-in Sathi Pay customer.
+   */
+  customerId =
+    await getCustomerId();
+
+  if(!customerId){
 
     return;
 
@@ -1907,21 +1934,6 @@ document.getElementById(
       'Incorrect UPI PIN. Please enter the same PIN you set earlier.';
 
     upiPin.focus();
-    return;
-
-  }
-
-
-  /* =================================
-     GET SAVED CUSTOMER ID
-  ================================= */
-
-  customerId =
-    await getCustomerId();
-
-
-  if(!customerId){
-
     return;
 
   }
