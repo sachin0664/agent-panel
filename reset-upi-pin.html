@@ -293,8 +293,6 @@ form.addEventListener(
 
     savePin.textContent = 'PIN Updated';
 
-    await supabaseClient.auth.signOut();
-
     setTimeout(
       () => {
         window.location.href =
