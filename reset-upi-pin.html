@@ -116,7 +116,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
   <h1>Reset UPI PIN</h1>
 
   <p class="sub">
-    Verify your registered email and create a new 6-digit PIN.
+    Use the secure Sathi Pay email link to create a new 6-digit UPI PIN.
   </p>
 
   <form id="pinForm">
@@ -261,7 +261,7 @@ form.addEventListener(
       error
     } =
       await supabaseClient.rpc(
-        'set_customer_upi_pin',
+        'reset_customer_upi_pin',
         {
           p_pin: pin
         }
