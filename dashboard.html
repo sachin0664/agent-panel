@@ -181,6 +181,41 @@ header{
     fill:white;
 }
 
+.profile-menu{
+    position:absolute;
+    top:72px;
+    right:25px;
+    width:150px;
+    background:white;
+    border:1px solid #e4edf7;
+    border-radius:14px;
+    box-shadow:0 14px 35px rgba(10,45,90,.18);
+    padding:7px;
+    display:none;
+    z-index:6000;
+}
+
+.profile-menu.show{
+    display:block;
+}
+
+.profile-menu button{
+    width:100%;
+    border:0;
+    background:white;
+    color:#173e79;
+    border-radius:10px;
+    padding:11px 12px;
+    text-align:left;
+    font-size:13px;
+    font-weight:900;
+}
+
+.profile-menu button:active{
+    background:#eef6ff;
+}
+
+
 
 /* =========================================================
    NOTIFICATIONS
@@ -1872,7 +1907,14 @@ header{
             </button>
 
 
-            <div class="profile-btn">
+            <div
+                class="profile-btn"
+                role="button"
+                tabindex="0"
+                aria-label="Profile menu"
+                onclick="toggleProfileMenu()"
+                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleProfileMenu();}"
+            >
 
                 <svg
                     viewBox="0 0 24 24"
@@ -1899,6 +1941,19 @@ header{
     </div>
 
 </header>
+
+<div
+    class="profile-menu"
+    id="profileMenu"
+    aria-label="Profile options">
+
+    <button
+        type="button"
+        onclick="logoutCustomer()">
+        Logout
+    </button>
+
+</div>
 
 
 <div
@@ -4123,6 +4178,53 @@ async function changeSellStatus(){
 
 
     toggle.disabled = false;
+
+}
+
+
+function toggleProfileMenu(){
+
+    const menu =
+        document.getElementById(
+            "profileMenu"
+        );
+
+    if(!menu){
+        return;
+    }
+
+    menu.classList.toggle("show");
+
+}
+
+
+async function logoutCustomer(){
+
+    const menu =
+        document.getElementById(
+            "profileMenu"
+        );
+
+    if(menu){
+        menu.classList.remove("show");
+    }
+
+    try{
+
+        await supabaseClient.auth.signOut();
+
+    }
+    catch(error){
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }
+
+    window.location.href =
+        "customer-login.html";
 
 }
 
