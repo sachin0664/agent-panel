@@ -1523,56 +1523,72 @@ forgotPinBtn.addEventListener(
         .trim()
         .toLowerCase();
 
+    /*
+     * Use Supabase's recovery flow so the email contains
+     * a direct reset link for the logged-in customer's
+     * UPI PIN reset page.
+     */
     const redirectTo =
-      window.location.origin +
-      window.location.pathname
-        .replace(
-          'link-upi.html',
-          'reset-upi-pin.html'
-        );
+      'https://mysathipay.com/reset-upi-pin.html';
 
     forgotPinBtn.style.pointerEvents = 'none';
-    forgotPinBtn.textContent = 'Sending verification...';
+    forgotPinBtn.textContent = 'Sending reset link...';
 
     msg.style.color = '#2563eb';
     msg.textContent =
-      'Sending verification link to your registered email...';
+      'Sending UPI PIN reset link to your registered email...';
 
-    const {
-      error
-    } =
-      await supabaseClient.auth.signInWithOtp({
-        email,
-        options: {
-          shouldCreateUser: false,
-          emailRedirectTo: redirectTo
-        }
-      });
+    try{
 
-    if(error){
+      const {
+        error
+      } =
+        await supabaseClient.auth.resetPasswordForEmail(
+          email,
+          {
+            redirectTo: redirectTo
+          }
+        );
+
+      if(error){
+
+        console.error(
+          'UPI PIN reset email error:',
+          error
+        );
+
+        msg.style.color = '#dc2626';
+        msg.textContent =
+          'Unable to send reset link: ' +
+          (error.message || 'Please try again.');
+
+        return;
+
+      }
+
+      msg.style.color = '#15803d';
+      msg.textContent =
+        '✅ UPI PIN reset link sent. Check your registered email.';
+
+    }
+    catch(error){
 
       console.error(
-        'UPI PIN verification email error:',
+        'UPI PIN reset request error:',
         error
       );
 
       msg.style.color = '#dc2626';
       msg.textContent =
-        'Unable to send verification email: ' +
-        (error.message || 'Unknown error');
+        'Unable to send reset link. Please try again.';
+
+    }
+    finally{
 
       forgotPinBtn.style.pointerEvents = '';
       forgotPinBtn.textContent = 'Forgot PIN?';
-      return;
 
     }
-
-    msg.style.color = '#15803d';
-    msg.textContent =
-      '✅ Verification link sent. Check your registered email.';
-
-    forgotPinBtn.style.pointerEvents = '';
-    forgotPinBtn.textContent = 'Forgot PIN?';
 
   }
 );
