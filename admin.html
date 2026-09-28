@@ -4433,11 +4433,13 @@ async function permanentlyDeleteCustomer(customerId){
             data,
             error
         } =
-        await supabaseClient.rpc(
-            "admin_permanently_delete_customer",
+        await supabaseClient.functions.invoke(
+            "admin-permanent-delete-customer",
             {
-                p_customer_id:
-                    customerId
+                body: {
+                    customer_id:
+                        customerId
+                }
             }
         );
 
