@@ -149,6 +149,93 @@
 
 <script src="js/app.js?v=6"></script>
 
+<script>
+/* =====================================
+   RECOVERY ROUTER
+   Keeps Password Reset and UPI PIN Reset
+   on their own pages even if the email
+   link first opens the Login page.
+===================================== */
+(function(){
+
+    const raw =
+        localStorage.getItem("sathiPayRecoveryType");
+
+    if(!raw){
+        return;
+    }
+
+    let recovery = null;
+
+    try{
+        recovery = JSON.parse(raw);
+    }
+    catch(error){
+        localStorage.removeItem("sathiPayRecoveryType");
+        return;
+    }
+
+    if(
+        !recovery ||
+        !recovery.type ||
+        !recovery.time ||
+        Date.now() - Number(recovery.time) > 30 * 60 * 1000
+    ){
+        localStorage.removeItem("sathiPayRecoveryType");
+        return;
+    }
+
+    const target =
+        recovery.type === "upi"
+            ? "reset-upi-pin.html"
+            : recovery.type === "password"
+                ? "reset-password.html"
+                : null;
+
+    if(!target){
+        localStorage.removeItem("sathiPayRecoveryType");
+        return;
+    }
+
+    let routed = false;
+
+    function routeToRecovery(){
+        if(routed){
+            return;
+        }
+
+        const hash =
+            String(window.location.hash || "");
+
+        if(
+            !hash.includes("type=recovery")
+        ){
+            return;
+        }
+
+        routed = true;
+        localStorage.removeItem("sathiPayRecoveryType");
+
+        window.location.replace(target);
+    }
+
+    supabaseClient.auth.onAuthStateChange(
+        function(event){
+
+            if(event === "PASSWORD_RECOVERY"){
+                routed = true;
+                localStorage.removeItem("sathiPayRecoveryType");
+                window.location.replace(target);
+            }
+
+        }
+    );
+
+    routeToRecovery();
+
+})();
+</script>
+
 
 <script>
 
