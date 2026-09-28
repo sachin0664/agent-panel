@@ -679,6 +679,97 @@ const pinNote =
 const forgotPinBtn =
   document.getElementById('forgotPinBtn');
 
+const providerField =
+  document.getElementById('provider').closest('.field');
+
+const upiField =
+  document.getElementById('upi').closest('.field');
+
+const minField =
+  document.getElementById('min').closest('.field');
+
+const maxField =
+  document.getElementById('max').closest('.field');
+
+const addUPIFields = [
+  providerField,
+  upiField,
+  minField,
+  maxField
+];
+
+function setAddUPIMode(){
+
+  addUPIFields.forEach(field => {
+
+    field.style.display =
+      pinRequired ? 'none' : '';
+
+    field.querySelectorAll(
+      'input, select'
+    ).forEach(input => {
+
+      input.required =
+        !pinRequired;
+
+    });
+
+  });
+
+  pinBox.style.display =
+    'block';
+
+  forgotPinBtn.style.display =
+    pinRequired ? 'none' : 'block';
+
+  saveBtn.textContent =
+    pinRequired ? 'Set PIN' : 'Save UPI';
+
+  if(pinRequired){
+
+    pinTitle.textContent =
+      '🔐 Set 6-Digit UPI PIN';
+
+    pinNote.textContent =
+      'Create your 6-digit UPI PIN once. You will use the same PIN for future UPI additions.';
+
+    upiPinConfirm.style.display =
+      'block';
+
+    upiPinConfirm.required =
+      true;
+
+    upiPin.placeholder =
+      '6-digit PIN';
+
+    upiPinConfirm.placeholder =
+      'Confirm PIN';
+
+  }
+  else{
+
+    pinTitle.textContent =
+      '🔐 Enter 6-Digit UPI PIN';
+
+    pinNote.textContent =
+      'Enter the same 6-digit PIN you set earlier to save this UPI ID.';
+
+    upiPinConfirm.value =
+      '';
+
+    upiPinConfirm.style.display =
+      'none';
+
+    upiPinConfirm.required =
+      false;
+
+    upiPin.placeholder =
+      'Enter 6-digit PIN';
+
+  }
+
+}
+
 let pinRequired = false;
 
 let customerId = null;
@@ -1355,60 +1446,17 @@ async function loadPinState(){
     );
 
     pinRequired = false;
-    pinBox.style.display = 'none';
+    setAddUPIMode();
     return;
 
   }
 
-  pinRequired = data !== true;
+  pinRequired =
+    data !== true;
 
-  pinBox.style.display = 'block';
-
-  if(pinRequired){
-
-    pinTitle.textContent =
-      '🔐 Set 6-Digit UPI PIN';
-
-    pinNote.textContent =
-      'Create your 6-digit UPI PIN once. You will use the same PIN for future UPI additions.';
-
-    upiPinConfirm.style.display =
-      'block';
-
-    upiPinConfirm.required =
-      true;
-
-    upiPin.placeholder =
-      '6-digit PIN';
-
-    upiPinConfirm.placeholder =
-      'Confirm PIN';
-
-  }
-  else{
-
-    pinTitle.textContent =
-      '🔐 Enter 6-Digit UPI PIN';
-
-    pinNote.textContent =
-      'Enter the same 6-digit PIN you set earlier to save this UPI ID.';
-
-    upiPinConfirm.value =
-      '';
-
-    upiPinConfirm.style.display =
-      'none';
-
-    upiPinConfirm.required =
-      false;
-
-    upiPin.placeholder =
-      'Enter 6-digit PIN';
-
-  }
+  setAddUPIMode();
 
 }
-
 /* =====================================
    PIN INPUT — DIGITS ONLY
 ===================================== */
@@ -1649,6 +1697,94 @@ document.getElementById(
   }
 
 
+  /* =================================
+     FIRST-TIME PIN SETUP
+  ================================= */
+
+  if(pinRequired){
+
+    const newPin =
+      upiPin.value.trim();
+
+    const confirmPin =
+      upiPinConfirm.value.trim();
+
+    if(!/^\d{6}$/.test(newPin)){
+
+      msg.textContent =
+        'UPI PIN must be exactly 6 digits.';
+
+      upiPin.focus();
+      return;
+
+    }
+
+    if(newPin !== confirmPin){
+
+      msg.textContent =
+        'UPI PINs do not match.';
+
+      upiPinConfirm.focus();
+      return;
+
+    }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent =
+      'Setting PIN...';
+
+    const {
+      data: pinSaved,
+      error: pinError
+    } =
+      await supabaseClient.rpc(
+        'set_customer_upi_pin',
+        {
+          p_pin: newPin
+        }
+      );
+
+    if(
+      pinError ||
+      pinSaved !== true
+    ){
+
+      console.error(
+        'UPI PIN Save Error:',
+        pinError
+      );
+
+      saveBtn.disabled = false;
+      saveBtn.textContent =
+        'Set PIN';
+
+      msg.textContent =
+        'Unable to set UPI PIN. Please try again.';
+
+      return;
+
+    }
+
+    pinRequired = false;
+
+    upiPin.value = '';
+    upiPinConfirm.value = '';
+
+    setAddUPIMode();
+
+    saveBtn.disabled = false;
+
+    msg.style.color =
+      '#15803d';
+
+    msg.textContent =
+      '✅ UPI PIN set successfully. Now add your UPI ID.';
+
+    return;
+
+  }
+
+
   const upi =
     document
       .getElementById('upi')
@@ -1727,9 +1863,6 @@ document.getElementById(
   const newPin =
     upiPin.value.trim();
 
-  const confirmPin =
-    upiPinConfirm.value.trim();
-
   if(!/^\d{6}$/.test(newPin)){
 
     msg.textContent =
@@ -1740,83 +1873,32 @@ document.getElementById(
 
   }
 
-  if(pinRequired && newPin !== confirmPin){
+  const {
+    data: pinVerified,
+    error: pinVerifyError
+  } =
+    await supabaseClient.rpc(
+      'verify_customer_upi_pin',
+      {
+        p_pin: newPin
+      }
+    );
+
+  if(
+    pinVerifyError ||
+    pinVerified !== true
+  ){
+
+    console.error(
+      'UPI PIN Verify Error:',
+      pinVerifyError
+    );
 
     msg.textContent =
-      'UPI PINs do not match.';
+      'Incorrect UPI PIN. Please enter the same PIN you set earlier.';
 
-    upiPinConfirm.focus();
+    upiPin.focus();
     return;
-
-  }
-
-
-
-  /* =================================
-     PIN CHECK / FIRST-TIME PIN SET
-  ================================= */
-
-  if(pinRequired){
-
-    const {
-      data: pinSaved,
-      error: pinError
-    } =
-      await supabaseClient.rpc(
-        'set_customer_upi_pin',
-        {
-          p_pin: newPin
-        }
-      );
-
-    if(
-      pinError ||
-      pinSaved !== true
-    ){
-
-      console.error(
-        'UPI PIN Save Error:',
-        pinError
-      );
-
-      msg.textContent =
-        'Unable to set UPI PIN. Please try again.';
-
-      return;
-
-    }
-
-  }
-  else{
-
-    const {
-      data: pinVerified,
-      error: pinVerifyError
-    } =
-      await supabaseClient.rpc(
-        'verify_customer_upi_pin',
-        {
-          p_pin: newPin
-        }
-      );
-
-    if(
-      pinVerifyError ||
-      pinVerified !== true
-    ){
-
-      console.error(
-        'UPI PIN Verify Error:',
-        pinVerifyError
-      );
-
-      msg.textContent =
-        'Incorrect UPI PIN. Please enter the same PIN you set earlier.';
-
-      upiPin.focus();
-      return;
-
-    }
 
   }
 
