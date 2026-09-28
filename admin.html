@@ -4456,7 +4456,7 @@ async function permanentlyDeleteCustomer(customerId){
         }
 
 
-        if(data !== true){
+        if(!data || data.ok !== true){
 
             alert(
                 "❌ Permanent delete failed."
@@ -4469,7 +4469,8 @@ async function permanentlyDeleteCustomer(customerId){
 
         alert(
             "✅ Customer permanently deleted.\n\n" +
-            "Purane customer records remove ho gaye hain. Ab same details se NEW registration ki ja sakti hai."
+            "Customer ka database data, login account aur payment screenshots remove ho gaye hain.\n\n" +
+            "Ab same details se NEW registration ki ja sakti hai."
         );
 
 
