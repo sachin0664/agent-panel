@@ -990,21 +990,21 @@ function getCommissionRate(amount) {
         Number(amount) || 0;
 
 
-    if (amount >= 20000) {
+    if (amount >= 25000) {
 
-        return 0.10;
+        return 0.06;
 
     }
 
 
     if (amount >= 10000) {
 
-        return 0.08;
+        return 0.05;
 
     }
 
 
-    return 0.06;
+    return 0.045;
 
 }
 
