@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sathi Pay - Reset UPI PIN</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#eef7ff,#f7f2ff,#effcf8);
+  color:#0f172a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px
+}
+.card{
+  width:100%;
+  max-width:460px;
+  background:#fff;
+  border-radius:26px;
+  padding:28px 22px;
+  box-shadow:0 22px 60px rgba(31,61,115,.16);
+  border:1px solid #e5edff;
+  position:relative;
+  overflow:hidden
+}
+.card:before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;height:7px;
+  background:linear-gradient(90deg,#087df5,#7548f5,#10b981)
+}
+.logo{
+  width:76px;height:76px;
+  margin:8px auto 14px;
+  display:block
+}
+h1{
+  text-align:center;
+  margin:0 0 7px;
+  font-size:28px
+}
+.sub{
+  text-align:center;
+  color:#64748b;
+  font-size:14px;
+  margin:0 0 24px
+}
+label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  color:#334155;
+  margin:15px 0 7px
+}
+input{
+  width:100%;
+  padding:15px;
+  border:1px solid #d7dce5;
+  border-radius:14px;
+  font-size:18px;
+  letter-spacing:5px;
+  text-align:center;
+  outline:none
+}
+input:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 0 4px rgba(37,99,235,.09)
+}
+button{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:15px;
+  margin-top:20px;
+  background:linear-gradient(100deg,#087ff5,#5538f5,#11d994);
+  color:#fff;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer
+}
+button:disabled{opacity:.6;cursor:not-allowed}
+#message{
+  min-height:20px;
+  margin-top:14px;
+  text-align:center;
+  font-size:13px;
+  line-height:1.5
+}
+.back{
+  display:block;
+  text-align:center;
+  margin-top:18px;
+  color:#2563eb;
+  text-decoration:none;
+  font-weight:700;
+  font-size:14px
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <img
+    class="logo"
+    src="assets/sathipay-logo.svg?v=13"
+    alt="Sathi Pay"
+  >
+
+  <h1>Reset UPI PIN</h1>
+
+  <p class="sub">
+    Verify your registered email and create a new 6-digit PIN.
+  </p>
+
+  <form id="pinForm">
+
+    <label for="newPin">New 6-Digit PIN</label>
+
+    <input
+      id="newPin"
+      type="password"
+      inputmode="numeric"
+      maxlength="6"
+      minlength="6"
+      pattern="[0-9]{6}"
+      autocomplete="new-password"
+      placeholder="••••••"
+      required
+    >
+
+    <label for="confirmPin">Confirm 6-Digit PIN</label>
+
+    <input
+      id="confirmPin"
+      type="password"
+      inputmode="numeric"
+      maxlength="6"
+      minlength="6"
+      pattern="[0-9]{6}"
+      autocomplete="new-password"
+      placeholder="••••••"
+      required
+    >
+
+    <button type="submit" id="savePin">
+      Set New PIN
+    </button>
+
+  </form>
+
+  <div id="message"></div>
+
+  <a class="back" href="link-upi.html">
+    ← Back to Link UPI
+  </a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js?v=8"></script>
+
+<script>
+const form =
+  document.getElementById('pinForm');
+
+const newPin =
+  document.getElementById('newPin');
+
+const confirmPin =
+  document.getElementById('confirmPin');
+
+const savePin =
+  document.getElementById('savePin');
+
+const message =
+  document.getElementById('message');
+
+
+async function checkVerifiedUser(){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getUser();
+
+  if(
+    error ||
+    !data ||
+    !data.user
+  ){
+
+    savePin.disabled = true;
+
+    message.style.color = '#dc2626';
+    message.textContent =
+      'Verification link is invalid or expired. Please request a new email verification from Link UPI.';
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+
+form.addEventListener(
+  'submit',
+  async event => {
+
+    event.preventDefault();
+
+    message.textContent = '';
+    message.style.color = '#dc2626';
+
+    const pin =
+      newPin.value.trim();
+
+    const confirm =
+      confirmPin.value.trim();
+
+    if(!/^\d{6}$/.test(pin)){
+
+      message.textContent =
+        'PIN must be exactly 6 digits.';
+
+      newPin.focus();
+      return;
+
+    }
+
+    if(pin !== confirm){
+
+      message.textContent =
+        'PINs do not match.';
+
+      confirmPin.focus();
+      return;
+
+    }
+
+    if(!await checkVerifiedUser()){
+
+      return;
+
+    }
+
+    savePin.disabled = true;
+    savePin.textContent = 'Saving...';
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        'set_customer_upi_pin',
+        {
+          p_pin: pin
+        }
+      );
+
+    if(
+      error ||
+      data !== true
+    ){
+
+      console.error(
+        'UPI PIN reset error:',
+        error
+      );
+
+      message.style.color = '#dc2626';
+      message.textContent =
+        'Unable to reset PIN. Please try again.';
+
+      savePin.disabled = false;
+      savePin.textContent = 'Set New PIN';
+      return;
+
+    }
+
+    message.style.color = '#15803d';
+    message.textContent =
+      '✅ UPI PIN updated successfully.';
+
+    savePin.textContent = 'PIN Updated';
+
+    await supabaseClient.auth.signOut();
+
+    setTimeout(
+      () => {
+        window.location.href =
+          'link-upi.html';
+      },
+      900
+    );
+
+  }
+);
+
+
+checkVerifiedUser();
+</script>
+
+</body>
+</html>
