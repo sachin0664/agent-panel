@@ -182,9 +182,9 @@ header{
 }
 
 .profile-menu{
-    position:absolute;
-    top:72px;
-    right:25px;
+    position:fixed;
+    top:78px;
+    right:18px;
     width:150px;
     background:white;
     border:1px solid #e4edf7;
@@ -1907,13 +1907,11 @@ header{
             </button>
 
 
-            <div
+            <button
+                type="button"
                 class="profile-btn"
-                role="button"
-                tabindex="0"
                 aria-label="Profile menu"
                 onclick="toggleProfileMenu()"
-                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleProfileMenu();}"
             >
 
                 <svg
@@ -1934,7 +1932,7 @@ header{
 
                 </svg>
 
-            </div>
+            </button>
 
         </div>
 
