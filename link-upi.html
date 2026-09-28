@@ -1447,7 +1447,12 @@ async function loadPinState(){
       error
     );
 
-    pinRequired = false;
+    /*
+     * If PIN-state lookup fails, never assume a PIN
+     * already exists. First-time users must still see
+     * the PIN setup screen.
+     */
+    pinRequired = true;
     setAddUPIMode();
     return;
 
