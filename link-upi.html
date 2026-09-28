@@ -1436,7 +1436,7 @@ async function loadPinState(){
     error
   } =
     await supabaseClient
-      .rpc('has_customer_upi_pin', {
+      .rpc('get_customer_upi_pin_state', {
         p_customer_id: customerId
       });
 
@@ -1745,7 +1745,7 @@ document.getElementById(
       error: pinError
     } =
       await supabaseClient.rpc(
-        'set_customer_upi_pin',
+        'create_customer_upi_pin',
         {
           p_customer_id: customerId,
           p_pin: newPin
