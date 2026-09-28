@@ -1301,16 +1301,16 @@ body.pageReady{
 
         <div class="commissionModalRates">
             <div class="rate">
-                <span>₹1 – ₹9,999</span>
+                <span>₹100 – ₹9,999</span>
+                <b>4.5%</b>
+            </div>
+            <div class="rate">
+                <span>₹10,000 – ₹24,999</span>
+                <b>5%</b>
+            </div>
+            <div class="rate">
+                <span>₹25,000+</span>
                 <b>6%</b>
-            </div>
-            <div class="rate">
-                <span>₹10,000 – ₹19,999</span>
-                <b>8%</b>
-            </div>
-            <div class="rate">
-                <span>₹20,000+</span>
-                <b>10%</b>
             </div>
         </div>
     </div>
@@ -2196,19 +2196,19 @@ function commissionRate(amount){
     const n =
         Number(amount || 0);
 
-    if(n >= 20000){
+    if(n >= 25000){
 
-        return 0.10;
+        return 0.06;
 
     }
 
     if(n >= 10000){
 
-        return 0.08;
+        return 0.05;
 
     }
 
-    return 0.06;
+    return 0.045;
 
 }
 
