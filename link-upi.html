@@ -1523,55 +1523,44 @@ forgotPinBtn.addEventListener(
         .trim()
         .toLowerCase();
 
-    /*
-     * Use Supabase's recovery flow so the email contains
-     * a direct reset link for the logged-in customer's
-     * UPI PIN reset page.
-     */
-    const redirectTo =
-      'https://mysathipay.com/reset-upi-pin.html';
-
     forgotPinBtn.style.pointerEvents = 'none';
-    forgotPinBtn.textContent = 'Sending reset link...';
+    forgotPinBtn.textContent = 'Sending code...';
 
     msg.style.color = '#2563eb';
     msg.textContent =
-      'Sending UPI PIN reset link to your registered email...';
+      'Sending 6-digit verification code to your registered email...';
 
     try{
 
-      localStorage.setItem(
-        'sathiPayRecoveryType',
-        JSON.stringify({
-          type: 'upi',
-          time: Date.now()
-        })
+      sessionStorage.setItem(
+        'sathiPayUPIPinResetEmail',
+        email
       );
 
       const {
         error
       } =
-        await supabaseClient.auth.resetPasswordForEmail(
-          email,
-          {
-            redirectTo: redirectTo
+        await supabaseClient.auth.signInWithOtp({
+          email: email,
+          options: {
+            shouldCreateUser: false
           }
-        );
+        });
 
       if(error){
 
         console.error(
-          'UPI PIN reset email error:',
+          'UPI PIN OTP error:',
           error
         );
 
-        localStorage.removeItem(
-          'sathiPayRecoveryType'
+        sessionStorage.removeItem(
+          'sathiPayUPIPinResetEmail'
         );
 
         msg.style.color = '#dc2626';
         msg.textContent =
-          'Unable to send reset link: ' +
+          'Unable to send verification code: ' +
           (error.message || 'Please try again.');
 
         return;
@@ -1580,19 +1569,31 @@ forgotPinBtn.addEventListener(
 
       msg.style.color = '#15803d';
       msg.textContent =
-        '✅ UPI PIN reset link sent. Check your registered email.';
+        '✅ 6-digit code sent. Open the PIN reset page and enter the code from your email.';
+
+      setTimeout(
+        () => {
+          window.location.href =
+            'reset-upi-pin.html';
+        },
+        700
+      );
 
     }
     catch(error){
 
       console.error(
-        'UPI PIN reset request error:',
+        'UPI PIN OTP request error:',
         error
+      );
+
+      sessionStorage.removeItem(
+        'sathiPayUPIPinResetEmail'
       );
 
       msg.style.color = '#dc2626';
       msg.textContent =
-        'Unable to send reset link. Please try again.';
+        'Unable to send verification code. Please try again.';
 
     }
     finally{
