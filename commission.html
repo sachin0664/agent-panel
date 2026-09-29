@@ -1261,9 +1261,13 @@ async function loadEarnings() {
 
 
                     const percentage =
-                        Number(
-                            item.percentage || 0
-                        );
+                        level === "A"
+                            ? 1
+                            : level === "B"
+                                ? 0.5
+                                : level === "C"
+                                    ? 0.2
+                                    : 0;
 
 
                     const status =
