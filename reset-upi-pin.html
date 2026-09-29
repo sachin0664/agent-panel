@@ -191,32 +191,10 @@ button:disabled{opacity:.6;cursor:not-allowed}
 <script src="js/app.js?v=8"></script>
 
 <script>
-const otpCode =
-  document.getElementById('otpCode');
-
-const verifyOtpBtn =
-  document.getElementById('verifyOtpBtn');
-
-const otpStep =
-  document.getElementById('otpStep');
-
-const pinStep =
-  document.getElementById('pinStep');
-
-const form =
-  document.getElementById('pinForm');
-
-const newPin =
-  document.getElementById('newPin');
-
-const confirmPin =
-  document.getElementById('confirmPin');
-
-const savePin =
-  document.getElementById('savePin');
-
-const message =
-  document.getElementById('message');
+const newPin = document.getElementById('newPin');
+const confirmPin = document.getElementById('confirmPin');
+const savePin = document.getElementById('savePin');
+const message = document.getElementById('message');
 
 function showMessage(text, color){
   message.style.color = color || '#dc2626';
@@ -224,237 +202,142 @@ function showMessage(text, color){
 }
 
 function digitsOnly(input){
-  input.value =
-    input.value
-      .replace(/\D/g, '')
-      .slice(0, 6);
+  input.value = input.value.replace(/\\D/g, '').slice(0, 6);
 }
 
-otpCode.addEventListener('input', () => {
-  digitsOnly(otpCode);
-});
-
 [newPin, confirmPin].forEach(input => {
-  input.addEventListener('input', () => {
-    digitsOnly(input);
-  });
+  input.addEventListener('input', () => digitsOnly(input));
 });
 
-verifyOtpBtn.addEventListener(
-  'click',
-  async () => {
+async function ensureRecoverySession(){
+  const { data, error } =
+    await supabaseClient.auth.getSession();
 
-    showMessage('', '#dc2626');
-
-    const email =
-      String(
-        sessionStorage.getItem(
-          'sathiPayUPIPinResetEmail'
-        ) || ''
-      )
-      .trim()
-      .toLowerCase();
-
-    const token =
-      otpCode.value.trim();
-
-    if(!email){
-
-      showMessage(
-        'Reset session expired. Please click Forgot PIN again.',
-        '#dc2626'
-      );
-
-      return;
-
-    }
-
-    if(!/^\d{6}$/.test(token)){
-
-      showMessage(
-        'Enter the 6-digit code from your email.',
-        '#dc2626'
-      );
-
-      otpCode.focus();
-      return;
-
-    }
-
-    verifyOtpBtn.disabled = true;
-    verifyOtpBtn.textContent = 'Verifying...';
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth.verifyOtp({
-        email: email,
-        token: token,
-        type: 'email'
-      });
-
-    if(
-      error ||
-      !data ||
-      !data.session ||
-      !data.user
-    ){
-
-      console.error(
-        'UPI PIN OTP verify error:',
-        error
-      );
-
-      verifyOtpBtn.disabled = false;
-      verifyOtpBtn.textContent = 'Verify Code';
-
-      showMessage(
-        'Invalid or expired code. Please enter the latest 6-digit code.',
-        '#dc2626'
-      );
-
-      return;
-
-    }
-
-    otpStep.style.display = 'none';
-    pinStep.style.display = 'block';
-
-    otpCode.required = false;
-    newPin.required = true;
-    confirmPin.required = true;
-
-    verifyOtpBtn.disabled = false;
-    verifyOtpBtn.textContent = 'Verify Code';
-
+  if(
+    error ||
+    !data ||
+    !data.session ||
+    !data.session.user
+  ){
     showMessage(
-      '✅ Code verified. Now create your new 6-digit UPI PIN.',
-      '#15803d'
+      'This UPI PIN reset link is expired or invalid. Please click Forgot PIN again.',
+      '#dc2626'
     );
-
-    newPin.focus();
-
+    savePin.disabled = true;
+    return false;
   }
-);
 
-form.addEventListener(
+  return true;
+}
+
+/*
+ * This page is only for UPI PIN recovery.
+ * It uses the authenticated recovery session to authorize
+ * the UPI PIN RPC; it does not change the customer's login password.
+ */
+(async function(){
+  const ready = await ensureRecoverySession();
+
+  if(!ready){
+    return;
+  }
+
+  showMessage(
+    'Enter your new 6-digit UPI PIN below.',
+    '#2563eb'
+  );
+
+  newPin.focus();
+})();
+
+document.getElementById('pinForm').addEventListener(
   'submit',
   async event => {
-
     event.preventDefault();
 
-    if(pinStep.style.display === 'none'){
-
+    const ready = await ensureRecoverySession();
+    if(!ready){
       return;
-
     }
 
-    showMessage('', '#dc2626');
+    const pin = newPin.value.trim();
+    const confirm = confirmPin.value.trim();
 
-    const pin =
-      newPin.value.trim();
-
-    const confirm =
-      confirmPin.value.trim();
-
-    if(!/^\d{6}$/.test(pin)){
-
+    if(!/^\\d{6}$/.test(pin)){
       showMessage(
-        'PIN must be exactly 6 digits.',
+        'UPI PIN must be exactly 6 digits.',
         '#dc2626'
       );
-
       newPin.focus();
       return;
-
     }
 
     if(pin !== confirm){
-
       showMessage(
-        'PINs do not match.',
+        'UPI PINs do not match.',
         '#dc2626'
       );
-
       confirmPin.focus();
       return;
-
     }
 
     savePin.disabled = true;
-    savePin.textContent = 'Saving...';
+    savePin.textContent = 'Updating...';
+    showMessage(
+      'Updating your UPI PIN...',
+      '#2563eb'
+    );
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.rpc(
-        'reset_customer_upi_pin',
-        {
-          p_pin: pin
-        }
+    try{
+      const { data, error } =
+        await supabaseClient.rpc(
+          'reset_customer_upi_pin',
+          { p_pin: pin }
+        );
+
+      if(error || data !== true){
+        console.error(
+          'UPI PIN reset error:',
+          error
+        );
+
+        savePin.disabled = false;
+        savePin.textContent = 'Set New PIN';
+        showMessage(
+          'Unable to reset PIN. Please try again.',
+          '#dc2626'
+        );
+        return;
+      }
+
+      showMessage(
+        '✅ UPI PIN updated successfully.',
+        '#15803d'
       );
+      savePin.textContent = 'PIN Updated';
 
-    if(
-      error ||
-      data !== true
-    ){
+      await supabaseClient.auth.signOut();
 
+      setTimeout(() => {
+        window.location.href = 'customer-login.html';
+      }, 1200);
+
+    }
+    catch(error){
       console.error(
-        'UPI PIN reset error:',
+        'UPI PIN reset exception:',
         error
       );
 
       savePin.disabled = false;
       savePin.textContent = 'Set New PIN';
-
       showMessage(
-        'Unable to reset PIN. Please try again.',
+        'Something went wrong. Please try again.',
         '#dc2626'
       );
-
-      return;
-
     }
-
-    sessionStorage.removeItem(
-      'sathiPayUPIPinResetEmail'
-    );
-
-    showMessage(
-      '✅ UPI PIN updated successfully.',
-      '#15803d'
-    );
-
-    savePin.textContent = 'PIN Updated';
-
-    setTimeout(
-      () => {
-        window.location.href =
-          'link-upi.html';
-      },
-      900
-    );
-
   }
 );
-
-const resetEmail =
-  sessionStorage.getItem(
-    'sathiPayUPIPinResetEmail'
-  );
-
-if(!resetEmail){
-
-  showMessage(
-    'Please return to Link UPI and click Forgot PIN to receive a new code.',
-    '#dc2626'
-  );
-
-  verifyOtpBtn.disabled = true;
-
-}
 </script>
 
 </body>
