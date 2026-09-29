@@ -246,6 +246,19 @@ body{
   margin-bottom:5px
 }
 
+.pin-warning{
+  display:none;
+  margin-bottom:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.4
+}
+
 .pin-note{
   font-size:12px;
   color:#64748b;
@@ -470,6 +483,13 @@ body{
       >
 
         <div
+          class="pin-warning"
+          id="pinWarning"
+        >
+          ⚠️ Important: UPI PIN cannot be reset. Please remember and keep your PIN safe.
+        </div>
+
+        <div
           class="pin-title"
           id="pinTitle"
         >
@@ -658,6 +678,9 @@ const pinTitle =
 const pinNote =
   document.getElementById('pinNote');
 
+const pinWarning =
+  document.getElementById('pinWarning');
+
 const providerField =
   document.getElementById('provider').closest('.field');
 
@@ -698,13 +721,12 @@ function setAddUPIMode(){
   pinBox.style.display =
     'block';
 
-  forgotPinBtn.style.display =
-    pinRequired ? 'none' : 'block';
-
   saveBtn.textContent =
     pinRequired ? 'Set PIN' : 'Save UPI';
 
   if(pinRequired){
+
+    pinWarning.style.display = 'block';
 
     pinTitle.textContent =
       '🔐 Set 6-Digit UPI PIN';
@@ -726,6 +748,8 @@ function setAddUPIMode(){
 
   }
   else{
+
+    pinWarning.style.display = 'none';
 
     pinTitle.textContent =
       '🔐 Enter 6-Digit UPI PIN';
