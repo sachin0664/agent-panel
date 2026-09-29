@@ -268,16 +268,6 @@ body{
   text-align:center
 }
 
-.pin-forgot{
-  display:block;
-  margin-top:9px;
-  color:#2563eb;
-  font-size:13px;
-  font-weight:700;
-  text-align:right;
-  text-decoration:none
-}
-
 @media(max-width:420px){
   .pin-inputs{grid-template-columns:1fr}
 }
@@ -521,14 +511,6 @@ body{
 
       </div>
 
-      <a
-        href="#"
-        class="pin-forgot"
-        id="forgotPinBtn"
-      >
-        Forgot PIN?
-      </a>
-
 
       <div class="actions">
 
@@ -675,9 +657,6 @@ const pinTitle =
 
 const pinNote =
   document.getElementById('pinNote');
-
-const forgotPinBtn =
-  document.getElementById('forgotPinBtn');
 
 const providerField =
   document.getElementById('provider').closest('.field');
@@ -1482,123 +1461,6 @@ async function loadPinState(){
 
       }
     );
-
-  }
-);
-
-
-/* =====================================
-   FORGOT PIN — EMAIL RESET LINK
-===================================== */
-
-forgotPinBtn.addEventListener(
-  'click',
-  async event => {
-
-    event.preventDefault();
-
-    const {
-      data: authData,
-      error: authError
-    } = await supabaseClient.auth.getUser();
-
-    if(
-      authError ||
-      !authData ||
-      !authData.user ||
-      !authData.user.email
-    ){
-      msg.style.color = '#dc2626';
-      msg.textContent =
-        'Please login again to reset your UPI PIN.';
-      return;
-    }
-
-    const email = String(authData.user.email)
-      .trim()
-      .toLowerCase();
-
-    forgotPinBtn.style.pointerEvents = 'none';
-    forgotPinBtn.textContent = 'Sending reset link...';
-
-    msg.style.color = '#2563eb';
-    msg.textContent =
-      'Sending UPI PIN reset link to your registered email...';
-
-    try{
-
-      /*
-       * Use Supabase password-recovery session only as a
-       * secure identity/recovery link. The user will NOT
-       * change their login password here. reset-upi-pin.html
-       * uses the recovery session only to authorize the UPI
-       * PIN update through reset_customer_upi_pin.
-       */
-      const resetUrl =
-        'https://mysathipay.com/reset-upi-pin.html';
-
-      localStorage.setItem(
-        'sathiPayRecoveryType',
-        JSON.stringify({
-          type: 'upi',
-          time: Date.now()
-        })
-      );
-
-      const { error } =
-        await supabaseClient.auth.resetPasswordForEmail(
-          email,
-          {
-            redirectTo: resetUrl
-          }
-        );
-
-      if(error){
-
-        console.error(
-          'UPI PIN reset link error:',
-          error
-        );
-
-        localStorage.removeItem(
-          'sathiPayRecoveryType'
-        );
-
-        msg.style.color = '#dc2626';
-        msg.textContent =
-          'Unable to send reset link: ' +
-          (error.message || 'Please try again.');
-
-        return;
-      }
-
-      msg.style.color = '#15803d';
-      msg.textContent =
-        '✅ UPI PIN reset link sent. Please check your email.';
-
-    }
-    catch(error){
-
-      console.error(
-        'UPI PIN reset link request error:',
-        error
-      );
-
-      localStorage.removeItem(
-        'sathiPayRecoveryType'
-      );
-
-      msg.style.color = '#dc2626';
-      msg.textContent =
-        'Unable to send reset link. Please try again.';
-
-    }
-    finally{
-
-      forgotPinBtn.style.pointerEvents = '';
-      forgotPinBtn.textContent = 'Forgot PIN?';
-
-    }
 
   }
 );
