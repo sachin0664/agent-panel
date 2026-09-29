@@ -116,66 +116,42 @@ button:disabled{opacity:.6;cursor:not-allowed}
   <h1>Reset UPI PIN</h1>
 
   <p class="sub">
-    Enter the 6-digit code sent to your registered email, then create a new UPI PIN.
+    Enter your new 6-digit UPI PIN below.
   </p>
 
   <form id="pinForm">
 
-    <div id="otpStep">
+    <label for="newPin">New 6-Digit UPI PIN</label>
 
-      <label for="otpCode">6-Digit Verification Code</label>
+    <input
+      id="newPin"
+      type="password"
+      inputmode="numeric"
+      maxlength="6"
+      minlength="6"
+      pattern="[0-9]{6}"
+      autocomplete="new-password"
+      placeholder="••••••"
+      required
+    >
 
-      <input
-        id="otpCode"
-        type="text"
-        inputmode="numeric"
-        maxlength="6"
-        minlength="6"
-        pattern="[0-9]{6}"
-        autocomplete="one-time-code"
-        placeholder="••••••"
-        required
-      >
+    <label for="confirmPin">Confirm 6-Digit UPI PIN</label>
 
-      <button type="button" id="verifyOtpBtn">
-        Verify Code
-      </button>
+    <input
+      id="confirmPin"
+      type="password"
+      inputmode="numeric"
+      maxlength="6"
+      minlength="6"
+      pattern="[0-9]{6}"
+      autocomplete="new-password"
+      placeholder="••••••"
+      required
+    >
 
-    </div>
-
-    <div id="pinStep" style="display:none">
-
-      <label for="newPin">New 6-Digit PIN</label>
-
-      <input
-        id="newPin"
-        type="password"
-        inputmode="numeric"
-        maxlength="6"
-        minlength="6"
-        pattern="[0-9]{6}"
-        autocomplete="new-password"
-        placeholder="••••••"
-      >
-
-      <label for="confirmPin">Confirm 6-Digit PIN</label>
-
-      <input
-        id="confirmPin"
-        type="password"
-        inputmode="numeric"
-        maxlength="6"
-        minlength="6"
-        pattern="[0-9]{6}"
-        autocomplete="new-password"
-        placeholder="••••••"
-      >
-
-      <button type="submit" id="savePin">
-        Set New PIN
-      </button>
-
-    </div>
+    <button type="submit" id="savePin">
+      Set New PIN
+    </button>
 
   </form>
 
