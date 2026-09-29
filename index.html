@@ -34,6 +34,16 @@ footer{text-align:center;padding:25px;color:rgba(255,255,255,.75);font-size:13px
 </style>
 <script>
 (function(){
+    const hash = String(window.location.hash || "");
+    if (!hash.includes("type=recovery")) return;
+
+    const target = new URL("reset-password.html", window.location.href);
+    target.hash = hash;
+    window.location.replace(target.href);
+})();
+</script>
+<script>
+(function(){
     const params = new URLSearchParams(window.location.search);
     const invite = params.get("invite") || params.get("ref") || params.get("referral");
     if(invite){
