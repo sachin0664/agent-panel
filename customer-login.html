@@ -158,80 +158,86 @@
 ===================================== */
 (function(){
 
-    const raw =
-        localStorage.getItem("sathiPayRecoveryType");
-
-    if(!raw){
-        return;
-    }
-
+    /*
+     * Recovery links can arrive here without the temporary
+     * localStorage marker. Password recovery must still go
+     * directly to the new-password page.
+     * UPI PIN recovery keeps its existing separate route.
+     */
+    const raw = localStorage.getItem("sathiPayRecoveryType");
     let recovery = null;
 
-    try{
-        recovery = JSON.parse(raw);
-    }
-    catch(error){
-        localStorage.removeItem("sathiPayRecoveryType");
-        return;
-    }
-
-    if(
-        !recovery ||
-        !recovery.type ||
-        !recovery.time ||
-        Date.now() - Number(recovery.time) > 30 * 60 * 1000
-    ){
-        localStorage.removeItem("sathiPayRecoveryType");
-        return;
+    if(raw){
+        try{
+            recovery = JSON.parse(raw);
+        }
+        catch(error){
+            localStorage.removeItem("sathiPayRecoveryType");
+        }
     }
 
-    const target =
-        recovery.type === "upi"
-            ? "reset-upi-pin.html"
-            : recovery.type === "password"
-                ? "reset-password.html"
-                : null;
+    const recoveryType =
+        recovery &&
+        recovery.type &&
+        recovery.time &&
+        Date.now() - Number(recovery.time) <= 30 * 60 * 1000
+            ? recovery.type
+            : null;
 
-    if(!target){
+    if(!recoveryType && raw){
         localStorage.removeItem("sathiPayRecoveryType");
-        return;
     }
 
     let routed = false;
 
-    function routeToRecovery(){
-        if(routed){
-            return;
-        }
-
-        const hash =
-            String(window.location.hash || "");
-
-        if(
-            !hash.includes("type=recovery")
-        ){
+    function routeToRecovery(target){
+        if(routed || !target){
             return;
         }
 
         routed = true;
         localStorage.removeItem("sathiPayRecoveryType");
-
         window.location.replace(target);
+    }
+
+    function checkRecoveryUrl(){
+        if(routed){
+            return;
+        }
+
+        const hash = String(window.location.hash || "");
+        const search = String(window.location.search || "");
+
+        /*
+         * Supabase recovery links normally contain type=recovery
+         * in the callback URL. If the marker is missing, this
+         * still identifies a password-recovery callback safely.
+         */
+        if(
+            hash.includes("type=recovery") ||
+            search.includes("type=recovery")
+        ){
+            routeToRecovery(
+                recoveryType === "upi"
+                    ? "reset-upi-pin.html"
+                    : "reset-password.html"
+            );
+        }
     }
 
     supabaseClient.auth.onAuthStateChange(
         function(event){
-
             if(event === "PASSWORD_RECOVERY"){
-                routed = true;
-                localStorage.removeItem("sathiPayRecoveryType");
-                window.location.replace(target);
+                routeToRecovery(
+                    recoveryType === "upi"
+                        ? "reset-upi-pin.html"
+                        : "reset-password.html"
+                );
             }
-
         }
     );
 
-    routeToRecovery();
+    checkRecoveryUrl();
 
 })();
 </script>
