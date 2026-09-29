@@ -961,6 +961,15 @@ async function loadHistory(){
             levelText = "C";
         }
 
+        const referralRate =
+            levelText === "A"
+                ? 1
+                : levelText === "B"
+                    ? 0.5
+                    : levelText === "C"
+                        ? 0.2
+                        : 0;
+
 
         let statusClass =
             "approved";
@@ -1030,7 +1039,7 @@ async function loadHistory(){
 
                 <td>
                     ${
-                        Number(row.percentage || 0)
+                        referralRate
                     }%
                 </td>
 
