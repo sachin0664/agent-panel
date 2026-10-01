@@ -34,11 +34,34 @@ footer{text-align:center;padding:25px;color:rgba(255,255,255,.75);font-size:13px
 </style>
 <script>
 (function(){
+    /*
+     * PASSWORD RECOVERY ROUTER
+     * Some Supabase recovery emails can return to the
+     * configured Site URL instead of the reset page.
+     * Keep the recovery token/code and send the customer
+     * directly to the new-password page.
+     */
     const hash = String(window.location.hash || "");
-    if (!hash.includes("type=recovery")) return;
+    const search = String(window.location.search || "");
+
+    const isRecovery =
+        hash.includes("type=recovery") ||
+        search.includes("type=recovery") ||
+        search.includes("code=") ||
+        hash.includes("access_token=") ||
+        hash.includes("refresh_token=");
+
+    if (!isRecovery) return;
 
     const target = new URL("reset-password.html", window.location.href);
-    target.hash = hash;
+
+    /*
+     * Preserve BOTH PKCE code/query parameters and
+     * implicit-flow recovery tokens in the hash.
+     */
+    target.search = window.location.search;
+    target.hash = window.location.hash;
+
     window.location.replace(target.href);
 })();
 </script>
