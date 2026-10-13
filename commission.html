@@ -417,7 +417,7 @@
 
             <div class="rule">
 
-                ₹100 – ₹9,999
+                ₹5,000 – ₹24,999
 
                 <strong>4.5%</strong>
 
@@ -426,7 +426,7 @@
 
             <div class="rule">
 
-                ₹10,000 – ₹24,999
+                ₹25,000 – ₹49,999
 
                 <strong>5%</strong>
 
@@ -435,7 +435,7 @@
 
             <div class="rule">
 
-                ₹25,000+
+                ₹50,000+
 
                 <strong>6%</strong>
 
@@ -1028,17 +1028,17 @@ async function loadEarnings() {
                     let rate = 0;
 
 
-                    if (amount >= 20000) {
+                    if (amount >= 50000) {
 
-                        rate = 10;
+                        rate = 6;
 
-                    } else if (amount >= 10000) {
+                    } else if (amount >= 25000) {
 
-                        rate = 8;
+                        rate = 5;
 
                     } else {
 
-                        rate = 6;
+                        rate = 4.5;
 
                     }
 
