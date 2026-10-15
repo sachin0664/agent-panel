@@ -1947,14 +1947,6 @@ header{
 
     <button
         type="button"
-        id="appUpdateButton"
-        onclick="downloadAppUpdate()"
-        style="display:none">
-        🔄 Update Now
-    </button>
-
-    <button
-        type="button"
         onclick="logoutCustomer()">
         Logout
     </button>
@@ -4275,48 +4267,7 @@ function closeSecurityModal(){
         localStorage.setItem(
             "sathiPaySe// Current release baseline. Show update control only for a different newer release.
 const SATHIPAY_CURRENT_RELEASE = "sathi-pay-v1.0.1-79";
-let sathiPayUpdateUrl = "";
-
-async function checkForAppUpdate(){
-    try{
-        const response = await fetch(
-            "https://api.github.com/repos/sachin0664/agent-panel/releases/latest",
-            { cache:"no-store" }
-        );
-        if(!response.ok) return;
-
-        const release = await response.json();
-        if(!release || !release.tag_name ||
-           String(release.tag_name) === SATHIPAY_CURRENT_RELEASE) return;
-
-        const apk = Array.isArray(release.assets)
-            ? release.assets.find(function(asset){
-                return String(asset.name || "").toLowerCase() === "sathipay.apk";
-            })
-            : null;
-        if(!apk || !apk.browser_download_url) return;
-
-        const downloadUrl = new URL(apk.browser_download_url);
-        if(downloadUrl.hostname !== "github.com") return;
-
-        sathiPayUpdateUrl = downloadUrl.href;
-        const button = document.getElementById("appUpdateButton");
-        if(button) button.style.display = "block";
-    }catch(error){
-        // Update checks are silent: no customer-facing message if no update/check fails.
-        console.debug("Sathi Pay update check unavailable.");
-    }
-}
-
-function downloadAppUpdate(){
-    const menu = document.getElementById("profileMenu");
-    if(menu) menu.classList.remove("show");
-    if(sathiPayUpdateUrl){
-        window.open(sathiPayUpdateUrl, "_blank", "noopener,noreferrer");
-    }
-}
-
-function showAppMessage(){
+let sathiPayUpdateUrl = "";function showAppMessage(){
 
     const apkUrl =
         "https://mysathipay.com/SathiPay.apk";
