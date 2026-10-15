@@ -4273,20 +4273,19 @@ function closeSecurityModal(){
             "securityModal"
         );
 
-
-    if(
-        modal
-    ){
-
-        modal.classList.add(
-            "hidden"
-        );
-
-
+    if(modal){
+        modal.classList.add("hidden");
         localStorage.setItem(
-            "sathiPaySe// Current release baseline. Show update control only for a different newer release.
-const SATHIPAY_CURRENT_RELEASE = "sathi-pay-v1.0.1-79";
-let sathiPayUpdateUrl = "";function showAppMessage(){
+            "sathiPaySecuritySeen",
+            "1"
+        );
+    }
+
+}
+
+
+/* Open the official latest APK download. */
+function showAppMessage(){
 
     const apkUrl =
         "https://github.com/sachin0664/agent-panel/releases/latest/download/SathiPay.apk";
@@ -4297,10 +4296,11 @@ let sathiPayUpdateUrl = "";function showAppMessage(){
         "noopener,noreferrer"
     );
 
-    document.getElementById(
-        "message"
-    ).innerText =
-        "Sathi Pay app download started.";
+    const message = document.getElementById("message");
+    if(message){
+        message.innerText =
+            "Sathi Pay app download started.";
+    }
 
 }
 
