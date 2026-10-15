@@ -1,11 +1,13 @@
 package com.sathipay.app;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -23,6 +26,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.URLUtil;
 
 public class MainActivity extends Activity {
     private static final String HOME_URL =
@@ -132,6 +136,51 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(true);
 
         webView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public boolean downloadFile(String url, String fileName) {
+                try {
+                    Uri uri = Uri.parse(url);
+                    if (!"https".equalsIgnoreCase(uri.getScheme()) || uri.getHost() == null) {
+                        return false;
+                    }
+
+                    String safeName = (fileName == null || fileName.trim().isEmpty())
+                            ? "sathi-pay-upi-qr.png" : fileName.replaceAll("[^A-Za-z0-9._-]", "_");
+                    if (!safeName.toLowerCase().endsWith(".png")
+                            && !safeName.toLowerCase().endsWith(".jpg")
+                            && !safeName.toLowerCase().endsWith(".jpeg")
+                            && !safeName.toLowerCase().endsWith(".webp")) {
+                        safeName += ".png";
+                    }
+
+                    DownloadManager manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                    if (manager == null) return false;
+
+                    DownloadManager.Request request = new DownloadManager.Request(uri);
+                    request.setTitle("Sathi Pay QR");
+                    request.setDescription("Downloading your UPI QR code");
+                    request.setNotificationVisibility(
+                            DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    request.setAllowedOverMetered(true);
+                    request.setAllowedOverRoaming(false);
+                    request.setDestinationInExternalPublicDir(
+                            Environment.DIRECTORY_DOWNLOADS, safeName);
+                    manager.enqueue(request);
+
+                    runOnUiThread(() -> Toast.makeText(
+                            MainActivity.this,
+                            "QR download started. Check Downloads.",
+                            Toast.LENGTH_LONG).show());
+                    return true;
+                } catch (Exception e) {
+                    runOnUiThread(() -> Toast.makeText(
+                            MainActivity.this,
+                            "QR download failed. Please try again.",
+                            Toast.LENGTH_LONG).show());
+                    return false;
+                }
+            }
+
             @JavascriptInterface
             public void shareText(String title, String text, String url) {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
