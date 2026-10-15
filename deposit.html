@@ -1397,121 +1397,69 @@ document
 
 document
     .getElementById("downloadQR")
-    .addEventListener(
-        "click",
-        async function () {
-
-            if (!paymentQRUrl) {
-
-                showMessage(
-                    "QR code is not available.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const button =
-                this;
-
-
-            let uploadedFileName = null;
-
-            try {
-
-                button.disabled =
-                    true;
-
-                button.textContent =
-                    "⏳ Preparing QR...";
-
-
-                const response =
-                    await fetch(
-                        paymentQRUrl
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "QR download failed"
-                    );
-
-                }
-
-
-                const blob =
-                    await response.blob();
-
-
-                const blobURL =
-                    URL.createObjectURL(
-                        blob
-                    );
-
-
-                const link =
-                    document.createElement(
-                        "a"
-                    );
-
-
-                link.href =
-                    blobURL;
-
-                link.download =
-                    "sathi-pay-upi-qr.png";
-
-
-                document.body.appendChild(
-                    link
-                );
-
-
-                link.click();
-
-                link.remove();
-
-
-                URL.revokeObjectURL(
-                    blobURL
-                );
-
-
-                showMessage(
-                    "QR download started.",
-                    "success"
-                );
-
-
-            } catch (error) {
-
-                window.open(
-                    paymentQRUrl,
-                    "_blank"
-                );
-
-                showMessage(
-                    "QR opened. You can save it from there.",
-                    "info"
-                );
-
-            } finally {
-
-                button.disabled =
-                    !paymentQRUrl;
-
-                button.textContent =
-                    "📥 Download QR";
-
-            }
-
+    .addEventListener("click", async function () {
+        if (!paymentQRUrl) {
+            showMessage("QR code is not available.", "error");
+            return;
         }
-    );
 
+        const button = this;
+        button.disabled = true;
+        button.textContent = "⏳ Preparing QR...";
+
+        try {
+            // Prefer a normal download when the image host allows CORS.
+            const response = await fetch(paymentQRUrl, {
+                method: "GET",
+                mode: "cors",
+                credentials: "omit"
+            });
+
+            if (!response.ok) throw new Error("QR image could not be fetched");
+
+            const blob = await response.blob();
+            if (!blob || !blob.size) throw new Error("Empty QR image");
+
+            const objectUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            const type = (blob.type || "").toLowerCase();
+            const ext = type.includes("jpeg") || type.includes("jpg") ? "jpg"
+                : type.includes("webp") ? "webp"
+                : type.includes("svg") ? "svg" : "png";
+
+            link.href = objectUrl;
+            link.download = "sathi-pay-upi-qr." + ext;
+            link.style.display = "none";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            // Revoke later; immediate revocation can cancel mobile downloads.
+            window.setTimeout(function () {
+                URL.revokeObjectURL(objectUrl);
+            }, 60000);
+
+            showMessage("QR download requested. Check your Downloads folder.", "success");
+        } catch (error) {
+            console.warn("QR download failed; opening image fallback.", error);
+
+            // Cross-origin QR URLs and Android WebViews may block fetch/blob downloads.
+            // Open the original QR so the customer can save it with the browser menu.
+            const fallback = document.createElement("a");
+            fallback.href = paymentQRUrl;
+            fallback.target = "_blank";
+            fallback.rel = "noopener";
+            fallback.click();
+
+            showMessage(
+                "QR opened separately. Use the image menu or long-press the QR and choose Download/Save image.",
+                "info"
+            );
+        } finally {
+            button.disabled = !paymentQRUrl;
+            button.textContent = "📥 Download QR";
+        }
+    });
 
 // ========================================
 // AMOUNT
