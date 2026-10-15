@@ -2674,6 +2674,9 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
+/* Share the page client with customer-guard.js. */
+window.supabaseClient = supabaseClient;
+
 </script>
 
 
@@ -3699,6 +3702,22 @@ function withTimeout(promise,ms){
 async function loadDashboard(){
     if(dashboardLoading) return;
     dashboardLoading = true;
+
+    /* Show already-saved, non-financial customer details immediately
+       while the authenticated database request is being restored. */
+    const cachedName = localStorage.getItem("sathiPayCustomerName");
+    const cachedUID = localStorage.getItem("sathiPayUID");
+    const cachedCode = localStorage.getItem("sathiPayInvitationCode");
+    if(cachedName && document.getElementById("customerName")){
+        document.getElementById("customerName").innerText = cachedName;
+    }
+    if(cachedUID && document.getElementById("customerUID")){
+        document.getElementById("customerUID").innerText = cachedUID;
+    }
+    if(cachedCode && document.getElementById("referralLink")){
+        currentReferralLink = window.location.origin + "/?invite=" + encodeURIComponent(cachedCode);
+        document.getElementById("referralLink").innerText = currentReferralLink;
+    }
 
     const message =
         document.getElementById(
