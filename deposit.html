@@ -1403,6 +1403,19 @@ document
             return;
         }
 
+        // Android app: use the native DownloadManager instead of a browser blob URL.
+        // Blob downloads are not reliably handled by Android WebView.
+        if (window.SathiPayAndroid && typeof window.SathiPayAndroid.downloadFile === "function") {
+            const started = window.SathiPayAndroid.downloadFile(
+                paymentQRUrl,
+                "sathi-pay-upi-qr.png"
+            );
+            if (started) {
+                showMessage("QR download started. Check your phone's Downloads folder.", "success");
+                return;
+            }
+        }
+
         const button = this;
         button.disabled = true;
         button.textContent = "⏳ Preparing QR...";
