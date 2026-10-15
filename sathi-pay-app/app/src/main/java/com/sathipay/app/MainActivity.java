@@ -159,10 +159,23 @@ public class MainActivity extends Activity {
                     DownloadManager.Request request = new DownloadManager.Request(uri);
                     request.setTitle("Sathi Pay QR");
                     request.setDescription("Downloading your UPI QR code");
+                    request.setMimeType("image/*");
                     request.setNotificationVisibility(
                             DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                     request.setAllowedOverMetered(true);
                     request.setAllowedOverRoaming(false);
+
+                    // Pass the same browser session headers when the QR host requires them.
+                    String userAgent = webView != null
+                            ? webView.getSettings().getUserAgentString() : System.getProperty("http.agent");
+                    if (userAgent != null && !userAgent.isEmpty()) {
+                        request.addRequestHeader("User-Agent", userAgent);
+                    }
+                    String cookie = CookieManager.getInstance().getCookie(url);
+                    if (cookie != null && !cookie.isEmpty()) {
+                        request.addRequestHeader("Cookie", cookie);
+                    }
+
                     request.setDestinationInExternalPublicDir(
                             Environment.DIRECTORY_DOWNLOADS, safeName);
                     manager.enqueue(request);
