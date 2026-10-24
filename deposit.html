@@ -788,9 +788,9 @@ body {
             <input
                 type="number"                id="amount"
                 class="form-input"
-                min="5000"
+                min="1000"
                 step="1"
-                placeholder="Minimum ₹5,000"
+                placeholder="Minimum ₹1,000"
                 inputmode="numeric"
             >
 
@@ -849,7 +849,7 @@ body {
         </button>
 
         <div id="paymentInstructions" class="message error" style="display:none;margin-bottom:16px;">
-            Minimum deposit amount is ₹5,000. Please enter at least ₹5,000 to continue.
+            Minimum deposit amount is ₹1,000. Please enter at least ₹1,000 to continue.
         </div>
 
 
@@ -1614,10 +1614,10 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
     const amountInput = document.getElementById("amount");
     const amount = Number(amountInput.value);
 
-    if (!Number.isFinite(amount) || amount < 5000) {
+    if (!Number.isFinite(amount) || amount < 1000) {
         const instructions = document.getElementById("paymentInstructions");
         instructions.className = "message error";
-        instructions.textContent = "Minimum deposit amount is ₹5,000. Please enter a valid amount to continue.";
+        instructions.textContent = "Minimum deposit amount is ₹1,000. Please enter a valid amount to continue.";
         instructions.style.display = "block";
         amountInput.focus();
         return;
@@ -1636,8 +1636,8 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
 document.getElementById("newPaymentRequestButton").addEventListener("click", function () {
     const amountInput = document.getElementById("amount");
     const amount = Number(amountInput.value);
-    if (!Number.isFinite(amount) || amount < 5000) {
-        showMessage("Minimum deposit amount is ₹5,000. Please enter at least ₹5,000.", "error");
+    if (!Number.isFinite(amount) || amount < 1000) {
+        showMessage("Minimum deposit amount is ₹1,000. Please enter at least ₹1,000.", "error");
         return;
     }
     document.getElementById("submitButton").disabled = false;
@@ -2016,11 +2016,11 @@ document
 
             if (
                 !amount ||
-                amount < 5000
+                amount < 1000
             ) {
 
                 showMessage(
-                    "Minimum deposit amount is ₹5,000.",
+                    "Minimum deposit amount is ₹1,000.",
                     "error"
                 );
 
