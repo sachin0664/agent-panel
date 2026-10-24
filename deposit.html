@@ -807,6 +807,10 @@ body {
             Continue to Payment →
         </button>
 
+        <div id="paymentInstructions" class="message error" style="display:none;margin-bottom:16px;">
+            Minimum deposit amount is ₹5,000. Please enter at least ₹5,000 to continue.
+        </div>
+
 
 
         <div id="depositSubmissionFields" style="display:none;">
@@ -2215,7 +2219,7 @@ document
 
                 document.getElementById("paymentCard").style.display = "none";
                 document.getElementById("depositSubmissionFields").style.display = "none";
-                document.getElementById("paymentInstructions").style.display = "block";
+                document.getElementById("paymentInstructions").style.display = "none";
                 document.getElementById("confirmAmountButton").disabled = false;
                 document.getElementById("confirmAmountButton").textContent = "Continue to Payment →";
                 amountInput.readOnly = false;
