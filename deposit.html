@@ -156,6 +156,39 @@ body {
     border: 1px solid #a7f3d0;
 }
 
+.payment-timer {
+    margin: 12px 0 16px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    color: #9a3412;
+    text-align: center;
+    font-weight: 800;
+}
+.payment-timer strong {
+    display: block;
+    font-size: 25px;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+.payment-timer.expired {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #991b1b;
+}
+.new-request-btn {
+    width: 100%;
+    margin: 0 0 14px;
+    border: 0;
+    border-radius: 12px;
+    padding: 12px;
+    background: #0f766e;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}
+
 .payment-title {
     display: flex;
     align-items: center;
@@ -634,6 +667,14 @@ body {
 
     </div>
 
+    <div class="payment-timer" id="paymentTimer" style="display:none;" role="timer" aria-live="polite">
+        ⏳ Payment time remaining
+        <strong id="paymentCountdown">10:00</strong>
+        <span id="paymentTimerNote" style="font-size:12px;font-weight:600;">Complete payment and submit within 10 minutes.</span>
+    </div>
+    <button type="button" id="newPaymentRequestButton" class="new-request-btn" style="display:none;">
+        ↻ Start New Payment Request
+    </button>
 
     <div class="qr-box">
 
@@ -932,6 +973,80 @@ let currentCustomer = null;
 let paymentQRUrl = "";
 
 let paymentUPI = "";
+let paymentTimerInterval = null;
+let paymentExpiresAt = null;
+
+function paymentTimerStorageKey() {
+    const customerId = getCustomerId();
+    return customerId ? "sathiPayDepositExpiresAt:" + customerId : null;
+}
+
+function stopPaymentTimer() {
+    if (paymentTimerInterval) {
+        clearInterval(paymentTimerInterval);
+        paymentTimerInterval = null;
+    }
+}
+
+function renderPaymentTimer() {
+    const timer = document.getElementById("paymentTimer");
+    const countdown = document.getElementById("paymentCountdown");
+    const note = document.getElementById("paymentTimerNote");
+    const newRequestButton = document.getElementById("newPaymentRequestButton");
+    if (!timer || !countdown) return;
+
+    const remaining = Math.max(0, Math.ceil((paymentExpiresAt - Date.now()) / 1000));
+    const minutes = Math.floor(remaining / 60);
+    const seconds = remaining % 60;
+    countdown.textContent = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+
+    if (remaining <= 0) {
+        stopPaymentTimer();
+        timer.classList.add("expired");
+        note.textContent = "Time expired. Start a new payment request to continue.";
+        newRequestButton.style.display = "block";
+        document.getElementById("submitButton").disabled = true;
+        document.getElementById("submitButton").textContent = "Payment Time Expired";
+        showMessage("Payment time expired. Please start a new payment request.", "error");
+    } else {
+        timer.classList.remove("expired");
+        note.textContent = "Complete payment and submit within 10 minutes.";
+        newRequestButton.style.display = "none";
+        const submitButton = document.getElementById("submitButton");
+        if (submitButton.textContent === "Payment Time Expired") {
+            submitButton.disabled = false;
+            submitButton.textContent = "🚀 Submit Deposit";
+        }
+    }
+}
+
+function startPaymentTimer(reset = false) {
+    const key = paymentTimerStorageKey();
+    if (!key) return;
+
+    stopPaymentTimer();
+    const stored = Number(localStorage.getItem(key) || 0);
+    if (reset || !stored || stored <= Date.now()) {
+        paymentExpiresAt = Date.now() + 10 * 60 * 1000;
+        localStorage.setItem(key, String(paymentExpiresAt));
+    } else {
+        paymentExpiresAt = stored;
+    }
+
+    document.getElementById("paymentTimer").style.display = "block";
+    renderPaymentTimer();
+    paymentTimerInterval = setInterval(renderPaymentTimer, 1000);
+}
+
+function clearPaymentTimer() {
+    stopPaymentTimer();
+    const key = paymentTimerStorageKey();
+    if (key) localStorage.removeItem(key);
+    paymentExpiresAt = null;
+    document.getElementById("paymentTimer").style.display = "none";
+    document.getElementById("newPaymentRequestButton").style.display = "none";
+    document.getElementById("paymentTimer").classList.remove("expired");
+}
 
 
 // ========================================
@@ -1510,10 +1625,26 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
     document.getElementById("paymentCard").style.display = "block";
     document.getElementById("depositSubmissionFields").style.display = "block";
     document.getElementById("paymentInstructions").style.display = "none";
+    startPaymentTimer(true);
     document.getElementById("confirmAmountButton").textContent = "✓ Amount Confirmed";
     document.getElementById("confirmAmountButton").disabled = true;
     document.getElementById("amount").readOnly = true;
     document.getElementById("paymentCard").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+document.getElementById("newPaymentRequestButton").addEventListener("click", function () {
+    const amountInput = document.getElementById("amount");
+    const amount = Number(amountInput.value);
+    if (!Number.isFinite(amount) || amount < 5000) {
+        showMessage("Minimum deposit amount is ₹5,000. Please enter at least ₹5,000.", "error");
+        return;
+    }
+    document.getElementById("submitButton").disabled = false;
+    document.getElementById("submitButton").textContent = "🚀 Submit Deposit";
+    document.getElementById("utr").value = "";
+    document.getElementById("paymentProof").value = "";
+    startPaymentTimer(true);
+    showMessage("New 10-minute payment window started. Please complete payment before the timer expires.", "info");
 });
 
 // If the customer changes the amount before confirming, keep the preview current.
@@ -1850,6 +1981,11 @@ document
                     amountInput.value
                 );
 
+            if (!paymentExpiresAt || Date.now() >= paymentExpiresAt) {
+                renderPaymentTimer();
+                showMessage("Payment time expired. Please start a new payment request.", "error");
+                return;
+            }
 
             const utr =
                 utrInput.value.trim().toUpperCase();
@@ -2217,6 +2353,7 @@ document
                 amountInput.value =
                     "";
 
+                clearPaymentTimer();
                 document.getElementById("paymentCard").style.display = "none";
                 document.getElementById("depositSubmissionFields").style.display = "none";
                 document.getElementById("paymentInstructions").style.display = "none";
