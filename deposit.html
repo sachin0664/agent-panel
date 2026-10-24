@@ -1638,12 +1638,13 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
         return;
     }
 
-    // Keep this amount as the customer's active order until submission or cancellation.
+    // A genuinely new order gets one fresh 10-minute timer.
+    // Returning to this page restores the same saved order and expiry.
     if (orderKey) localStorage.setItem(orderKey, String(amount));
     document.getElementById("paymentCard").style.display = "block";
     document.getElementById("depositSubmissionFields").style.display = "block";
     document.getElementById("paymentInstructions").style.display = "none";
-    startPaymentTimer(false);
+    startPaymentTimer(true);
     document.getElementById("confirmAmountButton").textContent = "✓ Amount Confirmed";
     document.getElementById("confirmAmountButton").disabled = true;
     document.getElementById("amount").readOnly = true;
