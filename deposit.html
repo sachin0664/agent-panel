@@ -1626,7 +1626,8 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
     document.getElementById("paymentCard").style.display = "block";
     document.getElementById("depositSubmissionFields").style.display = "block";
     document.getElementById("paymentInstructions").style.display = "none";
-    startPaymentTimer(false);
+    // Every explicit Continue to Payment starts a fresh 10-minute window.
+    startPaymentTimer(true);
     document.getElementById("confirmAmountButton").textContent = "✓ Amount Confirmed";
     document.getElementById("confirmAmountButton").disabled = true;
     document.getElementById("amount").readOnly = true;
