@@ -1026,10 +1026,11 @@ function startPaymentTimer(reset = false) {
 
     stopPaymentTimer();
     const stored = Number(localStorage.getItem(key) || 0);
-    if (reset || !stored || stored <= Date.now()) {
+    if (reset || !stored) {
         paymentExpiresAt = Date.now() + 10 * 60 * 1000;
         localStorage.setItem(key, String(paymentExpiresAt));
     } else {
+        // Keep the original expiry across page refreshes; never silently extend it.
         paymentExpiresAt = stored;
     }
 
@@ -1625,7 +1626,7 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
     document.getElementById("paymentCard").style.display = "block";
     document.getElementById("depositSubmissionFields").style.display = "block";
     document.getElementById("paymentInstructions").style.display = "none";
-    startPaymentTimer(true);
+    startPaymentTimer(false);
     document.getElementById("confirmAmountButton").textContent = "✓ Amount Confirmed";
     document.getElementById("confirmAmountButton").disabled = true;
     document.getElementById("amount").readOnly = true;
