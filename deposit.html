@@ -672,8 +672,8 @@ body {
         <strong id="paymentCountdown">10:00</strong>
         <span id="paymentTimerNote" style="font-size:12px;font-weight:600;">Complete payment and submit within 10 minutes.</span>
     </div>
-    <button type="button" id="newPaymentRequestButton" class="new-request-btn" style="display:none;">
-        ↻ Start New Payment Request
+    <button type="button" id="cancelPaymentOrderButton" class="new-request-btn" style="display:none;background:#b91c1c;">
+        ✕ Cancel Deposit Order
     </button>
 
     <div class="qr-box">
@@ -981,6 +981,11 @@ function paymentTimerStorageKey() {
     return customerId ? "sathiPayDepositExpiresAt:" + customerId : null;
 }
 
+function paymentOrderStorageKey() {
+    const customerId = getCustomerId();
+    return customerId ? "sathiPayActiveDepositOrder:" + customerId : null;
+}
+
 function stopPaymentTimer() {
     if (paymentTimerInterval) {
         clearInterval(paymentTimerInterval);
@@ -992,8 +997,9 @@ function renderPaymentTimer() {
     const timer = document.getElementById("paymentTimer");
     const countdown = document.getElementById("paymentCountdown");
     const note = document.getElementById("paymentTimerNote");
-    const newRequestButton = document.getElementById("newPaymentRequestButton");
+    const cancelOrderButton = document.getElementById("cancelPaymentOrderButton");
     if (!timer || !countdown) return;
+    if (cancelOrderButton) cancelOrderButton.style.display = "block";
 
     const remaining = Math.max(0, Math.ceil((paymentExpiresAt - Date.now()) / 1000));
     const minutes = Math.floor(remaining / 60);
@@ -1003,15 +1009,15 @@ function renderPaymentTimer() {
     if (remaining <= 0) {
         stopPaymentTimer();
         timer.classList.add("expired");
-        note.textContent = "Time expired. Start a new payment request to continue.";
-        newRequestButton.style.display = "block";
+        note.textContent = "Time expired. Cancel this order to create a new deposit request.";
+        cancelOrderButton.style.display = "block";
         document.getElementById("submitButton").disabled = true;
         document.getElementById("submitButton").textContent = "Payment Time Expired";
         showMessage("Payment time expired. Please start a new payment request.", "error");
     } else {
         timer.classList.remove("expired");
-        note.textContent = "Complete payment and submit within 10 minutes.";
-        newRequestButton.style.display = "none";
+        note.textContent = "Complete payment and submit within 10 minutes. This order stays active until you cancel it.";
+        cancelOrderButton.style.display = "block";
         const submitButton = document.getElementById("submitButton");
         if (submitButton.textContent === "Payment Time Expired") {
             submitButton.disabled = false;
@@ -1045,7 +1051,9 @@ function clearPaymentTimer() {
     if (key) localStorage.removeItem(key);
     paymentExpiresAt = null;
     document.getElementById("paymentTimer").style.display = "none";
-    document.getElementById("newPaymentRequestButton").style.display = "none";
+    document.getElementById("cancelPaymentOrderButton").style.display = "none";
+    const orderKey = paymentOrderStorageKey();
+    if (orderKey) localStorage.removeItem(orderKey);
     document.getElementById("paymentTimer").classList.remove("expired");
 }
 
@@ -1623,30 +1631,41 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
         return;
     }
 
+    const orderKey = paymentOrderStorageKey();
+    const existingOrder = orderKey ? localStorage.getItem(orderKey) : null;
+    if (existingOrder) {
+        restoreActivePaymentOrder();
+        return;
+    }
+
+    // Keep this amount as the customer's active order until submission or cancellation.
+    if (orderKey) localStorage.setItem(orderKey, String(amount));
     document.getElementById("paymentCard").style.display = "block";
     document.getElementById("depositSubmissionFields").style.display = "block";
     document.getElementById("paymentInstructions").style.display = "none";
-    // Every explicit Continue to Payment starts a fresh 10-minute window.
-    startPaymentTimer(true);
+    startPaymentTimer(false);
     document.getElementById("confirmAmountButton").textContent = "✓ Amount Confirmed";
     document.getElementById("confirmAmountButton").disabled = true;
     document.getElementById("amount").readOnly = true;
     document.getElementById("paymentCard").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-document.getElementById("newPaymentRequestButton").addEventListener("click", function () {
-    const amountInput = document.getElementById("amount");
-    const amount = Number(amountInput.value);
-    if (!Number.isFinite(amount) || amount < 1000) {
-        showMessage("Minimum deposit amount is ₹1,000. Please enter at least ₹1,000.", "error");
-        return;
-    }
-    document.getElementById("submitButton").disabled = false;
-    document.getElementById("submitButton").textContent = "🚀 Submit Deposit";
+document.getElementById("cancelPaymentOrderButton").addEventListener("click", function () {
+    const confirmed = window.confirm("Cancel this deposit order? The current amount and timer will be cleared.");
+    if (!confirmed) return;
+
+    clearPaymentTimer();
+    document.getElementById("paymentCard").style.display = "none";
+    document.getElementById("depositSubmissionFields").style.display = "none";
+    document.getElementById("paymentInstructions").style.display = "none";
+    document.getElementById("confirmAmountButton").disabled = false;
+    document.getElementById("confirmAmountButton").textContent = "Continue to Payment →";
+    document.getElementById("amount").readOnly = false;
     document.getElementById("utr").value = "";
     document.getElementById("paymentProof").value = "";
-    startPaymentTimer(true);
-    showMessage("New 10-minute payment window started. Please complete payment before the timer expires.", "info");
+    document.getElementById("submitButton").disabled = false;
+    document.getElementById("submitButton").textContent = "🚀 Submit Deposit";
+    showMessage("Deposit order cancelled. You can now enter a new amount.", "info");
 });
 
 // If the customer changes the amount before confirming, keep the preview current.
@@ -2423,26 +2442,35 @@ document
 // PAGE INIT
 // ========================================
 
+function restoreActivePaymentOrder() {
+    const orderKey = paymentOrderStorageKey();
+    if (!orderKey) return false;
+
+    const storedAmount = Number(localStorage.getItem(orderKey) || 0);
+    if (!Number.isFinite(storedAmount) || storedAmount < 1000) return false;
+
+    document.getElementById("amount").value = String(storedAmount);
+    document.getElementById("amount").readOnly = true;
+    document.getElementById("confirmAmountButton").disabled = true;
+    document.getElementById("confirmAmountButton").textContent = "✓ Amount Confirmed";
+    document.getElementById("paymentCard").style.display = "block";
+    document.getElementById("depositSubmissionFields").style.display = "block";
+    document.getElementById("paymentInstructions").style.display = "none";
+    updateCommission();
+    startPaymentTimer(false);
+    return true;
+}
+
 async function initDepositPage() {
 
     updateCommission();
 
-
-    const customerLoaded =
-        await loadCustomer();
-
-
-    if (!customerLoaded) {
-
-        return;
-
-    }
-
+    const customerLoaded = await loadCustomer();
+    if (!customerLoaded) return;
 
     await loadPaymentSettings();
-
+    restoreActivePaymentOrder();
     await loadDeposits();
-
 }
 
 
