@@ -620,7 +620,7 @@ body {
 
 <!-- PAYMENT -->
 
-<section class="card payment-card">
+<section class="card payment-card" id="paymentCard" style="display:none;">
 
     <div class="section-title payment-title">
 
@@ -798,7 +798,20 @@ body {
 
         </div>
 
+        <button
+            type="button"
+            id="confirmAmountButton"
+            class="submit-btn"
+            style="margin-bottom:18px;"
+        >
+            Continue to Payment →
+        </button>
 
+        <div id="paymentInstructions" class="message info" style="display:block;margin-bottom:16px;">
+            Enter at least ₹5,000 and continue. Your payment QR and UPI ID will appear after you confirm the amount.
+        </div>
+
+        <div id="depositSubmissionFields" style="display:none;">
         <label
             class="form-label"
             for="utr"
@@ -862,6 +875,7 @@ body {
             id="message"
             class="message"
         ></div>
+        </div>
 
 
     </div>
@@ -1473,6 +1487,32 @@ document
             button.textContent = "📥 Download QR";
         }
     });
+
+// ========================================
+// AMOUNT CONFIRMATION / PAYMENT REVEAL
+// ========================================
+
+document.getElementById("confirmAmountButton").addEventListener("click", function () {
+    const amountInput = document.getElementById("amount");
+    const amount = Number(amountInput.value);
+
+    if (!Number.isFinite(amount) || amount < 5000) {
+        showMessage("Minimum deposit amount is ₹5,000.", "error");
+        amountInput.focus();
+        return;
+    }
+
+    document.getElementById("paymentCard").style.display = "block";
+    document.getElementById("depositSubmissionFields").style.display = "block";
+    document.getElementById("paymentInstructions").style.display = "none";
+    document.getElementById("confirmAmountButton").textContent = "✓ Amount Confirmed";
+    document.getElementById("confirmAmountButton").disabled = true;
+    document.getElementById("amount").readOnly = true;
+    document.getElementById("paymentCard").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+// If the customer changes the amount before confirming, keep the preview current.
+// After confirmation the amount is locked so the displayed payment and submitted amount match.
 
 // ========================================
 // AMOUNT
@@ -2171,6 +2211,13 @@ document
 
                 amountInput.value =
                     "";
+
+                document.getElementById("paymentCard").style.display = "none";
+                document.getElementById("depositSubmissionFields").style.display = "none";
+                document.getElementById("paymentInstructions").style.display = "block";
+                document.getElementById("confirmAmountButton").disabled = false;
+                document.getElementById("confirmAmountButton").textContent = "Continue to Payment →";
+                amountInput.readOnly = false;
 
                 utrInput.value =
                     "";
