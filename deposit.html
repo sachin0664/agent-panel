@@ -788,9 +788,9 @@ body {
             <input
                 type="number"                id="amount"
                 class="form-input"
-                min="1000"
+                min="2000"
                 step="1"
-                placeholder="Minimum ₹1,000"
+                placeholder="Minimum ₹2,000"
                 inputmode="numeric"
             >
 
@@ -849,7 +849,7 @@ body {
         </button>
 
         <div id="paymentInstructions" class="message error" style="display:none;margin-bottom:16px;">
-            Minimum deposit amount is ₹1,000. Please enter at least ₹1,000 to continue.
+            Minimum deposit amount is ₹2,000. Please enter at least ₹2,000 to continue.
         </div>
 
 
@@ -1622,10 +1622,10 @@ document.getElementById("confirmAmountButton").addEventListener("click", functio
     const amountInput = document.getElementById("amount");
     const amount = Number(amountInput.value);
 
-    if (!Number.isFinite(amount) || amount < 1000) {
+    if (!Number.isFinite(amount) || amount < 2000) {
         const instructions = document.getElementById("paymentInstructions");
         instructions.className = "message error";
-        instructions.textContent = "Minimum deposit amount is ₹1,000. Please enter a valid amount to continue.";
+        instructions.textContent = "Minimum deposit amount is ₹2,000. Please enter a valid amount to continue.";
         instructions.style.display = "block";
         amountInput.focus();
         return;
@@ -2037,11 +2037,11 @@ document
 
             if (
                 !amount ||
-                amount < 1000
+                amount < 2000
             ) {
 
                 showMessage(
-                    "Minimum deposit amount is ₹1,000.",
+                    "Minimum deposit amount is ₹2,000.",
                     "error"
                 );
 
@@ -2448,7 +2448,7 @@ function restoreActivePaymentOrder() {
     if (!orderKey) return false;
 
     const storedAmount = Number(localStorage.getItem(orderKey) || 0);
-    if (!Number.isFinite(storedAmount) || storedAmount < 1000) return false;
+    if (!Number.isFinite(storedAmount) || storedAmount < 2000) return false;
 
     document.getElementById("amount").value = String(storedAmount);
     document.getElementById("amount").readOnly = true;
