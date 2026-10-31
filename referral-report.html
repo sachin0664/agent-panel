@@ -26,7 +26,7 @@ button{border:0;border-radius:10px;padding:12px 16px;background:#2563eb;color:#f
 table{width:100%;border-collapse:collapse;min-width:720px}
 th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
 th{background:#f8fafc;color:#475569;white-space:nowrap}
-.rank{font-weight:bold;color:#1d4ed8}.count{font-weight:bold;background:#eff6ff;color:#1d4ed8;padding:5px 9px;border-radius:20px;display:inline-block}
+.clickable-row{cursor:pointer}.clickable-row:hover{background:#eff6ff}.clickable-row:active{background:#dbeafe}.rank{font-weight:bold;color:#1d4ed8}.count{font-weight:bold;background:#eff6ff;color:#1d4ed8;padding:5px 9px;border-radius:20px;display:inline-block}
 .pair{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-top:9px}
 .pair strong{display:block;margin-bottom:5px}.small{font-size:12px;color:#64748b;line-height:1.5}
 .empty{text-align:center;padding:22px;color:#64748b}
@@ -41,16 +41,22 @@ th{background:#f8fafc;color:#475569;white-space:nowrap}
 <div class="stat"><small>Customers Joined by Referral</small><strong id="referredCustomers">—</strong></div>
 <div class="stat"><small>Total Referrers</small><strong id="totalReferrers">—</strong></div>
 </div>
-<section class="card">
+<section class="card" id="rankingSection">
 <h2>🥇 Most Referrals — Ranking</h2>
 <div class="small" style="margin-bottom:12px">Ranking is by total Level A + B + C network. Counts are based on invitation-code referral records.</div>
 <div class="table-wrap"><table><thead><tr><th>Rank</th><th>Referrer Name</th><th>Referrer UID</th><th>Level A</th><th>Level B</th><th>Level C</th><th>Total Network</th></tr></thead><tbody id="rankingBody"><tr><td colspan="4" class="empty">Loading referral ranking…</td></tr></tbody></table></div>
 </section>
-<section class="card">
+<section class="card" id="allReferralSection">
 <h2>🔎 Who Referred Whom?</h2>
 <div class="controls"><input id="searchInput" type="search" placeholder="Search referrer or referred customer by name / UID"><button onclick="renderDetails()">Search</button><button class="muted" onclick="clearSearch()">Clear</button></div>
 <div id="detailCount" class="message">Loading referral registrations…</div>
 <div id="detailsList"></div>
+</section>
+<section class="card" id="customerNetworkSection" style="display:none">
+<button type="button" class="muted" onclick="backToRanking()" style="margin-bottom:14px">← Back to Referral Ranking</button>
+<h2 id="networkTitle">Customer Referral Network</h2>
+<div id="networkSummary" class="message"></div>
+<div id="networkLists"></div>
 </section>
 </main>
 <script>
@@ -118,13 +124,35 @@ async function loadReferralReport(){
   document.getElementById("totalCustomers").textContent=rows.length.toLocaleString("en-IN");
   document.getElementById("referredCustomers").textContent=referralPairs.length.toLocaleString("en-IN");
   document.getElementById("totalReferrers").textContent=ranking.length.toLocaleString("en-IN");
-  rank.innerHTML=ranking.length?ranking.map((item,i)=>'<tr><td class="rank">#'+(i+1)+'</td><td><b>'+esc(item.customer.name||"—")+'</b></td><td>'+esc(item.customer.uid||"—")+'</td><td><span class="count">'+item.levelA.length+'</span></td><td><span class="count">'+item.levelB.length+'</span></td><td><span class="count">'+item.levelC.length+'</span></td><td><span class="count">'+item.total+'</span></td></tr>').join(""):'<tr><td colspan="7" class="empty">No referral records found.</td></tr>';
+  rank.innerHTML=ranking.length?ranking.map((item,i)=>'<tr class="clickable-row" data-customer-id="'+esc(item.customer.id)+'" title="Tap to see registered customers"><td class="rank">#'+(i+1)+'</td><td><b>'+esc(item.customer.name||"—")+'</b></td><td>'+esc(item.customer.uid||"—")+'</td><td><span class="count">'+item.levelA.length+'</span></td><td><span class="count">'+item.levelB.length+'</span></td><td><span class="count">'+item.levelC.length+'</span></td><td><span class="count">'+item.total+'</span></td></tr>').join(""):'<tr><td colspan="7" class="empty">No referral records found.</td></tr>';
   renderDetails();
  }catch(error){
   console.error("Referral report error:",error);
   rank.innerHTML='<tr><td colspan="7" class="empty">Unable to load referral report. Please refresh.</td></tr>';
   document.getElementById("detailCount").textContent="Could not load referral registrations.";
  }
+}
+function openCustomerNetwork(customerId){
+ const customer=allCustomers.find(c=>String(c.id)===String(customerId));
+ if(!customer)return;
+ const direct=parent=>allCustomers.filter(c=>String(c.referred_by||"").trim().toUpperCase()===String(parent.invitation_code||"").trim().toUpperCase());
+ const levelA=direct(customer);
+ const levelB=levelA.flatMap(direct);
+ const levelC=levelB.flatMap(direct);
+ const renderGroup=(label,items)=>'<div class="pair"><strong>'+label+' ('+items.length+')</strong>'+(items.length?items.map(c=>'<div class="pair"><strong>'+esc(c.name||"Customer")+' · UID: '+esc(c.uid||"—")+'</strong><div class="small">Invitation Code: '+esc(c.invitation_code||"—")+' · Mobile: '+esc(c.mobile||"—")+'<br>Registered: '+(c.created_at?new Date(c.created_at).toLocaleString("en-IN"):"—")+'</div></div>').join(""):'<div class="small">No customers in this level.</div>')+'</div>';
+ document.getElementById("networkTitle").textContent=(customer.name||"Customer")+" · Referral Details";
+ document.getElementById("networkSummary").textContent="UID: "+(customer.uid||"—")+" · Direct referrals: "+levelA.length+" · Total Level A+B+C: "+(levelA.length+levelB.length+levelC.length);
+ document.getElementById("networkLists").innerHTML=renderGroup("Level A — Directly Referred",levelA)+renderGroup("Level B — Referred by Level A",levelB)+renderGroup("Level C — Referred by Level B",levelC);
+ document.getElementById("rankingSection").style.display="none";
+ document.getElementById("allReferralSection").style.display="none";
+ document.getElementById("customerNetworkSection").style.display="block";
+ window.scrollTo(0,0);
+}
+function backToRanking(){
+ document.getElementById("customerNetworkSection").style.display="none";
+ document.getElementById("rankingSection").style.display="block";
+ document.getElementById("allReferralSection").style.display="block";
+ window.scrollTo(0,0);
 }
 function renderDetails(){
  const q=document.getElementById("searchInput").value.trim().toLowerCase();
@@ -138,6 +166,7 @@ function renderDetails(){
  box.innerHTML=filtered.map(({referrer,joined})=>'<div class="pair"><strong>'+esc(referrer.name||"Customer")+' ('+esc(referrer.uid||"No UID")+') referred → '+esc(joined.name||"Customer")+' ('+esc(joined.uid||"No UID")+')</strong><div class="small">Level A · Referrer code: '+esc(referrer.invitation_code||"—")+' · Joined customer code: '+esc(joined.invitation_code||"—")+'<br>Registration date: '+(joined.created_at?new Date(joined.created_at).toLocaleString("en-IN"):"—")+'</div></div>').join("");
 }
 function clearSearch(){document.getElementById("searchInput").value="";renderDetails()}
+document.getElementById("rankingBody").addEventListener("click",e=>{const row=e.target.closest("tr[data-customer-id]");if(row)openCustomerNetwork(row.dataset.customerId)});
 document.getElementById("searchInput").addEventListener("keydown",e=>{if(e.key==="Enter")renderDetails()});
 supabaseClient.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT")window.location.replace("admin-login.html")});
 document.addEventListener("DOMContentLoaded",async()=>{if(await verifyAdminAccess())await loadReferralReport()});
