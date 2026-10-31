@@ -3654,7 +3654,7 @@ function renderCustomer(customer, referralOwner = null, targetBox = null){
 
         <div class="item">
 
-            ${targetBox ? '<button class="gray full" style="margin-bottom:12px" onclick="loadCustomers(customerPage)">← Back to Customers</button>' : '<button class="gray full" style="margin-bottom:12px" onclick="backFromCustomerDetails()">← Back</button>'}
+            ${targetBox ? '<button class="gray full" style="margin-bottom:12px" onclick="backFromCustomerList()">← Back</button>' : '<button class="gray full" style="margin-bottom:12px" onclick="backFromCustomerDetails()">← Back</button>'}
 
             <h3>
                 👤 ${escapeHtml(customer.name || "-")}
@@ -5098,9 +5098,16 @@ let customerPage = 0;
 const CUSTOMERS_PER_PAGE = 50;
 
 let customerDetailReturn = "search";
+let customerListReturnScrollY = 0;
+
+async function backFromCustomerList(){
+    await loadCustomers(customerPage);
+    window.scrollTo({top:customerListReturnScrollY,behavior:"auto"});
+}
 
 async function openCustomerDetailsFromList(customerId){
     customerDetailReturn = "list";
+    customerListReturnScrollY = window.scrollY || window.pageYOffset || 0;
     const box = document.getElementById("customerList");
     box.innerHTML = '<p>Loading customer details...</p>';
     try{
@@ -5111,7 +5118,7 @@ async function openCustomerDetailsFromList(customerId){
             .maybeSingle();
         if(error) throw error;
         if(!customer){
-            box.innerHTML = '<div class="status error">Customer not found.</div><button class="gray full" onclick="loadCustomers(customerPage)">← Back to Customers</button>';
+            box.innerHTML = '<div class="status error">Customer not found.</div><button class="gray full" onclick="backFromCustomerList()">← Back</button>';
             return;
         }
         let referralOwner = null;
@@ -5130,7 +5137,7 @@ async function openCustomerDetailsFromList(customerId){
         box.scrollIntoView({behavior:"smooth",block:"start"});
     }catch(error){
         console.error("Customer details load error:",error);
-        box.innerHTML = '<div class="status error">Unable to load customer details.</div><button class="gray full" onclick="loadCustomers(customerPage)">← Back to Customers</button>';
+        box.innerHTML = '<div class="status error">Unable to load customer details.</div><button class="gray full" onclick="backFromCustomerList()">← Back</button>';
     }
 }
 
