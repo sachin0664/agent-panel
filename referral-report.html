@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sathi Pay - Referral Report</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+body.pageLocked{visibility:hidden}body.pageReady{visibility:visible}
+header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:20px 16px}
+.header-inner{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:23px;margin:0}.sub{font-size:13px;opacity:.9;margin-top:6px}
+.back{color:#fff;text-decoration:none;border:1px solid #ffffff70;padding:10px 13px;border-radius:10px;font-weight:bold;font-size:13px}
+.container{max-width:1150px;margin:20px auto;padding:0 14px 35px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat,.card{background:#fff;border-radius:16px;padding:17px;box-shadow:0 4px 16px #0000000b}
+.stat small{display:block;color:#64748b;font-size:12px}.stat strong{display:block;font-size:25px;margin-top:7px}
+.card{margin-bottom:16px}.card h2{font-size:18px;margin:0 0 14px}
+.controls{display:flex;gap:10px;flex-wrap:wrap}
+input{flex:1;min-width:200px;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px}
+button{border:0;border-radius:10px;padding:12px 16px;background:#2563eb;color:#fff;font-weight:bold;cursor:pointer}
+.muted{background:#64748b}.message{padding:12px;background:#eff6ff;border-radius:10px;color:#1e40af;margin-top:12px;font-size:13px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
+th{background:#f8fafc;color:#475569;white-space:nowrap}
+.rank{font-weight:bold;color:#1d4ed8}.count{font-weight:bold;background:#eff6ff;color:#1d4ed8;padding:5px 9px;border-radius:20px;display:inline-block}
+.pair{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-top:9px}
+.pair strong{display:block;margin-bottom:5px}.small{font-size:12px;color:#64748b;line-height:1.5}
+.empty{text-align:center;padding:22px;color:#64748b}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:span 2}.stat{padding:14px}.stat strong{font-size:22px}.container{margin-top:14px}}
+</style>
+</head>
+<body class="pageLocked">
+<header><div class="header-inner"><div><h1>🏆 Referral Report</h1><div class="sub">Sathi Pay Admin · Referral ranking and registration details</div></div><a class="back" href="admin.html">← Admin Panel</a></div></header>
+<main class="container">
+<div class="stats">
+<div class="stat"><small>Total Customers</small><strong id="totalCustomers">—</strong></div>
+<div class="stat"><small>Customers Joined by Referral</small><strong id="referredCustomers">—</strong></div>
+<div class="stat"><small>Total Referrers</small><strong id="totalReferrers">—</strong></div>
+</div>
+<section class="card">
+<h2>🥇 Most Referrals — Ranking</h2>
+<div class="small" style="margin-bottom:12px">Highest number of direct registrations appears first. Ranking is based on customer referral records, not commission transactions.</div>
+<div class="table-wrap"><table><thead><tr><th>Rank</th><th>Referrer Name</th><th>Referrer UID</th><th>Direct Referrals</th></tr></thead><tbody id="rankingBody"><tr><td colspan="4" class="empty">Loading referral ranking…</td></tr></tbody></table></div>
+</section>
+<section class="card">
+<h2>🔎 Who Referred Whom?</h2>
+<div class="controls"><input id="searchInput" type="search" placeholder="Search referrer or referred customer by name / UID"><button onclick="renderDetails()">Search</button><button class="muted" onclick="clearSearch()">Clear</button></div>
+<div id="detailCount" class="message">Loading referral registrations…</div>
+<div id="detailsList"></div>
+</section>
+</main>
+<script>
+const SUPABASE_URL="https://lozluohksmjxbxixkbmq.supabase.co";
+const SUPABASE_KEY="sb_publishable_R6LUj2dUcEwVL5Xuce-7Wg_8y4ZpnBm";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let allCustomers=[];
+let referralPairs=[];
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+async function verifyAdminAccess(){
+ try{
+  const {data,error}=await supabaseClient.auth.getUser();
+  if(error||!data?.user){window.location.replace("admin-login.html");return false}
+  const {data:isAdmin,error:adminError}=await supabaseClient.rpc("is_admin");
+  if(adminError||isAdmin!==true){await supabaseClient.auth.signOut();window.location.replace("admin-login.html");return false}
+  document.body.classList.remove("pageLocked");document.body.classList.add("pageReady");return true;
+ }catch(e){console.error(e);window.location.replace("admin-login.html");return false}
+}
+async function loadReferralReport(){
+ const rank=document.getElementById("rankingBody");
+ rank.innerHTML='<tr><td colspan="4" class="empty">Loading customers…</td></tr>';
+ try{
+  const rows=[];const pageSize=500;let from=0;
+  while(true){
+   const {data,error}=await supabaseClient.from("customers")
+    .select("id,name,uid,mobile,referred_by,created_at,status")
+    .neq("status","Deleted").order("created_at",{ascending:false})
+    .range(from,from+pageSize-1);
+   if(error)throw error;
+   rows.push(...(data||[]));
+   if(!data||data.length<pageSize)break;
+   from+=pageSize;
+  }
+  allCustomers=rows;
+  const byId=new Map(rows.map(c=>[String(c.id),c]));
+  const counts=new Map();
+  referralPairs=[];
+  rows.forEach(joined=>{
+   if(!joined.referred_by)return;
+   const referrer=byId.get(String(joined.referred_by));
+   if(!referrer)return;
+   counts.set(String(referrer.id),(counts.get(String(referrer.id))||0)+1);
+   referralPairs.push({referrer,joined});
+  });
+  const ranking=[...counts.entries()].map(([id,count])=>({customer:byId.get(id),count}))
+   .sort((a,b)=>b.count-a.count||String(a.customer?.name||"").localeCompare(String(b.customer?.name||"")));
+  document.getElementById("totalCustomers").textContent=rows.length.toLocaleString("en-IN");
+  document.getElementById("referredCustomers").textContent=referralPairs.length.toLocaleString("en-IN");
+  document.getElementById("totalReferrers").textContent=ranking.length.toLocaleString("en-IN");
+  rank.innerHTML=ranking.length?ranking.map((item,i)=>'<tr><td class="rank">#'+(i+1)+'</td><td><b>'+esc(item.customer?.name||"—")+'</b></td><td>'+esc(item.customer?.uid||"—")+'</td><td><span class="count">'+item.count+'</span></td></tr>').join(""):'<tr><td colspan="4" class="empty">No referral records found.</td></tr>';
+  renderDetails();
+ }catch(error){
+  console.error("Referral report error:",error);
+  rank.innerHTML='<tr><td colspan="4" class="empty">Unable to load referral report. Please refresh.</td></tr>';
+  document.getElementById("detailCount").textContent="Could not load referral registrations.";
+ }
+}
+function renderDetails(){
+ const q=document.getElementById("searchInput").value.trim().toLowerCase();
+ const filtered=referralPairs.filter(({referrer,joined})=>{
+  const a=[referrer.name,referrer.uid,referrer.mobile,joined.name,joined.uid,joined.mobile].join(" ").toLowerCase();
+  return !q||a.includes(q);
+ }).sort((a,b)=>new Date(b.joined.created_at||0)-new Date(a.joined.created_at||0));
+ document.getElementById("detailCount").textContent=filtered.length+" referral registration(s) shown";
+ const box=document.getElementById("detailsList");
+ if(!filtered.length){box.innerHTML='<div class="empty">No matching referral registrations found.</div>';return}
+ box.innerHTML=filtered.map(({referrer,joined})=>'<div class="pair"><strong>'+esc(referrer.name||"Customer")+' ('+esc(referrer.uid||"No UID")+') referred → '+esc(joined.name||"Customer")+' ('+esc(joined.uid||"No UID")+')</strong><div class="small">Referrer mobile: '+esc(referrer.mobile||"—")+' · Joined customer mobile: '+esc(joined.mobile||"—")+'<br>Registration date: '+(joined.created_at?new Date(joined.created_at).toLocaleString("en-IN"):"—")+'</div></div>').join("");
+}
+function clearSearch(){document.getElementById("searchInput").value="";renderDetails()}
+document.getElementById("searchInput").addEventListener("keydown",e=>{if(e.key==="Enter")renderDetails()});
+supabaseClient.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT")window.location.replace("admin-login.html")});
+document.addEventListener("DOMContentLoaded",async()=>{if(await verifyAdminAccess())await loadReferralReport()});
+</script>
+</body>
+</html>
