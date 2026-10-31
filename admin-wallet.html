@@ -1102,7 +1102,7 @@ td{
                     class="btn btn-small"
                     onclick="closeDetails()">
 
-                    ← Back to All Customers
+                    ← Back
 
                 </button>
 
@@ -2773,9 +2773,13 @@ async function searchCustomer(){
    OPEN CUSTOMER
 ===================================================== */
 
+let customerReturnScrollY = 0;
+
 async function openCustomer(
     customerId
 ){
+
+    customerReturnScrollY = window.scrollY || window.pageYOffset || 0;
 
     const customer =
         customers.find(
@@ -4515,6 +4519,11 @@ function closeDetails(){
 
     currentCustomer =
         null;
+
+    window.scrollTo({
+        top: customerReturnScrollY,
+        behavior: "auto"
+    });
 
 }
 
