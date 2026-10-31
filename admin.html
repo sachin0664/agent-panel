@@ -3653,7 +3653,7 @@ function renderCustomer(customer, referralOwner = null, targetBox = null){
 
         <div class="item">
 
-            <button class="gray full" style="margin-bottom:12px" onclick="backFromCustomerDetails()">← Back</button>
+            ${targetBox ? '<button class="gray full" style="margin-bottom:12px" onclick="loadCustomers(customerPage)">← Back to Customers</button>' : '<button class="gray full" style="margin-bottom:12px" onclick="backFromCustomerDetails()">← Back</button>'}
 
             <h3>
                 👤 ${escapeHtml(customer.name || "-")}
