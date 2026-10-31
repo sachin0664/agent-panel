@@ -374,11 +374,13 @@ button:disabled{
 }
 
 #customerList,
+#inactiveCustomerList,
 #archivedCustomerList{
     display:none;
 }
 
 #customerList.open,
+#inactiveCustomerList.open,
 #archivedCustomerList.open{
     display:block;
 }
@@ -1238,6 +1240,19 @@ body.pageReady{
     </button>
 
     <div id="customerList"></div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>⏳ Inactive Customers</h2>
+
+    <button class="blue full" onclick="openCustomerFunction('inactive')">
+        ⏳ Open Inactive Customers
+    </button>
+
+    <div id="inactiveCustomerList"></div>
 
 </div>
 
@@ -4349,9 +4364,11 @@ let activeAdminFunction = null;
 function openCustomerFunction(type){
 
     const customerBox = document.getElementById("customerList");
+    const inactiveBox = document.getElementById("inactiveCustomerList");
     const archivedBox = document.getElementById("archivedCustomerList");
 
     customerBox.classList.remove("open");
+    inactiveBox.classList.remove("open");
     archivedBox.classList.remove("open");
 
     if(type === "customers"){
@@ -4359,6 +4376,14 @@ function openCustomerFunction(type){
         customerBox.classList.add("open");
         history.pushState({adminFunction:"customers"}, "", "#customers");
         loadCustomers(0);
+        return;
+    }
+
+    if(type === "inactive"){
+        activeAdminFunction = "inactive";
+        inactiveBox.classList.add("open");
+        history.pushState({adminFunction:"inactive"}, "", "#inactive");
+        loadInactiveCustomers();
         return;
     }
 
@@ -4373,9 +4398,11 @@ function openCustomerFunction(type){
 function closeAdminFunction(){
 
     const customerBox = document.getElementById("customerList");
+    const inactiveBox = document.getElementById("inactiveCustomerList");
     const archivedBox = document.getElementById("archivedCustomerList");
 
     customerBox.classList.remove("open");
+    inactiveBox.classList.remove("open");
     archivedBox.classList.remove("open");
     activeAdminFunction = null;
 }
@@ -4385,6 +4412,77 @@ window.addEventListener("popstate", function(){
         closeAdminFunction();
     }
 });
+
+
+/* =====================================================
+   INACTIVE CUSTOMERS
+===================================================== */
+
+async function loadInactiveCustomers(){
+
+    const box = document.getElementById("inactiveCustomerList");
+    box.innerHTML = "<p>Loading inactive customers...</p>";
+
+    const {data,error} = await supabaseClient.rpc("admin_get_inactive_customers");
+
+    if(error){
+        box.innerHTML = `<div class="status error">❌ ${escapeHtml(error.message)}</div>`;
+        return;
+    }
+
+    if(!data || !data.length){
+        box.innerHTML = '<div class="empty">✅ No inactive customers found.</div>';
+        return;
+    }
+
+    box.innerHTML = data.map(customer => `
+        <div class="item">
+            <h3>👤 ${escapeHtml(customer.name || "-")}</h3>
+            <div class="row"><span class="label">UID</span><span class="value">${escapeHtml(customer.uid || "-")}</span></div>
+            <div class="row"><span class="label">Mobile</span><span class="value">${escapeHtml(customer.mobile || "-")}</span></div>
+            <div class="row"><span class="label">Registration Date & Time</span><span class="value">${customer.created_at ? formatReferralDate(customer.created_at) : "-"}</span></div>
+            <div class="row"><span class="label">Activity</span><span class="value">No Deposit / Sell recorded</span></div>
+            <div class="actions">
+                <button class="red full" onclick="archiveInactiveCustomer('${escapeHtml(customer.id)}')">
+                    🗑️ Move to Deleted Customers
+                </button>
+            </div>
+        </div>
+    `).join("");
+}
+
+async function archiveInactiveCustomer(customerId){
+
+    if(!customerId){
+        alert("❌ Customer ID missing.");
+        return;
+    }
+
+    const confirmed = confirm(
+        "Is customer ko Inactive Customers se Deleted / Blocked Customers folder me move karna hai?\n\nSystem dobara check karega ki customer ne koi Deposit ya Sell nahi kiya."
+    );
+
+    if(!confirmed) return;
+
+    try{
+        const {data,error} = await supabaseClient.rpc(
+            "admin_archive_inactive_customer",
+            {p_customer_id:customerId}
+        );
+
+        if(error) throw error;
+        if(data !== true) throw new Error("Customer could not be moved.");
+
+        alert("✅ Customer Deleted / Blocked Customers folder me move ho gaya.");
+
+        await loadInactiveCustomers();
+        await loadAdminTotals();
+
+    }catch(error){
+        console.error("Archive inactive customer error:",error);
+        alert("❌ Customer move nahi hua:\\n\\n" + (error.message || "Please try again."));
+    }
+}
 
 
 /* =====================================================
