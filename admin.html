@@ -3473,6 +3473,7 @@ async function searchCustomer(){
         );
 
     const box =
+        targetBox ||
         document.getElementById(
             "customerDetails"
         );
@@ -3579,6 +3580,7 @@ async function searchCustomer(){
         }
     }
 
+    customerDetailReturn = "search";
     renderCustomer(
         customer,
         referralOwner
@@ -3606,7 +3608,16 @@ async function searchCustomer(){
    RENDER CUSTOMER
 ===================================================== */
 
-function renderCustomer(customer, referralOwner = null){
+function backFromCustomerDetails(){
+    const box=document.getElementById("customerDetails");
+    box.innerHTML="";
+    const status=document.getElementById("searchStatus");
+    status.className="status";
+    status.textContent="Ready to search.";
+    document.getElementById("customerSearch").focus();
+}
+
+function renderCustomer(customer, referralOwner = null, targetBox = null){
 
     const box =
         document.getElementById(
@@ -3641,6 +3652,8 @@ function renderCustomer(customer, referralOwner = null){
     box.innerHTML = `
 
         <div class="item">
+
+            <button class="gray full" style="margin-bottom:12px" onclick="backFromCustomerDetails()">← Back</button>
 
             <h3>
                 👤 ${escapeHtml(customer.name || "-")}
@@ -3792,13 +3805,12 @@ function renderCustomer(customer, referralOwner = null){
 ===================================================== */
 
 async function loadAdminReferralOverview(
-    customerId
+    customerId,
+    targetBox = null
 ){
 
     const box =
-        document.getElementById(
-            "adminReferralNetwork"
-        );
+        (targetBox || document).querySelector("#adminReferralNetwork");
 
     if(!box){
 
@@ -5084,6 +5096,43 @@ async function updateDeposit(
 let customerPage = 0;
 const CUSTOMERS_PER_PAGE = 50;
 
+let customerDetailReturn = "search";
+
+async function openCustomerDetailsFromList(customerId){
+    customerDetailReturn = "list";
+    const box = document.getElementById("customerList");
+    box.innerHTML = '<p>Loading customer details...</p>';
+    try{
+        const {data:customer,error} = await supabaseClient
+            .from("customers")
+            .select("*")
+            .eq("id",customerId)
+            .maybeSingle();
+        if(error) throw error;
+        if(!customer){
+            box.innerHTML = '<div class="status error">Customer not found.</div><button class="gray full" onclick="loadCustomers(customerPage)">← Back to Customers</button>';
+            return;
+        }
+        let referralOwner = null;
+        if(customer.referred_by){
+            const {data:owner,error:ownerError} = await supabaseClient
+                .from("customers")
+                .select("name,uid,mobile,invitation_code")
+                .eq("invitation_code",String(customer.referred_by).trim())
+                .maybeSingle();
+            if(!ownerError) referralOwner = owner;
+        }
+        box.innerHTML = '<button class="gray full" style="margin-bottom:12px" onclick="loadCustomers(customerPage)">← Back to Customers</button><div id="customerListDetail"></div>';
+        const detailBox = document.getElementById("customerListDetail");
+        renderCustomer(customer,referralOwner,detailBox);
+        await loadAdminReferralOverview(customer.id,detailBox);
+        box.scrollIntoView({behavior:"smooth",block:"start"});
+    }catch(error){
+        console.error("Customer details load error:",error);
+        box.innerHTML = '<div class="status error">Unable to load customer details.</div><button class="gray full" onclick="loadCustomers(customerPage)">← Back to Customers</button>';
+    }
+}
+
 async function loadCustomers(page = customerPage){
 
     const box = document.getElementById("customerList");
@@ -5143,26 +5192,23 @@ async function loadCustomers(page = customerPage){
             return;
         }
 
-        box.innerHTML = data.map(c => `
-            <div class="item">
+        box.innerHTML = data.map(c => {
+            const owner = referralOwnersByCode.get(String(c.referred_by || "").trim().toUpperCase());
+            const referredByText = c.referred_by
+                ? (owner ? (owner.name || "Customer") + " · UID: " + (owner.uid || "-") : "Referral code: " + c.referred_by)
+                : "—";
+            return `
+            <div class="item customer-summary-card" role="button" tabindex="0"
+                 onclick="openCustomerDetailsFromList('${escapeHtml(c.id)}')"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCustomerDetailsFromList('${escapeHtml(c.id)}')}">
                 <h3>👤 ${escapeHtml(c.name || "-")}</h3>
                 <div class="row"><span class="label">UID</span><span class="value">${escapeHtml(c.uid || "-")}</span></div>
-                <div class="row"><span class="label">Mobile</span><span class="value">${escapeHtml(c.mobile || "-")}</span></div>
-                <div class="row"><span class="label">Invitation Code</span><span class="value">${escapeHtml(c.invitation_code || "-")}</span></div>
                 <div class="row"><span class="label">Registration Source</span><span class="value">${c.referred_by ? "🔗 Referral Link" : "🌐 Direct Website"}</span></div>
-                <div class="row"><span class="label">Referred By</span><span class="value">${c.referred_by ? (() => { const owner = referralOwnersByCode.get(String(c.referred_by).trim().toUpperCase()); return owner ? escapeHtml((owner.name || "Customer") + " · UID: " + (owner.uid || "-")) : escapeHtml("Referral code: " + c.referred_by + " (referrer details not found)"); })() : "—"}</span></div>
-                <div class="row"><span class="label">Wallet</span><span class="value">${money(c.wallet_balance)}</span></div>
-                <div class="row"><span class="label">Deposit Balance</span><span class="value">${money(c.deposit_balance)}</span></div>
-                <div class="row"><span class="label">Commission</span><span class="value">${money(c.commission_balance)}</span></div>
-                <div class="row"><span class="label">Referral</span><span class="value">${money(c.referral_balance)}</span></div>
-                <div class="row"><span class="label">Bonus</span><span class="value">${money(c.bonus_balance)}</span></div>
-                <div class="row"><span class="label">Status</span><span class="value">${escapeHtml(c.status || "Active")}</span></div>
-                <div class="row"><span class="label">Sell</span><span class="value">${c.sell_on ? "🟢 ON" : "🔴 OFF"}</span></div>
-                <div class="actions">
-                    <button class="red full" onclick="deleteCustomer('${c.id}')">🗑️ Delete Customer</button>
-                </div>
+                <div class="row"><span class="label">Referred By</span><span class="value">${escapeHtml(referredByText)}</span></div>
+                <div class="small" style="margin-top:10px;color:#2563eb;font-weight:bold">Tap to view full customer details →</div>
             </div>
-        `).join("");
+            `;
+        }).join("");
 
         const totalPages = Math.max(1,Math.ceil((count || 0) / CUSTOMERS_PER_PAGE));
         box.insertAdjacentHTML("beforeend", `
