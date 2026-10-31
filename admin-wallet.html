@@ -2601,6 +2601,7 @@ function renderCustomers(
 
                     <div
                         class="customer-card"
+                        data-customer-id="${esc(customer.id)}"
                         onclick="openCustomer('${esc(customer.id)}')">
 
 
@@ -2773,13 +2774,13 @@ async function searchCustomer(){
    OPEN CUSTOMER
 ===================================================== */
 
-let customerReturnScrollY = 0;
+let customerReturnCustomerId = null;
 
 async function openCustomer(
     customerId
 ){
 
-    customerReturnScrollY = window.scrollY || window.pageYOffset || 0;
+    customerReturnCustomerId = String(customerId);
 
     const customer =
         customers.find(
@@ -4520,10 +4521,16 @@ function closeDetails(){
     currentCustomer =
         null;
 
-    window.scrollTo({
-        top: customerReturnScrollY,
-        behavior: "auto"
-    });
+    const selectedCard = Array.from(
+        document.querySelectorAll("#customersGrid [data-customer-id]")
+    ).find(card => String(card.dataset.customerId) === String(customerReturnCustomerId));
+
+    if(selectedCard){
+        selectedCard.scrollIntoView({
+            behavior: "auto",
+            block: "center"
+        });
+    }
 
 }
 
