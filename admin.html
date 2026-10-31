@@ -5123,7 +5123,7 @@ async function openCustomerDetailsFromList(customerId){
                 .maybeSingle();
             if(!ownerError) referralOwner = owner;
         }
-        box.innerHTML = '<button class="gray full" style="margin-bottom:12px" onclick="loadCustomers(customerPage)">← Back to Customers</button><div id="customerListDetail"></div>';
+        box.innerHTML = '<div id="customerListDetail"></div>';
         const detailBox = document.getElementById("customerListDetail");
         renderCustomer(customer,referralOwner,detailBox);
         await loadAdminReferralOverview(customer.id,detailBox);
