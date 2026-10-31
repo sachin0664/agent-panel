@@ -5106,6 +5106,32 @@ async function loadCustomers(page = customerPage){
 
         if(error) throw error;
 
+        const referralCodes = [...new Set(
+            (data || [])
+                .map(c => String(c.referred_by || "").trim())
+                .filter(Boolean)
+        )];
+
+        let referralOwnersByCode = new Map();
+
+        if(referralCodes.length){
+            const {data:owners,error:ownersError} = await supabaseClient
+                .from("customers")
+                .select("name,uid,invitation_code")
+                .in("invitation_code",referralCodes);
+
+            if(ownersError){
+                console.warn("Could not load referrer names for customer list:",ownersError);
+            }else{
+                referralOwnersByCode = new Map(
+                    (owners || []).map(owner => [
+                        String(owner.invitation_code || "").trim().toUpperCase(),
+                        owner
+                    ])
+                );
+            }
+        }
+
         if(!data || !data.length){
             box.innerHTML = customerPage === 0
                 ? '<div class="empty">No customers found.</div>'
@@ -5123,6 +5149,8 @@ async function loadCustomers(page = customerPage){
                 <div class="row"><span class="label">UID</span><span class="value">${escapeHtml(c.uid || "-")}</span></div>
                 <div class="row"><span class="label">Mobile</span><span class="value">${escapeHtml(c.mobile || "-")}</span></div>
                 <div class="row"><span class="label">Invitation Code</span><span class="value">${escapeHtml(c.invitation_code || "-")}</span></div>
+                <div class="row"><span class="label">Registration Source</span><span class="value">${c.referred_by ? "🔗 Referral Link" : "🌐 Direct Website"}</span></div>
+                <div class="row"><span class="label">Referred By</span><span class="value">${c.referred_by ? (() => { const owner = referralOwnersByCode.get(String(c.referred_by).trim().toUpperCase()); return owner ? escapeHtml((owner.name || "Customer") + " · UID: " + (owner.uid || "-")) : escapeHtml("Referral code: " + c.referred_by + " (referrer details not found)"); })() : "—"}</span></div>
                 <div class="row"><span class="label">Wallet</span><span class="value">${money(c.wallet_balance)}</span></div>
                 <div class="row"><span class="label">Deposit Balance</span><span class="value">${money(c.deposit_balance)}</span></div>
                 <div class="row"><span class="label">Commission</span><span class="value">${money(c.commission_balance)}</span></div>
