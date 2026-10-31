@@ -3620,6 +3620,7 @@ function backFromCustomerDetails(){
 function renderCustomer(customer, referralOwner = null, targetBox = null){
 
     const box =
+        targetBox ||
         document.getElementById(
             "customerDetails"
         );
