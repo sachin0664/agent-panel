@@ -43,8 +43,8 @@ th{background:#f8fafc;color:#475569;white-space:nowrap}
 </div>
 <section class="card">
 <h2>🥇 Most Referrals — Ranking</h2>
-<div class="small" style="margin-bottom:12px">Highest number of direct registrations appears first. Ranking is based on customer referral records, not commission transactions.</div>
-<div class="table-wrap"><table><thead><tr><th>Rank</th><th>Referrer Name</th><th>Referrer UID</th><th>Direct Referrals</th></tr></thead><tbody id="rankingBody"><tr><td colspan="4" class="empty">Loading referral ranking…</td></tr></tbody></table></div>
+<div class="small" style="margin-bottom:12px">Ranking is by total Level A + B + C network. Counts are based on invitation-code referral records.</div>
+<div class="table-wrap"><table><thead><tr><th>Rank</th><th>Referrer Name</th><th>Referrer UID</th><th>Level A</th><th>Level B</th><th>Level C</th><th>Total Network</th></tr></thead><tbody id="rankingBody"><tr><td colspan="4" class="empty">Loading referral ranking…</td></tr></tbody></table></div>
 </section>
 <section class="card">
 <h2>🔎 Who Referred Whom?</h2>
@@ -71,12 +71,12 @@ async function verifyAdminAccess(){
 }
 async function loadReferralReport(){
  const rank=document.getElementById("rankingBody");
- rank.innerHTML='<tr><td colspan="4" class="empty">Loading customers…</td></tr>';
+ rank.innerHTML='<tr><td colspan="7" class="empty">Loading customers…</td></tr>';
  try{
   const rows=[];const pageSize=500;let from=0;
   while(true){
    const {data,error}=await supabaseClient.from("customers")
-    .select("id,name,uid,mobile,referred_by,created_at,status")
+    .select("id,name,uid,mobile,invitation_code,referred_by,created_at,status")
     .neq("status","Deleted").order("created_at",{ascending:false})
     .range(from,from+pageSize-1);
    if(error)throw error;
@@ -85,39 +85,57 @@ async function loadReferralReport(){
    from+=pageSize;
   }
   allCustomers=rows;
-  const byId=new Map(rows.map(c=>[String(c.id),c]));
-  const counts=new Map();
+  const byCode=new Map();
+  rows.forEach(c=>{const code=String(c.invitation_code||"").trim().toUpperCase();if(code&&!byCode.has(code))byCode.set(code,c)});
+  const children=new Map();
   referralPairs=[];
   rows.forEach(joined=>{
-   if(!joined.referred_by)return;
-   const referrer=byId.get(String(joined.referred_by));
+   const code=String(joined.referred_by||"").trim().toUpperCase();
+   if(!code)return;
+   const referrer=byCode.get(code);
    if(!referrer)return;
-   counts.set(String(referrer.id),(counts.get(String(referrer.id))||0)+1);
+   const parentId=String(referrer.id);
+   if(!children.has(parentId))children.set(parentId,[]);
+   children.get(parentId).push(joined);
    referralPairs.push({referrer,joined});
   });
-  const ranking=[...counts.entries()].map(([id,count])=>({customer:byId.get(id),count}))
-   .sort((a,b)=>b.count-a.count||String(a.customer?.name||"").localeCompare(String(b.customer?.name||"")));
+  const getDescendants=(customer,depth,seen=new Set())=>{
+   if(depth===0||!customer)return [];
+   const id=String(customer.id);
+   if(seen.has(id))return [];
+   const nextSeen=new Set(seen);nextSeen.add(id);
+   const direct=children.get(id)||[];
+   if(depth===1)return direct;
+   return direct.concat(...direct.map(child=>getDescendants(child,depth-1,nextSeen)));
+  };
+  const ranking=rows.map(customer=>{
+   const levelA=children.get(String(customer.id))||[];
+   const levelB=levelA.flatMap(child=>children.get(String(child.id))||[]);
+   const levelC=levelB.flatMap(child=>children.get(String(child.id))||[]);
+   return {customer,levelA,levelB,levelC,total:levelA.length+levelB.length+levelC.length};
+  }).filter(x=>x.total>0)
+   .sort((a,b)=>b.total-a.total||b.levelA.length-a.levelA.length||String(a.customer.name||"").localeCompare(String(b.customer.name||"")));
   document.getElementById("totalCustomers").textContent=rows.length.toLocaleString("en-IN");
   document.getElementById("referredCustomers").textContent=referralPairs.length.toLocaleString("en-IN");
   document.getElementById("totalReferrers").textContent=ranking.length.toLocaleString("en-IN");
-  rank.innerHTML=ranking.length?ranking.map((item,i)=>'<tr><td class="rank">#'+(i+1)+'</td><td><b>'+esc(item.customer?.name||"—")+'</b></td><td>'+esc(item.customer?.uid||"—")+'</td><td><span class="count">'+item.count+'</span></td></tr>').join(""):'<tr><td colspan="4" class="empty">No referral records found.</td></tr>';
+  rank.innerHTML=ranking.length?ranking.map((item,i)=>'<tr><td class="rank">#'+(i+1)+'</td><td><b>'+esc(item.customer.name||"—")+'</b></td><td>'+esc(item.customer.uid||"—")+'</td><td><span class="count">'+item.levelA.length+'</span></td><td><span class="count">'+item.levelB.length+'</span></td><td><span class="count">'+item.levelC.length+'</span></td><td><span class="count">'+item.total+'</span></td></tr>').join(""):'<tr><td colspan="7" class="empty">No referral records found.</td></tr>';
   renderDetails();
  }catch(error){
   console.error("Referral report error:",error);
-  rank.innerHTML='<tr><td colspan="4" class="empty">Unable to load referral report. Please refresh.</td></tr>';
+  rank.innerHTML='<tr><td colspan="7" class="empty">Unable to load referral report. Please refresh.</td></tr>';
   document.getElementById("detailCount").textContent="Could not load referral registrations.";
  }
 }
 function renderDetails(){
  const q=document.getElementById("searchInput").value.trim().toLowerCase();
  const filtered=referralPairs.filter(({referrer,joined})=>{
-  const a=[referrer.name,referrer.uid,referrer.mobile,joined.name,joined.uid,joined.mobile].join(" ").toLowerCase();
+  const a=[referrer.name,referrer.uid,referrer.invitation_code,joined.name,joined.uid,joined.invitation_code].join(" ").toLowerCase();
   return !q||a.includes(q);
  }).sort((a,b)=>new Date(b.joined.created_at||0)-new Date(a.joined.created_at||0));
  document.getElementById("detailCount").textContent=filtered.length+" referral registration(s) shown";
  const box=document.getElementById("detailsList");
  if(!filtered.length){box.innerHTML='<div class="empty">No matching referral registrations found.</div>';return}
- box.innerHTML=filtered.map(({referrer,joined})=>'<div class="pair"><strong>'+esc(referrer.name||"Customer")+' ('+esc(referrer.uid||"No UID")+') referred → '+esc(joined.name||"Customer")+' ('+esc(joined.uid||"No UID")+')</strong><div class="small">Referrer mobile: '+esc(referrer.mobile||"—")+' · Joined customer mobile: '+esc(joined.mobile||"—")+'<br>Registration date: '+(joined.created_at?new Date(joined.created_at).toLocaleString("en-IN"):"—")+'</div></div>').join("");
+ box.innerHTML=filtered.map(({referrer,joined})=>'<div class="pair"><strong>'+esc(referrer.name||"Customer")+' ('+esc(referrer.uid||"No UID")+') referred → '+esc(joined.name||"Customer")+' ('+esc(joined.uid||"No UID")+')</strong><div class="small">Level A · Referrer code: '+esc(referrer.invitation_code||"—")+' · Joined customer code: '+esc(joined.invitation_code||"—")+'<br>Registration date: '+(joined.created_at?new Date(joined.created_at).toLocaleString("en-IN"):"—")+'</div></div>').join("");
 }
 function clearSearch(){document.getElementById("searchInput").value="";renderDetails()}
 document.getElementById("searchInput").addEventListener("keydown",e=>{if(e.key==="Enter")renderDetails()});
