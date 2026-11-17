@@ -11,7 +11,12 @@ android {
         minSdk 23
         targetSdk 34
         versionCode 4
-        versionName '1.1.0'
+        versionName '1.2.0'
+        buildConfigField 'String', 'WEB_APP_URL', '\"' + (project.findProperty('webAppUrl') ?: '') + '\"'
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     buildTypes {
