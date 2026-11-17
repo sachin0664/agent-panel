@@ -1,5 +1,5 @@
 /* =========================================
-   SATHI PAY - CUSTOMER GUARD
+   RUVI PAY - CUSTOMER GUARD
    FINAL SESSION + SECURITY GUARD
 ========================================= */
 
@@ -13,16 +13,16 @@
     ========================================= */
 
     const CUSTOMER_ID_KEY =
-        "sathiPayCustomerId";
+        "ruviPayCustomerId";
 
     const CUSTOMER_UID_KEY =
-        "sathiPayUID";
+        "ruviPayUID";
 
     const INVITATION_CODE_KEY =
-        "sathiPayInvitationCode";
+        "ruviPayInvitationCode";
 
     const SECURITY_ALERT_KEY =
-        "sathiPaySecurityAlertShown";
+        "ruviPaySecurityAlertShown";
 
 
     /* =========================================
@@ -93,7 +93,7 @@
        REAL LOGOUT
     ========================================= */
 
-    window.sathiPayLogout =
+    window.ruviPayLogout =
         function(){
 
             clearCustomerSession();
@@ -301,7 +301,7 @@
                                 line-height:1.6;
                             "
                         >
-                            Genuine Sathi Pay support will never
+                            Genuine Ruvi Pay support will never
                             ask you to reveal your OTP,
                             password or PIN.
                         </p>
@@ -628,15 +628,15 @@
         getCustomerId;
 
 
-    window.sathiPayHasCustomerSession =
+    window.ruviPayHasCustomerSession =
         hasCustomerSession;
 
 
-    window.sathiPayClearCustomerSession =
+    window.ruviPayClearCustomerSession =
         clearCustomerSession;
 
 
-    window.sathiPayProtectPage =
+    window.ruviPayProtectPage =
         protectPage;
 
 
