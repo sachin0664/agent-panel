@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Create Account</title>
+<title>Ruvi Pay - Create Account</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/app.js?v=5"></script>
@@ -55,7 +55,7 @@ button:disabled{opacity:.65;cursor:not-allowed;transform:none}
 </style>
 
 <style>
-/* Sathi Pay unique SP vector brand */
+/* Ruvi Pay unique SP vector brand */
 .brand-logo{width:68px!important;height:68px!important;border-radius:20px!important;background:transparent!important;padding:0!important;box-shadow:0 10px 24px rgba(35,93,220,.20);display:grid!important;place-items:center!important}
 .brand-logo img{width:68px!important;height:68px!important;object-fit:contain!important;border-radius:20px!important}
 .brand-text{display:block!important}
@@ -66,9 +66,9 @@ button:disabled{opacity:.65;cursor:not-allowed;transform:none}
 
 
 <body>
-<header class="topbar"><div class="brand"><div class="brand-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Sathi Pay"></div><div class="brand-text"><b>Sathi Pay</b><span>SAFE • FAST • TOGETHER</span></div></div></header>
+<header class="topbar"><div class="brand"><div class="brand-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Ruvi Pay"></div><div class="brand-text"><b>Ruvi Pay</b><span>SAFE • FAST • TOGETHER</span></div></div></header>
 <main class="page"><div class="card">
-<section class="hero"><div class="hero-icon"><img src="assets/sathipay-logo.svg?v=13" alt="Sathi Pay"></div><div class="eyebrow">WELCOME TO SATHI PAY</div><h1>Create Your Account</h1><p>Join today and start your digital journey with Sathi Pay</p></section>
+<section class="hero"><div class="hero-icon"><img src="assets/sathipay-logo.svg?v=13" alt="Ruvi Pay"></div><div class="eyebrow">WELCOME TO RUVI PAY</div><h1>Create Your Account</h1><p>Join today and start your digital journey with Ruvi Pay</p></section>
 <div id="referralBox" class="referral-box" style="display:none">🎁 Referral Code: <span id="referralDisplay"></span></div>
 <form id="customerRegisterForm">
 <div class="form-grid">
@@ -81,7 +81,7 @@ button:disabled{opacity:.65;cursor:not-allowed;transform:none}
 <button type="submit" id="registerButton">Create My Account ✨</button>
 </form>
 <div id="customerRegisterMessage" class="message"></div>
-<div class="login-area">Already have an account?<br><a href="customer-login.html">Login to Sathi Pay →</a></div>
+<div class="login-area">Already have an account?<br><a href="customer-login.html">Login to Ruvi Pay →</a></div>
 <div class="trust"><span>🔒 Secure Registration</span><span>⚡ Fast Access</span><span>🛡️ Protected Account</span></div>
 </div></main>
 <script>
@@ -191,7 +191,7 @@ if(urlInvite){
 
 
     sessionStorage.setItem(
-        "sathiPayReferralCode",
+        "ruviPayReferralCode",
         referralCode
     );
 
@@ -199,7 +199,7 @@ if(urlInvite){
 
     referralCode =
         sessionStorage.getItem(
-            "sathiPayReferralCode"
+            "ruviPayReferralCode"
         ) || "";
 
 }
@@ -228,27 +228,7 @@ if(referralCode){
 // ========================================
 
 function generateUID(){
-
-    const randomPart =
-        Math.random()
-            .toString(36)
-            .substring(2,10)
-            .toUpperCase();
-
-
-    const timePart =
-        Date.now()
-            .toString(36)
-            .substring(2,8)
-            .toUpperCase();
-
-
-    return (
-        "SP" +
-        timePart +
-        randomPart
-    );
-
+    return "RP" + String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
 }
 
 
@@ -514,11 +494,9 @@ registerForm.addEventListener(
                     referred_by:
                         validReferral,
 
-                    wallet_balance:
-                        99,
+                    wallet_balance: 49,
 
-                    bonus_balance:
-                        99,
+                    bonus_balance: 49,
 
                     deposit_balance:
                         0,
@@ -566,19 +544,19 @@ registerForm.addEventListener(
             // ========================================
 
             localStorage.setItem(
-                "sathiPayCustomerId",
+                "ruviPayCustomerId",
                 data.user.id
             );
 
 
             localStorage.setItem(
-                "sathiPayUID",
+                "ruviPayUID",
                 uid
             );
 
 
             localStorage.setItem(
-                "sathiPayInvitationCode",
+                "ruviPayInvitationCode",
                 invitationCode
             );
 
@@ -589,7 +567,7 @@ registerForm.addEventListener(
             // ========================================
 
             sessionStorage.removeItem(
-                "sathiPayReferralCode"
+                "ruviPayReferralCode"
             );
 
 
@@ -603,7 +581,7 @@ registerForm.addEventListener(
 
 
             message.innerText =
-                "Registration successful! ₹99 bonus added.";
+                "Registration successful! ₹49 bonus added.";
 
 
             registerForm.reset();
