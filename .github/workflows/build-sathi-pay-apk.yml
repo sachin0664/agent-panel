@@ -50,18 +50,6 @@ jobs:
       - name: Prepare APK
         run: cp sathi-pay-app/app/build/outputs/apk/release/app-release.apk RuviPay.apk
 
-      - name: Publish APK on mysathipay.com
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -e
-          API="repos/${{ github.repository }}/contents/RuviPay.apk"
-          RESPONSE=$(gh api "$API" 2>/dev/null || true)
-          SHA=$(printf '%s' "$RESPONSE" | python -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || true)
-
-          python -c 'import base64,json,sys; p={"message":"Update customer APK" if sys.argv[1] else "Add customer APK","content":base64.b64encode(open("RuviPay.apk","rb").read()).decode("ascii"),"branch":"main"}; p.update({"sha":sys.argv[1]} if sys.argv[1] else {}); json.dump(p,open("apk-payload.json","w"))' "$SHA"
-          gh api --method PUT "$API" --input apk-payload.json
-
       - name: Publish APK release
         uses: softprops/action-gh-release@v2
         with:
@@ -69,6 +57,6 @@ jobs:
           name: Ruvi Pay Android App v1.1.0-${{ github.run_number }}
           body: |
             Ruvi Pay Android application.
-            The app opens the live Ruvi Pay website at https://mysathipay.com/
+            The app website URL is configured at build time using the webAppUrl Gradle property. Build the customer APK only after the new Ruvi Pay domain is connected.
           files: RuviPay.apk
           make_latest: true
