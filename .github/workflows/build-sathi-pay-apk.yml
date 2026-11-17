@@ -1,17 +1,6 @@
 name: Build Ruvi Pay APK
-# Branding build: use the same crowned SP logo as the website/customer pages.
 
 on:
-  push:
-    paths:
-      - 'sathi-pay-app/**'
-      - 'customer-register.html'
-      - 'assets/sathipay-logo-user.jpg'
-      - 'assets/sathipay-logo-final.jpg'
-      - 'assets/sathipay-logo-exact.svg'
-      - 'assets/sathipay-logo.svg'
-      - 'assets/sathipay-app-icon.svg'
-      - '.github/workflows/build-sathi-pay-apk.yml'
   workflow_dispatch:
 
 permissions:
@@ -21,6 +10,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Require the new Ruvi Pay website URL
+        env:
+          RUVI_PAY_WEB_APP_URL: ${{ secrets.RUVI_PAY_WEB_APP_URL }}
+        run: |
+          if [ -z "$RUVI_PAY_WEB_APP_URL" ]; then
+            echo "Set the RUVI_PAY_WEB_APP_URL repository secret after the new domain is connected."
+            exit 1
+          fi
+          echo "WEB_APP_URL=$RUVI_PAY_WEB_APP_URL" >> "$GITHUB_ENV"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -35,7 +34,7 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Generate the exact Ruvi Pay SP logo for Android app icon
+      - name: Generate Ruvi Pay app icon
         run: |
           sudo apt-get update
           sudo apt-get install -y librsvg2-bin imagemagick
@@ -43,20 +42,20 @@ jobs:
           rsvg-convert -w 512 -h 512 assets/sathipay-app-icon.svg > sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
           identify sathi-pay-app/app/src/main/res/drawable/sathipay_logo.png
 
-      - name: Set up Gradle build
+      - name: Build Ruvi Pay APK
         working-directory: sathi-pay-app
-        run: gradle assembleRelease --no-daemon
+        run: gradle assembleRelease --no-daemon -PwebAppUrl="$WEB_APP_URL"
 
       - name: Prepare APK
         run: cp sathi-pay-app/app/build/outputs/apk/release/app-release.apk RuviPay.apk
 
-      - name: Publish APK release
+      - name: Publish Ruvi Pay release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ruvi-pay-v1.1.0-${{ github.run_number }}
-          name: Ruvi Pay Android App v1.1.0-${{ github.run_number }}
+          tag_name: ruvi-pay-v1.2.0-${{ github.run_number }}
+          name: Ruvi Pay Android App v1.2.0-${{ github.run_number }}
           body: |
             Ruvi Pay Android application.
-            The app website URL is configured at build time using the webAppUrl Gradle property. Build the customer APK only after the new Ruvi Pay domain is connected.
+            Built with the configured Ruvi Pay website domain.
           files: RuviPay.apk
           make_latest: true
