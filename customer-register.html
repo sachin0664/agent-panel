@@ -228,7 +228,9 @@ if(referralCode){
 // ========================================
 
 function generateUID(){
-    return "RP" + String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
+    const digits = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
+    const letter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+    return "RP" + digits + letter;
 }
 
 
@@ -470,6 +472,7 @@ registerForm.addEventListener(
             // ========================================
 
             const {
+                data: createdProfile,
                 error: profileError
             } =
             await supabaseClient
@@ -522,7 +525,9 @@ registerForm.addEventListener(
                     bonus_received:
                         true
 
-                });
+                })
+                .select("uid")
+                .single();
 
 
 
@@ -551,7 +556,7 @@ registerForm.addEventListener(
 
             localStorage.setItem(
                 "ruviPayUID",
-                uid
+                createdProfile.uid
             );
 
 
