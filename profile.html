@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Sathi Pay - My Profile</title>
+<title>Ruvi Pay - My Profile</title>
 
 <script src="customer-guard.js"></script>
 
@@ -247,7 +247,7 @@ body {
 
 <header class="header">
 
-    <h2>Sathi Pay</h2>
+    <h2>Ruvi Pay</h2>
 
     <a href="dashboard.html">
         Dashboard
@@ -274,7 +274,7 @@ body {
             </h2>
 
             <p>
-                Sathi Pay Customer Account
+                Ruvi Pay Customer Account
             </p>
 
         </div>
@@ -520,7 +520,7 @@ async function loadCustomerProfile() {
     try {
 
         const customerId =
-            localStorage.getItem("sathiPayCustomerId");
+            localStorage.getItem("ruviPayCustomerId");
 
 
         if (!customerId) {
@@ -579,7 +579,7 @@ async function loadCustomerProfile() {
                 "Customer profile not found.";
 
             localStorage.removeItem(
-                "sathiPayCustomerId"
+                "ruviPayCustomerId"
             );
 
             setTimeout(function () {
@@ -657,7 +657,7 @@ async function loadCustomerProfile() {
         if (customerEmail) {
 
             localStorage.setItem(
-                "sathiPayCustomerEmail",
+                "ruviPayCustomerEmail",
                 customerEmail
             );
 
@@ -798,31 +798,31 @@ async function loadCustomerProfile() {
 
 
         localStorage.setItem(
-            "sathiPayCustomerId",
+            "ruviPayCustomerId",
             customer.id
         );
 
 
         localStorage.setItem(
-            "sathiPayUID",
+            "ruviPayUID",
             customer.uid || ""
         );
 
 
         localStorage.setItem(
-            "sathiPayCustomerName",
+            "ruviPayCustomerName",
             customer.name || ""
         );
 
 
         localStorage.setItem(
-            "sathiPayCustomerMobile",
+            "ruviPayCustomerMobile",
             customer.mobile || ""
         );
 
 
         localStorage.setItem(
-            "sathiPayInvitationCode",
+            "ruviPayInvitationCode",
             customer.invitation_code || ""
         );
 
@@ -846,9 +846,9 @@ async function loadCustomerProfile() {
 
 function logoutCustomer() {
 
-    if (window.sathiPayLogout) {
+    if (window.ruviPayLogout) {
 
-        window.sathiPayLogout();
+        window.ruviPayLogout();
 
         return;
 
@@ -856,27 +856,27 @@ function logoutCustomer() {
 
 
     localStorage.removeItem(
-        "sathiPayCustomerId"
+        "ruviPayCustomerId"
     );
 
     localStorage.removeItem(
-        "sathiPayUID"
+        "ruviPayUID"
     );
 
     localStorage.removeItem(
-        "sathiPayInvitationCode"
+        "ruviPayInvitationCode"
     );
 
     localStorage.removeItem(
-        "sathiPayCustomerName"
+        "ruviPayCustomerName"
     );
 
     localStorage.removeItem(
-        "sathiPayCustomerMobile"
+        "ruviPayCustomerMobile"
     );
 
     localStorage.removeItem(
-        "sathiPayCustomerEmail"
+        "ruviPayCustomerEmail"
     );
 
 
