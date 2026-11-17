@@ -10,7 +10,7 @@
   content="width=device-width,initial-scale=1.0"
 >
 
-<title>Sathi Pay - Link UPI</title>
+<title>Ruvi Pay - Link UPI</title>
 
 <style>
 
@@ -629,7 +629,7 @@ body{
 <script>
 
 /* =====================================
-   SATHI PAY — MULTI UPI
+   RUVI PAY — MULTI UPI
    Maximum 3 UPI
    GLOBAL UPI UNIQUENESS
    Customer:
@@ -782,14 +782,14 @@ let currentUPIs = [];
 
 /* =====================================
    GET CUSTOMER ID
-   USE SAVED SATHI PAY CUSTOMER ID
+   USE SAVED RUVI PAY CUSTOMER ID
 ===================================== */
 
 async function getCustomerId(){
 
   const id =
     localStorage.getItem(
-      'sathiPayCustomerId'
+      'ruviPayCustomerId'
     );
 
 
@@ -1631,7 +1631,7 @@ document.getElementById(
 
   /*
    * PIN setup/verification must always use
-   * the currently logged-in Sathi Pay customer.
+   * the currently logged-in Ruvi Pay customer.
    */
   customerId =
     await getCustomerId();
