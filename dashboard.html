@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Home</title>
+<title>Ruvi Pay - Home</title>
 
 <style>
 
@@ -1834,7 +1834,7 @@ header{
 }
 
 
-/* Sathi Pay unique SP vector brand */
+/* Ruvi Pay unique SP vector brand */
 .brand-logo{width:64px;height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:visible;border-radius:18px}
 .brand-logo img{width:64px;height:64px;object-fit:contain;display:block;border-radius:18px}
 .brand-text{display:block!important}
@@ -1853,13 +1853,13 @@ header{
 
         <div class="brand">
 
-            <div class="brand-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Sathi Pay"></div>
+            <div class="brand-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Ruvi Pay"></div>
 
 
             <div class="brand-text">
 
                 <h1>
-                    Sathi <span>Pay</span>
+                    Ruvi <span>Pay</span>
                 </h1>
 
                 <p>
@@ -2266,7 +2266,7 @@ header{
 
             <div class="telegram-subtitle">
                 Latest updates, rewards and important
-                Sathi Pay announcements directly on Telegram.
+                Ruvi Pay announcements directly on Telegram.
             </div>
 
         </div>
@@ -2531,7 +2531,7 @@ header{
         </h3>
 
         <p>
-            Genuine Sathi Pay support will never ask you
+            Genuine Ruvi Pay support will never ask you
             to reveal your OTP, password or PIN.
         </p>
 
@@ -2715,7 +2715,7 @@ function getCustomerId(){
 
     const id =
         localStorage.getItem(
-            "sathiPayCustomerId"
+            "ruviPayCustomerId"
         );
 
     if(
@@ -2856,10 +2856,10 @@ async function shareReferral(){
     const shareData = {
 
         title:
-            "Sathi Pay",
+            "Ruvi Pay",
 
         text:
-            "Join me on Sathi Pay using my referral link:",
+            "Join me on Ruvi Pay using my referral link:",
 
         url:
             currentReferralLink
@@ -2867,19 +2867,19 @@ async function shareReferral(){
     };
 
     /*
-       When running inside the Sathi Pay Android app, use the
+       When running inside the Ruvi Pay Android app, use the
        native Android share chooser. Android WebView does not
        reliably expose navigator.share(), so this prevents the
        Share button from falling back to copy-only behavior.
     */
     if(
-        window.SathiPayAndroid &&
-        typeof window.SathiPayAndroid.shareText === "function"
+        window.RuviPayAndroid &&
+        typeof window.RuviPayAndroid.shareText === "function"
     ){
 
         try{
 
-            window.SathiPayAndroid.shareText(
+            window.RuviPayAndroid.shareText(
                 shareData.title,
                 shareData.text,
                 shareData.url
@@ -2935,7 +2935,7 @@ async function shareReferral(){
 function openTelegram(){
 
     window.open(
-        "https://t.me/SathiPay_Official",
+        "https://t.me/RuviPay_Official",
         "_blank",
         "noopener,noreferrer"
     );
@@ -3161,7 +3161,7 @@ async function loadNotifications(
 
             title.innerText =
                 row.title ||
-                "Sathi Pay Update";
+                "Ruvi Pay Update";
 
             const message =
                 document.createElement(
@@ -3788,9 +3788,9 @@ async function loadDashboard(){
 
     /* Show already-saved, non-financial customer details immediately
        while the authenticated database request is being restored. */
-    const cachedName = localStorage.getItem("sathiPayCustomerName");
-    const cachedUID = localStorage.getItem("sathiPayUID");
-    const cachedCode = localStorage.getItem("sathiPayInvitationCode");
+    const cachedName = localStorage.getItem("ruviPayCustomerName");
+    const cachedUID = localStorage.getItem("ruviPayUID");
+    const cachedCode = localStorage.getItem("ruviPayInvitationCode");
     if(cachedName && document.getElementById("customerName")){
         document.getElementById("customerName").innerText = cachedName;
     }
@@ -4359,7 +4359,7 @@ function closeSecurityModal(){
     if(modal){
         modal.classList.add("hidden");
         localStorage.setItem(
-            "sathiPaySecuritySeen",
+            "ruviPaySecuritySeen",
             "1"
         );
     }
@@ -4371,7 +4371,7 @@ function closeSecurityModal(){
 function showAppMessage(){
 
     const apkUrl =
-        "https://github.com/sachin0664/agent-panel/releases/latest/download/SathiPay.apk";
+        "https://github.com/sachin0664/agent-panel/releases/latest/download/RuviPay.apk";
 
     window.open(
         apkUrl,
@@ -4382,7 +4382,7 @@ function showAppMessage(){
     const message = document.getElementById("message");
     if(message){
         message.innerText =
-            "Sathi Pay app download started.";
+            "Ruvi Pay app download started.";
     }
 
 }
@@ -4397,7 +4397,7 @@ document.addEventListener(
 
         const alreadySeen =
             localStorage.getItem(
-                "sathiPaySecuritySeen"
+                "ruviPaySecuritySeen"
             );
 
 
