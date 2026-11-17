@@ -37,9 +37,7 @@ footer{text-align:center;padding:25px;color:rgba(255,255,255,.75);font-size:13px
     /*
      * RUVI PAY - PERMANENT PASSWORD RECOVERY ROUTE
      *
-     * Supabase may return recovery callbacks to the Site URL.
-     * The Site URL is mysathipay.com, so this page must always
-     * forward a recovery callback to the new-password page.
+     * Forward Supabase recovery callbacks to the new-password page.
      */
     const hash = String(window.location.hash || "");
     const search = String(window.location.search || "");
@@ -94,8 +92,8 @@ footer{text-align:center;padding:25px;color:rgba(255,255,255,.75);font-size:13px
 </div>
 <div class="download-card" id="app-download">
 <img src="assets/sathipay-app-icon.svg?v=13" alt="Ruvi Pay App Icon">
-<h2>Ruvi Pay Android App</h2><p>Get the latest customer application directly from mysathipay.com.</p>
-<a class="download" href="https://github.com/sachin0664/agent-panel/releases/latest/download/RuviPay.apk">📱 Download Latest APK</a>
+<h2>Ruvi Pay Android App</h2><p>The Ruvi Pay app download will be enabled after the new website domain is connected.</p>
+<span class="download" aria-disabled="true">📱 App Coming Soon</span>
 </div>
 </section>
 <section class="features">
