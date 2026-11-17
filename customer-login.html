@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Sathi Pay - Customer Login</title>
+    <title>Ruvi Pay - Customer Login</title>
 
     <link
         rel="stylesheet"
@@ -18,7 +18,7 @@
     >
 
 <style>
-/* Sathi Pay premium colorful login refresh */
+/* Ruvi Pay premium colorful login refresh */
 .customer-login-page{background:linear-gradient(135deg,#eef8ff 0%,#f8fbff 48%,#eafff8 100%)!important;min-height:100vh}
 .customer-login-page .brand-header{background:linear-gradient(100deg,#075fe8 0%,#1766e8 48%,#10bfa0 100%)!important;border-bottom:0!important;box-shadow:0 8px 28px rgba(20,88,190,.20)!important}
 .customer-login-page .brand-name,.customer-login-page .brand-tagline{color:#fff!important}
@@ -60,9 +60,9 @@
 
 <header class="brand-header">
     <div class="brand-header-left">
-        <div class="brand-mini-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Sathi Pay"></div>
+        <div class="brand-mini-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Ruvi Pay"></div>
         <div>
-            <div class="brand-name"><span>Sathi</span> <b>Pay</b></div>
+            <div class="brand-name"><span>Ruvi</span> <b>Pay</b></div>
             <div class="brand-tagline">SAFE • FAST • TOGETHER</div>
         </div>
     </div>
@@ -72,10 +72,10 @@
 <main class="login-page-shell">
     <section class="login-card">
         <div class="login-card-top">
-            <div class="login-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Sathi Pay"></div>
+            <div class="login-logo"><img src="assets/sathipay-logo.svg?v=13" alt="Ruvi Pay"></div>
             <div class="login-kicker">WELCOME BACK</div>
             <h2>Customer Login</h2>
-            <p>Securely access your Sathi Pay account</p>
+            <p>Securely access your Ruvi Pay account</p>
         </div>
 
 
@@ -136,7 +136,7 @@
     <div class="login-trust-row">
         <span>✓ Protected account</span>
         <span>✓ Fast access</span>
-        <span>✓ Sathi Pay</span>
+        <span>✓ Ruvi Pay</span>
     </div>
     </section>
 </main>
@@ -164,7 +164,7 @@
      * directly to the new-password page.
      * UPI PIN recovery keeps its existing separate route.
      */
-    const raw = localStorage.getItem("sathiPayRecoveryType");
+    const raw = localStorage.getItem("ruviPayRecoveryType");
     let recovery = null;
 
     if(raw){
@@ -172,7 +172,7 @@
             recovery = JSON.parse(raw);
         }
         catch(error){
-            localStorage.removeItem("sathiPayRecoveryType");
+            localStorage.removeItem("ruviPayRecoveryType");
         }
     }
 
@@ -185,7 +185,7 @@
             : null;
 
     if(!recoveryType && raw){
-        localStorage.removeItem("sathiPayRecoveryType");
+        localStorage.removeItem("ruviPayRecoveryType");
     }
 
     let routed = false;
@@ -196,7 +196,7 @@
         }
 
         routed = true;
-        localStorage.removeItem("sathiPayRecoveryType");
+        localStorage.removeItem("ruviPayRecoveryType");
         window.location.replace(target);
     }
 
@@ -541,31 +541,31 @@ loginForm.addEventListener(
             ===================================== */
 
             localStorage.setItem(
-                "sathiPayCustomerId",
+                "ruviPayCustomerId",
                 customer.id
             );
 
 
             localStorage.setItem(
-                "sathiPayUID",
+                "ruviPayUID",
                 customer.uid || ""
             );
 
 
             localStorage.setItem(
-                "sathiPayCustomerName",
+                "ruviPayCustomerName",
                 customer.name || ""
             );
 
 
             localStorage.setItem(
-                "sathiPayCustomerMobile",
+                "ruviPayCustomerMobile",
                 customer.mobile || ""
             );
 
 
             localStorage.setItem(
-                "sathiPayInvitationCode",
+                "ruviPayInvitationCode",
                 customer.invitation_code || ""
             );
 
@@ -699,7 +699,7 @@ forgotPasswordLink.addEventListener(
 
 
             /*
-             * Password reset is handled on the live Sathi Pay domain.
+             * Password reset is handled on the live Ruvi Pay domain.
              */
 
             const resetUrl =
