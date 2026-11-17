@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Sathi Pay - Deposit</title>
+<title>Ruvi Pay - Deposit</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -597,7 +597,7 @@ body {
         <div>
 
             <div class="brand-name">
-                Sathi Pay
+                Ruvi Pay
             </div>
 
             <div class="brand-subtitle">
@@ -683,7 +683,7 @@ body {
             <img
                 id="qrImage"
                 src=""
-                alt="Sathi Pay Payment QR"
+                alt="Ruvi Pay Payment QR"
                 style="display:none;"
             >
 
@@ -962,7 +962,7 @@ body {
 
 
 <div class="footer-note">
-    Sathi Pay • Secure & Reliable Payments
+    Ruvi Pay • Secure & Reliable Payments
 </div>
 
 
@@ -978,12 +978,12 @@ let paymentExpiresAt = null;
 
 function paymentTimerStorageKey() {
     const customerId = getCustomerId();
-    return customerId ? "sathiPayDepositExpiresAt:" + customerId : null;
+    return customerId ? "ruviPayDepositExpiresAt:" + customerId : null;
 }
 
 function paymentOrderStorageKey() {
     const customerId = getCustomerId();
-    return customerId ? "sathiPayActiveDepositOrder:" + customerId : null;
+    return customerId ? "ruviPayActiveDepositOrder:" + customerId : null;
 }
 
 function stopPaymentTimer() {
@@ -1065,7 +1065,7 @@ function clearPaymentTimer() {
 function getCustomerId() {
 
     return localStorage.getItem(
-        "sathiPayCustomerId"
+        "ruviPayCustomerId"
     );
 
 }
@@ -1241,7 +1241,7 @@ async function loadCustomer() {
         if (!data) {
 
             localStorage.removeItem(
-                "sathiPayCustomerId"
+                "ruviPayCustomerId"
             );
 
             window.location.href =
@@ -1304,13 +1304,13 @@ async function loadCustomer() {
 
 
         localStorage.setItem(
-            "sathiPayUID",
+            "ruviPayUID",
             data.uid || ""
         );
 
 
         localStorage.setItem(
-            "sathiPayCustomerName",
+            "ruviPayCustomerName",
             data.name || ""
         );
 
@@ -1545,10 +1545,10 @@ document
 
         // Android app: use the native DownloadManager instead of a browser blob URL.
         // Blob downloads are not reliably handled by Android WebView.
-        if (window.SathiPayAndroid && typeof window.SathiPayAndroid.downloadFile === "function") {
-            const started = window.SathiPayAndroid.downloadFile(
+        if (window.RuviPayAndroid && typeof window.RuviPayAndroid.downloadFile === "function") {
+            const started = window.RuviPayAndroid.downloadFile(
                 paymentQRUrl,
-                "sathi-pay-upi-qr.png"
+                "ruvi-pay-upi-qr.png"
             );
             if (started) {
                 showMessage("QR download started. Check your phone's Downloads folder.", "success");
@@ -1581,7 +1581,7 @@ document
                 : type.includes("svg") ? "svg" : "png";
 
             link.href = objectUrl;
-            link.download = "sathi-pay-upi-qr." + ext;
+            link.download = "ruvi-pay-upi-qr." + ext;
             link.style.display = "none";
             document.body.appendChild(link);
             link.click();
