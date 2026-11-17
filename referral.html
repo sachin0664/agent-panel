@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Referral</title>
+<title>Ruvi Pay - Referral</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -539,7 +539,7 @@ td{
 <aside class="sidebar">
 
     <div class="logo">
-        Sathi <span>Pay</span>
+        Ruvi <span>Pay</span>
     </div>
 
     <nav class="nav">
@@ -939,7 +939,7 @@ let currentCustomer = null;
 function getCustomerId(){
 
     return localStorage.getItem(
-        "sathiPayCustomerId"
+        "ruviPayCustomerId"
     );
 
 }
@@ -1799,10 +1799,10 @@ function escapeHtml(value){
 function logoutCustomer(){
 
     if(
-        window.sathiPayLogout
+        window.ruviPayLogout
     ){
 
-        window.sathiPayLogout();
+        window.ruviPayLogout();
 
         return;
 
@@ -1810,15 +1810,15 @@ function logoutCustomer(){
 
 
     localStorage.removeItem(
-        "sathiPayCustomerId"
+        "ruviPayCustomerId"
     );
 
     localStorage.removeItem(
-        "sathiPayUID"
+        "ruviPayUID"
     );
 
     localStorage.removeItem(
-        "sathiPayInvitationCode"
+        "ruviPayInvitationCode"
     );
 
 
