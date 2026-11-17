@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sathi Pay - Earnings</title>
+<title>Ruvi Pay - Earnings</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="customer-guard.js"></script>
@@ -296,7 +296,7 @@ th{
 <aside class="sidebar">
 
     <div class="logo">
-        💳 Sathi Pay
+        💳 Ruvi Pay
     </div>
 
     <nav class="nav">
@@ -668,7 +668,7 @@ supabase.createClient(
 
 const customerId =
 localStorage.getItem(
-    "sathiPayCustomerId"
+    "ruviPayCustomerId"
 );
 
 
@@ -1102,15 +1102,15 @@ async function loadEarnings(){
 function logout(){
 
     localStorage.removeItem(
-        "sathiPayCustomerId"
+        "ruviPayCustomerId"
     );
 
     localStorage.removeItem(
-        "sathiPayUID"
+        "ruviPayUID"
     );
 
     localStorage.removeItem(
-        "sathiPayInvitationCode"
+        "ruviPayInvitationCode"
     );
 
     window.location.href =
