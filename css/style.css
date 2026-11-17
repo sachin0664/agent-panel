@@ -155,7 +155,7 @@ a {
 
 
 /* =========================================================
-   SATHI PAY CUSTOMER LOGIN — COLORFUL PREMIUM UI
+   RUVI PAY CUSTOMER LOGIN — COLORFUL PREMIUM UI
    Functional markup/JS remains unchanged.
 ========================================================= */
 
@@ -455,7 +455,7 @@ body.customer-login-page {
 }
 
 
-/* SATHI PAY OFFICIAL LOGO */
+/* RUVI PAY OFFICIAL LOGO */
 .brand-mini-logo img{display:block;width:44px;height:44px;object-fit:contain;border-radius:12px}
 .login-logo img{display:block;width:82px;height:82px;object-fit:contain;border-radius:20px}
 .brand-mini-logo{display:grid;place-items:center;background:#fff;border-radius:14px;overflow:hidden}
