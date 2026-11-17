@@ -1,38 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="36" y1="36" x2="476" y2="476" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#143fe0"/>
-      <stop offset="0.52" stop-color="#1269ef"/>
-      <stop offset="1" stop-color="#17c795"/>
+    <linearGradient id="bg" x1="24" y1="24" x2="488" y2="488" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2639d8"/><stop offset="0.55" stop-color="#176fe8"/><stop offset="1" stop-color="#11b98b"/>
     </linearGradient>
-    <linearGradient id="s" x1="104" y1="164" x2="256" y2="374" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1fc5ff"/>
-      <stop offset="0.58" stop-color="#1776ef"/>
-      <stop offset="1" stop-color="#1457df"/>
-    </linearGradient>
-    <linearGradient id="p" x1="238" y1="164" x2="366" y2="376" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#74f25e"/>
-      <stop offset="0.58" stop-color="#2de39a"/>
-      <stop offset="1" stop-color="#12c98c"/>
-    </linearGradient>
-    <linearGradient id="gold" x1="156" y1="76" x2="356" y2="145" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ffe74d"/>
-      <stop offset="1" stop-color="#f2b900"/>
+    <linearGradient id="accent" x1="100" y1="100" x2="412" y2="412" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9fffe0"/><stop offset="1" stop-color="#35e6ae"/>
     </linearGradient>
   </defs>
-  <rect x="20" y="20" width="472" height="472" rx="96" fill="url(#bg)"/>
-  <path d="M144 140 L160 74 L208 110 L256 50 L304 110 L352 74 L368 140 Z"
-        fill="url(#gold)" stroke="#e8ad00" stroke-width="5" stroke-linejoin="round"/>
-  <path d="M146 138 H366 L352 166 H160 Z" fill="#ffd12d"/>
-  <circle cx="160" cy="74" r="8" fill="#fff4a6"/>
-  <circle cx="256" cy="50" r="8" fill="#fff4a6"/>
-  <circle cx="352" cy="74" r="8" fill="#fff4a6"/>
-  <text x="248" y="368" text-anchor="middle"
-        font-family="Arial Rounded MT Bold, Trebuchet MS, Arial, sans-serif"
-        font-size="232" font-weight="900" letter-spacing="-48">
-    <tspan fill="url(#s)">S</tspan><tspan fill="url(#p)">P</tspan>
-  </text>
-  <path d="M86 354 C156 404 278 408 422 286"
-        fill="none" stroke="#ffffff" stroke-width="25" stroke-linecap="round"/>
+  <rect x="20" y="20" width="472" height="472" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="184" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="7"/>
+  <path d="M142 390 V122 H285 C367 122 412 167 412 238 C412 294 379 334 324 348 L420 390 H317 L226 348 V390 Z M226 204 V276 H281 C311 276 329 263 329 239 C329 216 311 204 281 204 Z" fill="#fff"/>
+  <path d="M226 348 L317 390 H420 L324 348 Z" fill="url(#accent)"/>
+  <path d="M112 418 C181 456 321 453 400 384" fill="none" stroke="url(#accent)" stroke-width="18" stroke-linecap="round"/>
 </svg>
