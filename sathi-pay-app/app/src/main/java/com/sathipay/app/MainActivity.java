@@ -30,7 +30,7 @@ import android.webkit.URLUtil;
 
 public class MainActivity extends Activity {
     private static final String HOME_URL =
-            "https://mysathipay.com/customer-login.html";
+            BuildConfig.WEB_APP_URL + "/customer-login.html";
     private static final int FILE_CHOOSER_REQUEST = 1001;
 
     private WebView webView;
@@ -43,6 +43,10 @@ public class MainActivity extends Activity {
         showSplash();
 
         handler.postDelayed(() -> {
+            if (BuildConfig.WEB_APP_URL == null || BuildConfig.WEB_APP_URL.trim().isEmpty()) {
+                showDomainPendingScreen();
+                return;
+            }
             setupWebView();
             if (savedInstanceState == null) {
                 webView.loadUrl(HOME_URL);
@@ -93,6 +97,29 @@ public class MainActivity extends Activity {
         splash.addView(tagline, taglineParams);
 
         setContentView(splash);
+    }
+
+    private void showDomainPendingScreen() {
+        LinearLayout screen = new LinearLayout(this);
+        screen.setOrientation(LinearLayout.VERTICAL);
+        screen.setGravity(Gravity.CENTER);
+        screen.setPadding(28, 28, 28, 28);
+        screen.setBackgroundColor(Color.WHITE);
+        TextView title = new TextView(this);
+        title.setText("Ruvi Pay");
+        title.setTextColor(Color.rgb(18, 76, 150));
+        title.setTextSize(30);
+        title.setGravity(Gravity.CENTER);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
+        screen.addView(title);
+        TextView message = new TextView(this);
+        message.setText("Ruvi Pay is being prepared. The app will be available after the new website domain is connected.");
+        message.setTextColor(Color.rgb(70, 90, 105));
+        message.setTextSize(16);
+        message.setGravity(Gravity.CENTER);
+        message.setPadding(12, 18, 12, 0);
+        screen.addView(message);
+        setContentView(screen);
     }
 
     private void setupWebView() {
@@ -251,8 +278,11 @@ public class MainActivity extends Activity {
         Uri uri = Uri.parse(url);
         String host = uri.getHost();
 
-        if (host != null && (host.equals("mysathipay.com")
-                || host.equals("www.mysathipay.com"))) {
+        Uri appUri = Uri.parse(BuildConfig.WEB_APP_URL);
+        String appHost = appUri.getHost();
+        if (host != null && appHost != null
+                && (host.equalsIgnoreCase(appHost)
+                || host.equalsIgnoreCase("www." + appHost))) {
             return false;
         }
 
