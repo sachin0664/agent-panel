@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Transaction History</title>
+<title>Ruvi Pay - Transaction History</title>
 
 <script src="customer-guard.js"></script>
 
@@ -342,7 +342,7 @@ tr:last-child td{
 
 <header class="header">
 
-    <h1>Sathi Pay</h1>
+    <h1>Ruvi Pay</h1>
 
     <a href="dashboard.html">
         Dashboard
@@ -701,7 +701,7 @@ async function loadTransactions(){
         const customerId =
             typeof getCustomerId === "function"
                 ? getCustomerId()
-                : localStorage.getItem("sathiPayCustomerId");
+                : localStorage.getItem("ruviPayCustomerId");
 
         if(!customerId){
             throw new Error("Customer session not found.");
