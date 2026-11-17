@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sathi Pay - Support</title>
+<title>Ruvi Pay - Support</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="customer-guard.js"></script>
 <style>
@@ -21,13 +21,13 @@ button:active{transform:scale(.99)}.status{text-align:center;margin-top:10px;fon
 </style>
 </head>
 <body>
-<div class="header"><h1>🛟 Sathi Pay Support</h1><p>Need help? Choose an option below.</p></div>
+<div class="header"><h1>🛟 Ruvi Pay Support</h1><p>Need help? Choose an option below.</p></div>
 <div class="container">
-<div class="card"><div class="icon">🎧</div><h2>Customer Support</h2><p>Agar aapko Sathi Pay account, deposit, wallet ya kisi bhi problem me help chahiye to customer support se contact karein.</p><button id="supportBtn" class="blue" onclick="openSupport(event)">Loading...</button></div>
-<div class="card"><div class="icon">✈️</div><h2>Telegram Support</h2><p>Telegram ke through Sathi Pay support team se contact karein.</p><button id="telegramBtn" class="telegram" onclick="openTelegram(event)">Loading...</button></div>
-<div class="card"><div class="icon">📱</div><h2>Download App</h2><p>Sathi Pay Android application download karein.</p><button id="downloadBtn" class="green" onclick="openDownload(event)">Loading...</button></div>
+<div class="card"><div class="icon">🎧</div><h2>Customer Support</h2><p>Agar aapko Ruvi Pay account, deposit, wallet ya kisi bhi problem me help chahiye to customer support se contact karein.</p><button id="supportBtn" class="blue" onclick="openSupport(event)">Loading...</button></div>
+<div class="card"><div class="icon">✈️</div><h2>Telegram Support</h2><p>Telegram ke through Ruvi Pay support team se contact karein.</p><button id="telegramBtn" class="telegram" onclick="openTelegram(event)">Loading...</button></div>
+<div class="card"><div class="icon">📱</div><h2>Download App</h2><p>Ruvi Pay Android application download karein.</p><button id="downloadBtn" class="green" onclick="openDownload(event)">Loading...</button></div>
 <div id="pageStatus" class="status">Support settings load ho rahi hain...</div>
-<div class="footer">Sathi Pay © 2026</div>
+<div class="footer">Ruvi Pay © 2026</div>
 </div>
 <script>
 const SUPABASE_URL="https://lozluohksmjxbxixkbmq.supabase.co";
@@ -43,7 +43,7 @@ async function loadSupportSettings(){
   if(!data){setUnavailableButtons();pageStatus.textContent="Support settings available nahi hain.";return}
   SUPPORT_URL=(data.customer_support_url||"").trim();
   TELEGRAM_URL=(data.telegram_support_url||"").trim();
-  APP_DOWNLOAD_URL=(data.apk_download_url||"SathiPay.apk").trim();
+  APP_DOWNLOAD_URL=(data.apk_download_url||"RuviPay.apk").trim();
   updateButtons(); pageStatus.textContent="Support options ready.";
  }catch(error){console.error("Support settings exception:",error);setUnavailableButtons();pageStatus.textContent="Support settings load nahi ho paayi."}
 }
@@ -51,12 +51,12 @@ function updateButtons(){
  const supportBtn=document.getElementById("supportBtn"),telegramBtn=document.getElementById("telegramBtn"),downloadBtn=document.getElementById("downloadBtn");
  if(isValidUrl(SUPPORT_URL)){supportBtn.textContent="🎧 Contact Customer Support";supportBtn.className="blue";supportBtn.disabled=false}else{supportBtn.textContent="Customer Support Coming Soon";supportBtn.className="disabled";supportBtn.disabled=true}
  if(isValidUrl(TELEGRAM_URL)){telegramBtn.textContent="✈️ Open Telegram Support";telegramBtn.className="telegram";telegramBtn.disabled=false}else{telegramBtn.textContent="Telegram Support Coming Soon";telegramBtn.className="disabled";telegramBtn.disabled=true}
- if(isValidUrl(APP_DOWNLOAD_URL)||APP_DOWNLOAD_URL==="SathiPay.apk"){downloadBtn.textContent="📱 Download Sathi Pay App";downloadBtn.className="green";downloadBtn.disabled=false}else{downloadBtn.textContent="📱 App Coming Soon";downloadBtn.className="disabled";downloadBtn.disabled=true}
+ if(isValidUrl(APP_DOWNLOAD_URL)||APP_DOWNLOAD_URL==="RuviPay.apk"){downloadBtn.textContent="📱 Download Ruvi Pay App";downloadBtn.className="green";downloadBtn.disabled=false}else{downloadBtn.textContent="📱 App Coming Soon";downloadBtn.className="disabled";downloadBtn.disabled=true}
 }
 function setUnavailableButtons(){["supportBtn","telegramBtn","downloadBtn"].forEach(id=>{const b=document.getElementById(id);b.textContent="Unavailable";b.className="disabled";b.disabled=true})}
 function openSupport(event){if(event)event.preventDefault();if(!isValidUrl(SUPPORT_URL)){alert("Customer Support link abhi available nahi hai.");return}window.open(SUPPORT_URL,"_blank","noopener,noreferrer")}
 function openTelegram(event){if(event)event.preventDefault();if(!isValidUrl(TELEGRAM_URL)){alert("Telegram Support link abhi available nahi hai.");return}window.open(TELEGRAM_URL,"_blank","noopener,noreferrer")}
-function openDownload(event){if(event)event.preventDefault();const url=APP_DOWNLOAD_URL==="SathiPay.apk"?"SathiPay.apk":APP_DOWNLOAD_URL;if(!url){alert("APK download link abhi available nahi hai.");return}window.open(url,"_blank","noopener,noreferrer")}
+function openDownload(event){if(event)event.preventDefault();const url=APP_DOWNLOAD_URL==="RuviPay.apk"?"RuviPay.apk":APP_DOWNLOAD_URL;if(!url){alert("APK download link abhi available nahi hai.");return}window.open(url,"_blank","noopener,noreferrer")}
 document.addEventListener("DOMContentLoaded",loadSupportSettings);
 </script>
 </body>
