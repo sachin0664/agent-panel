@@ -10,9 +10,9 @@ android {
         applicationId 'com.sathipay.app'
         minSdk 23
         targetSdk 34
-        versionCode 4
+        versionCode 5
         versionName '1.2.0'
-        buildConfigField 'String', 'WEB_APP_URL', '\"' + (project.findProperty('webAppUrl') ?: '') + '\"'
+        buildConfigField 'String', 'WEB_APP_URL', '"' + (project.findProperty('webAppUrl') ?: '') + '"'
     }
 
     buildFeatures {
