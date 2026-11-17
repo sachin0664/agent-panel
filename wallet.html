@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sathi Pay - Wallet</title>
+<title>Ruvi Pay - Wallet</title>
 
 <script src="customer-guard.js"></script>
 
@@ -439,7 +439,7 @@ button{
     <div class="header-inner">
 
         <div class="brand">
-            Sathi Pay
+            Ruvi Pay
         </div>
 
         <div class="header-right">
@@ -870,22 +870,22 @@ function hideError(){
 
 function logoutCustomer(){
 
-    if(window.sathiPayLogout){
+    if(window.ruviPayLogout){
 
-        window.sathiPayLogout();
+        window.ruviPayLogout();
 
     }else{
 
         localStorage.removeItem(
-            "sathiPayCustomerId"
+            "ruviPayCustomerId"
         );
 
         localStorage.removeItem(
-            "sathiPayUID"
+            "ruviPayUID"
         );
 
         localStorage.removeItem(
-            "sathiPayInvitationCode"
+            "ruviPayInvitationCode"
         );
 
         window.location.href =
@@ -905,7 +905,7 @@ async function loadWallet(){
 
     const customerId =
         localStorage.getItem(
-            "sathiPayCustomerId"
+            "ruviPayCustomerId"
         );
 
 
@@ -953,15 +953,15 @@ async function loadWallet(){
         if(!customer){
 
             localStorage.removeItem(
-                "sathiPayCustomerId"
+                "ruviPayCustomerId"
             );
 
             localStorage.removeItem(
-                "sathiPayUID"
+                "ruviPayUID"
             );
 
             localStorage.removeItem(
-                "sathiPayInvitationCode"
+                "ruviPayInvitationCode"
             );
 
             window.location.href =
