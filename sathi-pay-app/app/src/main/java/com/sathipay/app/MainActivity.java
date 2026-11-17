@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
         splash.addView(logo, new LinearLayout.LayoutParams(220, 220));
 
         TextView title = new TextView(this);
-        title.setText("Sathi Pay");
+        title.setText("Ruvi Pay");
         title.setTextColor(Color.rgb(18, 76, 150));
         title.setTextSize(34);
         title.setGravity(Gravity.CENTER);
@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
         webView = new WebView(this);
 
         // Keep the native system bars outside the website viewport and add a
-        // clean white gap above the Sathi Pay header, matching the customer
+        // clean white gap above the Ruvi Pay header, matching the customer
         // website layout shown in the reference.
         getWindow().setStatusBarColor(Color.WHITE);
         getWindow().setNavigationBarColor(Color.WHITE);
@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
-        // Always fetch the latest Sathi Pay web UI so logout -> login and register always show the latest colorful UI.
+        // Always fetch the latest Ruvi Pay web UI so logout -> login and register always show the latest colorful UI.
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
@@ -145,7 +145,7 @@ public class MainActivity extends Activity {
                     }
 
                     String safeName = (fileName == null || fileName.trim().isEmpty())
-                            ? "sathi-pay-upi-qr.png" : fileName.replaceAll("[^A-Za-z0-9._-]", "_");
+                            ? "ruvi-pay-upi-qr.png" : fileName.replaceAll("[^A-Za-z0-9._-]", "_");
                     if (!safeName.toLowerCase().endsWith(".png")
                             && !safeName.toLowerCase().endsWith(".jpg")
                             && !safeName.toLowerCase().endsWith(".jpeg")
@@ -157,7 +157,7 @@ public class MainActivity extends Activity {
                     if (manager == null) return false;
 
                     DownloadManager.Request request = new DownloadManager.Request(uri);
-                    request.setTitle("Sathi Pay QR");
+                    request.setTitle("Ruvi Pay QR");
                     request.setDescription("Downloading your UPI QR code");
                     request.setMimeType("image/*");
                     request.setNotificationVisibility(
@@ -202,7 +202,7 @@ public class MainActivity extends Activity {
                 shareIntent.putExtra(Intent.EXTRA_TEXT, text + "\n" + url);
                 startActivity(Intent.createChooser(shareIntent, "Share with"));
             }
-        }, "SathiPayAndroid");
+        }, "RuviPayAndroid");
 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
