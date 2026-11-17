@@ -1,46 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Sathi Pay">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Ruvi Pay">
   <defs>
-    <linearGradient id="bg" x1="18" y1="18" x2="238" y2="238" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#143fe0"/>
-      <stop offset="0.52" stop-color="#1269ef"/>
-      <stop offset="1" stop-color="#17c795"/>
+    <linearGradient id="bg" x1="12" y1="12" x2="244" y2="244" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2639d8"/><stop offset="0.55" stop-color="#176fe8"/><stop offset="1" stop-color="#11b98b"/>
     </linearGradient>
-    <linearGradient id="s" x1="52" y1="82" x2="128" y2="187" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1fc5ff"/>
-      <stop offset="0.58" stop-color="#1776ef"/>
-      <stop offset="1" stop-color="#1457df"/>
-    </linearGradient>
-    <linearGradient id="p" x1="119" y1="82" x2="183" y2="188" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#74f25e"/>
-      <stop offset="0.58" stop-color="#2de39a"/>
-      <stop offset="1" stop-color="#12c98c"/>
-    </linearGradient>
-    <linearGradient id="gold" x1="78" y1="38" x2="178" y2="72" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ffe74d"/>
-      <stop offset="1" stop-color="#f2b900"/>
+    <linearGradient id="accent" x1="58" y1="54" x2="196" y2="204" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9fffe0"/><stop offset="1" stop-color="#35e6ae"/>
     </linearGradient>
   </defs>
-
-  <!-- Exact-style Sathi Pay mark: rounded blue/green square -->
-  <rect x="10" y="10" width="236" height="236" rx="48" fill="url(#bg)"/>
-
-  <!-- Crown -->
-  <path d="M72 70 L80 37 L104 55 L128 25 L152 55 L176 37 L184 70 Z"
-        fill="url(#gold)" stroke="#e8ad00" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M73 69 H183 L176 83 H80 Z" fill="#ffd12d"/>
-  <circle cx="80" cy="37" r="4.2" fill="#fff4a6"/>
-  <circle cx="128" cy="25" r="4.2" fill="#fff4a6"/>
-  <circle cx="176" cy="37" r="4.2" fill="#fff4a6"/>
-
-  <!-- Stylized SP letters -->
-  <text x="124" y="184" text-anchor="middle"
-        font-family="Arial Rounded MT Bold, Trebuchet MS, Arial, sans-serif"
-        font-size="116" font-weight="900" letter-spacing="-24">
-    <tspan fill="url(#s)">S</tspan><tspan fill="url(#p)">P</tspan>
-  </text>
-
-  <!-- Signature white sweep -->
-  <path d="M43 177 C78 202 139 205 204 147"
-        fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round"/>
+  <rect x="10" y="10" width="236" height="236" rx="54" fill="url(#bg)"/>
+  <circle cx="128" cy="128" r="91" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="3"/>
+  <path d="M72 188 V68 H137 C174 68 194 88 194 120 C194 145 180 163 156 169 L199 188 H153 L112 169 V188 Z M112 105 V137 H135 C149 137 157 131 157 120 C157 110 149 105 135 105 Z" fill="#fff"/>
+  <path d="M112 169 L153 188 H199 L156 169 Z" fill="url(#accent)"/>
+  <path d="M57 202 C91 220 156 219 198 185" fill="none" stroke="url(#accent)" stroke-width="8" stroke-linecap="round"/>
 </svg>
