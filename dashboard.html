@@ -1888,6 +1888,29 @@ header{background:rgba(255,255,255,.90);backdrop-filter:blur(14px);border-bottom
 @media(prefers-reduced-motion:reduce){.quick-action,.pay-flow-box{transition:none}}
 </style>
 
+
+<style id="ruvi-dashboard-premium-v2">
+:root{--ruvi-purple:#6417e8;--ruvi-deep:#17106f;--ruvi-blue:#1459ef;--ruvi-line:#e7ddff}
+body{background:radial-gradient(ellipse at 12% 0%,rgba(142,54,255,.16),transparent 34%),radial-gradient(ellipse at 92% 18%,rgba(0,164,255,.12),transparent 30%),linear-gradient(180deg,#faf7ff 0%,#f1edff 100%);color:#17105f}
+header{background:rgba(255,255,255,.94);border-bottom:1px solid #e8ddff;box-shadow:0 8px 28px rgba(61,28,135,.08)}
+.brand-text h1{background:linear-gradient(95deg,#171078,#7422ed 62%,#0d72ef);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{background:linear-gradient(120deg,#9d00f5 0%,#2634ec 52%,#0758e8 100%);border-radius:26px;box-shadow:0 16px 36px rgba(76,35,205,.22)}
+.hero:after{background:rgba(255,255,255,.09);box-shadow:0 0 0 28px rgba(255,255,255,.035),0 0 0 58px rgba(255,255,255,.025)}
+.balance-card{background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.09));border:1px solid rgba(255,255,255,.3);border-radius:19px}
+.referral-link-box,.quick-action,.referral-commission{border:1px solid #e7ddff;box-shadow:0 8px 24px rgba(60,35,130,.07);border-radius:20px}
+.share-btn{background:linear-gradient(135deg,#8d08ed,#4e1ee8)}
+.telegram-card{background:linear-gradient(110deg,#1264f3,#087fe9 58%,#06a8e8);border-radius:22px;box-shadow:0 10px 26px rgba(16,99,230,.19)}
+.deposit-commission{background:linear-gradient(135deg,#261078 0%,#4e16cb 52%,#075de9 100%);border-radius:23px;box-shadow:0 12px 28px rgba(58,27,174,.2)}
+.referral-commission{background:linear-gradient(145deg,#fff,#fbf9ff);border-radius:23px}
+.deposit-tiers .ref-row{margin-top:13px;gap:10px}
+.deposit-tiers .level-name{color:#251a70;font-size:12px;font-weight:700}
+.deposit-tiers .level-percent{color:#24116f;font-size:17px}
+.sell-control{background:linear-gradient(110deg,#e6fff5,#f3fff9 60%,#d9fff0);border-color:#91edc6}
+.bottom-nav{border-top:1px solid #e5ddff;box-shadow:0 -8px 28px rgba(63,37,130,.09)}
+.bottom-nav .plus{background:linear-gradient(145deg,#9a12f2,#4d16e8);box-shadow:0 8px 20px rgba(87,23,221,.3)}
+@media(max-width:700px){.hero{border-radius:23px}.deposit-tiers .level-name{font-size:11px}.deposit-tiers .level-percent{font-size:15px}}
+</style>
+
 </head>
 
 
@@ -2329,6 +2352,9 @@ header{background:rgba(255,255,255,.90);backdrop-filter:blur(14px);border-bottom
     </section>
 
 
+
+
+
     <section class="info-grid">
 
 
@@ -2367,67 +2393,34 @@ header{background:rgba(255,255,255,.90);backdrop-filter:blur(14px);border-bottom
             </div>
 
             <div class="commission-note">
-                Starter Tier (Under ₹25,000): 4.5% · Growth Tier (₹25,000–₹49,999): 5% · Premium Tier (₹50,000+): 6%.
+                Below ₹24,999: 4.5% · ₹25,000 to below ₹50,000: 5% · ₹50,000 or more: 6%.
             </div>
 
         </div>
 
 
-        <div class="referral-commission">
+        <div class="referral-commission deposit-tiers">
 
             <div class="ref-title">
-                Referral Commission
+                Deposit Commission
             </div>
 
-
             <div class="ref-row">
-
-                <div class="level-circle level-a">
-                    A
-                </div>
-
-                <div class="level-name">
-                    Level
-                </div>
-
-                <div class="level-percent">
-                    1%
-                </div>
-
+                <div class="level-circle level-a">A</div>
+                <div class="level-name">Below 24999</div>
+                <div class="level-percent">4.5%</div>
             </div>
 
-
             <div class="ref-row">
-
-                <div class="level-circle level-b">
-                    B
-                </div>
-
-                <div class="level-name">
-                    Level
-                </div>
-
-                <div class="level-percent">
-                    0.5%
-                </div>
-
+                <div class="level-circle level-b">B</div>
+                <div class="level-name">25000 to Below 50000</div>
+                <div class="level-percent">5%</div>
             </div>
 
-
             <div class="ref-row">
-
-                <div class="level-circle level-c">
-                    C
-                </div>
-
-                <div class="level-name">
-                    Level
-                </div>
-
-                <div class="level-percent">
-                    0.2%
-                </div>
-
+                <div class="level-circle level-c">C</div>
+                <div class="level-name">50000 or more</div>
+                <div class="level-percent">6%</div>
             </div>
 
         </div>
@@ -3279,13 +3272,13 @@ function showDepositCommissionDetails(){
         <div style="padding:18px;">
             <p style="margin:0 0 14px;line-height:1.5;color:#52627a;">Deposit amount ke hisaab se commission rate:</p>
             <div style="display:flex;justify-content:space-between;gap:12px;padding:12px;border-radius:10px;background:#f1f6ff;margin-bottom:9px;">
-                <strong>Starter Tier · Under ₹25,000</strong><strong style="color:#1555d9;">4.5%</strong>
+                <strong>Below ₹24,999</strong><strong style="color:#1555d9;">4.5%</strong>
             </div>
             <div style="display:flex;justify-content:space-between;gap:12px;padding:12px;border-radius:10px;background:#effcf7;margin-bottom:9px;">
-                <strong>Growth Tier · ₹25,000–₹49,999</strong><strong style="color:#07966f;">5%</strong>
+                <strong>₹25,000 to below ₹50,000</strong><strong style="color:#07966f;">5%</strong>
             </div>
             <div style="display:flex;justify-content:space-between;gap:12px;padding:12px;border-radius:10px;background:#fff7e9;margin-bottom:13px;">
-                <strong>Premium Tier · ₹50,000+</strong><strong style="color:#b96a00;">6%</strong>
+                <strong>₹50,000 or more</strong><strong style="color:#b96a00;">6%</strong>
             </div>
             <div style="font-size:12px;line-height:1.5;color:#65758b;">Minimum deposit: ₹1,000. Deposit commission is calculated according to the applicable slab.</div>
         </div>
