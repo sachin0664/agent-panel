@@ -229,8 +229,7 @@ if(referralCode){
 
 function generateUID(){
     const digits = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
-    const letter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-    return "RP" + digits + letter;
+    return "RP" + digits + "H";
 }
 
 
