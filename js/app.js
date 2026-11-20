@@ -1,5 +1,5 @@
 // ============================================
-// SATHI PAY - SHARED SUPABASE CLIENT
+// RUVI PAY - SHARED SUPABASE CLIENT
 // Customer/Admin pages use this connection.
 // Legacy Agent/Withdrawal logic has been removed.
 // ============================================
