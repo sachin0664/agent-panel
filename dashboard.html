@@ -3855,8 +3855,9 @@ async function loadDashboard(){
         document.getElementById("customerUID").innerText = cachedUID;
     }
     if(cachedCode && document.getElementById("referralLink")){
-        currentReferralLink = window.location.origin + "/?invite=" + encodeURIComponent(cachedCode);
-        document.getElementById("referralLink").innerText = currentReferralLink;
+        currentReferralLink = "";
+        document.getElementById("referralLink").innerText = "Available after new domain connection";
+        document.querySelectorAll(".copy-link-btn, .share-btn").forEach(button => button.disabled = true);
     }
 
     const message =
@@ -4114,18 +4115,16 @@ async function loadDashboard(){
             code
         ){
 
-            currentReferralLink =
-    window.location.origin +
-    "/?invite=" +
-    encodeURIComponent(
-        code
-    );
-
+            currentReferralLink = "";
 
             document.getElementById(
                 "referralLink"
             ).innerText =
-                currentReferralLink;
+                "Available after new domain connection";
+
+            document.querySelectorAll(
+                ".copy-link-btn, .share-btn"
+            ).forEach(button => button.disabled = true);
 
         }
         else{
@@ -4424,22 +4423,13 @@ function closeSecurityModal(){
 }
 
 
-/* Open the official latest APK download. */
+/* APK download stays disabled until the new Ruvi Pay domain is connected. */
 function showAppMessage(){
-
-    const apkUrl =
-        "https://github.com/sachin0664/agent-panel/releases/latest/download/RuviPay.apk";
-
-    window.open(
-        apkUrl,
-        "_blank",
-        "noopener,noreferrer"
-    );
 
     const message = document.getElementById("message");
     if(message){
         message.innerText =
-            "Ruvi Pay app download started.";
+            "Ruvi Pay app download will be available after the new domain is connected.";
     }
 
 }
