@@ -1840,7 +1840,33 @@ header{
 .brand-text{display:block!important}
 @media(max-width:700px){.brand-logo{width:56px;height:56px}.brand-logo img{width:56px;height:56px}}
 
-/* Compact commission banner: show only the final rate */
+/* Compact commission banner and details below */
+.compact-commission .commission-graph{font-size:25px;line-height:1}
+.compact-commission .commission-heading{font-size:14px;font-weight:800;color:#fff;white-space:nowrap}
+.compact-commission .commission-percent{font-size:27px;font-weight:900;color:#fff}
+.deposit-tiers-panel{margin-top:14px;padding:18px 20px;background:linear-gradient(145deg,#fff,#fbf9ff);border:1px solid #e7ddff;border-radius:21px;box-shadow:0 8px 24px rgba(60,35,130,.07)}
+.deposit-tiers-title{font-size:18px;font-weight:800;color:#25166e;margin-bottom:12px}
+.deposit-tier-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #eee9fa;color:#30256d;font-size:13px}
+.deposit-tier-row strong{font-size:15px;color:#24116f;white-space:nowrap}
+@media(max-width:700px){
+ .deposit-commission.compact-commission{gap:9px;padding:14px 12px}
+ .compact-commission .commission-graph{font-size:21px}
+ .compact-commission .commission-heading{font-size:12px}
+ .compact-commission .commission-percent{font-size:23px}
+ .compact-commission .final-pill{font-size:11px;padding:7px 10px}
+ .deposit-tiers-panel{padding:15px 16px}
+ .deposit-tiers-title{font-size:16px}
+ .deposit-tier-row{font-size:12px}
+ .deposit-tier-row strong{font-size:14px}
+}
+@media(max-width:380px){
+ .deposit-commission.compact-commission{gap:6px;padding:13px 9px}
+ .compact-commission .commission-graph{font-size:18px}
+ .compact-commission .commission-heading{font-size:10px}
+ .compact-commission .commission-percent{font-size:20px}
+ .compact-commission .final-pill{font-size:10px;padding:6px 8px}
+}
+
 .info-grid.compact-commission-wrap{display:block;margin-top:15px}
 .deposit-commission.compact-commission{
  min-height:0;height:auto;padding:17px 22px;border-radius:22px;
@@ -2394,10 +2420,28 @@ header{background:rgba(255,255,255,.94);border-bottom:1px solid #e8ddff;box-shad
     <section class="info-grid compact-commission-wrap">
 
         <div class="deposit-commission compact-commission">
-            <div class="commission-percent">6%</div>
+            <span class="commission-graph" aria-hidden="true">📈</span>
+            <span class="commission-heading">Deposit Commission</span>
+            <span class="commission-percent">6%</span>
             <span class="final-pill">Final</span>
         </div>
 
+    </section>
+
+    <section class="deposit-tiers-panel">
+        <div class="deposit-tiers-title">Deposit Commission</div>
+        <div class="deposit-tier-row">
+            <span>Below ₹25,000</span>
+            <strong>4.5%</strong>
+        </div>
+        <div class="deposit-tier-row">
+            <span>₹25,000 to Below ₹50,000</span>
+            <strong>5%</strong>
+        </div>
+        <div class="deposit-tier-row">
+            <span>₹50,000 or more</span>
+            <strong>6%</strong>
+        </div>
     </section>
 
 
