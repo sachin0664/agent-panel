@@ -1839,6 +1839,22 @@ header{
 .brand-logo img{width:64px;height:64px;object-fit:contain;display:block;border-radius:18px}
 .brand-text{display:block!important}
 @media(max-width:700px){.brand-logo{width:56px;height:56px}.brand-logo img{width:56px;height:56px}}
+
+/* Compact commission banner: show only the final rate */
+.info-grid.compact-commission-wrap{display:block;margin-top:15px}
+.deposit-commission.compact-commission{
+ min-height:0;height:auto;padding:17px 22px;border-radius:22px;
+ display:flex;align-items:center;justify-content:center;gap:14px;
+ background:linear-gradient(110deg,#1264f3,#087fe9 58%,#06a8e8);
+ box-shadow:0 10px 26px rgba(16,99,230,.19)
+}
+.compact-commission .commission-percent{margin:0;font-size:34px;line-height:1}
+.compact-commission .final-pill{font-size:12px;padding:9px 16px}
+@media(max-width:700px){
+ .deposit-commission.compact-commission{padding:15px 18px;border-radius:22px}
+ .compact-commission .commission-percent{font-size:30px}
+}
+
 </style>
 
 
@@ -2375,74 +2391,11 @@ header{background:rgba(255,255,255,.94);border-bottom:1px solid #e8ddff;box-shad
 
 
 
-    <section class="info-grid">
+    <section class="info-grid compact-commission-wrap">
 
-
-        <div class="deposit-commission">
-
-            <div class="commission-top">
-
-                <div class="commission-icon-big">
-                    📈
-                </div>
-
-                <div>
-
-                    <div class="commission-label">
-                        Deposit Commission
-                    </div>
-
-                    <div class="commission-main">
-
-                        <span class="commission-percent">
-                            4.5%
-                        </span>
-
-                        <span class="final-pill">
-                            Final
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="commission-example">
-                Example: ₹2,000 → ₹90
-            </div>
-
-            <div class="commission-note">
-                Below ₹24,999: 4.5% · ₹25,000 to below ₹50,000: 5% · ₹50,000 or more: 6%.
-            </div>
-
-        </div>
-
-
-        <div class="referral-commission deposit-tiers">
-
-            <div class="ref-title">
-                Deposit Commission
-            </div>
-
-            <div class="ref-row">
-                <div class="level-circle level-a">A</div>
-                <div class="level-name">Below 24999</div>
-                <div class="level-percent">4.5%</div>
-            </div>
-
-            <div class="ref-row">
-                <div class="level-circle level-b">B</div>
-                <div class="level-name">25000 to Below 50000</div>
-                <div class="level-percent">5%</div>
-            </div>
-
-            <div class="ref-row">
-                <div class="level-circle level-c">C</div>
-                <div class="level-name">50000 or more</div>
-                <div class="level-percent">6%</div>
-            </div>
-
+        <div class="deposit-commission compact-commission">
+            <div class="commission-percent">6%</div>
+            <span class="final-pill">Final</span>
         </div>
 
     </section>
